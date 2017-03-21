@@ -1,0 +1,23 @@
+---
+title: "Android Development: Lecture Notes"
+author: "Joel Ross"
+date: "`r Sys.Date()`"
+description: "Lecture notes for Info 448 Mobile Development: Android."
+github-repo: info448-s17/lecture-notes
+params:
+  recent.url: https://canvas.uw.edu/courses/1139926
+  recent.quarter: Spring 2017
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+monofont: "Source Code Pro"
+---
+
+# About this Book {-}
+This book compiles lecture notes and tutorials for the **INFO 448 Mobile Development: Android** course taught at the [University of Washington Information School](https://ischool.uw.edu/) (most recently in [`r params$recent.quarter`](`r params$recent.url`)). The goal of these notes is to provide learning materials for students in the course or anyone else who wishes to learn the basics of developing Android applications.
+
+These notes are primarily adapted from the [official Android developer documentation](https://developer.android.com/develop/index.html), compiling and synthesizing those guidelines for pedagogical purposes (and the author's own interpretation/biases). Please refer to that documentation for the latest information and official guidance.
+
+<p class="alert alert-warning">This book is currently in **alpha** status, as pure lecture notes are converted into more generic formats.</p>
+
+![Creative Commons License](img/index/by-nc-sa.png)
+This book is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
