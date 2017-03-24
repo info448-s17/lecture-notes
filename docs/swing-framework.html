@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
+<link rel="prev" href="java-review.html">
 
-<link rel="next" href="introduction.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -190,28 +190,64 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Android Development: Lecture Notes</h1>
-<h4 class="author"><em>Joel Ross</em></h4>
-<h4 class="date"><em>2017-03-24</em></h4>
-</div>
-<div id="about-this-book" class="section level1 unnumbered">
-<h1>About this Book</h1>
-<p>This book compiles lecture notes and tutorials for the <strong>INFO 448 Mobile Development: Android</strong> course taught at the <a href="https://ischool.uw.edu/">University of Washington Information School</a> (most recently in <a href="https://canvas.uw.edu/courses/1139926">Spring 2017</a>). The goal of these notes is to provide learning materials for students in the course or anyone else who wishes to learn the basics of developing Android applications.</p>
-<p>These notes are primarily adapted from the <a href="https://developer.android.com/develop/index.html">official Android developer documentation</a>, compiling and synthesizing those guidelines for pedagogical purposes (and the author’s own interpretation/biases). Please refer to that documentation for the latest information and official guidance.</p>
-<p class="alert alert-warning">
-This book is currently in <strong>alpha</strong> status, as pure lecture notes are converted into more generic formats.
-</p>
-<p><img src="img/index/by-nc-sa.png" alt="Creative Commons License" /> This book is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<div id="swing-framework" class="section level1">
+<h1><span class="header-section-number">B</span> Swing Framework</h1>
+<p>Android applications are user-driven graphical applications. So to look at some of the <em>patterns</em> involved in this kind of software (without the overhead of the Android framework), let’s consider how to build simple graphical applications in Java using the <a href="https://docs.oracle.com/javase/tutorial/uiswing/start/">Swing library</a> - We’re going to be doing a little bit of Java programming; easiest to just do this in Sublime Text or whatever light-weight IDE you have floating around.</p>
+<p>The <strong>Swing</strong> library is a set of Java classes used to specify graphical user interfaces (GUIs). These classes can be found in the <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/package-summary.html"><code>javax.swing</code></a> package. They also rely on the <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/package-summary.html"><code>java.awt</code></a> package (the “Advanced Windowing Toolkit”), which is an older GUI library that Swing builds on top of. - Fun fact: Swing library is named after the dance style: the developers wanted to name it after something hip and cool and popular. In the mid-90s.</p>
+<p>Let’s look at an incredibly basic GUI class: <code>MyGUI</code> found in the <code>src/main/java/</code> folder. Things to note about this class: - The class subclasses <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JFrame.html"><code>JFrame</code></a>. <code>JFrame</code> represents a “window” in your operating system, and does all the work of making that window show up and interact with the operating system in a normal way. By subclassing <code>JFrame</code>, we get that functionality for free! this is how we build all GUI applications. - We call the parent constructor (passing in the title for the window), and then specify what happens when we hit the “close” button. - We then instantiate a <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JButton.html"><code>JButton</code></a>, which is a Java button - Note that <code>JButton</code> is the Swing version of a button, building off of the older <code>java.awt.Button</code> class. - We then <code>.add()</code> this button to the <code>JFrame</code>. This puts the button inside the Window. A little but like using jQuery to add some HTML to the page. - Finally, we call <code>.pack()</code> to tell the Frame to resize itself to fit the contents, and then <code>.setVisible()</code> to make it actually appear. - We run this program from <code>main</code> by just instantiating our specialized <code>JFrame</code>, which will contain the button.</p>
+<p>We can compile and run it with <code>./gradlew -q run</code>. And voila, we have a basic button!</p>
+<div id="events" class="section level2">
+<h2><span class="header-section-number">B.1</span> Events</h2>
+<p>If we click the button… nothing happens. Let’s make it print out a message when clicked. We can do this through <strong>event-based programming</strong> (if you remember <code>onClick</code> events from JavaScript, this is the same idea).</p>
+<p>The computer sees interactions with its GUI as a series of <strong>events</strong>. The event of clicking a button. The event of moving the mouse. The event of closing a window. Etc. Each thing you interact with <em>generates</em> and <em>emits</em> these events. So when you click on a button, it creates and emits an “I was clicked!” event. - You can think of this like the button shouting “Hey hey! I was pressed!” We can then respond to this shouting to have our program do something when the button is clicked.</p>
+<p>Events, like everything else in Java, are Objects (of the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/EventObject.html"><code>EventObject</code></a> type) that are created by the emitter. A <code>JButton</code> in particular emits <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionEvent.html"><code>ActionEvents</code></a> when pressed (the “action” being that it was pressed). - When buttons are pressed, they shout out <code>ActionEvents</code></p>
+<p>In order to respond to this shouting, we need to “listen” for these events. Then whenever we hear that there is an event happening, we can react to it. - This is like a person manning a submarine radar. Or hooking up a baby monitor. Or following someone on Twitter, in a way.</p>
+<p>But this is Java, so we need an object to listen for these events: a “listener” if you will. Luckily, Java provides a type that can listen for <code>ActionEvents</code>: <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionListener.html"><code>ActionListener</code></a>. This type has an <code>actionPerformed()</code> method that can be called in response to an event. - We use the <a href="https://sourcemaking.com/design_patterns/observer">Observer Pattern</a> to connect this listener object to the button (<code>button.addActionListener(listener)</code>). This <em>registers</em> the listener, so that the Button knows who to shout at when something happens. Again, like following someone on Twitter. When the button is pressed, it will go to any listeners registered with it and call their <code>actionPerformed()</code> methods, passing in the <code>ActionEvent</code> it generated.</p>
+<p>Look again: is <code>ActionListener</code> a class? No, it’s an interface! Which means if we want to make an <code>ActionListener</code> object, we need to create a class that implements this interface (and provides the <code>actionPerformed()</code> method that can be called when the event occurs). There are a few ways we can do this:</p>
+<ol style="list-style-type: decimal">
+<li>Well we already have a class we’re developing: <code>MyGUI</code>! So let’s just make <em>that</em> class <code>implement ActionListener</code>. We’ll fill in the provided method, and then specify that <code>this</code> object is the listener, and voila.</li>
+</ol>
+<ul>
+<li>This is my favorite way to create listeners in Java (since it keeps everything self-contained: the <code>JFrame</code> handles the events its buttons produce).</li>
+<li>We’ll utilize a variant of this pattern in Android: we’ll make classes implement listeners, and then “register” that listener somewhere else in the code (often in a nested class).</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>But what if we want to reuse our listener across different classes, but don’t want to have to create a new <code>MyGUI</code> object to listen for a button to be clicked? We can instead use an <strong>inner</strong> or <strong>nested</strong> class. For example, a nested class <code>MyActionListener</code> that implements the interface, and then just instantiate one of these to register with the button.</li>
+</ol>
+<ul>
+<li>This could be a <code>static</code> nested class, but then we can’t have it access instance variables (because it belongs to the <em>class</em>, not the <em>object</em>). So might make it an inner class. Of course then we can’t re-use it elsewhere without making the <code>MyGUI</code>… but at least we’ve organized the functionality a bit.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>It seems sort of silly to create a whole new <code>MyActionListener</code> class that has one method and is just going to be instantiated once. So what if instead of giving it a name, we just made it an <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/anonymousclasses.html"><strong>anonymous class</strong></a>?</li>
+</ol>
+<ul>
+<li><p>Like how we’ve made <em>anonymous variables</em> by instantiating objects without assigning them to named variables… we can do the same thing with a class that just implements an interface. The syntax looks like:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">button.<span class="fu">addActionListener</span>(<span class="kw">new</span> <span class="bu">ActionListener</span>() {
+  <span class="co">//class declaration goes here!</span>
 
+  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">actionPerformed</span>(<span class="bu">ActionEvent</span>) { <span class="co">/*...*/</span>}
+});</code></pre></div></li>
+<li><p>This is how buttons are often used in Android: we’ll create an anonymous listener object to respond to the event that occurs when they are pressed.</p></li>
+</ul>
+<p>Questions on this kind of event-driven programming?</p>
+</div>
+<div id="layouts-and-composites" class="section level2">
+<h2><span class="header-section-number">B.2</span> Layouts and Composites</h2>
+<p>One more piece if we have time: what if we want to add a second button? If we try to just <code>.add()</code> another button… it replaces the one we just had! This is because Java doesn’t know <em>where</em> to put the second button. Below? Above? Left? Right?</p>
+<p>In order to have the <code>JFrame</code> contain multiple components, we need to specify a <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/LayoutManager.html"><strong>layout</strong></a>, which knows how to organize items that are added to the Frame. We do this with the <code>.setLayout()</code> method. For example, we can give the frame a <code>BoxLayout()</code> with a <code>PAGE_AXIS</code> orientation to have it lay out the buttons in a vertical row. - Java has different <code>LayoutManagers</code> that each have their own way of organizing components. We’ll see this same idea in Android (and talk about Android’s layout system in <em>a lot</em> more detail next week)!</p>
+<p>What if we want to do more complex layouts? Well we can use a different <code>LayoutManager</code>… but we can actually achieve a lot of flexibility simply by using <em>multiple containers</em>.</p>
+<p>For example, we can make a <code>JPanel</code> object, which is basically an “empty” component. We can then add multiple buttons to this this panel, and add that panel to the <code>JFrame</code>. Because <code>JPanel</code> <em>is a</em> <code>Component</code> (just like <code>JButton</code> is), we can use the <code>JPanel</code> exactly as we used the <code>JButton</code>—this panel just happens to have multiple buttons.</p>
+<p>And since we can put any <code>Component</code> in a <code>JPanel</code>, and <code>JPanel</code> is itself a component… we can create nest these components together into a tree in an example of the <a href="https://sourcemaking.com/design_patterns/composite">Composite Pattern</a>. This allows us to create very complex user interfaces with just a simple <code>BoxLayout</code>! - We’ll see this kind of “nested” composite pattern in Android next week!</p>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
+<a href="java-review.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -239,7 +275,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/index.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/java-swing.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

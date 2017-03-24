@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Android Development: Lecture Notes</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="Lecture notes for Info 448 Mobile Development: Android.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Android Development: Lecture Notes" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes for Info 448 Mobile Development: Android." />
+  <meta name="github-repo" content="info448-s17/lecture-notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Android Development: Lecture Notes" />
+  
+  <meta name="twitter:description" content="Lecture notes for Info 448 Mobile Development: Android." />
+  
+
+<meta name="author" content="Joel Ross">
+
+
+<meta name="date" content="2017-03-24">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="introduction.html">
+<link rel="next" href="resources-and-layouts.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Android Development</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About this Book</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#android-history"><i class="fa fa-check"></i><b>1.1</b> Android History</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#android-architecture-and-code"><i class="fa fa-check"></i><b>1.2</b> Android Architecture and Code</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#development-tools"><i class="fa fa-check"></i><b>1.3</b> Development Tools</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#software"><i class="fa fa-check"></i><b>1.3.1</b> Software</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#hello-world"><i class="fa fa-check"></i><b>1.4</b> Hello World</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="introduction.html"><a href="introduction.html#the-emulator"><i class="fa fa-check"></i><b>1.4.1</b> The Emulator</a></li>
+<li class="chapter" data-level="1.4.2" data-path="introduction.html"><a href="introduction.html#project-contents"><i class="fa fa-check"></i><b>1.4.2</b> Project Contents</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="activities-and-logging.html"><a href="activities-and-logging.html"><i class="fa fa-check"></i><b>2</b> Activities and Logging</a><ul>
+<li class="chapter" data-level="2.1" data-path="activities-and-logging.html"><a href="activities-and-logging.html#what-is-an-activity-10min"><i class="fa fa-check"></i><b>2.1</b> What is an Activity? [10min]</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="activities-and-logging.html"><a href="activities-and-logging.html#making-activities"><i class="fa fa-check"></i><b>2.1.1</b> Making Activities</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="activities-and-logging.html"><a href="activities-and-logging.html#the-activity-lifecycle-10min"><i class="fa fa-check"></i><b>2.2</b> The Activity Lifecycle [10min]</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="activities-and-logging.html"><a href="activities-and-logging.html#overriding-the-methods"><i class="fa fa-check"></i><b>2.2.1</b> Overriding the methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="activities-and-logging.html"><a href="activities-and-logging.html#logging-adb-10min"><i class="fa fa-check"></i><b>2.3</b> Logging &amp; ADB [10min]</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="activities-and-logging.html"><a href="activities-and-logging.html#log-methods"><i class="fa fa-check"></i><b>2.3.1</b> Log Methods</a></li>
+<li class="chapter" data-level="2.3.2" data-path="activities-and-logging.html"><a href="activities-and-logging.html#logcat"><i class="fa fa-check"></i><b>2.3.2</b> Logcat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="activities-and-logging.html"><a href="activities-and-logging.html#basic-events-10min"><i class="fa fa-check"></i><b>2.4</b> Basic Events [10min]</a></li>
+<li class="chapter" data-level="2.5" data-path="activities-and-logging.html"><a href="activities-and-logging.html#multiple-activities-15mins"><i class="fa fa-check"></i><b>2.5</b> Multiple Activities [15mins]</a></li>
+<li class="chapter" data-level="2.6" data-path="activities-and-logging.html"><a href="activities-and-logging.html#back-tasks-5-10min"><i class="fa fa-check"></i><b>2.6</b> Back &amp; Tasks [5-10min]</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="activities-and-logging.html"><a href="activities-and-logging.html#bonus-up-navigation"><i class="fa fa-check"></i><b>2.6.1</b> Bonus: Up Navigation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="activities-and-logging.html"><a href="activities-and-logging.html#toasts-5min"><i class="fa fa-check"></i><b>2.7</b> Toasts [5min]</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html"><i class="fa fa-check"></i><b>3</b> Resources and Layouts</a><ul>
+<li class="chapter" data-level="3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#resources"><i class="fa fa-check"></i><b>3.1</b> Resources</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#alternate-resources"><i class="fa fa-check"></i><b>3.1.1</b> Alternate Resources</a></li>
+<li class="chapter" data-level="3.1.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#xml-details"><i class="fa fa-check"></i><b>3.1.2</b> XML Details</a></li>
+<li class="chapter" data-level="3.1.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#r"><i class="fa fa-check"></i><b>3.1.3</b> R</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#views"><i class="fa fa-check"></i><b>3.2</b> Views</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#view-components-and-properties"><i class="fa fa-check"></i><b>3.2.1</b> View Components and Properties</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#layouts"><i class="fa fa-check"></i><b>3.3</b> Layouts</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#linearlayout"><i class="fa fa-check"></i><b>3.3.1</b> LinearLayout</a></li>
+<li class="chapter" data-level="3.3.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#relativelayout"><i class="fa fa-check"></i><b>3.3.2</b> RelativeLayout</a></li>
+<li class="chapter" data-level="3.3.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#other-layouts"><i class="fa fa-check"></i><b>3.3.3</b> Other Layouts</a></li>
+<li class="chapter" data-level="3.3.4" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#combining-layouts"><i class="fa fa-check"></i><b>3.3.4</b> Combining Layouts</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="interactive-views.html"><a href="interactive-views.html"><i class="fa fa-check"></i><b>4</b> Interactive Views</a><ul>
+<li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs-20min"><i class="fa fa-check"></i><b>4.1</b> Inputs [20min]</a></li>
+<li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listview-and-adapters-30min"><i class="fa fa-check"></i><b>4.2</b> ListView and Adapters [30min]</a></li>
+<li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data-40min"><i class="fa fa-check"></i><b>4.3</b> Network Data [40min]</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix: Java</b></span></li>
+<li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
+<li class="chapter" data-level="A.1" data-path="java-review.html"><a href="java-review.html#building-apps-with-gradle"><i class="fa fa-check"></i><b>A.1</b> Building Apps with Gradle</a></li>
+<li class="chapter" data-level="A.2" data-path="java-review.html"><a href="java-review.html#class-basics"><i class="fa fa-check"></i><b>A.2</b> Class Basics</a></li>
+<li class="chapter" data-level="A.3" data-path="java-review.html"><a href="java-review.html#inheritance"><i class="fa fa-check"></i><b>A.3</b> Inheritance</a></li>
+<li class="chapter" data-level="A.4" data-path="java-review.html"><a href="java-review.html#interfaces"><i class="fa fa-check"></i><b>A.4</b> Interfaces</a></li>
+<li class="chapter" data-level="A.5" data-path="java-review.html"><a href="java-review.html#polymorphism"><i class="fa fa-check"></i><b>A.5</b> Polymorphism</a></li>
+<li class="chapter" data-level="A.6" data-path="java-review.html"><a href="java-review.html#abstract-methods-and-classes"><i class="fa fa-check"></i><b>A.6</b> Abstract Methods and Classes</a></li>
+<li class="chapter" data-level="A.7" data-path="java-review.html"><a href="java-review.html#generics"><i class="fa fa-check"></i><b>A.7</b> Generics</a></li>
+<li class="chapter" data-level="A.8" data-path="java-review.html"><a href="java-review.html#nested-classes"><i class="fa fa-check"></i><b>A.8</b> Nested Classes</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="swing-framework.html"><a href="swing-framework.html"><i class="fa fa-check"></i><b>B</b> Swing Framework</a><ul>
+<li class="chapter" data-level="B.1" data-path="swing-framework.html"><a href="swing-framework.html#events"><i class="fa fa-check"></i><b>B.1</b> Events</a></li>
+<li class="chapter" data-level="B.2" data-path="swing-framework.html"><a href="swing-framework.html#layouts-and-composites"><i class="fa fa-check"></i><b>B.2</b> Layouts and Composites</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Android Development: Lecture Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="activities-and-logging" class="section level1">
+<h1><span class="header-section-number">2</span> Activities and Logging</h1>
+<p>Now that we’ve gotten a feel for the pattern/coding style of creating graphical applications, let’s see how they play out in Android! - You’ll need to create a new <code>Android</code> application to play with, with a single <strong>Empty</strong> Activity (e.g., <code>MainActivity</code>). In the future I’ll have starter code for you to work from, but since we’re starting from scratch it makes sense to start with something empty. Plus: it’s good practice! - We can also take a <strong>2-minute</strong> stretch break while you get everything up and running.</p>
+<div id="what-is-an-activity-10min" class="section level2">
+<h2><span class="header-section-number">2.1</span> What is an Activity? [10min]</h2>
+<p>What is an <a href="http://developer.android.com/guide/components/activities.html">Activity</a>? According to Google:</p>
+<blockquote>
+<p>An Activity is an application component that provides a screen with which users can interact in order to do something</p>
+</blockquote>
+<p>You can think of an Activity as a single Screen in your app. The equivalent of a “Window” in a GUI system (or a <code>JFrame</code> in our Swing app). - Note that Activities don’t <strong>need</strong> to be full screens: they can also be floating modal windows, embedded inside other Activities (like half a screen), etc. But we’ll start by thinking of them as full screens. - In many ways, an Activity is a “bookkeeping mechanism”: a place to hold <em>state</em> and <em>data</em>, and tell to Android what to show on the display. - It functions much like a Controller (in Model-View-Controller sense) in that regard! - We can have lots of Activities (screens) in an Application, and they are loosely connected so we can easily move between them.</p>
+<p>Also to note from the documentation:</p>
+<blockquote>
+<p>An activity is a single, focused thing that the user can do.</p>
+</blockquote>
+<p>which implies a design suggestion: Activities (screens) break up your App into “tasks”: each one can represent what a user is doing at once! If the user does something else, that should be a different Activity and so probably a different screen.</p>
+<div id="making-activities" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Making Activities</h3>
+<p>How do we use them? We create our own activities by subclassing the provided <a href="http://developer.android.com/reference/android/app/Activity.html"><code>Activity</code></a> class. - This is <strong>inheritance</strong>: we’re making a specialized type of <code>Activity</code>, similar to extending <code>JFrame</code> in Swing apps - All the methods that control how the OS interacts with Activities are provided for us.</p>
+<p>If you look at the default Empty activity, it actually subclasses <a href="http://developer.android.com/reference/android/support/v7/app/AppCompatActivity.html"><code>AppCompatActivity</code></a>, which is a already specialized kind of Activity that provides an <a href="http://developer.android.com/reference/android/support/v7/app/ActionBar.html"><code>ActionBar</code></a> (the toolbar at the top). If we change the class to just extend <code>Activity</code>, that bar disappears. - You’d need to import the <code>Activity</code> class! The keyboard shortcut inAndroid Studio is <code>alt+return</code>, or you can do it by hand (look up the package)!</p>
+<p>There are a pile of other built-in Activity subclasses that we could subclass instead. We’ll mention them as they become relevant. - Many on the books have been deprecated in favor of <strong>Fragments</strong>, which are sort of like “subactivities” that get nested in larger Activities. We’ll talk about Fragments more in a couple weeks, once we’ve gotten the basics down.</p>
+<p>Other important point to note: does this activity have a <strong>constructor</strong> that we call? (No!) - We never write code that <strong>instantiates</strong> our Activity. There is no <code>main</code> method. Activities are created and managed by the Android operating system!</p>
+</div>
+</div>
+<div id="the-activity-lifecycle-10min" class="section level2">
+<h2><span class="header-section-number">2.2</span> The Activity Lifecycle [10min]</h2>
+<p>So if we never call the constructor or main, how do we start doing stuff?</p>
+<p>Activities have an <em>incredibly</em> well-defined <a href="http://developer.android.com/guide/components/activities.html#Lifecycle">lifecycle</a>—that is, a series of <strong>events</strong> that occur during usage (e.g., when created, stopped, etc). - When each of these events occur, Android executes a <strong>callback method</strong>, similar to how you called <code>actionPerformed</code> to react to a “button press” event. We can override these methods in order to do special actions (read: our own code) when these events occur.</p>
+<p>What is the lifecycle?</p>
+<div class="figure">
+<img src="img/activities/activity_lifecycle.png" alt="lifecycle state chart" />
+<p class="caption">lifecycle state chart</p>
+</div>
+<p>(Or an alternative, simplified diagram <a href="http://developer.android.com/images/training/basics/basic-lifecycle.png">here</a>).</p>
+<p>There are 7 “events” that occur in the Activity Lifecycle, which are designated by the callback function that they execute: - <code>onCreate()</code>: when <strong>first</strong> created/instantiated. This is where you initialize UI stuff (e.g., specify the layout to use) - <code>onStart()</code>: called just before the Activity becomes <strong>visible</strong> to the user. - Whats the difference between this and <code>onCreate</code>? <code>onStart</code> can be called more than once (e.g., if you leave the Activity and come back). - <code>onResume()</code>: just before <strong>user interaction</strong> starts–activity is ready to go! A little bit like when that Activity “has focus” - difference between <code>onStart()</code>? When start is called we’re visible, but resume is called when interaction is ready. - We can be visible but not interacting (like if there is a modal in front of us!) - <code>onPause()</code>: when the system is about to start another activity (so about to lose focus). This is the “mirror” of <code>onResume()</code>. <em>The activity stays visible</em>. - This is where we tend to store (temporary) unsaved changes (like email drafts), stop animations, etc, since the activity might be on its way out. - <code>onStop()</code>: the activity is no longer visible. (e.g., another activity took over, but also because might be destroyed). A mirror of <code>onStart()``   - This is where we would want to persist any state information (e.g., save their game). -</code>onRestart()<code>: called when the app is coming back from a &quot;stopped&quot; state -</code>onDestroy()<code>: activity is about to be closed. This can happen because the user ended the application, **or** (and this is important!) because the OS is trying to save memory and so kills your app (if it hasn't been use in a while).   - can do more final cleanup, but better to have cleanup in</code>onPause()<code>and</code>onStop()`</p>
+<p>Note that apps may not need to use all of these methods: for example, if there is no difference between starting from scratch and resuming from stop, then you don’t need an onRestart (since onStart goes in the middle). Similarly onStart may not be needed if you just use onCreate and onResume; but these lifecycles allow for more granularity and the ability to avoid duplicate code.</p>
+<div id="overriding-the-methods" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Overriding the methods</h3>
+<p>Let’s look at overriding these methods to see them in action!</p>
+<p>We already have <code>onCreate()</code> overridden for us, since that’s where the layout is specified (we’ll cover how soon, I promise!) - Notice it takes a <code>Bundle</code> as a parameter. A <a href="http://developer.android.com/reference/android/os/Bundle.html"><code>Bundle</code></a> is an object that stores key-value pairs, like a super-simple <code>HashMap</code> (or an Object in JavaScript). Bundles can only hold basic types (numbers, Strings) and so are used for temporarily “bunding” <em>small</em> amounts of information. - This <code>Bundle</code> in particular in stored information about the Activity’s current state (e.g., what text they may have typed into a search box), so that if the App gets killed it can be restarted in the same state and the user won’t notice that it was ever lost! - It stores current layout information in it by default (if Views have ids), and since its a Map (key-value pairs) you can store other data in it as well. - calls <code>onSaveInstanceState()</code> for each View, and those tend to save important bits already - see <a href="http://developer.android.com/guide/components/activities.html#SavingActivityState">Saving Activity State</a> for details. - Also note that we call <code>super.onCreate()</code>. <strong>ALWAYS CALL UP THE INHERITANCE CHAIN</strong>, so that you can do system-level stuff!</p>
+<p>So we can add the others: how about <code>onStart()</code>? (see <a href="http://developer.android.com/guide/components/activities.html#ImplementingLifecycleCallbacks">Implementing Lifecycle Callbacks</a> for template).</p>
+</div>
+</div>
+<div id="logging-adb-10min" class="section level2">
+<h2><span class="header-section-number">2.3</span> Logging &amp; ADB [10min]</h2>
+<p>But how can we know if the lifecycle events are getting called? - <code>System.out.println()</code>? we don’t actually have a terminal! More specifically, our device (which is where the application is running) doesn’t have access to <code>stdout</code> - Aside: we can get it with <code>adb shell stop; adb shell setprop log.redirect-stdio true; adb shell start</code> - Instead, Android provides a <a href="http://developer.android.com/tools/debugging/debugging-log.html">Logging</a> system that we can use to write out debugging information, and which is automatically accessible over the <code>adb</code> (Android Debugging Bridge). - Logging can be filtered, categorized, sorted, etc. - Can be disabled in production builds, but often isn’t :p - To perform logging, we’ll use the <a href="http://developer.android.com/reference/android/util/Log.html"><code>android.util.Log</code></a> class. This class includes a number of <code>static</code> methods, which all basically wrap around <code>println</code> to print to the device’s log file, which is then accessible through the <code>adb</code>. - The device’s log file is stored… sort of. It’s a 16k file, but is shared across the <em>entire</em> system. So fills up fast. Hence filtering/searching becomes important, and you tend to watch it/debug in real time! - Remember to import the <a href="http://developer.android.com/reference/android/util/Log.html"><code>Log</code></a>] class!</p>
+<div id="log-methods" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Log Methods</h3>
+<p>Methods correspond to different level of priority (importance) of the messages. From low to high: - <code>Log.v()</code>: VERBOSE output. The most detail. Everyday stuff. Often our go-to level. - Ideally, you should only compile into an application during development! - <code>Log.d()</code>: DEBUG output. lower-level, but a bit less detail (e.g., code-level) - Debug logs <em>can</em> be compiled but stripped at runtime using the [<code>BuildConfig</code>] generated class, which can be customized through Gradle - <code>Log.i()</code>: INFO output. High level info (e.g., user-level) - <code>Log.w()</code>: WARN output. Warnings - <code>Log.e()</code>: ERROR output. Errors - Also look at the API… <code>Log.wtf()</code>!</p>
+<p>These are used to help “filter out the noise”. So you can look just at errors, at errors and warnings, at err warn info… all the way down to <em>everything</em> with verbose. - A HUGE amount of information is logged, so filtering really helps!</p>
+<p>Each <code>Log</code> method takes two <code>Strings</code> as parameters. The second is the message to print. The first is a “tag”–a String that’s prepended to the output which you can search and filter on. - This is is usually the App or Class name (e.g., “AndroidDemo”, “MainActivity”) - A common practice is to declare a <code>TAG</code> constant you can use throughout the class:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="bu">String</span> TAG = <span class="st">&quot;MainActivity&quot;</span>;</code></pre></div>
+</div>
+<div id="logcat" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Logcat</h3>
+<p>You can view the logs via <code>adb</code> (the debugging bridge) and a service called <code>Logcat</code> (from “log” and “conCATenation”, since it concats the logs). - The easiest way to check Logcat is to use Android Studio. The Logcat browser panel is usually found at the bottom of the screen after you launch an application. It “tails” the log, showing the latest output as it appears - You can use the dropdown box to filter by priority, and the search box to search (e.g., by tag if you want). - Android Studio also lets you filter to only show the current application, which is hugely awesome. - Note that you may see a lot of Logs that you didn’t produce, including possibly Warnings (e.g., I see a lot of stuff about how OpenGL connects to the graphics card). <em>This is normal</em>! - It is also possible to view Logcat through the command-line using <code>adb</code>, and includes complex filtering arguments. See <a href="http://developer.android.com/tools/debugging/debugging-log.html">Reading and Writing Logs</a> for more details.</p>
+<p><strong>Demo!</strong></p>
+<p>Let’s log out some of the lifecycle! - implement <code>onResume()</code>. Note the wonders of tab completion! Have it log out at INFO level. Hit <code>menu</code> to send to background. - <code>onStop()</code> and switch out of the app. - <code>onDestroy()</code> can easily be called if you set phone to “Don’t Keep Activities” (at bottom of developer settings) - Something else to test: Cause the app to throw a runtime <code>Exception</code> in one of the handlers. For example, you could make a new local array and try to access an item out of bounds. Or just <code>throw new RuntimeException()</code> (which is slightly less interesting). - <em>Can you see the <strong>Stack Trace</strong> in the logs?</em></p>
+<!--#### BREAK 5mins, resume 11:45 latest-->
+</div>
+</div>
+<div id="basic-events-10min" class="section level2">
+<h2><span class="header-section-number">2.4</span> Basic Events [10min]</h2>
+<p>Now that can “output” some text (via log), let’s add some “input” via an interface element: a Button we can click. - In <strong><code>res/layouts/activity_main.xml</code></strong> (the original Activity’s layout), add the following code:</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;Button</span>
+<span class="ot">    android:id=</span><span class="st">&quot;@+id/my_button&quot;</span>
+<span class="ot">    android:layout_width=</span><span class="st">&quot;wrap_content&quot;</span>
+<span class="ot">    android:layout_height=</span><span class="st">&quot;wrap_content&quot;</span>
+<span class="ot">    android:text=</span><span class="st">&quot;Start Activity&quot;</span>
+    <span class="kw">/&gt;</span></code></pre></div>
+<p>This should go inside the <code>&lt;RelativeLayout&gt;</code> element, <strong>replace</strong> the <code>&lt;TextView&gt;</code> element. - This defines a (anyone?) Button. The <code>android:text</code> attribute gives the text that is on the button. - We’ll talk in a lot more detail about how exactly this XML works (and what’s the deal with the id, layout_width/height) next week, but you should be able to make a pretty good educated guess based on the names. - Actually, to make the button not overlap, change the <code>&lt;RelativeLayout&gt;</code> to a <code>&lt;LinearLayout&gt;</code>. More on layout tomorrow! - Defining this in XML is basically the same process as creating the <code>JButton</code> and adding it to the <code>JFrame</code> in Java!</p>
+<p>Now we have a button, but we want to click on it. So we need to register a “listener” for it (in Java).</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">Button</span> button = (<span class="bu">Button</span>)<span class="fu">findViewById</span>(R.<span class="fu">id</span>.<span class="fu">my_button</span>);
+button.<span class="fu">setOnClickListener</span>(<span class="kw">new</span> <span class="bu">View</span>.<span class="fu">OnClickListener</span>() {
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">onClick</span>(<span class="bu">View</span> v) {
+        <span class="co">// Perform action on click</span>
+    }
+});</code></pre></div>
+<ul>
+<li>First we need to get access to a variable that represents that Button defined in the XML. The <code>findViewById</code> method “finds” the appropriate XML element with the given <code>id</code>. We’l talk about why we wrote the id as <code>R.id.my_button</code> tomorrow. Note that this method returns a <code>View</code>, so we want to cast into the more specific <code>Button</code>.</li>
+<li>Now we can assign a listener to that button by registering through the <code>.setOnClickListener()</code>, passing in an <strong>anonymous class</strong></li>
+<li>Again, tab-completion is our friend!</li>
+<li>This is <em>just like</em> what we did with Swing!</li>
+<li>Finally, we can fill in the method to have it log out something when clicked.</li>
+</ul>
+<p>This is an example of an <a href="http://developer.android.com/guide/topics/ui/controls.html">Input Control</a>. We’ll talk about these in more detail next week.</p>
+</div>
+<div id="multiple-activities-15mins" class="section level2">
+<h2><span class="header-section-number">2.5</span> Multiple Activities [15mins]</h2>
+<p>The whole point of considering the Activity Lifecycle is because Android applications can have multiple activities and interact with multiple other applications. So let’s talk briefly about how we could have an app use multiple Activities (and so get a sense for how this lifecycle may affect us)</p>
+<p>We can go ahead and create a New Activity through Android Student by using <code>File &gt; New &gt; Activity</code>. We could also just add a new .java file with the Activity class in it - Make a new Empty activity <code>SecondActivity</code> - Note that this Activity also gets a resource XML layout - You should edit the <code>&lt;TextView&gt;</code> element so this one can have a message as well. - <em>ALSO NOTE</em>: For every activity we make, it gets added to the <strong>Manifest</strong> file. This is sort of like the “Table of contents” for our application, telling the operating system information about what our app looks like so it can interact with it. - another <code>&lt;activity&gt;</code> element in the <code>&lt;application&gt;</code> element. We can also see the first Activity; we’ll talk about its child elements later (a lot of that) - We can also add <code>android:label</code> attributes to these <code>&lt;activity&gt;</code> elements to give them nicer names.</p>
+<p>In Android, we don’t start new Activities by instantiating them (remember, <strong><em>we never instantiate Activities</em></strong>!). Instead, we send the operating system a message requesting that the Activity do something (i.e., start). These messages are called <a href="http://developer.android.com/guide/components/intents-filters.html"><strong>Intents</strong></a>. - Intents are <strong>messages</strong> used to communicate between app components like Activities. This allows them to communicate, even though they don’t have references to each other (so we can’t just call a method on them). - I don’t have a good justification for the name, other than it is an “intention” to do something that you announce to the OS - You can think of Intents as like envelopes: they are addressed to a particular target (e.g., another Activity–or more properly a <code>Context</code>), and contain a brief message about what to do.</p>
+<p><a href="http://developer.android.com/reference/android/content/Intent.html"><code>Intents</code></a> are something we <em>can</em> instantiate, so let’s do that in our event handler! There are lots of different constructors, but the one we’ll start with is:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Intent intent = <span class="kw">new</span> <span class="fu">Intent</span>(MainActivity.<span class="fu">this</span>, SecondActivity.<span class="fu">class</span>);</code></pre></div>
+<ul>
+<li>The first parameter refers to the current <a href="http://developer.android.com/reference/android/content/Context.html"><strong>Context</strong></a>, which is a superclass of <code>Activity</code>. Context is an <strong>abstract class</strong> that acts as a reference for information about the current running environment; it represents environmental data (stuff like “what OS is running? Is there a keyboard plugged in?”). You can <em>almost</em> think of it as representing the “Application”, though it’s broader than that (since <code>Application</code> is actually a subclass of <code>Context</code>!)</li>
+<li>The context is <em>used</em> to do “application-level” actions: mostly working with resources (accessing/loading), but also communicating between Activities like we’re doing now. Effectively, it lets us refer to the state in which we are running: the “context” for our code (e.g., “where is this occurring?”). It’s a kind of <em>reflection</em> or meta-programming, in a way.</li>
+<li>There are a couple of different kinds of Contexts we might use:
+<ul>
+<li>The Application context (e.g., the <code>Application</code>) references the state of the entire application. It’s basically the Java object that is built out of the Manifest (and so contains that level of information)</li>
+<li>The Activity context (e.g., the <code>Activity</code>) that references the state of that activity. Again, this would be the <code>&lt;activity&gt;</code> tags from the Manifest.</li>
+</ul>
+<p>Each of these <code>Context</code> objects exist for the life of their respective component: that is, an <code>Activity</code> Context is around as long as the Activity exists (disappearing after <code>onDestroy</code>), where as <code>Application</code> Contexts survive as long as the application does. We’ll almost always use the <code>Activity</code> context, as it’s safer and less likely to cause memory leaks.</p></li>
+<li><p>The second parameter is the class we want to send the Intent to (the <code>.class</code> property fetches a reference to the class type; this is metaprogramming!)</p></li>
+</ul>
+<p>And now that we built the intent, we can use it to start an activity using the <a href="http://developer.android.com/reference/android/app/Activity.html#startActivity(android.content.Intent)"><code>startActivity</code></a> method (inherited from <code>Activity</code>), passing it the <code>Intent</code>! - Voila! we can now start a second activity, and see how that impacts our Lifecycle calls (e.g., with visibility, etc). - And we can use the <strong>back</strong> button to go backwards!</p>
+<p>There are actually a couple of different kinds of <code>Intents</code> (this is an <strong>Explicit Intent</strong>, because it is explicit about what Activity it’s sent to), and a lot more we can do with them. We’ll dive into Intents in more detail later; for now we’re going to focus on mostly Single Activities. - e.g., if you look back at the Manifest, you can see that the MainActivity has an <code>&lt;intent-filter&gt;</code> that allows it to receive particular kinds of Intents–including ones to use it when launching the App!</p>
+</div>
+<div id="back-tasks-5-10min" class="section level2">
+<h2><span class="header-section-number">2.6</span> Back &amp; Tasks [5-10min]</h2>
+<p>So we can have lots of Activities (even across multiple apps!) running and move between them. How exactly is that “Back” button keeping track of where to go to? - Do you know what kind of data structure is associated with “back” or “undo”? A <strong>stack</strong>! - Every time you start a new Activity, Android creates it and puts it on the top of a stack. Then when you hit the back button, that activity is popped off the stack and you’re taken to the new head. <img src="img/activities/diagram_backstack.png" alt="activity stack example" /></p>
+<p>However, you might have different “sequences” of actions you’re working on: maybe you start writing an email, and then go to check your Twitter timeline through a different set of Activities. Android breaks up these sequences into groups called <a href="http://developer.android.com/guide/components/tasks-and-back-stack.html"><strong>Tasks</strong></a>. A task is a collection of activities arranged in a Stack; and there can be multiple tasks in the background. - Tasks usually start from the Home Screen. E.g., when you launch an Application, that starts a new Task. - When you go back to home screen, that Task is moved to the background, so the “back” button won’t let you navigate that Stack. - Thinking of them like different tabs/browsers and webpages is a pretty good analogy</p>
+<p>Important caveat: Tasks are distinct from one another, so you can have different copies of the same Activity on multiple stacks (e.g., the Camera activity could be part of both Facebook and Twitter app Tasks if you are on a selfie binge) - Though it is possible to modify this, see <a href="http://developer.android.com/guide/components/tasks-and-back-stack.html#ManagingTasks">Managing Tasks</a></p>
+<p>Demo: switch to another app, then back to ours</p>
+<div id="bonus-up-navigation" class="section level3">
+<h3><span class="header-section-number">2.6.1</span> Bonus: Up Navigation</h3>
+<p>We can make this “back” navigation a little more intuitive for users by providing explicit <a href="http://developer.android.com/design/patterns/navigation.html">up navigation</a>), rather than just forcing them to go back through Activities in the order they viewed them (e.g., if you’re swiping through emails and want to go back to the home list). We just need a little bit of configuration for our Activities: - In the Java code, we want to add more functionality to the <code>ActionBar</code>. <em>Think</em>: what event handler should it be put in? <code>java   getSupportActionBar().setHomeButtonEnabled(true);</code> - Then In the <strong>Manifest</strong>, add a <code>android:parentActivityName</code> attribute to the <code>SecondActivity</code>, with a value to set the full class name (including package <strong>and</strong> appname!) of your Main Activity. This will let you be able to use the “back” visual elements (e.g., of the ActionBar) to move back to the “parent” activity. See <a href="http://developer.android.com/design/patterns/navigation.html">Up Navigation</a> for details. - This is only supported for API 16+; since our min SDK is 15, we can include backwards support with the following child XML element: <code>xml     &lt;meta-data          android:name=&quot;android.support.PARENT_ACTIVITY&quot;          android:value=&quot;{parent.activity.package.goes.here}&quot; /&gt;</code></p>
+</div>
+</div>
+<div id="toasts-5min" class="section level2">
+<h2><span class="header-section-number">2.7</span> Toasts [5min]</h2>
+<p>Logging is fantastic and one of the the best techniques we have for debugging, both in how Activities are being used or for any kind of bug (also RuntimeExceptions) - It harkens back to printline debugging, which is totes legit. Android Studio does have a <a href="http://developer.android.com/tools/debugging/debugging-studio.html">debugger</a> if you’re comfortable with those (can be handy!)</p>
+<p>However, sometimes you want to check some output/interaction without Logging it. You just want to see some feedback while the app is running! Or you want to give a quick message to the user. Android provides a number of different classes for doing visual notifications, including alert-style and customizable <a href="http://developer.android.com/guide/topics/ui/dialogs.html">Dialogs</a>, which we’ll talk about in a few weeks.</p>
+<p>But a simple, quick way of giving some short visual feedback is to use what is called a <a href="http://developer.android.com/guide/topics/ui/notifiers/toasts.html">Toast</a>. This is a tiny little text box that pops up at the bottom of the screen for a moment. - Toast because it pops up :p</p>
+<p>Toasts a pretty simple to implement, as with the following example (from the docs):</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">Context</span> context = <span class="kw">this</span>; <span class="co">//getApplicationContext(); //for not disappearing if app closed quickly.</span>
+<span class="bu">String</span> text = <span class="st">&quot;Hello toast!&quot;</span>;
+<span class="dt">int</span> duration = Toast.<span class="fu">LENGTH_SHORT</span>;
+
+Toast toast = Toast.<span class="fu">makeText</span>(context, text, duration);
+toast.<span class="fu">show</span>();</code></pre></div>
+<ul>
+<li><p>But since <code>this</code> Activity <em>is</em> a context, and we can just use the Toast anonymous, we can shorten this to a one-liner:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Toast.<span class="fu">makeText</span>(<span class="kw">this</span>, <span class="st">&quot;Hello world&quot;</span>, Toast.<span class="fu">LENGTH_SHORT</span>).<span class="fu">show</span>();</code></pre></div></li>
+<li>Boom, a quick visual alert method we can use for proof-of-concept stuff!</li>
+<li>Note that this uses a static <code>makeToast()</code> method, rather than a constructor. This is an example of a Factory method–a design pattern we’ll see a lot.</li>
+<li><p>Toasts are intended to be ways to interact with the user (e.g., giving them quick feedback), but can possibly be useful for testing too! Though in the end, Logcat is going to be your best bet for debugging.</p></li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="resources-and-layouts.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["github", "facebook", "twitter", "google"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/activities.Rmd",
+"text": "Edit"
+},
+"download": ["android-dev-book.pdf", "android-dev-book.epub"],
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+</body>
+
+</html>

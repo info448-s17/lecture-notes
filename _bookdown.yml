@@ -1,7 +1,14 @@
 book_filename: "android-dev-book"
 output_dir: docs
-# chapter_name: "Chapter "
+language:
+  ui:
+    chapter_name: ["",": "]
 edit: https://github.com/info448-s17/lecture-notes/edit/master/%s
 rmd_files:
   - index.Rmd
   - introduction.Rmd
+  - activities.Rmd
+  - resources.Rmd
+  - input-lists.Rmd
+  - java-review.Rmd
+  - java-swing.Rmd
