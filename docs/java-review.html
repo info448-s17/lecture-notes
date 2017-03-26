@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-03-24">
+<meta name="date" content="2017-03-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -170,6 +170,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="B.1" data-path="swing-framework.html"><a href="swing-framework.html#events"><i class="fa fa-check"></i><b>B.1</b> Events</a></li>
 <li class="chapter" data-level="B.2" data-path="swing-framework.html"><a href="swing-framework.html#layouts-and-composites"><i class="fa fa-check"></i><b>B.2</b> Layouts and Composites</a></li>
 </ul></li>
+<li class="chapter" data-level="C" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html"><i class="fa fa-check"></i><b>C</b> Threads and HTTP Requests</a><ul>
+<li class="chapter" data-level="C.1" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#concurrency"><i class="fa fa-check"></i><b>C.1</b> Concurrency</a><ul>
+<li class="chapter" data-level="C.1.1" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#an-example-algorithm-races"><i class="fa fa-check"></i><b>C.1.1</b> An Example: Algorithm Races!</a></li>
+<li class="chapter" data-level="C.1.2" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#threading-the-race"><i class="fa fa-check"></i><b>C.1.2</b> Threading the Race</a></li>
+</ul></li>
+<li class="chapter" data-level="C.2" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#http-requests"><i class="fa fa-check"></i><b>C.2</b> HTTP Requests</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -192,7 +199,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="java-review" class="section level1">
 <h1><span class="header-section-number">A</span> Java Review</h1>
-<p>Android applications are written primarily in the Java Language. This appendix contains a review of some Java fundamentals needed when developing for Android, presented as a set of practice exercises. The code for these exercises can be found at <a href="https://github.com/info448-s17/java-review" class="uri">https://github.com/info448-s17/java-review</a>.</p>
+<p>Android applications are written primarily in the Java Language. This appendix contains a review of some Java fundamentals needed when developing for Android, presented as a set of practice exercises. The code for these exercises can be found at <a href="https://github.com/info448-s17/lab-java-review" class="uri">https://github.com/info448-s17/lab-java-review</a>.</p>
 <div id="building-apps-with-gradle" class="section level2">
 <h2><span class="header-section-number">A.1</span> Building Apps with Gradle</h2>
 <p>Consider the included <code>Dog</code> class found in the <code>src/main/java/edu/info448/review/</code> folder. This is a very basic class representing a Dog. You can instantiate and call methods on this class by building and running the <code>Tester</code> class found in the same folder. - You can just use any text editor, like <em>VS Code</em>, <em>Atom</em>, or <em>Sublime Text</em> to view and edit these files.</p>
@@ -207,10 +214,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Running is then done with the <code>java</code> command: you specify the full package name of the class you wish to run, as well as the <a href="https://docs.oracle.com/javase/tutorial/essential/environment/paths.html">classpath</a> so that Java knows where to go find classes it depends on:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Runs the Tester#main() method with the `src/main/java` folder as the classpath</span>
 <span class="ex">java</span> -classpath ./src/main/java edu.info498.review.Tester</code></pre></div>
-<p><strong><em>Task: Compile and run this application now.</em></strong></p>
-<p><strong><em>Task: Modify the <code>Dog</code> class so that it’s <code>.bark()</code> method barks twice (<code>&quot;Bark Bark!&quot;</code>). What do you have to do to test that your change worked?</em></strong></p>
+<p><strong><em>Practice: Compile and run this application now.</em></strong></p>
+<p><strong><em>Practice: Modify the <code>Dog</code> class so that it’s <code>.bark()</code> method barks twice (<code>&quot;Bark Bark!&quot;</code>). What do you have to do to test that your change worked?</em></strong></p>
 <p>You may notice that this development cycle can get pretty tedious: there are two commands we need to execute to run our code, and both are complex enough that they are a pain to retype.</p>
-<p>Enter <a href="https://gradle.org/"><strong>Gradle</strong></a>. Gradle is a build automation system: a “script” that you can run that will automatically perform the multiple steps required to build and run an application. This script is defined by the <code>build.gradle</code> configuration file: <strong><em>open that file and look through its contents</em></strong>. The <code>task run()</code> is where the “run” task is defined: do you see how it defines the same arguments we otherwise passed to the <code>java</code> command?</p>
+<p>Enter <a href="https://gradle.org/"><strong>Gradle</strong></a>. Gradle is a build automation system: a “script” that you can run that will automatically perform the multiple steps required to build and run an application. This script is defined by the <code>build.gradle</code> configuration file. <strong><em>Practice: open that file and look through its contents</em></strong>. The <code>task run()</code> is where the “run” task is defined: do you see how it defines the same arguments we otherwise passed to the <code>java</code> command?</p>
 <p>You can run the version of Gradle included in the repo with the <code>gradlew &lt;task&gt;</code> command, specifying what task you want to the build system to perform. For example:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># on Mac/Linux</span>
 <span class="ex">./gradlew</span> tasks
@@ -221,7 +228,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><strong>Helpful hint</strong>: you can specify the “quite” flag with <code>gradlew -q &lt;task&gt;</code> to not have Gradle output its build status (handy for the <code>run</code> task)</li>
 </ul>
-<p><strong><em>Use gradle to build and run your Dog program. See how much easier that is?</em></strong></p>
+<p><strong><em>Practice: Use gradle to build and run your Dog program. See how much easier that is?</em></strong></p>
 <p>We will be using Gradle to build our Android applications (which are much more complex than this simple Java demo)!</p>
 </div>
 <div id="class-basics" class="section level2">
@@ -238,11 +245,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>Method signatures are very important! They tell us what the inputs and outputs of a method will be. We should be able to understand how the method works <em>just</em> from its signature.</p></li>
 </ul></li>
 </ol>
-<p>Notice that one of the methods, <code>.createPuppies()</code> is a <code>static</code> method. This means that the method belongs to the <strong><em>class</em></strong>, not to individual object instances of the class! <strong><em>For example, try running the following code (by placing it in the <code>main()</code> method of the <code>Tester</code> class)</em></strong>:</p>
+<p>Notice that one of the methods, <code>.createPuppies()</code> is a <code>static</code> method. This means that the method belongs to the <strong><em>class</em></strong>, not to individual object instances of the class! <strong><em>Practice: try running the following code (by placing it in the <code>main()</code> method of the <code>Tester</code> class)</em></strong>:</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Dog[] pups = Dog.<span class="fu">createPuppies</span>(<span class="dv">3</span>);
 <span class="bu">System</span>.<span class="fu">out</span>.<span class="fu">println</span>(<span class="bu">Arrays</span>.<span class="fu">toString</span>(pups));</code></pre></div>
 <p>Notice that to call the <code>createPuppies()</code> method you didn’t need to have a <code>Dog</code> object (you didn’t need to use the <code>new</code> keyword): instead you went to the “template” for a <code>Dog</code> and told that template to do some work. <em>Non-static</em> methods (ones without the <code>static</code> keyword, also called “instance methods”) need to be called on an object.</p>
-<p><strong><em>Try to run the code <code>Dog.bark()</code>. What happens?</em></strong> This is because you can’t tell the “template” for a <code>Dog</code> to bark, only an actual <code>Dog</code> object!</p>
+<p><strong><em>Practice: Try to run the code <code>Dog.bark()</code>. What happens?</em></strong> This is because you can’t tell the “template” for a <code>Dog</code> to bark, only an actual <code>Dog</code> object!</p>
 <p>In general, in 98% of cases, your methods should <strong>not</strong> be <code>static</code>, because you want to call them on a specific object rather than on a general “template” for objects. Variables should <strong>never</strong> be static, unless they are <strong>also</strong> <code>final</code> constants (like the <code>BEST_BREED</code> variable).</p>
 <ul>
 <li>In Android, <code>static</code> variables cause significant memory leaks, as well as just being generally poor design.</li>
@@ -250,27 +257,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="inheritance" class="section level2">
 <h2><span class="header-section-number">A.3</span> Inheritance</h2>
-<p><strong><em>Create a new file <code>Husky.java</code> that declares a new <code>Husky</code> class:</em></strong></p>
+<p><strong><em>Practice: Create a new file <code>Husky.java</code> that declares a new <code>Husky</code> class:</em></strong></p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">package</span><span class="im"> edu.info448.review;</span> <span class="co">//package declaration (needed)</span>
 
 <span class="kw">public</span> <span class="kw">class</span> Husky <span class="kw">extends</span> Dog {
   <span class="co">/* class body goes here */</span>
 }</code></pre></div>
 <p>The <code>extends</code> keyword means that <code>Husky</code> is a <a href="https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html"><strong>subclass</strong></a> of <code>Dog</code>, inheriting all of its methods and attributes. It also means that that a <code>Husky</code> instance <strong>is a</strong> <code>Dog</code> instance.</p>
-<p><strong><em>In the Tester, instantiate a new <code>Husky</code> and call <code>bark()</code> on it. What happens?</em></strong></p>
+<p><strong><em>Practice: In the Tester, instantiate a new <code>Husky</code> and call <code>bark()</code> on it. What happens?</em></strong></p>
 <ul>
 <li><p>Because we’ve inherited from <code>Dog</code>, the <code>Husky</code> class gets all of the methods defined in <code>Dog</code> for free!</p></li>
 <li><p>Try adding a constructor that takes in a single parameter (<code>name</code>) and calls the appropriate <code>super()</code> constructor so that the breed is <code>&quot;Husky&quot;</code>, which makes this a little more sensible.</p></li>
 </ul>
-<p>We can also add more methods to the <strong>subclass</strong> that the <strong>parent class</strong> doesn’t have. <strong><em>For example, add a method called <code>.pullSled()</code> to the <code>Husky</code> class.</em></strong></p>
+<p>We can also add more methods to the <strong>subclass</strong> that the <strong>parent class</strong> doesn’t have. <strong><em>Practice: add a method called <code>.pullSled()</code> to the <code>Husky</code> class.</em></strong></p>
 <ul>
 <li>Try calling <code>.pullSled()</code> on your <code>Husky</code> <em>object</em>. What happens? Then try calling <code>.pullSled()</code> on a <code>Dog</code> <em>object</em>. What happens?</li>
 </ul>
-<p>Finally, we can <strong>override</strong> methods from the parent class. <strong><em>For example, add a <code>bark()</code> method to <code>Husky</code> (with the same signature), but that has the <code>Husky</code> “woof” instead of “bark”.</em></strong> Test out your code by calling the method in the <code>Tester</code>.</p>
+<p>Finally, we can <strong>override</strong> methods from the parent class. <strong><em>Practice: add a <code>bark()</code> method to <code>Husky</code> (with the same signature), but that has the <code>Husky</code> “woof” instead of “bark”.</em></strong> Test out your code by calling the method in the <code>Tester</code>.</p>
 </div>
 <div id="interfaces" class="section level2">
 <h2><span class="header-section-number">A.4</span> Interfaces</h2>
-<p><strong><em>Create a new file <code>Huggable.java</code> with the following code:</em></strong></p>
+<p><strong><em>Practice: Create a new file <code>Huggable.java</code> with the following code:</em></strong></p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">package</span><span class="im"> edu.info448.review;</span>
 
 <span class="kw">public</span> <span class="kw">interface</span> Huggable {
@@ -279,7 +286,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>This is an example of an <a href="https://docs.oracle.com/javase/tutorial/java/concepts/interface.html"><strong>interface</strong></a>. An <strong>interface</strong> is a list of methods that a class <em>promises</em> to provide. By <em>implementing</em> the interface (with the <code>interface</code> keyword in the class declaration), the class promises to include any methods listed in the interface.</p>
 <ul>
 <li><p>This is a lot like hanging a sign outside your business that says <em>“Accepts Visa”</em>. It means that if someone comes to you and tries to pay with a Visa card, you’ll be able to do that!</p></li>
-<li><p>Implementing an interface makes no promise about <em>what</em> those methods do, just that the class will include methods with those signatures. <strong><em>For example, change the <code>Husky</code> class declaration</em></strong>:</p></li>
+<li><p>Implementing an interface makes no promise about <em>what</em> those methods do, just that the class will include methods with those signatures. <strong><em>Practice: change the <code>Husky</code> class declaration</em></strong>:</p></li>
 </ul>
 <p><code>java   public class Husky extends Dog implements Huggable {...}</code></p>
 <p>Now the the <code>Husky</code> class needs to have a <code>public void hug()</code> method, but what that method <em>does</em> is up to you!</p>
@@ -296,7 +303,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>In addition, we can implement multiple interfaces (<code>Husky implements Huggable, Pettable</code>), but we can’t inherit from multiple classes</p>
 <ul>
 <li><p>This is great for when we have other classes of different types but similar behavior: e.g., a <code>TeddyBear</code> can be <code>Huggable</code> but can’t <code>bark()</code> like a <code>Dog</code>!</p></li>
-<li><p><strong><em>Make the class <code>TeddyBear</code> implement <code>Huggable</code>. Do you need to add any new methods?</em></strong></p></li>
+<li><p><strong><em>Practice: Make the class <code>TeddyBear</code> implement <code>Huggable</code>. Do you need to add any new methods?</em></strong></p></li>
 </ul></li>
 </ul>
 <p><strong><em>What’s the difference between inheritance and interfaces?</em></strong> The main rule of thumb: use <em>inheritance</em> (<code>extends</code>) when you want classes to share <strong>code</strong> (implementation). Use <em>interfaces</em> (<code>implements</code>) when you want classes to share <strong>behaviors</strong> (method signatures). In the end, <em>interfaces</em> are more important for doing good Object-Oriented design. Favor interfaces over inheritance!</p>
@@ -307,14 +314,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Consider the standard variable declaration:</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Dog myDog; <span class="co">//= new Dog();</span></code></pre></div>
 <p>The variable type of <code>myDog</code> is <code>Dog</code>, which means that variable can refer to any value (object) that <strong>is a</strong> <code>Dog</code>.</p>
-<p><strong><em>Task: Try the following declarations (note that some will not compile!)</em></strong></p>
+<p><strong><em>Practice: Try the following declarations (note that some will not compile!)</em></strong></p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Dog v1 = <span class="kw">new</span> <span class="fu">Husky</span>();
 Husky v2 = <span class="kw">new</span> <span class="fu">Dog</span>();
 Huggable v2 = <span class="kw">new</span> <span class="fu">Husky</span>();
 Huggable v3 = <span class="kw">new</span> <span class="fu">TeddyBear</span>();
 Husky v4 = <span class="kw">new</span> <span class="fu">TeddyBear</span>();</code></pre></div>
 <p>If the <strong>value</strong> (the thing on the right side) <em>is an</em> instance of the <strong>variable type</strong> (the type on the left side), then you have a valid declaration.</p>
-<p>Even if you declare a variable <code>Dog v1 = new Husky()</code>, the <strong>value</strong> in that object <em>is</em> a <code>Husky</code>. If you call <code>.bark()</code> on it, you’ll get the <code>Husky</code> version of the method (<strong><em>try overriding the method to print out <code>&quot;barks like a Husky&quot;</code> to see</em></strong>).</p>
+<p>Even if you declare a variable <code>Dog v1 = new Husky()</code>, the <strong>value</strong> in that object <em>is</em> a <code>Husky</code>. If you call <code>.bark()</code> on it, you’ll get the <code>Husky</code> version of the method (<strong><em>Practice: try overriding the method to print out <code>&quot;barks like a Husky&quot;</code> to see</em></strong>).</p>
 <p>You can <strong>cast</strong> between types if you need to convert from one to another. As long as the <strong>value</strong> <em>is a</em> instance of the type you’re casting to, the operation will work fine.</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Dog v1 = <span class="kw">new</span> <span class="fu">Husky</span>();
 Husky v2 = (Husky)v1; <span class="co">//legal casting</span></code></pre></div>
@@ -325,10 +332,10 @@ hugList.<span class="fu">add</span>(<span class="kw">new</span> <span class="fu"
 
 <span class="co">//enhanced for loop (&quot;foreach&quot; loop)</span>
 <span class="co">//read: &quot;for each Huggable in the hugList&quot;</span>
-<span class="kw">for</span>(Huggabble thing : hugList) { 
+<span class="kw">for</span>(Huggabble thing : hugList) {
     thing.<span class="fu">hug</span>();
 }</code></pre></div>
-<p><strong><em>What happens if you run the above code?</em></strong> Because Huskies and Teddy Bears share the same behavior (<code>interface</code>), we can treat them as a single “type”, and so put them both in a list. And because everything in the list supports the <code>Huggable</code> interface, we can call <code>.hug()</code> on each item in the list and we know they’ll have that method—they promised by <code>implementing</code> the interface after all!</p>
+<p><strong><em>Practice: What happens if you run the above code?</em></strong> Because Huskies and Teddy Bears share the same behavior (<code>interface</code>), we can treat them as a single “type”, and so put them both in a list. And because everything in the list supports the <code>Huggable</code> interface, we can call <code>.hug()</code> on each item in the list and we know they’ll have that method—they promised by <code>implementing</code> the interface after all!</p>
 </div>
 <div id="abstract-methods-and-classes" class="section level2">
 <h2><span class="header-section-number">A.6</span> Abstract Methods and Classes</h2>
@@ -336,11 +343,11 @@ hugList.<span class="fu">add</span>(<span class="kw">new</span> <span class="fu"
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">abstract</span> <span class="dt">void</span> <span class="fu">hug</span>();</code></pre></div>
 <p>An <strong>abstract method</strong> is one that does not (yet) have a method body: it’s just the signature, but no actual implementation. It is “unfinished.” In order to instantiate a class (using the <code>new</code> keyword), that class needs to be “finished” and provide implementations for <em>all</em> abstract methods—e.g., all the ones you’ve inherited from an interface. This is exactly how you’ve used <code>interfaces</code> so far: it’s just another way of thinking about why you need to provide those methods.</p>
 <p>If the <code>abstract</code> keyword is implied for interfaces, what’s the point? Consider the <code>Animal</code> class (which is a parent class for <code>Dog</code>). The <code>.speak()</code> method is “empty”; in order for it to do anything, the subclass needs to override it. And currently there is nothing to stop someone who is subclassing <code>Animal</code> from forgetting to implement that method!</p>
-<p>We can <em>force</em> the subclass to override this method by making the method <code>abstract</code>: effectively, leaving it unfinished so that if the subclass (e.g., <code>Dog</code>) wants to do anything, it must finish up the method. <strong><em>Make the <code>Animal#speak()</code> method <code>abstract</code>. What happens when you try and build the code?</em></strong></p>
+<p>We can <em>force</em> the subclass to override this method by making the method <code>abstract</code>: effectively, leaving it unfinished so that if the subclass (e.g., <code>Dog</code>) wants to do anything, it must finish up the method. <strong><em>Practice: Make the <code>Animal#speak()</code> method <code>abstract</code>. What happens when you try and build the code?</em></strong></p>
 <p>If the <code>Animal</code> class contains an unfinished (<code>abstract</code>) method… then that class itself is unfinished, and Java requires us to mark it as such. We do this by declaring the <em>class</em> as <code>abstract</code> in the class declaration :</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> MyAbstractClass {...}</code></pre></div>
-<p><strong><em>Make the <code>Animal</code> class <code>abstract</code>.</em></strong> You will need to provide an implementation of the <code>.speak()</code> method in the <code>Dog</code> class: try just having it call the <code>.bark()</code> method (method composition for-the-win!).</p>
-<p>Only abstract classes and <code>interfaces</code> can contain <code>abstract</code> methods. In addition, an <code>abstract</code> class is unfinished, meaning it can’t be instantiated. <strong><em>Try to instantiate a <code>new Animal()</code>. What happens?</em></strong> Abstract classes are great for containing “most” of a class, but making sure that it isn’t used without all the details provided. And if you think about it, we’d never want to ever instantiate a generic <code>Animal</code> anyway—we’d instead make a <code>Dog</code> or a <code>Cat</code> or a <code>Turtle</code> or something. All that the <code>Animal</code> class is doing is acting as an <strong>abstraction</strong> for these other classes to allow them to share implementations (e.g., of a <code>walk()</code> method).</p>
+<p><strong><em>Practice: Make the <code>Animal</code> class <code>abstract</code>.</em></strong> You will need to provide an implementation of the <code>.speak()</code> method in the <code>Dog</code> class: try just having it call the <code>.bark()</code> method (method composition for-the-win!).</p>
+<p>Only abstract classes and <code>interfaces</code> can contain <code>abstract</code> methods. In addition, an <code>abstract</code> class is unfinished, meaning it can’t be instantiated. <strong><em>Practice: Try to instantiate a <code>new Animal()</code>. What happens?</em></strong> Abstract classes are great for containing “most” of a class, but making sure that it isn’t used without all the details provided. And if you think about it, we’d never want to ever instantiate a generic <code>Animal</code> anyway—we’d instead make a <code>Dog</code> or a <code>Cat</code> or a <code>Turtle</code> or something. All that the <code>Animal</code> class is doing is acting as an <strong>abstraction</strong> for these other classes to allow them to share implementations (e.g., of a <code>walk()</code> method).</p>
 <ul>
 <li>Abstract classes are a bit like “templates” for classes… which are themselves “templates” for objects.</li>
 </ul>
@@ -358,7 +365,7 @@ hugList.<span class="fu">add</span>(<span class="kw">new</span> <span class="fu"
 <ul>
 <li>Warning: <em>always</em> use single-letter variable names for generic types! If you try to name it something like <code>String</code> (e.g., <code>public class GiftBox&lt;String&gt;</code>), then Java will interpret the word <code>String</code> to be that variable type, rather than refering to the <code>java.lang.String</code> class. This a lot like declaring a variable <code>int Dog = 448</code>, and then calling <code>Dog.createPuppies()</code>.</li>
 </ul>
-<p><strong><em>Try to make the <code>GiftBox</code> class generic and instantiate a new <code>GiftBox&lt;Husky&gt;</code></em></strong></p>
+<p><strong><em>Practice: Try to make the <code>GiftBox</code> class generic and instantiate a new <code>GiftBox&lt;Husky&gt;</code></em></strong></p>
 </div>
 <div id="nested-classes" class="section level2">
 <h2><span class="header-section-number">A.8</span> Nested Classes</h2>

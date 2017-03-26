@@ -17,6 +17,11 @@
   content: "Last updated: ";
 }
 
+/* appendix number fix?*/
+.header-section-number {
+    padding-right: .5em;
+}
+
 /* Common? */
 p.caption {
   color: #777;

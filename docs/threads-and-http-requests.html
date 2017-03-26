@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
+<link rel="prev" href="swing-framework.html">
 
-<link rel="next" href="introduction.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -197,28 +197,73 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Android Development: Lecture Notes</h1>
-<h4 class="author"><em>Joel Ross</em></h4>
-<h4 class="date"><em>2017-03-26</em></h4>
+<div id="threads-and-http-requests" class="section level1">
+<h1><span class="header-section-number">C</span> Threads and HTTP Requests</h1>
+<p>This appendix introduces concepts in <strong>concurrency and threading</strong>, which are used extensively by Android though a framework-specific classes and options. For clarity, these concepts are introduced though a set of practice exercises in straight Java (though similar code can be utilized in Android). The code for these exercises can be found at <a href="https://github.com/info448-s17/lab-threads-http" class="uri">https://github.com/info448-s17/lab-threads-http</a>.</p>
+<p>Additionally, this appendix introduces the Java code used to send <strong>network requests</strong>. Android will use <em>exactly</em> this code, but in order to experiment with it separate from the Android framework you’ll be making network connections directly from Java.</p>
+<div id="concurrency" class="section level2">
+<h2><span class="header-section-number">C.1</span> Concurrency</h2>
+<p><strong>Concurrency</strong> the process by which we have multiple <em>processes</em> (think: methods) running at the same time. This can be contrasted with processes that run <strong>serially</strong>, or one after another.</p>
+<div id="an-example-algorithm-races" class="section level3">
+<h3><span class="header-section-number">C.1.1</span> An Example: Algorithm Races!</h3>
+<p>As an example, note that one of the main concerns of computer science and software in general is speed: how fast will a particular program or algorithm run? For example, give two of the <a href="https://en.wikipedia.org/wiki/Sorting_algorithm#Popular_sorting_algorithms">many sorting algorithms</a> that have been invented, which one can sort a list of numbers more quickly?</p>
+<ul>
+<li>Sorting algorithms are usually covered in UW’s <em>CSE 373</em> course, but don’t worry if you haven’t taken that course yet! All you need to know is that there are different techniques for sorting numbers, these techniques are given funny names, and one technique may be faster than another</li>
+</ul>
+<p>Consider the provided <code>SortRacer.java</code> class (found in the <code>src/main/java</code> folder). The <code>main</code> method for this program runs two different sorting algorithms (currently <a href="https://en.wikipedia.org/wiki/Merge_sort">Merge Sort</a> and <a href="https://en.wikipedia.org/wiki/Quicksort">Quicksort</a>), reporting when each one is finished.</p>
+<p><strong><em>Practice: Run this program using gradle</em></strong>: <code>./gradlew -q runSorts</code>. Note that it may take a few seconds for it to build and begin running, and the sorting itself may take a few seconds!</p>
+<p>Of course, it’s not really a “race” at the moment: rather, each sorting algorithm is run <strong>serially</strong> (that is, one after another). If we really wanted them to race, we’d like the algorithms to run <strong>concurrently</strong> (at the same time).</p>
+<p>Computers as a general rule do exactly one thing a time: your central processing unit (CPU) just adds two number together over and over again, billions of times a second</p>
+<ul>
+<li>The standard measure for <em>rate</em> (how many times per second) is the <code>hertz</code> (Hz). So a 2 gigahertz (GHz) processor can do 2 billion operations per second.</li>
+</ul>
+<p>However, we don’t realize that computers do only one thing at a time! This is because computers are really good at <em>multitasking</em>: they will do a tiny bit of one task, and then jump over to another task and do a little of that, and then jump over to another task and do a little of that, and then back to the first task, and so on.</p>
+<div class="figure">
+<img src="img/threads/thread-switching.jpg" alt="Diagram of thread switching (source unknown)" />
+<p class="caption">Diagram of thread switching (source unknown)</p>
 </div>
-<div id="about-this-book" class="section level1 unnumbered">
-<h1>About this Book</h1>
-<p>This book compiles lecture notes and tutorials for the <strong>INFO 448 Mobile Development: Android</strong> course taught at the <a href="https://ischool.uw.edu/">University of Washington Information School</a> (most recently in <a href="https://canvas.uw.edu/courses/1139926">Spring 2017</a>). The goal of these notes is to provide learning materials for students in the course or anyone else who wishes to learn the basics of developing Android applications.</p>
-<p>These notes are primarily adapted from the <a href="https://developer.android.com/develop/index.html">official Android developer documentation</a>, compiling and synthesizing those guidelines for pedagogical purposes (and the author’s own interpretation/biases). Please refer to that documentation for the latest information and official guidance.</p>
-<p class="alert alert-warning">
-This book is currently in <strong>alpha</strong> status, as pure lecture notes are converted into more generic formats.
-</p>
-<p><img src="img/index/by-nc-sa.png" alt="Creative Commons License" /> This book is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<p>These “tasks” are divided up into two types: <strong>processes</strong> and <strong>threads</strong>. <strong><em>Read <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/procthread.html">this brief summary</a> of the difference between them</em></strong>.</p>
+<p>So by breaking up a program into threads (which are “interwoven”), we can in effect cause the computer to do two tasks at once. This is <em>especially</em> useful if one of the “tasks” might take a really long time–rather than <strong>blocking</strong> the application, we can let other tasks also make some progress while we’re waiting for the long task to finish.</p>
+</div>
+<div id="threading-the-race" class="section level3">
+<h3><span class="header-section-number">C.1.2</span> Threading the Race</h3>
+<p>Currently the two sorting algorithms run in the same thread, one after another. You should break them into two <em>different</em> threads that can run <strong>concurrently</strong>, letting them actually be able to race!</p>
+<p>In Java, we create a Thread by creating a class that <code>implements</code> the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html"><strong><code>Runnable</code></strong></a> interface. This represents a class that can be “run” in a separate thread! The <code>run()</code> method required by the interface acts a bit like the “main” method for that Thread: when we start the Thread running, that is the method that will get called.</p>
+<p><strong><em>Practice: Create two new <code>Runnable</code> classes, one for each Sorting method</em></strong>.</p>
+<ul>
+<li><p>These should be <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html">nested classes</a> (think: should they be <code>static</code>?).</p></li>
+<li><p>When each <code>Runnable</code> is <code>run</code>, you should create a new <em>shuffled</em> array of numbers and then call the appropriate sorting method on that list. Remember to print out when you start and finish sorting (just like is currently done in the <code>main()</code> method).</p></li>
+</ul>
+<p>If we just instantiate the <code>Runnable()</code> and call its <code>run()</code> method, that won’t actually execute the method on a different thread (remember: an interface is just a “sign”; we could have called the interface and method whatever we wanted and it would still compile). Instead, we execute code on a separate thread by using an instance of the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html"><strong><code>Thread</code></strong></a> class. This class actually does the work of running code on a separate thread.</p>
+<p><code>Thread</code> has a <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html#Thread-java.lang.Runnable-">constructor</a> that takes in a <code>Runnable</code> instance as a parameter—you pass an object representing the “code to run” to the <code>Thread</code> object (this is an example of the <em>Strategy Pattern</em>). You then can actually <strong>start</strong> the <code>Thread</code> by calling its <code>.start()</code> method (<em>not</em> the <code>run</code> method!).</p>
+<p><strong><em>Practice: Modify the <code>main()</code> method so you create new <code>Threads</code> to execute each <code>Runnable</code></em></strong> Make sure you actually <code>start()</code> the threads!</p>
+<ul>
+<li>Anonymous variables will be useful here; you don’t need to assign a variable name to the <code>Runnable</code> objects or even the <code>Thread</code> objects if you just use them directly.</li>
+</ul>
+<p>Now run your program! Do you see the Threads running at the same time? Try running the program multiple times and see what kind of differences you get.</p>
+<ul>
+<li><p>There are some print statements you can uncomment in the <code>Sorting</code> class if you want to see more concrete evidence of the Threads running concurrently.</p></li>
+<li><p>You are also welcome to try racing different sorting algorithms (you’ll want to use a smaller list of numbers, particularly for the painfully slow BubbleSort). You can even race more than two algorithms—just create additional Threads!</p></li>
+</ul>
+<p>And that’s the basics of creating Threads in Java!</p>
+</div>
+</div>
+<div id="http-requests" class="section level2">
+<h2><span class="header-section-number">C.2</span> HTTP Requests</h2>
+<p>Consider the provided <code>MovieDownloader.java</code> class (found in the <code>src/main/java/</code> folder). This Java code (which is <em>directly</em> portable to Android) accesses the database at <a href="http://www.omdbapi.com/">omdbapi.com</a>, a wrapper around the IMDB API calls for getting information about movies.</p>
+<p>You can run this program with the <code>./gradlew -q runMovies</code> task. It will prompt you for a movies to search for, and then print out the results (in JSON format).</p>
+<p><strong><em>Practice: add descriptive comments to the <code>downloadMovieData()</code> method</em></strong>, explaining what the code does and how it works. The goal is to understand the classes and methods are that are being used here (particularly the use of <a href="https://docs.oracle.com/javase/8/docs/api/java/net/HttpURLConnection.html"><code>HttpUrlConnection</code></a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html"><code>InputStream</code></a>, and <a href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html"><code>BufferedReader</code></a>), and demonstrate that understanding through explanatory comments. You should also pay particular attention to the use of <code>try/catch</code> blocks (see <a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/handling.html">here</a> for one explanation).</p>
+<p>Note that we’ll utilize this exact code in Android, so you should be familiar with what it is doing!</p>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
+<a href="swing-framework.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -246,7 +291,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/index.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/java-threads-http.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],
