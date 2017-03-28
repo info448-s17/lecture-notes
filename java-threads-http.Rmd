@@ -1,5 +1,7 @@
 # Threads and HTTP Requests
-This appendix introduces concepts in **concurrency and threading**, which are used extensively by Android though a framework-specific classes and options. For clarity, these concepts are introduced though a set of practice exercises in straight Java (though similar code can be utilized in Android). The code for these exercises can be found at <https://github.com/info448-s17/lab-threads-http>.
+This appendix introduces concepts in **concurrency and threading**, which are used extensively by Android though a framework-specific classes and options. For clarity, these concepts are introduced though a set of practice exercises in straight Java (though similar code can be utilized in Android).
+
+<p class="alert alert-info">The code for these exercises can be found at <https://github.com/info448-s17/lab-threads-http>.</p>
 
 Additionally, this appendix introduces the Java code used to send **network requests**. Android will use _exactly_ this code, but in order to experiment with it separate from the Android framework you'll be making network connections directly from Java.
 

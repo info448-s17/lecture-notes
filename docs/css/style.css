@@ -37,6 +37,7 @@ p code {
 pre {
   word-break: normal;
   word-wrap: normal;
+  line-height: 1.42em;
 }
 pre code {
   white-space: inherit;
