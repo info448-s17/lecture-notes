@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-03-26">
+<meta name="date" content="2017-03-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -106,10 +106,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About this Book</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#android-history"><i class="fa fa-check"></i><b>1.1</b> Android History</a></li>
-<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#android-architecture-and-code"><i class="fa fa-check"></i><b>1.2</b> Android Architecture and Code</a></li>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#android-history"><i class="fa fa-check"></i><b>1.1</b> Android History</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="introduction.html"><a href="introduction.html#android-versions"><i class="fa fa-check"></i><b>1.1.1</b> Android Versions</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introduction.html"><a href="introduction.html#legal-battles"><i class="fa fa-check"></i><b>1.1.2</b> Legal Battles</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#android-architecture-and-code"><i class="fa fa-check"></i><b>1.2</b> Android Architecture and Code</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="introduction.html"><a href="introduction.html#programming-languages"><i class="fa fa-check"></i><b>1.2.1</b> Programming Languages</a></li>
+<li class="chapter" data-level="1.2.2" data-path="introduction.html"><a href="introduction.html#building-apps"><i class="fa fa-check"></i><b>1.2.2</b> Building Apps</a></li>
+</ul></li>
 <li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#development-tools"><i class="fa fa-check"></i><b>1.3</b> Development Tools</a><ul>
-<li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#software"><i class="fa fa-check"></i><b>1.3.1</b> Software</a></li>
+<li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#hardware"><i class="fa fa-check"></i><b>1.3.1</b> Hardware</a></li>
+<li class="chapter" data-level="1.3.2" data-path="introduction.html"><a href="introduction.html#software"><i class="fa fa-check"></i><b>1.3.2</b> Software</a></li>
 </ul></li>
 <li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#hello-world"><i class="fa fa-check"></i><b>1.4</b> Hello World</a><ul>
 <li class="chapter" data-level="1.4.1" data-path="introduction.html"><a href="introduction.html#the-emulator"><i class="fa fa-check"></i><b>1.4.1</b> The Emulator</a></li>
@@ -199,298 +206,334 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">Lecture 1</span> Introduction</h1>
-<p>Start off with a question: <em>What is Android?</em> Why did you sign up for a course called Android Development?</p>
-<p>It’s an Operating System! That is, it’s software that connects hardware to software and provides general services. More than that, it’s a <em>mobile specific</em> operating system.</p>
-<p>“Android” also refers to “platform” (e.g., devices that use the OS) and the ecosystem that surrounds it. This includes the device manufacturers who use the platform, and the applications that can be built and run on this platform.</p>
+<p>This course focuses on <strong>Android Development</strong>. But what is Android?</p>
+<p>Android is an <a href="https://en.wikipedia.org/wiki/Operating_system">operating system</a>. That is, it’s software that connects hardware to software and provides general services. But more than that, it’s a <em>mobile specific</em> operating system: an OS designed to work on <em>mobile</em> (read: handheld, wearable, carry-able) devices.</p>
+<ul>
+<li>Note that the term “Android” also is used to refer to the “platform” (e.g., devices that use the OS) as well as the ecosystem that surrounds it. This includes the device manufacturers who use the platform, and the applications that can be built and run on this platform. So “Android Development” technically means developing applications that run on the specific OS, it also gets generalized to refer to developing any kind of software that interacts with the platform.</li>
+</ul>
 <div id="android-history" class="section level2">
 <h2><span class="header-section-number">1.1</span> Android History</h2>
-<p>Some brief history:</p>
+<p>If you’re going to develop systems for Android, it’s good to have some familiarity with the platform and its history, if only to give you perspective on how and why the framework is designed the way it is.</p>
 <ul>
-<li>2003: founded by “Android Inc” to build mobile OS operating system (similar to what Symbian (Nokia) was doing)</li>
-<li>2005: acquired by Google, who was looking to get into mobile</li>
-<li>2007: Google announces <a href="http://www.openhandsetalliance.com/">Open Handset Alliance</a>, group of tech companies working together to develop “open standards”
+<li><p><strong>2003</strong>: The platform was originally founded by a start-up “Android Inc.” which aimed to build a mobile OS operating system (similar to what <a href="https://en.wikipedia.org/wiki/Symbian">Nokia’s Symbian</a> was doing at the time)</p></li>
+<li><p><strong>2005</strong>: Android was acquired by Google, who was looking to get into mobile</p></li>
+<li><p><strong>2007</strong>: Google announces the <a href="https://www.openhandsetalliance.com/">Open Handset Alliance</a>, a group of tech companies working together to develop “open standards” for mobile platforms. Members included phone manufacturers like HTC, Samsung, and Sony; mobile carriers like T-Mobile, Sprint, and NTT DoCoMo; hardware manufacturers like Broadcom and Nvidia; and others. The Open Handset Alliance now (2017) includes 86 companies.</p>
 <ul>
-<li>Google; HTC, Samsung, Sony; T-Mobile, Sprint NTT DoCoMo; Broadcom, Nvidia, etc. Now 84 companies.</li>
 <li>Note this is the same year the first iPhone came out!</li>
 </ul></li>
-<li>2008: First Android device (HTC Dream / T-Mobile G1)
+<li><p><strong>2008</strong>: First Android device is released: the <a href="https://en.wikipedia.org/wiki/HTC_Dream">HTC Dream</a> (a.k.a. T-Mobile G1)</p>
+<!-- ![HTC Dream](img/introduction/htc-dream.png) -->
+<p>Specs: 528Mhz ARM chip; 256MB memory; 320x480 resolution capacitive touch; slide-out keyboard! Author’s opinion: a fun little device.</p></li>
+<li><p><strong>2010</strong>: First <a href="https://en.wikipedia.org/wiki/Google_Nexus">Nexus</a> device is released: the <a href="https://en.wikipedia.org/wiki/Nexus_One">Nexus One</a>. These are Google-developed “flagship” devices, intended to show off the capabilities of the platform.</p>
+<p>Specs: 1Ghz Scorpion; 512MB memory; .37&quot; at 480x800 AMOLED capacitive touch.</p>
 <ul>
-<li>528Mhz ARM chip; 256MB memory; 320x480 resolution capacitive touch; slide-out keyboard! A fun little device</li>
-</ul></li>
-<li>2010: First Nexus device: Google-developed “flagship” devices
-<ul>
-<li>Nexus One: 1Gz Scorpion; 512MB memory; .37&quot; 480x800 AMOLED capacitive touch</li>
-<li>Comparison: iPhone 6S+ (1.85Ghz dual core ARMv8, 2GB RAM, 5.5&quot; @ 1920x1080)</li>
-</ul></li>
-<li>2014: Android One (low-cost for developing countries)</li>
-<li>2015: Project Brillo, aiming for embedded devices</li>
+<li>For comparison, the <a href="https://en.wikipedia.org/wiki/IPhone_7">iPhone 7 Plus</a> (2016) has: 2.34Ghz dual core A10 64bit Fusion; 3GB RAM; 5.5&quot; at 1920x1080 display.</li>
 </ul>
-<p>Android is incredibly popular! (see e.g., <a href="https://www.netmarketshare.com/operating-system-market-share.aspx?qprid=10&amp;qpcustomd=0">here</a>, <a href="http://www.theverge.com/2017/2/16/14634656/android-ios-market-share-blackberry-2016">here</a>, <a href="http://www.businessinsider.com/iphone-v-android-market-share-2014-5">here</a>)</p>
-<ul>
-<li>There are some questions about what is counted… but what we care about is that there are <em>a lot</em> of Android devices out there! More than that, there are a lot of <strong>different</strong> devices!</li>
+<p>As of 2016, this program has been superceded by the <a href="https://en.wikipedia.org/wiki/Pixel_(smartphone)">Pixel</a> range of devices.</p></li>
+<li><p><strong>2014</strong>: Android Wear, a version of Android for wearable devices (watches) is announced.</p></li>
+<li><p><strong>2016</strong>: Daydream, a virtual reality (VR) platform for Android is announced</p></li>
 </ul>
-<p>For version history, reference the <a href="https://en.wikipedia.org/wiki/Android_version_history">Wiki chart</a> - Different “versions” are named after desserts. But from developer perspective, care about API version (e.g., what set of <em>interfaces</em> are available). - Interactive version: <a href="http://www.android.com/history/" class="uri">http://www.android.com/history/</a> - Usage breakdown at: <a href="http://developer.android.com/about/dashboards/index.html" class="uri">http://developer.android.com/about/dashboards/index.html</a></p>
-<p>Updates to devices historically through purchasing new devices (every 18m on average in US). Otherwise updates–including security updates–come through carriers. This is a problem from a consumer perspective! But Google working to change that; moving some services out of OS into separate “App” (Google Play Services). - Android OS is “open source”; latest version at <a href="https://source.android.com/" class="uri">https://source.android.com/</a>. Worth actually digging around in this sometime</p>
-<p>Would be remiss if didn’t mention some of the legal issues surrounding Android.</p>
+<p>In short, Google keeps pushing the platform wider so it includes more and more capabilities.</p>
+<p>Today, Android is incredibly popular (to put it mildly). Android is incredibly popular! (see e.g., <a href="https://www.netmarketshare.com/operating-system-market-share.aspx?qprid=8&amp;qpcustomd=1">here</a>, <a href="https://www.theverge.com/2017/2/16/14634656/android-ios-market-share-blackberry-2016">here</a>, and <a href="https://www.businessinsider.com/iphone-v-android-market-share-2014-5">here</a>)</p>
 <ul>
-<li>Biggest is <strong>Oracle v Google</strong>: basics is that Oracle says the <em>Java API</em> is copyright, so because Google uses that API is Android, Google is violating the copyright
-<ul>
-<li>Claim: the method signatures themselves (and how they work) are protected!</li>
-<li>CA court decided for Google in 2012 (can’t copyright an API!); reversed by Federal Circuit in 2014. Supreme Court refused to hear in 2015.</li>
-<li><a href="https://www.eff.org/cases/oracle-v-google" class="uri">https://www.eff.org/cases/oracle-v-google</a> for more Also <a href="https://arstechnica.com/series/series-oracle-v-google/" class="uri">https://arstechnica.com/series/series-oracle-v-google/</a></li>
-<li>Interesting development: latest version of Android (Nougat) uses the <a href="http://openjdk.java.net/">OpenJDK</a> implementation of Java, instead of Google own <a href="http://venturebeat.com/2015/12/29/google-confirms-next-android-version-wont-use-oracles-proprietary-java-apis/">see here</a>. Shouldn’t impact us, but keep an eye out for potential differences between Android and Java SE.</li>
-</ul></li>
-<li>Others as well:
-<ul>
-<li><a href="https://arstechnica.com/series/apple-v-samsung/">Apple v Samsung</a>: “You infringed our intellectual property!” (<a href="https://www.nytimes.com/2016/12/06/technology/samsung-apple-smartphone-patent-supreme-court.html?_r=0">Supreme court sides with Samsung</a>)</li>
-<li>FairSearch v Google: “You’re using predatory pricing!”</li>
-</ul></li>
+<li>In any of these analyses there are some questions about what exactly is counted… but what we care about is that there are <em>a lot</em> of Android devices out there! And more than that: there are a lot of <strong>different</strong> devices!</li>
 </ul>
-<p>Take away: Android is a growing, evolving platform that is embedded in and affecting the social infrastructures around information technology.</p>
+<div id="android-versions" class="section level3">
+<h3><span class="header-section-number">1.1.1</span> Android Versions</h3>
+<p>Android has gone through a large number of “versions” since it’s release:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Date</th>
+<th>Version</th>
+<th>Nickname</th>
+<th>API Level</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sep 2008</td>
+<td>1.0</td>
+<td>Android</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Apr 2009</td>
+<td>1.5</td>
+<td>Cupcake</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>Sep 2009</td>
+<td>1.6</td>
+<td>Donut</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>Oct 2009</td>
+<td>2.0</td>
+<td>Eclair</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>May 2010</td>
+<td>2.2</td>
+<td>Froyo</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>Dec 2010</td>
+<td>2.3</td>
+<td>Gingerbread</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td>Feb 2011</td>
+<td>3.0</td>
+<td>Honeycomb</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td>Oct 2011</td>
+<td>4.0</td>
+<td>Ice Cream Sandwich</td>
+<td>14</td>
+</tr>
+<tr class="odd">
+<td>July 2012</td>
+<td>4.1</td>
+<td>Jelly Bean</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>Oct 2013</td>
+<td>4.4</td>
+<td>KitKat</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>Nov 2014</td>
+<td>5.0</td>
+<td>Lollipop</td>
+<td>21</td>
+</tr>
+<tr class="even">
+<td>Oct 2015</td>
+<td>6.0</td>
+<td>Marshmallow</td>
+<td>23</td>
+</tr>
+<tr class="odd">
+<td>Aug 2016</td>
+<td>7.0</td>
+<td>Nougat</td>
+<td>24</td>
+</tr>
+<tr class="even">
+<td>Mar 2017</td>
+<td>O preview</td>
+<td><em>Android O Developer Preview</em></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Each different “version” is nicknamed after a dessert, in alphabetica order. But as developers, what we care about is the <strong>API Level</strong>, which indicates what different programming <em>interfaces</em> (classes and methods) are available to use.</p>
+<ul>
+<li>You can check out an interactive version of the history through Marshmallow at <a href="https://www.android.com/history/" class="uri">https://www.android.com/history/</a></li>
+<li>For current usage breakdown, see <a href="https://developer.android.com/about/dashboards/" class="uri">https://developer.android.com/about/dashboards/</a></li>
+</ul>
+<p>Additionally, Android is an “open source” project released through the “Android Open Source Project”, or <a href="https://source.android.com/">ASOP</a>. You can find the latest version of the operating system code at <a href="https://source.android.com/" class="uri">https://source.android.com/</a>; it is very worthwhile to actually dig around in the source code sometimes!</p>
+<p>While new versions are released fairly often, this doesn’t mean that all or even many devices update to the latest version. Instead, users get updated phones historically by purchasing new devices (every 18m on average in US). Beyond that, updates—including security updates—have to come through the mobile carriers, meaning that most devices are never updated beyond the version that they are purchases with.</p>
+<ul>
+<li>This is a problem from a consumer perspective, particularly in terms of security! There are some efforts on Google’s part to to work around this limitation by moving more and more platform services out of the base operating system into a separate “App” called Google Play Services.</li>
+<li>But what this means for developers is that you can’t expect devices to be running the latest version of the operating system—the range of versions you need to support is much greater than even web development!</li>
+</ul>
+</div>
+<div id="legal-battles" class="section level3">
+<h3><span class="header-section-number">1.1.2</span> Legal Battles</h3>
+<p>When discussing Android history, we would be remiss if we didn’t mention some of the legal battles surrounding Android. The biggest of these is <a href="https://www.eff.org/cases/oracle-v-google"><strong>Oracle v Google</strong></a>. In a nutshell, Oracle claims that the <em>Java API</em> is copyrighted (that the method signatures themeselves and how they work are protected), so because Google uses that API in Android, Google is violating the copyright. In 2012 a California federal judge decided in Google favor (that one can’t copyright an API). This was then reversed by the Federal Circuit court in 2014. The verdict was appealed to the Supreme courset in 2015, who refused to hear the case. It then went back to the the district court, which ruled that Google’s use of the API was fair use. See <a href="https://www.eff.org/cases/oracle-v-google" class="uri">https://www.eff.org/cases/oracle-v-google</a> for a summary, as well as <a href="https://arstechnica.com/series/series-oracle-v-google/" class="uri">https://arstechnica.com/series/series-oracle-v-google/</a></p>
+<ul>
+<li>One interesting side effect of this battle: the latest version of Android (Nougat) uses the <a href="https://openjdk.java.net/">OpenJDK</a> implementation of Java, instead of Google’s own in-violation-but-fair-use implementation <a href="https://venturebeat.com/2015/12/29/google-confirms-next-android-version-wont-use-oracles-proprietary-java-apis/">see here</a>. This change <em>shouldn’t</em> have any impact on us as developers, but it’s worth keeping an eye out for potentially differences between Android and Java SE.</li>
+</ul>
+<p>There have been other legal challenges as well. While not directly about Android, the other major relevant court battle is <a href="https://arstechnica.com/series/apple-v-samsung/"><strong>Apple v Samsung</strong></a>. In this case, Apple claims that Samsung infringed on their intellectual property (their design patents). This has gone back and forth in terms of damages and what is considered infringing; the latest development is that the Supreme Court heard the case and <a href="https://www.nytimes.com/2016/12/06/technology/samsung-apple-smartphone-patent-supreme-court.html?_r=0">sided with Samsung</a> that infringing design patents shouldn’t lead to damages in terms of the entire device… it’s complicated (the author is not a lawyer).</p>
+<p>So overall: Android is a growing, evolving platform that is embedded in and affecting the social infrastructures around information technology in numerous ways.</p>
+</div>
 </div>
 <div id="android-architecture-and-code" class="section level2">
 <h2><span class="header-section-number">1.2</span> Android Architecture and Code</h2>
-<p>Let’s consider the basic architecture of the Android platform (More details: <a href="https://source.android.com/devices/" class="uri">https://source.android.com/devices/</a>)</p>
+<p>Developing Android applications involves interfacing with the Android platform and framework. Thus you need a high level understanding of the architecture of the Android platform. See <a href="https://source.android.com/devices/" class="uri">https://source.android.com/devices/</a> for more details.</p>
+<div class="figure">
+<img src="img/introduction/android_architecture.png" alt="Android Architecture (image from: hub4tech)" />
+<p class="caption">Android Architecture (image from: hub4tech)</p>
+</div>
+<p>Like so many other systems, the Android platform is built as a layered architecture:</p>
 <ul>
-<li>Runs on a linux kernel (for interacting with memory, processor, etc)</li>
-<li>On top of that is the hardware abstraction layer: interface to drivers that let us access the hardware (camera, storage, wifi, etc)
+<li><p>At it’s base, Android runs on a Linux kernel for interacting with the device’s processor, memory, etc. Thus an Android device can be seen as a Linux computer.</p></li>
+<li><p>On top of that kernel is the Hardware Abstraction Layer: an interface to drivers that can programmatically access hardware elements, such as the camera, disk storage, Wifi antenna, etc.</p>
 <ul>
-<li>These drivers are generally written in C</li>
+<li>These drivers are generally written in C; we won’t interact with them directly in this course.</li>
 </ul></li>
-<li>But on top of that is the Runtime and Android Framework, which provides the Java language that we all know and love!</li>
-<li>(We’ll be developing applications that interact with the Framework, which runs on Java).</li>
+<li><p>On top of the HAL is the Runtime and Android Framework, which provides a set of abstraction in the Java language which we all know an love. For this course, Android Development will involve writing Java applications that interact with the Android Framework layer, which handles the task of interacting with the device hardware for us.</p></li>
 </ul>
-<p>There are two languages we’ll be working with in this class:</p>
+<div id="programming-languages" class="section level3">
+<h3><span class="header-section-number">1.2.1</span> Programming Languages</h3>
+<p>There are two programming languages we will be working with in this course:</p>
 <ol style="list-style-type: decimal">
-<li><strong>Java</strong>. Android code (the logic, control, data stuff) is written in Java.
+<li><p><strong>Java:</strong> Android code (program control and logic, as well as data storage and manipulation) is written in Java.</p>
+<p>Writing Android code will feel a lot writing any other Java program: you create classes, define methods, instantiate objects, and call methods on those objects. But because you’re working within a <a href="https://martinfowler.com/bliki/InversionOfControl.html"><strong>framework</strong></a>, there is a set of code that <em>already exists</em> to call specific methods. As a developer, your task will be to fill in what these methods do in order to run your specific application.</p>
 <ul>
-<li>This will feel a lot like every other Java Program: you write classes, define methods, instantiate objects, and call methods on those objects</li>
-<li>But we’re working within a <strong>framework</strong>: a set of code <em>already exists</em> to call specific methods: we’ll just fill in what those methods do to run our code
-<ul>
-<li>More Angular (framework) than jQuery (library)</li>
+<li><p>In web terms, this is closer to working with Angular (a framework) than jQuery (a library).</p></li>
+<li><p>Importantly: this course expects you to have “journeyman”-level skills in Java (apprenticeship done, not yet master). We’ll be using a number of intermediate concepts (like generics and inheritance) without much fanfare or explanation (though see <a href="java-review.html#java-review">the appendix</a>).</p></li>
 </ul></li>
-<li>Important: This course expects you to have “journeyman”-level skills in Java (apprenticeship done, not yet master). We’ll be using a number of intermediate concepts (like generics and inheritance) without much fanfare or explanation. And so you should be comfortable with that. If you’re not… this class is going to be a challenge. Consider yourselves warned.
-<ul>
-<li>We will go over some of the topics that people reported being less familiar with tomorrow in lab… but that will be most our Java review. I’m assuming you’re already comfortable with the language so that we can focus on the framework.</li>
-<li><em>By the way</em>: for reviewing; rather do a “work through a tutorial/explanation” or have me lecture/review topics? (e.g., do you want to drive or do you want me to?)</li>
-</ul></li>
-<li>Any questions/concerns/issues about that</li>
-</ul></li>
-<li><strong>XML</strong>. Android interfaces and resources are specified in XML (eXtensible Markup Language). So we’ll be doing a lot of XML writing.
-<ul>
-<li>XML is just like HTML, but you get to make up your own tags (though we’re going to use the ones that Android made up).</li>
-<li>If you’ve never worked with HTML… you’ll pick it up fast (it’s not complex).</li>
-</ul></li>
+<li><p><strong>XML:</strong> Android user interfaces and resources are specified in <a href="https://en.wikipedia.org/wiki/XML">XML</a> (E<strong>X</strong>tensible <strong>M</strong>arkup <strong>L</strong>anguage). To compare to web programming: the XML contains what would normally go in the HTML/CSS, while the Java code will contain what would normally go in the JavaScript.</p>
+<p>XML is just like HTML, but you get to make up your own tags. Except we’ll be using the ones that Android made up; so it’s like defining web pages, except with a new set of elements. This course expects you to have some familiarity with HTML or XML, but if not you should be able to infer what you need from the examples.</p></li>
 </ol>
-<p>If you think of web programming: the XML is going to contain what we would put in our HTML/CSS, and the Java will contain what would go in our JavaScript.</p>
-<p>Building Apps: So we write code in Java &amp; XML. How does that get run on the phone’s hardware?</p>
+</div>
+<div id="building-apps" class="section level3">
+<h3><span class="header-section-number">1.2.2</span> Building Apps</h3>
+<p>As stated above, we will write code in Java and XML. But how does that code get run on the phone’s hardware?</p>
+<p><strong>Pre-Lollipop (5.0)</strong>, Android code ran on <a href="https://en.wikipedia.org/wiki/Dalvik_(software)">Dalvik</a>: a virtual machine similar to the <a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM</a> used by Java SE.</p>
 <ul>
-<li>Pre-Lollipop (5.0): used <a href="https://en.wikipedia.org/wiki/Dalvik_(software)">Dalvik</a>, a virtual machine (similar to the JVM from Java SE)
-<ul>
-<li>Java code –compile–&gt; JVM bytecode –translated–&gt; DVM bytecode
-<ul>
-<li>stored in DEX or ODEX files (“[optimized] Dalvik executables”)</li>
-<li>process is called “dexing” (so code is “dexed”)</li>
-</ul></li>
-<li>For CS people: Dalvik register-based architecture (not stack-based!)</li>
-<li>Dalvik Includes JIT compilation to native code (like the <a href="http://www.oracle.com/technetwork/articles/javase/index-jsp-136373.html">Java HotSpot</a>)
-<ul>
-<li><em>Why would “native code” be faster?</em> Because no translation step is needed to talk to the actual hardware (the OS)</li>
-</ul></li>
-</ul></li>
-<li>Post-Lollipop (5.0): uses <a href="https://source.android.com/devices/tech/dalvik/">Android Runtime (ART)</a>
-<ul>
-<li>compile into native code on installation! (“Ahead of Time” AOT)</li>
-<li>accepts DEX bytecode for backwards compatibility</li>
-<li>faster execution, but longer install time</li>
-</ul></li>
+<li>Fun fact for people with a Computer Science background: Dalvik uses a <a href="https://en.wikipedia.org/wiki/Register_machine">register-based architecture</a> rather than a stack-based one!</li>
 </ul>
-<p>Android applications are packaged into APK files (basically zip files)</p>
+<p>A developer would write <em>Java code</em>, which would then be compiled into <em>JVM bytecode</em>, which would then be translated into <em>DVM</em> (Dalvik virtual machine) bytecode, that could be run on Android devices. This DVM bytecode was stored in <code>.dex</code> or <code>.odex</code> (“[Optimized] Dalvik Executable”) files, which is what was loaded onto the device. The process of converting from Jave code to <code>dex</code> files is called <strong>“dexing”</strong> (so code that has been built is “dexed”).</p>
+<p>Dalvik does include JIT (“Just In Time”) compilation to native code that runs much faster than the code interpreted by the virtual machine, similar to the <a href="http://www.oracle.com/technetwork/articles/javase/index-jsp-136373.html">Java HotSpot</a>. This navite code is faster because no translation step is needed to talk to the actual hardware (the OS).</p>
+<p><strong>From Lollipop (5.0) on</strong>, Android instead uses <a href="https://source.android.com/devices/tech/dalvik/">Android Runtime (ART)</a> to run code. ART’s biggest benefit is that it compiles the <code>.dex</code> bytecode into native code <em>on installation</em> using AOT (“Ahead of Time”) compilation. ART continues to accept <code>.dex</code> bytecode for backwards compatibility (so the same dexing process occurs), but the code that is actually installed and run on a device is native. This allows for applications to have faster execution, but at the cost of longer install times—but since you only install an application once, this is a pretty good trade.</p>
+<p>After being built, Android applications (the source, dexed bytecode, and any resources) are packaged into <strong><code>.apk</code></strong> files. These are basically zip files (they use the same gzip compression); if you rename the file to be <code>.zip</code> and you can unpackage them! The <code>.apk</code> files are then <a href="https://en.wikipedia.org/wiki/Digital_signature">cryptographically signed</a> to specify their authenticity, and either “side-loaded” onto the device or uploaded to an App Store for deployment.</p>
 <ul>
-<li>Which are then “side-loaded” or cryptographically signed to be uploaded to the App Store.
-<ul>
-<li>these are the “executable” versions of your program!</li>
-</ul></li>
-<li>Note: application frameworks are pre-DEXed (compiled) on device; actually compiling against empty stubs!
-<ul>
-<li>But any other libraries you include are copied into the app code.</li>
-</ul></li>
+<li><p>The signed <code>.apk</code> files are basically the “executable” versions of your program!</p></li>
+<li><p>Note that the Android application framework code is actually “pre-DEXed” (pre-compiled) on the device; when you write code, you’re actually compiling against empty code stubs (rather than needing to include those classes in your <code>.apk</code>)! That said, any other 3rd-party libraries you include will be copied into your built App, which can increase its file size both for installation and on the device.</p></li>
 </ul>
-<p>So when building an App…</p>
+<p>To summarize, in addition to writing Java and XML code, when building an App you need to:</p>
 <ol style="list-style-type: decimal">
 <li>Generate Java source files (e.g., from resource files, which are written XML used to generate Java code)</li>
 <li>Compile Java code into JVM bytecode</li>
 <li>“dex” the JVM bytecode into Dalvik bytecode</li>
 <li>Pack in assets and graphics into an APK</li>
 <li>Cryptographically sign the APK file to verify it</li>
+<li>Load it onto the device</li>
 </ol>
-<p>There are a lot of steps here, but there are tools that take care of it for us. We’ll just write Java and XML code and run a “build” script to do all of the steps.</p>
+<p>There are a lot of steps here, but there are tools that take care of it for us. We’ll just write Java and XML code and run a “build” script to do all of the steps!</p>
+</div>
 </div>
 <div id="development-tools" class="section level2">
 <h2><span class="header-section-number">1.3</span> Development Tools</h2>
-<p>Since we’re writing code for a virtual machine anyway, we can build Android apps on any computer OS (unlike some other mobile OS)</p>
+<p>There are a number of different hardware and software tools you will need to do Android development:</p>
+<div id="hardware" class="section level3">
+<h3><span class="header-section-number">1.3.1</span> Hardware</h3>
+<p>Since Android code is written for a virtual machine anyway, Android apps can be developed and built on any computer’s operating system (unlike some other mobile OS…).</p>
+<p>But obviously Android apps will need to be run on Android devices. <a href="https://developer.android.com/studio/run/device.html">Physical devices</a> are the best for development (they are the fastest, easiest way to test), though you’ll need USB cable to be able to wire your device into your computer. Any device will work for this course; you don’t even need cellular service (just WiFi should work). Note that if you are unfamiliar with Android devices, you should be sure to play around with the interface to get used to the interaction language, e.g., how to click/swipe/drag/long-click elements to use an app.</p>
 <ul>
-<li>Physical devices are the best–you’ll need USB cable to be able to wire your device into your computer.
-<ul>
-<li>Any device should be fine; don’t need cell service (just WiFi mostly)</li>
-<li>If you don’t normally use an Android phone, play around with it a bit to get use to the interaction language. E.g., how to click/swipe/drag/long-click things.</li>
-<li>Turn on <a href="http://developer.android.com/tools/device.html">developer options</a>!</li>
-</ul></li>
-<li>Also can use the Emulator (a “virtual” android device)
-<ul>
-<li>Represents a generic device with hardware you can specify… but has some limitations!</li>
-<li>But the emulator not great on Windows; recommend you use Mac or a physical device</li>
-<li>Make sure to use the HAXM (Intel acceleration manager!)</li>
-<li>I’ll be doing this for lecture demos (will keep me running slower than you!)</li>
-</ul></li>
+<li>You will need to turn on <a href="http://developer.android.com/tools/device.html">developer options</a> in order to install development apps on your device!</li>
 </ul>
+<p>If you don’t have a physical device, it is also possible to use the <a href="https://developer.android.com/studio/run/emulator.html">Android Emulator</a>, which is a “virtual” Android device. The emulator represents a generic device with hardware you can specify… but it does have some limitations (e.g., no cellular service, no bluetooth, etc).</p>
+<ul>
+<li>While it has improved recently, the Emulator historically does not work very well on Windows; I recommend you develop on either a Mac or a physical device. In either case, make sure you have enabled <a href="https://software.intel.com/en-us/android/articles/intel-hardware-accelerated-execution-manager">HAXM</a> (Intel’s Acceleration Manager, which allows the emulator to utilize your GPU for rendering): this speeds things up considerably.</li>
+</ul>
+</div>
 <div id="software" class="section level3">
-<h3><span class="header-section-number">1.3.1</span> Software</h3>
-<p>The software used to develop Android applications include:</p>
+<h3><span class="header-section-number">1.3.2</span> Software</h3>
+<p>Software needed to develop Android applications includes:</p>
 <ul>
-<li>Java 7 <strong>SDK</strong></li>
-<li><a href="https://gradle.org/">Gradle</a> or <a href="http://ant.apache.org/">Apache ANT</a>
+<li><p>The <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java 7 <strong>SDK</strong></a> (not just the JRE!) This is because you’re writing Java code!</p></li>
+<li><p><a href="https://gradle.org/">Gradle</a> or <a href="http://ant.apache.org/">Apache ANT</a>. These are <em>automated build tools</em>—in effect, they let you specify a single command that will do a bunch of steps at once (e.g., compile files, dex files, move files, etc). These are how we make the “build script” that does the 6 build steps listed above.</p>
 <ul>
-<li>These are automated build tools–in effect, they let you specify a command that will do a bunch of steps (e.g., compilation, moving, etc) at once. These are how we make the “build script” to do those 5 building steps from earlier.</li>
-<li>ANT is the old way, but Gradle is the new hotness</li>
-<li>You’ll be using Gradle for first homework (Java review), and we’ll be poking at it periodically through the course.
-<ul>
-<li>We’ll be doing minor tweaks to build files, not learning the entirety of the gradle build system (though as you get into professional development systems you’ll want to check them out)</li>
+<li><p>ANT is the “old” build system, Gradle is the “modern” build system (and so what we will be focusing on).</p></li>
+<li><p>Note that you do not need to install Gradle separately for this course.</p></li>
 </ul></li>
-</ul></li>
-<li>Finally, the <a href="http://developer.android.com/sdk/index.html">Android Studio &amp; SDK</a>.
+<li><p><a href="https://developer.android.com/studio/index.html">Android Studio &amp; Android SDK</a> is the official IDE for developing Android applications. Note that the IDE comes bundled with the SDK. Android Studio provides the main build system: all of the other software (Java, Gradle) goes to support this.</p>
+<p>The SDK comes with a number of useful <a href="https://developer.android.com/studio/command-line/index.html">command-line tools</a>. These include:</p>
 <ul>
-<li>This is our IDE and build system (everything else goes to support this).</li>
-<li>Make sure the SDK command-line tools are installed!
-<ul>
-<li>put <code>tools</code> and <code>platform-tools</code> on the <code>PATH</code></li>
-<li>run <code>adb</code> to check</li>
-</ul></li>
-</ul></li>
-<li>SDK <a href="http://developer.android.com/tools/help/index.html">Tools</a> include:
-<ul>
-<li><em>deprecated</em> <code>android</code>: does SDK/AVD (virtual device) work. Basically IDE commands, but from command-line</li>
-<li><code>emulator</code> runs the emulator</li>
-<li><code>adb</code> “Android Device Bridge”; connection between your computer and the device (physical <em>or</em> virtual). Used for console output!</li>
-<li>all of these are built into IDE, but command-line is a good fall-back!</li>
-</ul></li>
+<li><code>adb</code>, the “Android Device Bridge”, which is a connection between your computer and the device (physical <em>or</em> virtual). This tool is used for console output!</li>
+<li><code>emulator</code>, which is a tool used to run the Android emulator</li>
+<li><em>deprecated/removed</em> <code>android</code>: a tool that does SDK/AVD (Android Virtual Device) management. Basically, this command-line utility did everything that the IDE did, but from the command-line! It has recently been removed from the IDE.</li>
+</ul>
+<p>I recommend making sure that the SDK command-line tools are installed. Put the <code>tools</code> and <code>platform-tools</code> folders on your computer’s <code>PATH</code>; you can run <code>adb</code> to check that everything works. All of these tools are built into the IDE, but they can be useful fallbacks for debugging.</p></li>
 </ul>
 </div>
 </div>
 <div id="hello-world" class="section level2">
 <h2><span class="header-section-number">1.4</span> Hello World</h2>
-<p>In time remaining, lets get an App up and running and see what we actually will be working with! You will need to have Android Studio installed for this to work.</p>
+<p>As a final introductory steps, this chapter will walk you through creating and running a basic App so that you can see what you will actually be working with. You will need to have Android Studio installed for this to work.</p>
 <ol style="list-style-type: decimal">
-<li>Launch Android Studio if you have it (may take a few minutes to open)</li>
-<li>Start a new project!
+<li><p>Launch Android Studio if you have it (may take a few minutes to open)</p></li>
+<li><p>Start a new project.</p>
 <ul>
-<li>use uwnetid in domain</li>
-<li>note project location! Desktop is good for now</li>
-<li>Target: this is the “minimum” SDK you support. Going to target Ice Cream Sandwich (4.0.3) for most this class. This is the earliest version we’ll support.
+<li><p>Use your UW NetID in the domain.</p></li>
+<li><p>Make a mental note of the project location so you can find your code later!</p></li>
+<li><p><em>Target</em>: this is the “minimum” SDK you support. We’re going to target Ice Cream Sandwich (4.0.3, API 15) for most this class, as the earliest version of Android most our apps will support.</p>
 <ul>
-<li>Note that this is different than the “target SDK”, which is the version you tested on! We’ll adjust this in a moment, and will test on API 21 (Lollipop).</li>
-<li>If you’re testing on a physical device running older version, you can target that. But we’ll grade at the 5.0 target.</li>
+<li>Note that this is different than the “target SDK”, which is the version of Android you tested your application against (e.g., what system did you run it on?) For this course we will be testing on API 21 (Lollipop); we’ll specify that in a moment.</li>
 </ul></li>
 </ul></li>
-<li>Select an Empty Activity
+<li><p>Select an <em>Empty Activity</em></p>
 <ul>
-<li>Activities are “Screens” in your application (things the user can do). We’ll talk more about this on Wednesday.</li>
+<li><strong>Activities</strong> are “Screens” in your application (things the user can do). Activities are discussed in more detail in the next chapter.</li>
 </ul></li>
-<li>And boom, have an Android app! Aren’t frameworks lovely?</li>
+<li><p>And boom, you have an Android app! Aren’t frameworks lovely?</p></li>
 </ol>
 <div id="the-emulator" class="section level3">
 <h3><span class="header-section-number">1.4.1</span> The Emulator</h3>
-<p>We can run our app by clicking the “Play” or “Run” button. We will need to define a device, so let’s make an emulator!</p>
-<ul>
-<li>Nexus 5 is a good choice for supporting “older” devices. Pixel is also reasonable.
-<ul>
-<li>Use Lollipop, Google APIs, x86!</li>
-<li>Snapshot to speed up loading</li>
-</ul></li>
-<li>Specify <strong>hardware keyboard</strong></li>
-<li>Want to go in and edit it (<code>Tools &gt; Android &gt; AVD Manager</code>) so it accepts keyboard input!</li>
-</ul>
-<p>Can slide to unlock, and there is our app!</p>
+<p>We can run our app by clicking the “Play” or “Run” button at the top of the IDE. But we’ll need a device to run the app on, so let’s make an emulator!</p>
+<p>The <strong>Nexus 5</strong> is a good choice for supporting “older” devices. The new Pixel is also a reasonable device to test against.</p>
+<pre><code>- You&#39;ll want to make sure you create a Lollipop device, using the Google APIs (so we have special classes available to us), and amost certainly running on x86 (Intel) hardware
+
+- Make sure that you&#39;ve specified that it accepts keyboard input. You can always edit this emulator later (`Tools &gt; Android &gt; AVD Manager`).</code></pre>
+<p>After the emulator boots, you can slide to unlock, and there is our app!</p>
 </div>
 <div id="project-contents" class="section level3">
 <h3><span class="header-section-number">1.4.2</span> Project Contents</h3>
 <p>So what does our app look like in code? What do we have?</p>
-<p>Note that Android Studio by default shows the “Android” view, which organizes files thematically. If you got the “Project” view you can see what the actual file system looks like.</p>
+<p>Note that Android Studio by default shows the <strong>“Android”</strong> view, which organizes files thematically. If you go to the <strong>“Project”</strong> view you can see what the actual file system looks like:</p>
 <ul>
 <li><code>app/</code> folder contains our application
 <ul>
 <li><code>manifests/</code> contains the <strong>Android Manifest</strong> files, which is sort of like a “config” file for the app</li>
-<li><code>java/</code> contains the Java source code for your project
-<ul>
-<li>And we can find the <code>MyActivity</code> file in here</li>
-</ul></li>
+<li><code>java/</code> contains the Java source code for your project. You can find the <code>MyActivity</code> file in here</li>
 <li><code>res/</code> contains resource files used in the app. These are where we’re going to put layout/appearance information</li>
 </ul></li>
-<li>Also have the <code>Gradle</code> scripts. There are a lot of these:
+<li><p>Also have the <code>Gradle</code> scripts. There are a lot of these:</p>
 <ul>
 <li><code>build.gradle</code>: Top-level Gradle build; project-level (for building!)</li>
-<li><code>app/build.gradle</code>: Gradle build specific to the app <strong>use this one to customize project!</strong>
-<ul>
-<li>we can change the target SDK here!</li>
-</ul></li>
+<li><code>app/build.gradle</code>: Gradle build specific to the app <strong>use this one to customize project!</strong>. We can change the <em>Target SDK</em> in here!</li>
 <li><code>proguard-rules.pro</code>: config for release version (minimization, obfuscation, etc).</li>
 <li><code>gradle.properties</code>: Gradle-specific build settings, shared</li>
 <li><code>local.properties</code>: settings local to this machine only</li>
 <li><code>settings.gradle</code>: Gradle-specific build settings, shared</li>
-<li>ANT would give:
+</ul>
+<p>Note that ANT would instead give:</p>
+<pre><code>- `build.xml`: Ant build script integrated with Android SDK
+- `build.properties`: settings used for build across all machines
+- `local.properties`: settings local to this machine only
+
+We&#39;re using Gradle, but it is good to be aware of ANT stuff for legacy purposes</code></pre></li>
+<li><p><code>res</code> has resource files. These are <strong>XML</strong> files that specify details of the app–such as layout.</p>
 <ul>
-<li><code>build.xml</code>: Ant build script integrated with Android SDK</li>
-<li><code>build.properties</code>: settings used for build across all machines</li>
-<li><code>local.properties</code>: settings local to this machine only</li>
-<li>We’re using Gradle, but be aware of ANT stuff for legacy purposes</li>
-</ul></li>
-</ul></li>
-<li><code>res</code> has resource files. These are <strong>XML</strong> files that specify details of the app–such as layout.
-<ul>
-<li><code>res/drawable/</code> : graphics (PNG, JPEG, etc)</li>
-<li><code>res/layout/</code> : UI XML layout files</li>
-<li><code>res/mipmap/</code> : launcher icon files
+<li><code>res/drawable/</code>: graphics (PNG, JPEG, etc)</li>
+<li><code>res/layout/</code>: UI XML layout files</li>
+<li><code>res/mipmap/</code>: launcher icon files
 <ul>
 <li>fun fact: MIP comes from “multum in parvo”, latin for “much in little”. Map cause image mapping</li>
 </ul></li>
-<li><code>res/values/</code> : general constants</li>
-<li>See also: <a href="http://developer.android.com/guide/topics/resources/available-resources.html" class="uri">http://developer.android.com/guide/topics/resources/available-resources.html</a>
-<ul>
-<li>We’ll talk about these more next week!</li>
-</ul></li>
-</ul></li>
+<li><code>res/values/</code>: general constants</li>
 </ul>
-<p>Let’s look at what the application does. We’ll revisit this on Wednesday, but this will let us start seeing how the framework is structured.</p>
-<ul>
-<li>We start with the <strong>Activity</strong> Java source
-<ul>
-<li>We extend <a href="http://developer.android.com/reference/android/app/Activity.html"><code>Activity</code></a> (actually a subclass that supports Material Design stuff), making our own customizations.</li>
-</ul></li>
-<li>Override <code>onCreate()</code> method that is called by the framework when the Activity starts (more on lifecycle tomorrow).
-<ul>
-<li>Call super, and then <code>setContentView</code> to specify what the content (appearance) of our activity is.</li>
-<li>Passing in a value from something called <code>R</code>. What <em>type</em> of thing is this? (It’s a class!)</li>
-<li><code>R</code> is a class that is <strong>generated at compile time</strong> and contains constants that are defined by the “resource” files!
-<ul>
-<li>Those files are converted into Java variables, which we access through the <code>R</code> class.</li>
-</ul></li>
-</ul></li>
-<li><code>R.layout</code> refers to the “layouts” resource, so can go there.
-<ul>
-<li>Can open then up in “design” view. This lets you use GUIs to lay out your application (like a powerpoint slide). But frowned upon–much cleaner/nicer to write it out in code.
-<ul>
-<li>Same difference between writing your own HTML and using FrontPage or DreamWeaver or Wix. Legit, but less nice.</li>
-</ul></li>
-<li>We can see the XML: tags, attributes, values. Tags nested inside one another.</li>
-<li>Defines a layout, and inside that is a TextView (view of some of text), which has a value–text!
-<ul>
-<li>Can change that, and re-run the app!</li>
-</ul></li>
-<li>If time: can also define this in <code>values/strings</code> (e.g., as a constant, refer to as <code>@string/message</code>)</li>
-</ul></li>
-<li>We’ll talk about the layout and using these resources <em>A LOT</em> more next week.</li>
-<li>If time: we can also set an icon! (<code>File &gt; New &gt; Image Asset</code>)</li>
+<p>See also: <a href="http://developer.android.com/guide/topics/resources/available-resources.html" class="uri">http://developer.android.com/guide/topics/resources/available-resources.html</a>, or Chapter 3.</p></li>
 </ul>
+<p>We can also consider what the application code does. While we’ll revisit this in more detail in the next chapter, it’s useful to start seeing how the framework is structured:</p>
+<p>We’ll start with the <strong>MyActivity</strong> Java source file. This class extends <a href="http://developer.android.com/reference/android/app/Activity.html"><code>Activity</code></a> (actually it extends a subclass that supports Material Design components), allowing us making our own customizations to what the app does.</p>
+<p>In this class, we override the <code>onCreate()</code> method that is called by the framework when the Activity starts (see next chapter).</p>
+<ul>
+<li>We call the super method, and then <code>setContentView()</code> to specify what the content (appearance) of our Activity is. This is passed in a value from something called <code>R</code>. <code>R</code> is a class that is <strong>generated at compile time</strong> and contains constants that are defined by the XML “resource” files! Those files are converted into Java variables, which we can access through the <code>R</code> class.</li>
+</ul>
+<p><code>R.layout</code> refers to the “layout” XML resource, so can go there (remember: inside <code>res/</code>). Opening these XML files they appear in a “design” view. This view lets you use a graphical system to lay out your application (similar to a PowerPoint slide).</p>
+<ul>
+<li>However, even as the design view becomes more powerful, using it is still frowned upon by many developers for historical reasons. It’s often cleaner to write out the layouts and content in code. This is the same difference between writing your own HTML and using something like FrontPage or DreamWeaver or Wix to create a page. While those are legitimate applications, they are less “professional”.</li>
+</ul>
+<p>In the code view, we can see the XML: tags, attributes, values. Tags nested inside one another. The provided XML code defines a layout, and inside that is a <code>TextView</code> (a <a href="https://developer.android.com/reference/android/view/View.html">View</a> representing some text), which has a value: text! We can change that and then <em>re-run the app</em> to see it update!</p>
+<ul>
+<li>It’s also possible to define this value in <code>values/strings</code> (e.g., as a constant), then refer to as <code>@string/message</code>. More on this proces later.</li>
+</ul>
+<p>Finally, as a fun demonstration, try to set an icon for the App (<code>File &gt; New &gt; Image Asset</code>)</p>
 
 </div>
 </div>

@@ -22,6 +22,10 @@
     padding-right: .5em;
 }
 
+.page-inner li {
+  margin-bottom: .85em;
+}
+
 /* Common? */
 p.caption {
   color: #777;

@@ -1,4 +1,4 @@
-# Java Review
+# Java Review {#java-review}
 Android applications are written primarily in the Java Language. This appendix contains a review of some Java fundamentals needed when developing for Android, presented as a set of practice exercises. The code for these exercises can be found at <https://github.com/info448-s17/lab-java-review>.
 
 
