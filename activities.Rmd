@@ -139,10 +139,10 @@ Now that can "output" some text (via log), let's add some "input" via an interfa
     android:text="Start Activity"
     />
 ```
-This should go inside the `<RelativeLayout>` element, **replace** the `<TextView>` element.
+This should go inside the `<android.support.constraint.ConstraintLayout>` element, **replacing** the `<TextView>` element.
   - This defines a (anyone?) Button. The `android:text` attribute gives the text that is on the button.
   - We'll talk in a lot more detail about how exactly this XML works (and what's the deal with the id, layout_width/height) next week, but you should be able to make a pretty good educated guess based on the names.
-  - Actually, to make the button not overlap, change the `<RelativeLayout>` to a `<LinearLayout>`. More on layout tomorrow!
+  - Actually, to make the button not overlap, change the `<android.support.constraint.ConstraintLayout>` to a `<LinearLayout>`. More on layout tomorrow!
   - Defining this in XML is basically the same process as creating the `JButton` and adding it to the `JFrame` in Java!
 
 Now we have a button, but we want to click on it. So we need to register a "listener" for it (in Java).
@@ -167,7 +167,7 @@ This is an example of an [Input Control](http://developer.android.com/guide/topi
 ## Multiple Activities [15mins]
 The whole point of considering the Activity Lifecycle is because Android applications can have multiple activities and interact with multiple other applications. So let's talk briefly about how we could have an app use multiple Activities (and so get a sense for how this lifecycle may affect us)
 
-We can go ahead and create a New Activity through Android Student by using `File > New > Activity`. We could also just add a new .java file with the Activity class in it
+We can go ahead and create a New Activity through Android Studio by using `File > New > Activity`. We could also just add a new .java file with the Activity class in it
   - Make a new Empty activity `SecondActivity`
   - Note that this Activity also gets a resource XML layout
     - You should edit the `<TextView>` element so this one can have a message as well.
@@ -205,6 +205,7 @@ There are actually a couple of different kinds of `Intents` (this is an **Explic
 So we can have lots of Activities (even across multiple apps!) running and move between them. How exactly is that "Back" button keeping track of where to go to?
 - Do you know what kind of data structure is associated with "back" or "undo"? A **stack**!
 - Every time you start a new Activity, Android creates it and puts it on the top of a stack. Then when you hit the back button, that activity is popped off the stack and you're taken to the new head.
+
 ![activity stack example](img/activities/diagram_backstack.png)
 
 However, you might have different "sequences" of actions you're working on: maybe you start writing an email, and then go to check your Twitter timeline through a different set of Activities. Android breaks up these sequences into groups called [**Tasks**](http://developer.android.com/guide/components/tasks-and-back-stack.html). A task is a collection of activities arranged in a Stack; and there can be multiple tasks in the background.
@@ -228,7 +229,7 @@ We can make this "back" navigation a little more intuitive for users by providin
     ```xml
     <meta-data
          android:name="android.support.PARENT_ACTIVITY"
-         android:value="{parent.activity.package.goes.here}" />    
+         android:value="{parent.activity.package.goes.here}" />
     ```
 
 ## Toasts [5min]

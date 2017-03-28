@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-03-27">
+<meta name="date" content="2017-03-28">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -454,7 +454,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="hello-world" class="section level2">
 <h2><span class="header-section-number">1.4</span> Hello World</h2>
-<p>As a final introductory steps, this chapter will walk you through creating and running a basic App so that you can see what you will actually be working with. You will need to have Android Studio installed for this to work.</p>
+<p>As a final introductory steps, this lecture will walk you through creating and running a basic App so that you can see what you will actually be working with. You will need to have Android Studio installed for this to work.</p>
 <ol style="list-style-type: decimal">
 <li><p>Launch Android Studio if you have it (may take a few minutes to open)</p></li>
 <li><p>Start a new project.</p>
@@ -468,7 +468,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li><p>Select an <em>Empty Activity</em></p>
 <ul>
-<li><strong>Activities</strong> are “Screens” in your application (things the user can do). Activities are discussed in more detail in the next chapter.</li>
+<li><strong>Activities</strong> are “Screens” in your application (things the user can do). Activities are discussed in more detail in the next lecture.</li>
 </ul></li>
 <li><p>And boom, you have an Android app! Aren’t frameworks lovely?</p></li>
 </ol>
@@ -476,15 +476,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3><span class="header-section-number">1.4.1</span> The Emulator</h3>
 <p>We can run our app by clicking the “Play” or “Run” button at the top of the IDE. But we’ll need a device to run the app on, so let’s make an emulator!</p>
 <p>The <strong>Nexus 5</strong> is a good choice for supporting “older” devices. The new Pixel is also a reasonable device to test against.</p>
-<pre><code>- You&#39;ll want to make sure you create a Lollipop device, using the Google APIs (so we have special classes available to us), and amost certainly running on x86 (Intel) hardware
-
-- Make sure that you&#39;ve specified that it accepts keyboard input. You can always edit this emulator later (`Tools &gt; Android &gt; AVD Manager`).</code></pre>
+<ul>
+<li><p>You’ll want to make sure you create a Lollipop device, using the Google APIs (so we have special classes available to us), and amost certainly running on x86 (Intel) hardware</p></li>
+<li><p>Make sure that you’ve specified that it accepts keyboard input. You can always edit this emulator later (<code>Tools &gt; Android &gt; AVD Manager</code>).</p></li>
+</ul>
 <p>After the emulator boots, you can slide to unlock, and there is our app!</p>
 </div>
 <div id="project-contents" class="section level3">
 <h3><span class="header-section-number">1.4.2</span> Project Contents</h3>
 <p>So what does our app look like in code? What do we have?</p>
-<p>Note that Android Studio by default shows the <strong>“Android”</strong> view, which organizes files thematically. If you go to the <strong>“Project”</strong> view you can see what the actual file system looks like:</p>
+<p>Note that Android Studio by default shows the <strong>“Android”</strong> view, which organizes files thematically. If you go to the <strong>“Project”</strong> view you can see what the actual file system looks like. In Android view, files are organized as follows:</p>
 <ul>
 <li><code>app/</code> folder contains our application
 <ul>
@@ -502,26 +503,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><code>settings.gradle</code>: Gradle-specific build settings, shared</li>
 </ul>
 <p>Note that ANT would instead give:</p>
-<pre><code>- `build.xml`: Ant build script integrated with Android SDK
-- `build.properties`: settings used for build across all machines
-- `local.properties`: settings local to this machine only
-
-We&#39;re using Gradle, but it is good to be aware of ANT stuff for legacy purposes</code></pre></li>
+<ul>
+<li><code>build.xml</code>: Ant build script integrated with Android SDK</li>
+<li><code>build.properties</code>: settings used for build across all machines</li>
+<li><code>local.properties</code>: settings local to this machine only</li>
+</ul>
+<p>We’re using Gradle, but it is good to be aware of ANT stuff for legacy purposes</p></li>
 <li><p><code>res</code> has resource files. These are <strong>XML</strong> files that specify details of the app–such as layout.</p>
 <ul>
-<li><code>res/drawable/</code>: graphics (PNG, JPEG, etc)</li>
-<li><code>res/layout/</code>: UI XML layout files</li>
-<li><code>res/mipmap/</code>: launcher icon files
+<li><code>res/drawable/</code>: contains graphics (PNG, JPEG, etc)</li>
+<li><code>res/layout/</code>: contains UI XML layout files</li>
+<li><code>res/mipmap/</code>: conatins launcher icon files in different resolutions
 <ul>
-<li>fun fact: MIP comes from “multum in parvo”, latin for “much in little”. Map cause image mapping</li>
+<li>Fun fact: <a href="">MIP</a> stands for “<em>multum in parvo</em>”, which is Latin for “much in little” (because multiple resolutions of the images are stored in a single file). “Map” is used because Mipmaps are normally used for texture mapping.</li>
 </ul></li>
-<li><code>res/values/</code>: general constants</li>
+<li><code>res/values/</code>: contains XML definitions for general constants</li>
 </ul>
-<p>See also: <a href="http://developer.android.com/guide/topics/resources/available-resources.html" class="uri">http://developer.android.com/guide/topics/resources/available-resources.html</a>, or Chapter 3.</p></li>
+<p>See also: <a href="http://developer.android.com/guide/topics/resources/available-resources.html" class="uri">http://developer.android.com/guide/topics/resources/available-resources.html</a>, or Lecture 3.</p></li>
 </ul>
-<p>We can also consider what the application code does. While we’ll revisit this in more detail in the next chapter, it’s useful to start seeing how the framework is structured:</p>
+<p>We can also consider what the application code does. While we’ll revisit this in more detail in the next lecture, it’s useful to start seeing how the framework is structured:</p>
 <p>We’ll start with the <strong>MyActivity</strong> Java source file. This class extends <a href="http://developer.android.com/reference/android/app/Activity.html"><code>Activity</code></a> (actually it extends a subclass that supports Material Design components), allowing us making our own customizations to what the app does.</p>
-<p>In this class, we override the <code>onCreate()</code> method that is called by the framework when the Activity starts (see next chapter).</p>
+<p>In this class, we override the <code>onCreate()</code> method that is called by the framework when the Activity starts (see next lecture).</p>
 <ul>
 <li>We call the super method, and then <code>setContentView()</code> to specify what the content (appearance) of our Activity is. This is passed in a value from something called <code>R</code>. <code>R</code> is a class that is <strong>generated at compile time</strong> and contains constants that are defined by the XML “resource” files! Those files are converted into Java variables, which we can access through the <code>R</code> class.</li>
 </ul>
@@ -533,7 +535,7 @@ We&#39;re using Gradle, but it is good to be aware of ANT stuff for legacy purpo
 <ul>
 <li>It’s also possible to define this value in <code>values/strings</code> (e.g., as a constant), then refer to as <code>@string/message</code>. More on this proces later.</li>
 </ul>
-<p>Finally, as a fun demonstration, try to set an icon for the App (<code>File &gt; New &gt; Image Asset</code>)</p>
+<p>Finally, as a fun demonstration, try to set an icon for the App (in Android Studio, go to: <code>File &gt; New &gt; Image Asset</code>)</p>
 
 </div>
 </div>

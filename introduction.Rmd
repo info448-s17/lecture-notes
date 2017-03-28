@@ -184,7 +184,7 @@ Software needed to develop Android applications includes:
 
 
 ## Hello World `r #30min`
-As a final introductory steps, this chapter will walk you through creating and running a basic App so that you can see what you will actually be working with. You will need to have Android Studio installed for this to work.
+As a final introductory steps, this lecture will walk you through creating and running a basic App so that you can see what you will actually be working with. You will need to have Android Studio installed for this to work.
 
 1. Launch Android Studio if you have it (may take a few minutes to open)
 
@@ -200,7 +200,7 @@ As a final introductory steps, this chapter will walk you through creating and r
 
 3. Select an _Empty Activity_
 
-	- **Activities** are "Screens" in your application (things the user can do). Activities are discussed in more detail in the next chapter.
+	- **Activities** are "Screens" in your application (things the user can do). Activities are discussed in more detail in the next lecture.
 
 4. And boom, you have an Android app! Aren't frameworks lovely?
 
@@ -209,21 +209,22 @@ We can run our app by clicking the "Play" or "Run" button at the top of the IDE.
 
 The **Nexus 5** is a good choice for supporting "older" devices. The new Pixel is also a reasonable device to test against.
 
-	- You'll want to make sure you create a Lollipop device, using the Google APIs (so we have special classes available to us), and amost certainly running on x86 (Intel) hardware
+- You'll want to make sure you create a Lollipop device, using the Google APIs (so we have special classes available to us), and amost certainly running on x86 (Intel) hardware
 
-	- Make sure that you've specified that it accepts keyboard input. You can always edit this emulator later (`Tools > Android > AVD Manager`).
+- Make sure that you've specified that it accepts keyboard input. You can always edit this emulator later (`Tools > Android > AVD Manager`).
 
 After the emulator boots, you can slide to unlock, and there is our app!
 
 ### Project Contents
 So what does our app look like in code? What do we have?
 
-Note that Android Studio by default shows the **"Android"** view, which organizes files thematically. If you go to the **"Project"** view you can see what the actual file system looks like:
+Note that Android Studio by default shows the **"Android"** view, which organizes files thematically. If you go to the **"Project"** view you can see what the actual file system looks like. In Android view, files are organized as follows:
 
 - `app/` folder contains our application
 	- `manifests/` contains the **Android Manifest** files, which is sort of like a "config" file for the app
 	- `java/` contains the Java source code for your project. You can find the `MyActivity` file in here
 	- `res/` contains resource files used in the app. These are where we're going to put layout/appearance information
+
 - Also have the `Gradle` scripts. There are a lot of these:
 
 	- `build.gradle`: Top-level Gradle build; project-level (for building!)
@@ -235,27 +236,27 @@ Note that Android Studio by default shows the **"Android"** view, which organize
 
 	Note that ANT would instead give:
 
-		- `build.xml`: Ant build script integrated with Android SDK
-		- `build.properties`: settings used for build across all machines
-		- `local.properties`: settings local to this machine only
+	- `build.xml`: Ant build script integrated with Android SDK
+	- `build.properties`: settings used for build across all machines
+	- `local.properties`: settings local to this machine only
 
-		We're using Gradle, but it is good to be aware of ANT stuff for legacy purposes
+	We're using Gradle, but it is good to be aware of ANT stuff for legacy purposes
 
 - `res` has resource files. These are **XML** files that specify details of the app--such as layout.
 
-	- `res/drawable/`: graphics (PNG, JPEG, etc)
-	- `res/layout/`: UI XML layout files
-	- `res/mipmap/`: launcher icon files
-		- fun fact: MIP comes from "multum in parvo", latin for "much in little". Map cause image mapping
-	- `res/values/`: general constants
+	- `res/drawable/`: contains graphics (PNG, JPEG, etc)
+	- `res/layout/`: contains UI XML layout files
+	- `res/mipmap/`: conatins launcher icon files in different resolutions
+		- Fun fact: [MIP]() stands for "_multum in parvo_", which is Latin for "much in little" (because multiple resolutions of the images are stored in a single file). "Map" is used because Mipmaps are normally used for texture mapping.
+	- `res/values/`: contains XML definitions for general constants
 
-	See also: http://developer.android.com/guide/topics/resources/available-resources.html, or Chapter 3.
+	See also: http://developer.android.com/guide/topics/resources/available-resources.html, or Lecture 3.
 
-We can also consider what the application code does. While we'll revisit this in more detail in the next chapter, it's useful to start seeing how the framework is structured:
+We can also consider what the application code does. While we'll revisit this in more detail in the next lecture, it's useful to start seeing how the framework is structured:
 
 We'll start with the **MyActivity** Java source file. This class extends [`Activity`](http://developer.android.com/reference/android/app/Activity.html) (actually it extends a subclass that supports Material Design components), allowing us making our own customizations to what the app does.
 
-In this class, we override the `onCreate()` method that is called by the framework when the Activity starts (see next chapter).
+In this class, we override the `onCreate()` method that is called by the framework when the Activity starts (see next lecture).
 
 - We call the super method, and then `setContentView()` to specify what the content (appearance) of our Activity is. This is passed in a value from something called `R`. `R` is a class that is **generated at compile time** and contains constants that are defined by the XML "resource" files! Those files are converted into Java variables, which we can access through the `R` class.
 
@@ -267,4 +268,4 @@ In the code view, we can see the XML: tags, attributes, values. Tags nested insi
 
 - It's also possible to define this value in `values/strings` (e.g., as a constant), then refer to as `@string/message`. More on this proces later.
 
-Finally, as a fun demonstration, try to set an icon for the App (`File > New > Image Asset`)
+Finally, as a fun demonstration, try to set an icon for the App (in Android Studio, go to: `File > New > Image Asset`)

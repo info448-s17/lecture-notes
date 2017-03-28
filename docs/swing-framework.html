@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-03-27">
+<meta name="date" content="2017-03-28">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -206,7 +206,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="swing-framework" class="section level1">
 <h1><span class="header-section-number">B</span> Swing Framework</h1>
-<p>Android applications are user-driven graphical applications. So to look at some of the <em>patterns</em> involved in this kind of software (without the overhead of the Android framework), let’s consider how to build simple graphical applications in Java using the <a href="https://docs.oracle.com/javase/tutorial/uiswing/start/">Swing library</a> - We’re going to be doing a little bit of Java programming; easiest to just do this in Sublime Text or whatever light-weight IDE you have floating around.</p>
+<p>Android applications are user-driven graphical applications. In order to become familiar with some of the <em>coding patterns</em> involved in this kind of software (without the overhead of the Android framework), let’s consider how to build simple graphical applications in Java using the <a href="https://docs.oracle.com/javase/tutorial/uiswing/start/">Swing library</a></p>
+<p class="alert alert-info">
+This appendix references code found at <a href="https://github.com/info448-s17/lecture02-activities" class="uri">https://github.com/info448-s17/lecture02-activities</a>, in the <code>java/</code> folder. Note that this tutorial involves Java Programming: while it is possible to do this in Android Studio, it’s often easier to just utilize a light-weight text editor such as <a href="">Visual Studio Code</a> or <a href="">Sublime Text</a>.
+</p>
 <p>The <strong>Swing</strong> library is a set of Java classes used to specify graphical user interfaces (GUIs). These classes can be found in the <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/package-summary.html"><code>javax.swing</code></a> package. They also rely on the <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/package-summary.html"><code>java.awt</code></a> package (the “Advanced Windowing Toolkit”), which is an older GUI library that Swing builds on top of. - Fun fact: Swing library is named after the dance style: the developers wanted to name it after something hip and cool and popular. In the mid-90s.</p>
 <p>Let’s look at an incredibly basic GUI class: <code>MyGUI</code> found in the <code>src/main/java/</code> folder. Things to note about this class:</p>
 <ul>
