@@ -1,7 +1,7 @@
-# Swing Framework `r #30min`
+# Swing Framework `r #30min` {#java-swing}
 Android applications are user-driven graphical applications. In order to become familiar with some of the _coding patterns_ involved in this kind of software (without the overhead of the Android framework), let's consider how to build simple graphical applications in Java using the [Swing library](https://docs.oracle.com/javase/tutorial/uiswing/start/)
 
-<p class="alert alert-info">This appendix references code found at <https://github.com/info448-s17/lecture02-activities>, in the `java/` folder. Note that this tutorial involves Java Programming: while it is possible to do this in Android Studio, it's often easier to just utilize a light-weight text editor such as [Visual Studio Code]() or [Sublime Text]().</p>
+<p class="alert alert-info">This appendix references code found at <https://github.com/info448-s17/lecture02-activities>, in the `java/` folder. Note that this tutorial involves Java Programming: while it is possible to do this in Android Studio, it's often easier to just utilize a light-weight text editor such as [Visual Studio Code](https://code.visualstudio.com/) or [Sublime Text](https://www.sublimetext.com/).</p>
 
 The **Swing** library is a set of Java classes used to specify graphical user interfaces (GUIs). These classes can be found in the [`javax.swing`](https://docs.oracle.com/javase/8/docs/api/javax/swing/package-summary.html) package. They also rely on the [`java.awt`](https://docs.oracle.com/javase/8/docs/api/java/awt/package-summary.html) package (the "Advanced Windowing Toolkit"), which is an older GUI library that Swing builds on top of.
 
