@@ -18,14 +18,14 @@ Compiling is done with the `javac` ("java compile") command. For example, from i
 
 ```bash
 # Compile all .java files
-javac src/main/java/edu/info498/review/*.java
+javac src/main/java/edu/info448/review/*.java
 ```
 
 Running is then done with the `java` command: you specify the full package name of the class you wish to run, as well as the [classpath](https://docs.oracle.com/javase/tutorial/essential/environment/paths.html) so that Java knows where to go find classes it depends on:
 
 ```bash
 # Runs the Tester#main() method with the `src/main/java` folder as the classpath
-java -classpath ./src/main/java edu.info498.review.Tester
+java -classpath ./src/main/java edu.info448.review.Tester
 ```
 
 ___Practice: Compile and run this application now.___

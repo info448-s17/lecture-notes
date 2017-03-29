@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-03-28">
+<meta name="date" content="2017-03-29">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -220,10 +220,10 @@ The code for these exercises can be found at <a href="https://github.com/info448
 </ol>
 <p>Compiling is done with the <code>javac</code> (“java compile”) command. For example, from inside the code repo’s directory, you can compile both the <code>.java</code> files with:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Compile all .java files</span>
-<span class="ex">javac</span> src/main/java/edu/info498/review/*.java</code></pre></div>
+<span class="ex">javac</span> src/main/java/edu/info448/review/*.java</code></pre></div>
 <p>Running is then done with the <code>java</code> command: you specify the full package name of the class you wish to run, as well as the <a href="https://docs.oracle.com/javase/tutorial/essential/environment/paths.html">classpath</a> so that Java knows where to go find classes it depends on:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Runs the Tester#main() method with the `src/main/java` folder as the classpath</span>
-<span class="ex">java</span> -classpath ./src/main/java edu.info498.review.Tester</code></pre></div>
+<span class="ex">java</span> -classpath ./src/main/java edu.info448.review.Tester</code></pre></div>
 <p><strong><em>Practice: Compile and run this application now.</em></strong></p>
 <p><strong><em>Practice: Modify the <code>Dog</code> class so that it’s <code>.bark()</code> method barks twice (<code>&quot;Bark Bark!&quot;</code>). What do you have to do to test that your change worked?</em></strong></p>
 <p>You may notice that this development cycle can get pretty tedious: there are two commands we need to execute to run our code, and both are complex enough that they are a pain to retype.</p>

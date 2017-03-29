@@ -11,7 +11,7 @@ You can think of an Activity as a single _screen_ in your app, the equivalent of
 
 In many ways, an Activity is a "bookkeeping mechanism": a place to hold _state_ and _data_, and tell to Android what to show on the display. It functions much like a Controller (in [Model-View-Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) sense) in that regard!
 
-Also to note from the documentation:
+Also to note from the documentation^[https://developer.android.com/reference/android/app/Activity.html]:
 
 > An activity is a single, focused thing that the user can do.
 
@@ -35,7 +35,7 @@ When each of these events occur, Android executes a **callback method**, similar
 
 What is the lifecycle?
 
-![Lifecycle state diagram, from Google. See also an alternative, simplified diagram [here](http://developer.android.com/images/training/basics/basic-lifecycle.png).](img/activities/activity_lifecycle.png)
+![Lifecycle state diagram, from Google. See also an alternative, simplified diagram [here](http://developer.android.com/images/training/basics/basic-lifecycle.png).^[http://developer.android.com/images/activity_lifecycle.png]](img/activities/activity_lifecycle.png)
 
 There are 7 "events" that occur in the Activity Lifecycle, which are designated by the _callback function_ that they execute:
 
@@ -88,7 +88,7 @@ In Android, we can't use `System.out.println()` because we don't actually have a
 
 Instead, Android provides a [Logging](https://developer.android.com/studio/debug/am-logcat.html) system that we can use to write out debugging information, and which is automatically accessible over the `adb` (Android Debugging Bridge). Logged messages can be filtered, categorized, sorted, etc. Logging can also be disabled in production builds for performance reasons (though it often isn't).
 
-To perform this logging, we'll use the [`android.util.Log`](http://developer.android.com/reference/android/util/Log.html) class. This class includes a number of `static` methods, which all basically wrap around `println` to print to the device's log file, which is then accessible through the `adb`.
+To perform this logging, we'll use the [`android.util.Log`](https://developer.android.com/reference/android/util/Log.html)^[http://developer.android.com/reference/android/util/Log.html] class. This class includes a number of `static` methods, which all basically wrap around `println` to print to the device's log file, which is then accessible through the `adb`.
 
 - Remember to import the `Log` class!
 
@@ -186,7 +186,7 @@ Activities are listed as `<activity>` elements nested in the `<application>` ele
 - We can add `android:label` attributes to these `<activity>` elements in order to give the Activities nicer display names (e.g., in the ActionBar).
 
 ### Intents and Context
-In Android, we don't start new Activities by instantiating them (remember, _we never instantiate Activities_!). Instead, we send the operating system a message requesting that the Activity perform a particular action (i.e., start up and display on the screen). These messages are called [**Intents**](http://developer.android.com/guide/components/intents-filters.html), and are used to communicate between app components like Activities. The Intent system allows Activities to communicate, even though they don't have references to each other (we can't just call a method on them).
+In Android, we don't start new Activities by instantiating them (remember, _we never instantiate Activities_!). Instead, we send the operating system a message requesting that the Activity perform a particular action (i.e., start up and display on the screen). These messages are called [**Intents**](https://developer.android.com/guide/components/intents-filters.html), and are used to communicate between app components like Activities. The Intent system allows Activities to communicate, even though they don't have references to each other (we can't just call a method on them).
 
 - I don't have a good justification for the name, other than Intents announce an "intention" for the OS to do something (like start an Activity)
 
@@ -200,7 +200,7 @@ Intent intent = new Intent(MainActivity.this, SecondActivity.class);
 
 The second parameter to this constructor is the _class_ we want to send the Intent to (the `.class` property fetches a reference to the class type; this is metaprogramming!). Effectively, it is the "address" on the envelop for the message we're sending.
 
-The first parameter refers to the current [**Context**](http://developer.android.com/reference/android/content/Context.html) in which the message should be delivered. `Context` is an **abstract class** (and a superclass of `Activity`) that acts as a reference for information about the current running environment: it represents environmental data (information like "What OS is running? Is there a keyboard plugged in?"). You can _almost_ think of the Context as representing the "Application", though it's broader than that ([`Application`](https://developer.android.com/reference/android/app/Application.html) is actually a subclass of `Context`!)
+The first parameter refers to the current [**Context**](http://developer.android.com/reference/android/content/Context.html)^[https://developer.android.com/reference/android/content/Context.html] in which the message should be delivered. `Context` is an **abstract class** (and a superclass of `Activity`) that acts as a reference for information about the current running environment: it represents environmental data (information like "What OS is running? Is there a keyboard plugged in?"). You can _almost_ think of the Context as representing the "Application", though it's broader than that ([`Application`](https://developer.android.com/reference/android/app/Application.html) is actually a subclass of `Context`!)
 
 The Context is _used_ to do "application-level" actions: mostly working with resources (accessing and loading them), but also communicating between Activities like we're doing now. Effectively, it lets us refer to the state in which we are running: the "context" for our code (e.g., "where is this occurring?"). It's a kind of _reflection_ or meta-programming, in a way.
 
@@ -235,7 +235,7 @@ We've shown that we can have lots of Activities (and of course many more can exi
 
 The abstarct data type normally associated with "back" or "undo" functionality is a **stack**, and that is exactly what Android uses. Every time you _start_ a new Activity, Android instantiates that object and puts it on the top of a stack. Then when you hit the back button, that activity is "popped" off the stack and you're taken to the Activity that is now at the top.
 
-![An example of the Activity stack, from Google.](img/activities/diagram_backstack.png)
+![An example of the Activity stack, from Google^[http://developer.android.com/images/fundamentals/diagram_backstack.png].](img/activities/diagram_backstack.png)
 
 However, you might have different "sequences" of actions you're working on: maybe you start writing an email, and then go to check your Twitter feed through a different set of Activities. Android breaks up these sequences into groups called [**Tasks**](https://developer.android.com/guide/components/activities/tasks-and-back-stack.html). A _Task_ is a collection of Activities arranged in a Stack, and there can be multiple Tasks in the background of your device.
 

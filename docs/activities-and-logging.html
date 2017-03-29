@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-03-28">
+<meta name="date" content="2017-03-29">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -216,7 +216,7 @@ This lecture references code found at <a href="https://github.com/info448-s17/le
 </blockquote>
 <p>You can think of an Activity as a single <em>screen</em> in your app, the equivalent of a “window” in a GUI system (or a <code>JFrame</code> in a Swing app). Note that Activities don’t <strong>need</strong> to be full screens: they can also be floating modal windows, embedded inside other Activities (like half a screen), etc. But we’ll begin by thinking of them as full screens. We can have lots of Activities (screens) in an application, and they are loosely connected so we can easily move between them.</p>
 <p>In many ways, an Activity is a “bookkeeping mechanism”: a place to hold <em>state</em> and <em>data</em>, and tell to Android what to show on the display. It functions much like a Controller (in <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">Model-View-Controller</a> sense) in that regard!</p>
-<p>Also to note from the documentation:</p>
+<p>Also to note from the documentation<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>:</p>
 <blockquote>
 <p>An activity is a single, focused thing that the user can do.</p>
 </blockquote>
@@ -238,7 +238,7 @@ To make this change, you will need to import the <code>Activity</code> class! Th
 <p>What is the lifecycle?</p>
 <div class="figure">
 <img src="img/activities/activity_lifecycle.png" alt="Lifecycle state diagram, from Google. See also an alternative, simplified diagram here." />
-<p class="caption">Lifecycle state diagram, from Google. See also an alternative, simplified diagram <a href="http://developer.android.com/images/training/basics/basic-lifecycle.png">here</a>.</p>
+<p class="caption">Lifecycle state diagram, from Google. See also an alternative, simplified diagram <a href="http://developer.android.com/images/training/basics/basic-lifecycle.png">here</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 </div>
 <p>There are 7 “events” that occur in the Activity Lifecycle, which are designated by the <em>callback function</em> that they execute:</p>
 <ul>
@@ -276,7 +276,7 @@ Android apps run on devices with significant hardware constraints in terms of bo
 <li>It is possible to get access to <code>stdout</code> with <code>adb</code> using <code>adb shell stop; adb shell setprop log.redirect-stdio true; adb shell start</code>, but this is definitely not ideal.</li>
 </ul>
 <p>Instead, Android provides a <a href="https://developer.android.com/studio/debug/am-logcat.html">Logging</a> system that we can use to write out debugging information, and which is automatically accessible over the <code>adb</code> (Android Debugging Bridge). Logged messages can be filtered, categorized, sorted, etc. Logging can also be disabled in production builds for performance reasons (though it often isn’t).</p>
-<p>To perform this logging, we’ll use the <a href="http://developer.android.com/reference/android/util/Log.html"><code>android.util.Log</code></a> class. This class includes a number of <code>static</code> methods, which all basically wrap around <code>println</code> to print to the device’s log file, which is then accessible through the <code>adb</code>.</p>
+<p>To perform this logging, we’ll use the <a href="https://developer.android.com/reference/android/util/Log.html"><code>android.util.Log</code></a><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> class. This class includes a number of <code>static</code> methods, which all basically wrap around <code>println</code> to print to the device’s log file, which is then accessible through the <code>adb</code>.</p>
 <ul>
 <li>Remember to import the <code>Log</code> class!</li>
 </ul>
@@ -353,7 +353,7 @@ button.<span class="fu">setOnClickListener</span>(<span class="kw">new</span> <s
 </ul>
 <div id="intents-and-context" class="section level3">
 <h3><span class="header-section-number">2.5.1</span> Intents and Context</h3>
-<p>In Android, we don’t start new Activities by instantiating them (remember, <em>we never instantiate Activities</em>!). Instead, we send the operating system a message requesting that the Activity perform a particular action (i.e., start up and display on the screen). These messages are called <a href="http://developer.android.com/guide/components/intents-filters.html"><strong>Intents</strong></a>, and are used to communicate between app components like Activities. The Intent system allows Activities to communicate, even though they don’t have references to each other (we can’t just call a method on them).</p>
+<p>In Android, we don’t start new Activities by instantiating them (remember, <em>we never instantiate Activities</em>!). Instead, we send the operating system a message requesting that the Activity perform a particular action (i.e., start up and display on the screen). These messages are called <a href="https://developer.android.com/guide/components/intents-filters.html"><strong>Intents</strong></a>, and are used to communicate between app components like Activities. The Intent system allows Activities to communicate, even though they don’t have references to each other (we can’t just call a method on them).</p>
 <ul>
 <li><p>I don’t have a good justification for the name, other than Intents announce an “intention” for the OS to do something (like start an Activity)</p></li>
 <li><p>You can think of Intents as like <em>envelopes</em>: they are addressed to a particular target (e.g., another Activity—or more properly a <a href="https://developer.android.com/reference/android/content/Context.html"><code>Context</code></a>), and contain a brief message about what to do.</p></li>
@@ -361,7 +361,7 @@ button.<span class="fu">setOnClickListener</span>(<span class="kw">new</span> <s
 <p>An <a href="http://developer.android.com/reference/android/content/Intent.html"><code>Intent</code></a> is an object we <em>can</em> instantiate: for example, we can create a <code>new Intent</code> in the event handler for when we click the button on <code>MainActivity</code>. The <code>Intent</code> class has a number of different cnstructors, but the one we’ll start with looks like:</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Intent intent = <span class="kw">new</span> <span class="fu">Intent</span>(MainActivity.<span class="fu">this</span>, SecondActivity.<span class="fu">class</span>);</code></pre></div>
 <p>The second parameter to this constructor is the <em>class</em> we want to send the Intent to (the <code>.class</code> property fetches a reference to the class type; this is metaprogramming!). Effectively, it is the “address” on the envelop for the message we’re sending.</p>
-<p>The first parameter refers to the current <a href="http://developer.android.com/reference/android/content/Context.html"><strong>Context</strong></a> in which the message should be delivered. <code>Context</code> is an <strong>abstract class</strong> (and a superclass of <code>Activity</code>) that acts as a reference for information about the current running environment: it represents environmental data (information like “What OS is running? Is there a keyboard plugged in?”). You can <em>almost</em> think of the Context as representing the “Application”, though it’s broader than that (<a href="https://developer.android.com/reference/android/app/Application.html"><code>Application</code></a> is actually a subclass of <code>Context</code>!)</p>
+<p>The first parameter refers to the current <a href="http://developer.android.com/reference/android/content/Context.html"><strong>Context</strong></a><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> in which the message should be delivered. <code>Context</code> is an <strong>abstract class</strong> (and a superclass of <code>Activity</code>) that acts as a reference for information about the current running environment: it represents environmental data (information like “What OS is running? Is there a keyboard plugged in?”). You can <em>almost</em> think of the Context as representing the “Application”, though it’s broader than that (<a href="https://developer.android.com/reference/android/app/Application.html"><code>Application</code></a> is actually a subclass of <code>Context</code>!)</p>
 <p>The Context is <em>used</em> to do “application-level” actions: mostly working with resources (accessing and loading them), but also communicating between Activities like we’re doing now. Effectively, it lets us refer to the state in which we are running: the “context” for our code (e.g., “where is this occurring?”). It’s a kind of <em>reflection</em> or meta-programming, in a way.</p>
 <p>There are a couple of different kinds of Contexts we might wish to refer to:</p>
 <ul>
@@ -391,7 +391,7 @@ button.<span class="fu">setOnClickListener</span>(<span class="kw">new</span> <s
 <p>The abstarct data type normally associated with “back” or “undo” functionality is a <strong>stack</strong>, and that is exactly what Android uses. Every time you <em>start</em> a new Activity, Android instantiates that object and puts it on the top of a stack. Then when you hit the back button, that activity is “popped” off the stack and you’re taken to the Activity that is now at the top.</p>
 <div class="figure">
 <img src="img/activities/diagram_backstack.png" alt="An example of the Activity stack, from Google." />
-<p class="caption">An example of the Activity stack, from Google.</p>
+<p class="caption">An example of the Activity stack, from Google<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a>.</p>
 </div>
 <p>However, you might have different “sequences” of actions you’re working on: maybe you start writing an email, and then go to check your Twitter feed through a different set of Activities. Android breaks up these sequences into groups called <a href="https://developer.android.com/guide/components/activities/tasks-and-back-stack.html"><strong>Tasks</strong></a>. A <em>Task</em> is a collection of Activities arranged in a Stack, and there can be multiple Tasks in the background of your device.</p>
 <p>Tasks usually start from the Android “Home Screen”—when you launch an application, that then starts a new Task. Starting new Activities from that application will add them to the Stack of the task. If you go <em>back</em> to the Home Screen, the Task you’re currently on is moved to the background, so the “back” button won’t let you navigate that Stack.</p>
@@ -446,6 +446,16 @@ toast.<span class="fu">show</span>();</code></pre></div>
 <p>Toasts are intended to be a way to provide information to the user (e.g., giving them quick feedback), but can possibly be useful for testing too! Though in the end, Logcat is going to be your best bet for debugging, especially when trying to solve crashes or see more complex output.</p>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p><a href="https://developer.android.com/reference/android/app/Activity.html" class="uri">https://developer.android.com/reference/android/app/Activity.html</a><a href="activities-and-logging.html#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://developer.android.com/images/activity_lifecycle.png" class="uri">http://developer.android.com/images/activity_lifecycle.png</a><a href="activities-and-logging.html#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="http://developer.android.com/reference/android/util/Log.html" class="uri">http://developer.android.com/reference/android/util/Log.html</a><a href="activities-and-logging.html#fnref3">↩</a></p></li>
+<li id="fn4"><p><a href="https://developer.android.com/reference/android/content/Context.html" class="uri">https://developer.android.com/reference/android/content/Context.html</a><a href="activities-and-logging.html#fnref4">↩</a></p></li>
+<li id="fn5"><p><a href="http://developer.android.com/images/fundamentals/diagram_backstack.png" class="uri">http://developer.android.com/images/fundamentals/diagram_backstack.png</a><a href="activities-and-logging.html#fnref5">↩</a></p></li>
+</ol>
 </div>
             </section>
 
