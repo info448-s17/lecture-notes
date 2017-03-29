@@ -172,96 +172,136 @@ Finally, we can fill in the method to have it log out something when clicked.
 Overall, this button is an example of an [Input Control](http://developer.android.com/guide/topics/ui/controls.html). These will be discussed in more detail in Lecture 4.
 
 
-## Multiple Activities [15mins]
-The whole point of considering the Activity Lifecycle is because Android applications can have multiple activities and interact with multiple other applications. So let's talk briefly about how we could have an app use multiple Activities (and so get a sense for how this lifecycle may affect us)
+## Multiple Activities `r #[15mins]`
+The whole point of interfacing with the Activity Lifecycle is handle the fact that Android applications can have multiple activities and interact with multiple other applications. In this section we'll briefly discuss how to include multiple Activities within an app (in order to sense how the life cycle may affect them). Note that working with multiple Activities will be discussed in more detail in a later lecture.
 
-We can go ahead and create a New Activity through Android Studio by using `File > New > Activity`. We could also just add a new .java file with the Activity class in it
-	- Make a new Empty activity `SecondActivity`
-	- Note that this Activity also gets a resource XML layout
-		- You should edit the `<TextView>` element so this one can have a message as well.
-- _ALSO NOTE_: For every activity we make, it gets added to the **Manifest** file. This is sort of like the "Table of contents" for our application, telling the operating system information about what our app looks like so it can interact with it.
-	- another `<activity>` element in the `<application>` element. We can also see the first Activity; we'll talk about its child elements later (a lot of that)
-	- We can also add `android:label` attributes to these `<activity>` elements to give them nicer names.
+We can easily create a New Activity through Android Studio by using `File > New > Activity`. We could also just add a new `.java` file with the Activity class in it, but using Android Studio will also provide the `onCreate()` method stub as well as a layout resource.
 
-In Android, we don't start new Activities by instantiating them (remember, ___we never instantiate Activities___!). Instead, we send the operating system a message requesting that the Activity do something (i.e., start). These messages are called [**Intents**](http://developer.android.com/guide/components/intents-filters.html).
-	- Intents are **messages** used to communicate between app components like Activities. This allows them to communicate, even though they don't have references to each other (so we can't just call a method on them).
-	- I don't have a good justification for the name, other than it is an "intention" to do something that you announce to the OS
-	- You can think of Intents as like envelopes: they are addressed to a particular target (e.g., another Activity--or more properly a `Context`), and contain a brief message about what to do.
+- For practice, make a new **Empty** Activity called `SecondActivity`. You shuld edit this Activity's layout resource so that the `<TextView>` displays an appropriate message.
 
-[`Intents`](http://developer.android.com/reference/android/content/Intent.html) are something we _can_ instantiate, so let's do that in our event handler! There are lots of different constructors, but the one we'll start with is:
+Importantly, for every Activity we make, an entry gets added to the **Manifest** file `AndroidManifest.xml`. This file acts like the _"table of contents"_ for our application, telling the device Operating System information about what our app looks (that is, what Activities it has) like so that the OS can open appropriate Activities as needed.
+
+Activities are listed as `<activity>` elements nested in the `<application>` element. If you inspect the file you will be able to see an element representing the first `MainActivity`; that entry's child elements will be discussed later.
+
+- We can add `android:label` attributes to these `<activity>` elements in order to give the Activities nicer display names (e.g., in the ActionBar).
+
+### Intents and Context
+In Android, we don't start new Activities by instantiating them (remember, _we never instantiate Activities_!). Instead, we send the operating system a message requesting that the Activity perform a particular action (i.e., start up and display on the screen). These messages are called [**Intents**](http://developer.android.com/guide/components/intents-filters.html), and are used to communicate between app components like Activities. The Intent system allows Activities to communicate, even though they don't have references to each other (we can't just call a method on them).
+
+- I don't have a good justification for the name, other than Intents announce an "intention" for the OS to do something (like start an Activity)
+
+- You can think of Intents as like _envelopes_: they are addressed to a particular target (e.g., another Activity&mdash;or more properly a [`Context`](https://developer.android.com/reference/android/content/Context.html)), and contain a brief message about what to do.
+
+An [`Intent`](http://developer.android.com/reference/android/content/Intent.html) is an object we _can_ instantiate: for example, we can create a `new Intent` in the event handler for when we click the button on `MainActivity`. The `Intent` class has a number of different cnstructors, but the one we'll start with looks like:
+
 ```java
 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
 ```
-- The first parameter refers to the current [**Context**](http://developer.android.com/reference/android/content/Context.html), which is a superclass of `Activity`. Context is an **abstract class** that acts as a reference for information about the current running environment; it represents environmental data (stuff like "what OS is running? Is there a keyboard plugged in?"). You can _almost_ think of it as representing the "Application", though it's broader than that (since `Application` is actually a subclass of `Context`!)
-	- The context is _used_ to do "application-level" actions: mostly working with resources (accessing/loading), but also communicating between Activities like we're doing now. Effectively, it lets us refer to the state in which we are running: the "context" for our code (e.g., "where is this occurring?"). It's a kind of _reflection_ or meta-programming, in a way.
-	- There are a couple of different kinds of Contexts we might use:
-		- The Application context (e.g., the `Application`) references the state of the entire application. It's basically the Java object that is built out of the Manifest (and so contains that level of information)
-		- The Activity context (e.g., the `Activity`) that references the state of that activity. Again, this would be the `<activity>` tags from the Manifest.
 
-		Each of these `Context` objects exist for the life of their respective component: that is, an `Activity` Context is around as long as the Activity exists (disappearing after `onDestroy`), where as `Application` Contexts survive as long as the application does. We'll almost always use the `Activity` context, as it's safer and less likely to cause memory leaks.
+The second parameter to this constructor is the _class_ we want to send the Intent to (the `.class` property fetches a reference to the class type; this is metaprogramming!). Effectively, it is the "address" on the envelop for the message we're sending.
 
-- The second parameter is the class we want to send the Intent to (the `.class` property fetches a reference to the class type; this is metaprogramming!)
+The first parameter refers to the current [**Context**](http://developer.android.com/reference/android/content/Context.html) in which the message should be delivered. `Context` is an **abstract class** (and a superclass of `Activity`) that acts as a reference for information about the current running environment: it represents environmental data (information like "What OS is running? Is there a keyboard plugged in?"). You can _almost_ think of the Context as representing the "Application", though it's broader than that ([`Application`](https://developer.android.com/reference/android/app/Application.html) is actually a subclass of `Context`!)
 
-And now that we built the intent, we can use it to start an activity using the [`startActivity`](http://developer.android.com/reference/android/app/Activity.html#startActivity(android.content.Intent)) method (inherited from `Activity`), passing it the `Intent`!
-- Voila! we can now start a second activity, and see how that impacts our Lifecycle calls (e.g., with visibility, etc).
+The Context is _used_ to do "application-level" actions: mostly working with resources (accessing and loading them), but also communicating between Activities like we're doing now. Effectively, it lets us refer to the state in which we are running: the "context" for our code (e.g., "where is this occurring?"). It's a kind of _reflection_ or meta-programming, in a way.
+
+There are a couple of different kinds of Contexts we might wish to refer to:
+
+- The Application context (e.g., an `Application` object) references the state of the entire application. It's basically the Java object that is built out of the `<application>` element in the Manifest (and so contains that level of information).
+
+- The Activity context (e.g., an `Activity` object) that references the state of that Activity. Again, this roughly corresponds to the Java objects created out of the  `<activity>` tags from the Manifest.
+
+Each of these `Context` objects exist for the life of its respective component: that is, an `Activity` Context is available as long as the Activity exists (disappearing after `onDestroy()`), whereas `Application` Contexts survive as long as the application does. Note htat we'll almost always use the `Activity` context, as it's safer and less likely to cause memory leaks.
+
+- Inside an `Activity` object (e.g., in a lifecycle callback function), you can refer to the current `Activity` using `this`. And since `Activity` is a `Context`, you can also use `this` to refer to the current Activity context. You'll often see `Context` methods called as undecorated methods (without an explicit `this`).
+
+After having instantiated the `new Intent`, we can use that message to start an Activity by calling the <a href="http://developer.android.com/reference/android/app/Activity.html#startActivity(android.content.Intent)">`startActivity()`</a> method (inherited from `Activity`), passing it the `Intent`:
+
+```java
+startActivity(intent);
+```
+
+This method will "send" the message to the operating system, which will deliver the Intent to the appropriate Activity, telling that Activity to start as soon as it receives the message.
+
+With this interaction in place, we can now click a button to start a second activity, and see how that impacts our Lifecycle callbacks.
+
 - And we can use the **back** button to go backwards!
 
 There are actually a couple of different kinds of `Intents` (this is an **Explicit Intent**, because it is explicit about what Activity it's sent to), and a lot more we can do with them. We'll dive into Intents in more detail later; for now we're going to focus on mostly Single Activities.
-- e.g., if you look back at the Manifest, you can see that the MainActivity has an `<intent-filter>` that allows it to receive particular kinds of Intents--including ones to use it when launching the App!
 
-## Back & Tasks [5-10min]
-So we can have lots of Activities (even across multiple apps!) running and move between them. How exactly is that "Back" button keeping track of where to go to?
-- Do you know what kind of data structure is associated with "back" or "undo"? A **stack**!
-- Every time you start a new Activity, Android creates it and puts it on the top of a stack. Then when you hit the back button, that activity is popped off the stack and you're taken to the new head.
+- For example, if you look back at the Manifest, you can see that the `MainActivity` has an `<intent-filter>` child element that allows it to receive particular kinds of Intents&mdash;including ones for when an App is launched for the first time!
 
-![activity stack example](img/activities/diagram_backstack.png)
+## Back & Tasks `r #[5-10min]`
+We've shown that we can have lots of Activities (and of course many more can exist cross multiple apps), and we are able to move between them by sending Intents and clicking the "Back" button. But how exactly is that "Back" button able to keep track of where to go to?
 
-However, you might have different "sequences" of actions you're working on: maybe you start writing an email, and then go to check your Twitter timeline through a different set of Activities. Android breaks up these sequences into groups called [**Tasks**](http://developer.android.com/guide/components/tasks-and-back-stack.html). A task is a collection of activities arranged in a Stack; and there can be multiple tasks in the background.
-- Tasks usually start from the Home Screen. E.g., when you launch an Application, that starts a new Task.
-- When you go back to home screen, that Task is moved to the background, so the "back" button won't let you navigate that Stack.
-- Thinking of them like different tabs/browsers and webpages is a pretty good analogy
+The abstarct data type normally associated with "back" or "undo" functionality is a **stack**, and that is exactly what Android uses. Every time you _start_ a new Activity, Android instantiates that object and puts it on the top of a stack. Then when you hit the back button, that activity is "popped" off the stack and you're taken to the Activity that is now at the top.
 
-Important caveat: Tasks are distinct from one another, so you can have different copies of the same Activity on multiple stacks (e.g., the Camera activity could be part of both Facebook and Twitter app Tasks if you are on a selfie binge)
-	- Though it is possible to modify this, see [Managing Tasks](http://developer.android.com/guide/components/tasks-and-back-stack.html#ManagingTasks)
+![An example of the Activity stack, from Google.](img/activities/diagram_backstack.png)
 
-Demo: switch to another app, then back to ours
+However, you might have different "sequences" of actions you're working on: maybe you start writing an email, and then go to check your Twitter feed through a different set of Activities. Android breaks up these sequences into groups called [**Tasks**](https://developer.android.com/guide/components/activities/tasks-and-back-stack.html). A _Task_ is a collection of Activities arranged in a Stack, and there can be multiple Tasks in the background of your device.
 
-### Bonus: Up Navigation
-We can make this "back" navigation a little more intuitive for users by providing explicit [up navigation](http://developer.android.com/design/patterns/navigation.html)), rather than just forcing them to go back through Activities in the order they viewed them (e.g., if you're swiping through emails and want to go back to the home list). We just need a little bit of configuration for our Activities:
-- In the Java code, we want to add more functionality to the `ActionBar`. *Think*: what event handler should it be put in?
+Tasks usually start from the Android "Home Screen"&mdash;when you launch an application, that then starts a new Task. Starting new Activities from that application will add them to the Stack of the task. If you go _back_ to the Home Screen, the Task you're currently on is moved to the background, so the "back" button won't let you navigate that Stack.
+
+- It's useful to think of Tasks as being like different tabs or browsers, with the "back stack" being the history of web pages visited wthin that tab.
+
+- As a demonstration, try switching to another (built-in) app and then back to the example app; how does the back button work in each situation?
+
+An important caveat: Tasks are distinct from one another, so you can have different copies of the same Activity on multiple stacks (e.g., the Camera activity could be part of both Facebook and Twitter app Tasks if you are on a selfie binge). It is possible to modify this behavior though, see
+	- Though it is possible to modify this, see [Managing Tasks](https://developer.android.com/guide/components/activities/tasks-and-back-stack.html#ManagingTasks)
+
+### Up Navigation
+We can make this "back" navigation a little more intuitive for users by providing explicit [up navigation](https://developer.android.com/design/patterns/navigation.html), rather than just forcing users to go back through Activities in the order they viewed them (e.g., if you're swiping through emails and want to go back to the home list). To do this, we just need to add a little bit of configuration to our Activities:
+
+- In the Java code, we want to add more functionality to the `ActionBar`. *Think*: which lifecycle callback should this specification be put in?
+
 	```java
+	//specify that the ActionBar should have an "home" button
 	getSupportActionBar().setHomeButtonEnabled(true);
 	```
-- Then In the **Manifest**, add a `android:parentActivityName` attribute to the `SecondActivity`, with a value to set the full class name (including package **and** appname!) of your Main Activity. This will let you be able to use the "back" visual elements (e.g., of the ActionBar) to move back to the "parent" activity. See [Up Navigation](http://developer.android.com/design/patterns/navigation.html) for details.
-		- This is only supported for API 16+; since our min SDK is 15, we can include backwards support with the following child XML element:
-		```xml
-		<meta-data
-				 android:name="android.support.PARENT_ACTIVITY"
-				 android:value="{parent.activity.package.goes.here}" />
-		```
 
-## Toasts [5min]
-Logging is fantastic and one of the the best techniques we have for debugging, both in how Activities are being used or for any kind of bug (also RuntimeExceptions)
-- It harkens back to printline debugging, which is totes legit. Android Studio does have a [debugger](http://developer.android.com/tools/debugging/debugging-studio.html) if you're comfortable with those (can be handy!)
+- Then in the **Manifest**, add an `android:parentActivityName` attribute to the `SecondActivity`, with a value set to the full class name (including package **and** appname!) of your `MainActivity`. This will let you be able to use the "back" visual elements (e.g., of the ActionBar) to move back to the "parent" activity. See [Up Navigation](https://developer.android.com/training/implementing-navigation/ancestral.html) for details.
 
-However, sometimes you want to check some output/interaction without Logging it. You just want to see some feedback while the app is running! Or you want to give a quick message to the user. Android provides a number of different classes for doing visual notifications, including alert-style and customizable [Dialogs](http://developer.android.com/guide/topics/ui/dialogs.html), which we'll talk about in a few weeks.
+	```xml
+	<activity android:name=".SecondActivity"
+			android:label="Second Activity"
+			android:parentActivityName="edu.uw.activitydemo.MainActivity">
+			<meta-data
+					android:name="android.support.PARENT_ACTIVITY"
+					android:value="edu.uw.activitydemo.MainActivity" />
+	</activity>
+	```
 
-But a simple, quick way of giving some short visual feedback is to use what is called a [Toast](http://developer.android.com/guide/topics/ui/notifiers/toasts.html). This is a tiny little text box that pops up at the bottom of the screen for a moment.
-- Toast because it pops up :p
+	The `<meta-data>` element is to provide backwards compatibilit for API level 15 (since the `android:parentActivityName` is only defined for API level 16+).
 
-Toasts a pretty simple to implement, as with the following example (from the docs):
+## Toasts `r #[5min]`
+We have previously demonstrated how to use `Log` to output messages to logcat. Logging is fantastic and one of the the best techniques we have for debugging, both in how Activities are being used or for any kind of bug (also `RuntimeExceptions`). It harkens back to printline debugging, which is still a legitimate debugging process.
+
+<p class="alert alert-info">Note that Android Studio does have a built-in [debugger](https://developer.android.com/studio/debug/index.html) if you're comfortable with such systems.</p>
+
+However, sometimes you want to check some output/interaction without logging it. You just want to see some feedback while the app is running! Or you want to give a quick message to the user (and users can't normally read logs). Android provides a number of different classes for doing visual notifications, including alert-style and customizable [Dialogs](https://developer.android.com/guide/topics/ui/dialogs.html), which we'll talk about in a later lecture.
+
+But a simple, quick way of giving some short visual feedback is to use what is called a [**Toast**](http://developer.android.com/guide/topics/ui/notifiers/toasts.html). This is a tiny little text box that pops up at the bottom of the screen for a moment to quickly display a message.
+
+- It's called a "Toast" because it pops up!
+
+Toasts are pretty simple to implement, as with the following example (from the official documentation):
+
 ```java
-Context context = this; //getApplicationContext(); //for not disappearing if app closed quickly.
+Context context = this; //getApplicationContext(); //use application context to avoid disappearing if app is closed quickly.
 String text = "Hello toast!";
 int duration = Toast.LENGTH_SHORT;
 
 Toast toast = Toast.makeText(context, text, duration);
 toast.show();
 ```
-- But since `this` Activity _is_ a context, and we can just use the Toast anonymous, we can shorten this to a one-liner:
+
+But since `this` Activity _is_ a `Context`, and we can just use the Toast anonymously, we can shorten this to a one-liner:
+
 ```java
 Toast.makeText(this, "Hello world", Toast.LENGTH_SHORT).show();
 ```
-	- Boom, a quick visual alert method we can use for proof-of-concept stuff!
-- Note that this uses a static `makeToast()` method, rather than a constructor. This is an example of a Factory method--a design pattern we'll see a lot.
-- Toasts are intended to be ways to interact with the user (e.g., giving them quick feedback), but can possibly be useful for testing too! Though in the end, Logcat is going to be your best bet for debugging.
+
+Boom, a quick visual alert method we can use for proof-of-concept stuff!
+
+- Note that this code uses a `static` `makeToast()` method, rather than a constructor. This is an example of a Factory method&mdash;a design pattern we'll see a lot!
+
+Toasts are intended to be a way to provide information to the user (e.g., giving them quick feedback), but can possibly be useful for testing too! Though in the end, Logcat is going to be your best bet for debugging, especially when trying to solve crashes or see more complex output.
