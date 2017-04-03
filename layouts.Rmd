@@ -1,0 +1,256 @@
+# Resources and Layouts
+This lecture discusses [**Resources**](https://developer.android.com/guide/topics/resources/overview.html), which are used to represent elements or data that are separate from the behavior (functional logic) of the app. In particular, this lecture focuses on how resources are used to define **Layouts** for user interfaces. While the [Activities](#activities) lecture focused on the Java portion of Android apps; this lecture focuses on the XML.
+
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture03-layouts>.<p>
+
+## Resources
+[Resources](https://developer.android.com/guide/topics/resources/overview.html) can be found in the **`res/`** folder, and represent elements or data that are "external" to the code. You can think of them as "media content": often images, but also things like text clippings (or short String constants). Textual resources are usually defined in XML files. This is because resources represent elements (e.g., content) that is _separate_ from the code (the behavior of the app), so is kept separate from the Java code to support the **Principle of Separation of Concerns**
+
+- By defining resources in XML, they can be developed (worked on) _without_ coding tools (e.g., with systems like the graphical "layout design" tab). Theoretically you could have a Graphic Designer create these resources, which can then be integrated into the code without the designer needing to do a lick of Java.
+
+- Similarly, keeping resources separate allows you to choose what resources to include _dynamically_. You can choose to show different images based on device screen resolution, or pick different Strings based on the language of the device (internationalization!)&mdash;the behavior of the app is the same, but the "content" is different!
+
+	- This is similar to how in web development we may want to have the same JavaScript from different HTML.
+
+What should be a resource? In general:
+
+- Layouts should **always** be resources
+- UI controls (buttons, etc) should _mostly_ be defined as resources (part of layouts), though behavior will be defined programmtically (in Java)
+- Any graphic images (drawables) should be resources
+- Any _user-facing_ strings should be resources
+- Style and theming information should be resources
+
+As introduced in [Lecture 1]{#introduction}, there are a number of different [resource types](https://developer.android.com/guide/topics/resources/available-resources.html) used in Android, many of which can be found in the `res/` folder of a default Android project, including:
+
+- `res/drawable/`: contains graphics (PNG, JPEG, etc)
+- `res/layout/`: contains UI XML layout files
+- `res/mipmap/`: conatins launcher icon files in different resolutions
+- `res/values/`: contains XML definitions for general constants
+	- `/strings`: short string constants (e.g., labels)
+	- `/colors`: color constants
+	- `/styles` : constants for [style and theme](https://developer.android.com/guide/topics/ui/themes.html) details
+	- `/dimen` : dimensional constants (like default margins); not created by default in Android Studio 2.3+.
+
+The details about these different kinds of resources is a bit scattered throughout the documentation, but [Resource Types](http://developer.android.com/guide/topics/resources/available-resources.html)^[https://developer.android.com/guide/topics/resources/available-resources.html] is a good place to start, as is [Providing Resources](https://developer.android.com/guide/topics/resources/providing-resources.html#ResourceTypes).
+
+### Alternate Resources
+These aren't the only names for resource folders: as mentioned above, part of the goal of resources is that they can be **localized**: changed depending on the device! You are thus able to specify folders for "alternative" resources (e.g., special handling for another language, or for low-resolution devices). At runtime, Android will check the configuration of the device, and try to find an alternative resource that matches that config. If it it _can't_ find a relevant alternative resource, it will fall back to the "default" resource.
+
+There are many different configurations that can be used to influence resources; see [Providing Resources](https://developer.android.com/guide/topics/resources/providing-resources.html#AlternativeResources)^[http://developer.android.com/guide/topics/resources/providing-resources.html]. To highlight a few options, you can specify different resources based on:
+
+- Language and region (e.g., via two-letter ISO codes)
+- Screen size(`small`, `normal`, `medium`, `large`, `xlarge`)
+- Screen orientation (`port` for portrait, `land` for landscape)
+- Specifc screen pixel density (dpi) (`ldpi`, `mdpi`, `hdpi`, `xhdpi`, `xxhdpi`, etc.). `xxhdpi` is pretty common for high-end devices. Note that dpi is "dots per inch", so these values represent the number of pixels across _relative_ to the device size!
+- Platform version (`v1`, `v4`, `v7`... for each API number)
+
+Configurations are indicated using the **directory name**, giving them the form `<resource_name>(-<config_qualifier>)+`
+
+- You can see this in action by using the _New Resource_ wizard (`File > New > Android resource file`) to create a welcome message (a string resource, such as for the `app_name`) in another language^[https://www.webucator.com/blog/2010/03/saying-hello-world-in-your-language-using-javascript/], and then changing the device's language settings to see the content automatically adjust!
+
+	```xml
+	<?xml version="1.0" encoding="utf-8"?>
+	<resources>
+	    <string name="app_name">Mon Application</string>
+	</resources>
+	```
+
+- Switch to the `Package` view in Android Studio to see how the folder structure for this works.
+
+
+### XML Details
+Resources are usually defined as [XML](https://en.wikipedia.org/wiki/XML) (which is similar in syntax to HTML). The `strings.xml` example used above involves fairly simple elements but more complexresource is pretty simple, but more complex details can be seen in the `activity_main.xml` resource inside `layout/`.
+
+- Android-specific attributes are namespaced with a `android:` prefix, to avoid any potential conflicts (e.g., so we know we're talking about Android's `text` instead of something else).
+- We can use the **`@`** symbol to reference one resource from another, following the schema `@[<package_name>:]<resource_type>/<resource_name>`
+- We can also use the **`+`** symbol to create a _new_ resource that we can refer to; this is a bit like declaring a variable inside an attribute. This is most commonly used with the `android:id` attribute (`android:id="@+id/identifier"`), see below for details.
+
+### R
+Although XML resources are defined separately from the Java code, resources can be [accessed](https://developer.android.com/guide/topics/resources/accessing-resources.html) from within Java. When an application is compiled, the build tools (e.g., gradle) **generate** an additional Java class called **`R`** (for "resource"). This class contains what is basically a giant list of static "constants"&mdash;one for each resource! These constants are organized into subclasses, one for each resource type. This allows you to refer to a specific resource in the Java code as `[(package_name).]R.resource_type.identifier` similar to the kind of syntax used to refer to a nested JSON object! For example: `R.string.hello` (the `hello` string resource), `R.drawable.icon` or `R.layout.activity_main`
+
+- For most resources, the identifier is defined as an element attribute (`id` for specific View elements in layouts, `name` attribute for values). For more complex resources such as entire layouts or drawables, the identifier is the _filename_ (without the XML); hence `R.layout.activity_main` refers to the root element of the `layout/activity_main.xml` file.
+- Note that that `@` symbol used in the XML goes to the `R` Java file to look things up, so follows the same reference syntax.
+
+<p class="alert alert-info">You can find the generated `R.java` file inside `app/build/generated/source/r/debug/...` (Use the Project Files view in Android Studio).</p>
+
+The static constants inside the `R.java` file are often just `ints` that are _pointers_ to element references (similar to passing a `pointer*` around in the C language). So in the Java, we usually work with `int` as the data type for XML resources, because we're actually working with pointers _to_ those resources.
+
+- You can think of each `int` constant as a "key" or "index" for that resource (in the list of all resources). Android does the hard work of taking that `int`, looking it up in an internal resource table, finding the associated XML file, and then getting the right element out of that XML. (By hard work, I mean in terms of implementation. Android is looking up these references directly in memory, so the look-up is a fast `O(1)`).
+
+Because the `R` class is included in the Java, we can access these constants directly in our code (as `R.resource_type.identifier`). For example, the `setContentView()` call in an Activity's `onCreate()` takes in a resource `int`.
+
+- The other comment method that utilizes resources will be `findViewById(int)`, which is used to reference a `View` element (e.g., a button) from the resource in order to call methods on it in Java. This is the same method used with the Button example in the [Activities lecture]{#activities}
+
+<p class="alert alert-warning">The `R` class is regenerated all time (any time you change a resource, which is often); when Eclipse was the recommend Android IDE, you often needed to manually regenerate the class so that the IDE's index would stay up to date! You can perform a similar task in Android Studio by using `Build > Clean Project` and `Build > Rebuild Project`.</p>
+
+
+## Views
+The most common type of element we'll define in resources are [**Views**](https://developer.android.com/reference/android/view/View.html)^[http://developer.android.com/reference/android/view/View.html].
+`View` is the superclass for visual interface elements&mdash;a visual component on the screen is a View. Specific types of Views include: [TextViews](https://developer.android.com/reference/android/widget/TextView.html), [ImageViews](https://developer.android.com/reference/android/widget/ImageView.html), [Buttons](https://developer.android.com/reference/android/widget/Button.html), etc.
+
+- `View` is a superclass for these components because it allows us to use __polymorphism__ to treat all these visual elements the same way as instances of the same type. We can lay them out, draw them, click on them, move them, etc. And all the behavior will be the same&mdash;though subclasses can also have "extra" features
+
+Here's the big trick: one subclass of `View` is [`ViewGroup`](https://developer.android.com/reference/android/view/ViewGroup.html)^[http://developer.android.com/reference/android/view/ViewGroup.html]. A `ViewGroup` can contain other "child" Views. But since `ViewGroup` is a `View`... it can contain more `ViewGroups` inside it! Thus we can **nest** Views within Views, following the [Composite Pattern](http://www.oodesign.com/composite-pattern.html). This ends up working a lot like HTML (which can have DOM elements like `<div>` inside other DOM elements), allowing for complex user interfaces.
+
+Views are defined inside of [Layouts](https://developer.android.com/guide/topics/ui/declaring-layout.html)&mdash;that is, inside a layout resource, which is an XML file describing Views. These resources are "inflated" (rendered) into UI objects that are part of the application.
+
+Technically, `Layouts` are simply `ViewGroups` that provide "ordering" and "positioning" information for the Views inside of them. they let the system "lay out" the Views intelligently and effectively. _Individual views shouldn't know their own position_; this follows from good good object-oriented design and keeps the Views encapsulated.
+
+<p class="alert alert-info">Android studio does come with a graphical [Layout Editor](https://developer.android.com/studio/write/layout-editor.html) (the "Design" tab) that can be used to create layouts. However, most developers stick with writing layouts in XML. This is mostly because early design tools were pathetic and unusable, so XML was all we had. Although Android Studio's graphical editor can be effective, for this course you should create layouts "by hand" in XML. This is helpful for making sure you understand the pieces underlying development, and is a skill you should be comfortable with anyway (similar to how we encourage people to use `git` from the command-line).</p>
+
+### View Properties
+Before we get into how to group Views, let's focus on the individual, basic `View` classes. As an example, consider the `activity_main` layout in the lecture code. This layout contains two individual `View` elements (inside a `Layout`): a `TextView` and a `Button`.
+
+All views have three basic aspects:
+
+- They have **properties** which define the state of the View
+- They have **methods** which the Java code can call to manipulate them ("outside to inside" communication)
+- They can produce **events** which they can use to notify the Java code ("inside to outside" communication)
+
+This lecture will primarily focus on the **properties**. Properties are usually defined within the resource XML as element _attributes_. Some examples of these property attributes are described below.
+
+- **`android:id`** specifies a unique identifier for the View. This identifier needs to be unique within the layout, though ideally is unique within the entire app (for clarity).
+
+	Identifiers must be legal Java variable names (because they are turned into a variable name in the `R` class), and by convention are named in `lower_case` format.
+
+	- _Style tip_: it is useful to prefix each View's id with its type (e.g., `btn`, `txt`, `edt`). This helps with making the code self-documenting.
+
+	You should give each interactive `View` a unique id, which will allow its state to automatically be saved as a `Bundle` when the Activity is destroyed. See [here](https://developer.android.com/guide/components/activities/activity-lifecycle.html#saras) for details.
+
+
+- **`android:layout_width`** and **`android:layout_height`** are used to specify the View's size on the screen (see [ViewGroup.LayoutParams](http://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html) for documentation). These values can be a specific value (e.g., `12dp`), but more commonly is one of two special values:
+
+	- `wrap_content`, meaning the dimension should be as large as the content requires, plus padding.
+	- `match_parent`, meaning the dimension should be as large as the _parent_ (container) element, minus padding. This value was renamed from `fill_parent` (which has now been deprecated).
+
+	<div class="alert alert-info">
+	Android utilizes the following [dimensions](https://developer.android.com/guide/topics/resources/more-resources.html#Dimension) or [units](https://www.google.com/design/spec/layout/units-measurements.html#):
+	- **`dp`** is a "density-independent pixel". On a 160-dpi (dots-per-inch) screen, `1dp` equals `1px` (pixel). But as dpi increases, the number of pixels per `dp` increases. These values should be used instead of `px`, as it allows dimensions to work independent of the hardware's dpi (which is _highly_ variable).
+	- **`px`** is an actual screen pixel. _DO NOT USE THIS_ (use `dp` instead!)
+	- **`sp`** is a "scale-independent pixel". This value is like `dp`, but is scale by the system's font preference (e.g., if the user has selected that the device should display in a larger font, `1sp` will cover more `dp`). _You should **always** use `sp` for text dimensions, in order to support user preferences and accessibility._
+	- **`pt`** is 1/72 of an inch of the physical screen. Similar units `mm` and `in` are available. _Not recommended for use._
+	</div>
+
+- **`android:padding`**, **`android:paddingLeft`**, **`android:margin`**, **`android:marginLeft`**, etc. are used to specify the margin and padding for Views. These work basically the same way they do in CSS: padding is the space between the content and the "edge" of the View, and margin is the space between Views. Note that unlike CSS, margins between elements do not collapse.
+
+- **`android:textSize`** specifies the "font size" of textual Views (use `sp` units!), **`android:textColor`** specifies the color of text (reference a color resource!), etc.
+
+- There are lots of other properties as well! You can see a listing of generic properties in the [`View`](https://developer.android.com/reference/android/view/View.html#lattrs)^[http://developer.android.com/reference/android/view/View.html#lattrs] documentation, look at the options in the "Design" tab of Android Studio, or browse the auto-complete options in the IDE. Each different `View` class (e.g., `TextView`, `ImageView`, etc.) will also have their own set of properties.
+
+Note that unlike CSS, styling properties specified in the layout XML resources are not inherited; we're effectively specifying an inline `style` attribute for that element, and one that won't affect child elements. In order to define shared style properies, you'll need to use [styles resources](https://developer.android.com/guide/topics/ui/themes.html#DefiningStyles), which are discussed in a later lecture.
+
+
+While it is possible to specify these visual properties dynamically via Java methods (e.g., `setText()`, `setPadding()`). You should **only** use Java methods to specify View properties when they _need_ to be dynamic (e.g., the text changes in response to a button click)&mdash;it is much cleaner and effective to specify as much visual detail in the XML resource files as possible. It's also possible to simply replace one layout resource with another (see below).
+
+- Views also have inspection methods such as `isVisible()` and `hasFocus()`; we will point to those as we need them.
+
+<p class="alert alert-warning">Do not define Views or View appearances in an Activity's `onCreate()` callback, unless the properties (e.g., content) truly cannot be determined before runtime! Specify layouts in the XML instead.</p>
+
+### Practice
+Add a new [`ImageView`](http://developer.android.com/reference/android/widget/ImageView.html) element that contains a picture. Be sure and specify its `id` and size (experiment with different options).
+
+You can specify the content of the image in the XML resource using the `android:src` attribute (use `@` to reference a `drawable`), or you can specify the content dynamically in Java code:
+
+```java
+ImageView imageView = (ImageView)findViewById(R.id.img_view);
+imageView.setImageResource(R.drawable.my_image);
+```
+
+
+## Layouts
+As mentioned above, a [Layout](https://developer.android.com/guide/topics/ui/declaring-layout.html) is a grouping of Views (specifically, a `ViewGroup`). A Layout acts as a container for other Views, to help organize things. Layouts are all subclasses of [`ViewGroup`](https://developer.android.com/reference/android/view/ViewGroup.html), so you can use its inheritance documentation to see a (mostly) complete list of options, though many of the listed classes are deprecated in favor of later, more generic/powerful options.
+
+### LinearLayout
+Probably the simplest Layout to understand is the [`LinearLayout`](https://developer.android.com/guide/topics/ui/layout/linear.html). This Layout simply orders the children View in a line ("linearly"). All children are laid out in a single direction, but you can specify whether this is horizontal or vertical with the `android:orientation` property. See [LinearLayout.LayoutParams](https://developer.android.com/reference/android/widget/LinearLayout.LayoutParams.html) for a list of all attribute options!
+
+- Remember: since a `Layout` is a `ViewGroup` is a `View`, you can also utilize all the properties discussed above; the attributes are inherited!
+
+Another common property you might want to control in a LinearLayout is how much of any remaining space the elements should occupy (e.g., should they expand). This is done with the `android:layout_weght` property. After all element sizes are calculated (via their individual properties), the remaining space within the Layout is divided up proportionally to the `layout_weight` of each element (which defaults to `0` so they get no extra space). See the [example](https://developer.android.com/guide/topics/ui/layout/linear.html#Weight) in the guide for more details.
+
+- _Useful tip_: Give elements `0dp` width or height and `1` for weight to make everything in the Layout the same size!
+
+You can also use the [`android:layout_gravity`](https://developer.android.com/reference/android/widget/LinearLayout.LayoutParams.html#attr_android:layout_gravity) property to specify the "alignment" of elements within the Layout (e.g., where they "fall" to). Note that this property is specified on individual child Views.
+
+**An important point** Since Layouts _are_ Views, you can of course nest `LinearLayouts` inside each other! So you can make "grids" by creating a vertical Layout containing "rows" of horizontal Layouts (which contain Views). As with HTML, there are lots of different options for achieving any particular interface layout.
+
+### RelativeLayout
+A [`RelativeLayout`](https://developer.android.com/guide/topics/ui/layout/relative.html) is more flexible (and hence powerful), but can be more complex to use. In a `RelativeLayout`, children are positioned "relative" to the parent **OR** _to each other_. All children default to the top-left of the Layout, but you can give them properties from [`RelativeLayout.LayoutParams`](https://developer.android.com/reference/android/widget/RelativeLayout.LayoutParams.html) to specify where they should go instead.
+
+For example: `android:layout_verticalCenter` centers the View vertically within the parent. `android:layout_toRightOf` places the View to the right of the View with the given resource id (use an `@` reference to refer to the View by its id):
+
+```xml
+<TextView
+    android:id="@+id/first"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="FirstString" />
+<TextView
+    android:id="@+id/second"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/first"
+    android:layout_alignParentLeft="true"
+    android:text="SecondString" />
+```
+
+(Recall that the `@+` syntax defines a _new_ View id, like declaring a variable!)
+
+You do not need to specify both `toRightOf` and `toLeftOf`; think about placing one element on the screen, then putting another element relative to what came before. This can be tricky. For this reason the author prefers to use `LinearLayouts`, since you can always produce a Relative positioning using enough LinearLayouts (and most layouts end up being linear in some fashion anyway!)
+
+### ConstraintLayout
+[`ConstraintLayout`](https://developer.android.com/training/constraint-layout/index.html) is a Layout provided as part of an extra support library, and is what is used by Android Studio's "Design" tool (and thus is the default Layout for new layout resources). `ConstraintLayout` works in a manner conceptually similar to `RelativeLayout`, in that you specify the location of Views in relationship to one another. However, `ConstraintLayout` offers a more powerful set of relationships in the form of _constraints_, which can be used to create highly responsive layouts. See [the class documentation](https://developer.android.com/reference/android/support/constraint/ConstraintLayout.html) for more details and examples of constraints you can add.
+
+The main advantage of `ConstraintLayout` is that it supports development through Android Studio's Design tool. However, since this course is focusing on implementing the resource XML files rather than using the specific tool (that may change in a year's time), we will primarily be using other layouts.
+
+### Other Layouts
+There are many other layouts as well, though we won't go over them all in depth. They all work in similar ways; check the individual class's documentatoion for details.
+
+- [FrameLayout](https://developer.android.com/reference/android/widget/FrameLayout.html) is a sort of "placeholder" layout that holds a **single** child View (a second child will not be shown). You can think of this layout as a way of adding a simple container to use for padding, etc. It is also highly useful for situations where the framework requires you to specify a Layout resource instead of just an individual View.
+
+- [GridLayout](https://developer.android.com/reference/android/widget/GridLayout.html) arranges Views into a Grid. It is similar to LinearLayout, but places elements into a grid rather than into a line.
+
+	Note that this is different than a [Grid_View_](https://developer.android.com/guide/topics/ui/layout/gridview.html), which is a scrollable, adaptable list (similar to a `ListView`, which is discussed in the next lecture).
+
+- [TableLayout](http://developer.android.com/guide/topics/ui/layout/grid.html) acts like an HTML table: you define `TableRow` layouts which can be filled with content. This View is not commonly used.
+
+
+### Combining and Inflating Layouts
+It is possible to combine multiple layout resources. This is useful if you want to dynamically change what Views are included, or to refactor parts of a layout into different XML files to improve code organization.
+
+As one option, you can _statically_ include XML layouts inside other layouts by using an [`<include>`](https://developer.android.com/training/improving-layouts/reusing-layouts.html) element:
+
+```xml
+<include layout="@layout/sub_layout">
+```
+
+But it is also possible to dynamically load views "manually" (e.g., in Java code) using the [`LayoutInflator`](https://developer.android.com/reference/android/view/LayoutInflater.html). This is a class that has the job of "inflating" (rendering) Views. The process is called "inflating" based on the idea that it is "unpacking" or "expanding" a compact resource description into a complex Java Object. LayoutInflator is implicitly used in the `setContentView()` method, but can also be used independently with the following syntax:
+
+```java
+LayoutInflator inflator = getLayoutInflator(); //access the inflator (called on the Activity)
+View myLayout = inflator.inflate(R.layout.my_layout, parentViewGroup, true); //to attach
+```
+
+Note that we never instantiate the `LayoutInflator`, we just access an object that is defined as part of the Activity.
+
+The <a href="http://developer.android.com/reference/android/view/LayoutInflater.html#inflate(int, android.view.ViewGroup, boolean)">`inflate()`</a> method takes a couple of arguments:
+
+- The first parameter is a reference to the resource to inflate (an `int` saved in `R`)
+- The second parameter is a `ViewGroup` to act as the "parent" for this View&mdash;e.g., what layout should the View be inflate inside? This can be `null` if there is not yet a layout context; e.g., you wish to inflate the View but not show it on the screen yet.
+- The third (optional) parameter is whether to actually attach the inflated View to that parent (if not, the parent just provides context and layout params to use). If not assigning to parent on inflation, you can later attach the View using methods in `ViewGroup` (e.g., `addView(View)` similar to what we've done with Swing).
+
+Manually inflating a View works for dynamically loading resources, and we will often see UI implementation patterns that utilize Inflators.
+
+However, for dynamic View creation it tends to be messy and hard to maintain (UI work should be specified entirely in the XML, without needing multiple references to parent and child Views) so it isn't as common in modern development. A much cleaner solution is to use a [`ViewStub`](https://developer.android.com/training/improving-layouts/loading-ondemand.html)^[http://developer.android.com/training/improving-layouts/loading-ondemand.html]. A `ViewStub` is like an ["on deck"](https://en.wikipedia.org/wiki/On-deck) Layout: it is written into the XML, but isn't actually shown until you choose to reveal it via Java code. With a `ViewStub`, Android inflates the `View` at runtime, but then removes it from the parent (leaving a "stub" in its place). When you call `inflate()` (or `setVisible(View.VISIBLE)`) on that stub, it is reattached to the View tree and displayed:
+
+```xml
+<!-- XML -->
+<ViewStub android:id="@+id/stub"
+    android:inflatedId="@+id/subTree"
+    android:layout="@layout/mySubTree"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+```
+```java
+//Java
+ViewStub stub = (ViewStub)findViewById(R.id.stub);
+View inflated = stub.inflate();
+```

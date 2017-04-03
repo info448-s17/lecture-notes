@@ -78,6 +78,6 @@ What if we want to do more complex layouts? We could look for a more complex `La
 
 For example, we can make a `JPanel` object, which is basically an "empty" component. We can then add multiple buttons to this this panel, and add _that panel_ to the `JFrame`. Because `JPanel` **is a** `Component` (just like `JButton` is), we can use the `JPanel` exactly as we used the `JButton`&mdash;this panel just happens to have multiple buttons.
 
-And since we can put any `Component` in a `JPanel`, and `JPanel` is itself a Component... we can create nest these components together into a tree in an example of the [Composite Pattern](https://sourcemaking.com/design_patterns/composite). This allows us to create very complex user interfaces with just a simple `BoxLayout`!
+And since we can put any `Component` in a `JPanel`, and `JPanel` is itself a Component... we can create nest these components together into a tree in an example of the [Composite Pattern](http://www.oodesign.com/composite-pattern.html). This allows us to create very complex user interfaces with just a simple `BoxLayout`!
 
 - This is similar to how we can create complex web layouts just by nesting lots of `<div>` elements.

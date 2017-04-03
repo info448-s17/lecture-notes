@@ -26,6 +26,14 @@
   margin-bottom: .85em;
 }
 
+.footnotes ol li {
+  margin-bottom: .5em;
+}
+
+.footnotes ol li p {
+  margin-bottom: .5em !important;
+}
+
 /* Common? */
 p.caption {
   color: #777;

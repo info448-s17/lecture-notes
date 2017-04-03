@@ -8,7 +8,7 @@ rmd_files:
   - index.Rmd
   - introduction.Rmd
   - activities.Rmd
-  - resources.Rmd
+  - layouts.Rmd
   - input-lists.Rmd
   - appendix.Rmd
   - java-review.Rmd
