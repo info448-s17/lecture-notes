@@ -1,4 +1,4 @@
-# Threads and HTTP Requests
+# Threads and HTTP Requests {#java-threads-http}
 This appendix introduces concepts in **concurrency and threading**, which are used extensively by Android though a framework-specific classes and options. For clarity, these concepts are introduced though a set of practice exercises in straight Java (though similar code can be utilized in Android).
 
 <p class="alert alert-info">The code for these exercises can be found at <https://github.com/info448-s17/lab-threads-http>.</p>

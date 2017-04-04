@@ -9,7 +9,7 @@ rmd_files:
   - introduction.Rmd
   - activities.Rmd
   - layouts.Rmd
-  - input-lists.Rmd
+  - inputs-lists.Rmd
   - appendix.Rmd
   - java-review.Rmd
   - java-swing.Rmd

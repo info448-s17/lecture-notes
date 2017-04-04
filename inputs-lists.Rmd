@@ -1,0 +1,211 @@
+# Interactive Views
+This lecture discusses how to use Views to support user interaction and dynamic content, building on the previous lecture as while drawing on concepts introduced in the [Threads and HTTP Requests Appendix](#java-threads-http).
+
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture04-inputs-lists>.<p>
+
+## Inputs `r #[20min]`
+The previous lecture discussed **Views** and ViewGroups (**Layouts**), and introduced some basic Views such as `TextView`, `ImageView`, and `Button`.
+
+A `Button` is an example of an [Input Control](https://developer.android.com/guide/topics/ui/controls.html). These are simple (single-purpose; not necessarily lacking complexity) widgets that allow for user input. There are many such widgets in addition to `Button`, mostly found in the [`android.widget`](https://developer.android.com/reference/android/widget/package-summary.html) package. Many correspond to HTML `<input>` elements, but Android provided additional widgets at well.
+
+Launch the lecture code's `MainActivity` with a content View of `R.id.input_control_layout` to see an example of many widgets (as well as a demonstration of a more complex layout!). These widgets include:
+
+- [Button](https://developer.android.com/guide/topics/ui/controls/button.html), a widget that affords clicking. Buttons can display text, images or both.
+- [EditText](https://developer.android.com/reference/android/widget/EditText.html), a widget for user text entry. Note that you can use the `android:inputType` property to [specify the type](https://developer.android.com/training/keyboard-input/style.html) of the input similar to an HTML `<input>`.
+- [Checkbox](https://developer.android.com/guide/topics/ui/controls/checkbox.html), a widget for selecting an on-off state
+- [RadioButton](https://developer.android.com/guide/topics/ui/controls/radiobutton.html), a widget for selecting from a set of choices. Put `RadioButton` elements inside a `RadioGroup` element to make the buttons mutually exclusive.
+- [ToggleButton](https://developer.android.com/guide/topics/ui/controls/togglebutton.html), another widget for selecting an on-off state.
+- [Switch](https://developer.android.com/reference/android/widget/Switch.html), yet another widget for selecting an on-off state. This is just a `ToggleButton` with a slider UI. It was introduced in API 14 and is the "modern" way of supporting on-off input.
+- [Spinner](https://developer.android.com/guide/topics/ui/controls/spinner.html), a widget for picking from an array of choices, similar to a drop-down menu. Note that you should define the choices as a resource (e.g., in `strrings.xml`).
+- [Pickers](https://developer.android.com/guide/topics/ui/controls/pickers.html): a compound control around some specific input (dates, times, etc). These are typically used in pop-up dialogs, which will be discussed in a future lecture.
+- ...and more! See the [`android.widget`](http://developer.android.com/reference/android/widget/package-summary.html) package for further options.
+
+All these input controls basically work the same way: you define (instantiate) them in the layout resource, then access them in Java in order to define interaction behavior.
+
+There are two ways of interacting with controls (and Views in general) from the Java code:
+
+1. Calling **methods** on the View to manipulate it. This represents "outside to inside" communication (with respect to the View).
+2. Listening for **events** produced by the View and responding to then. This represents "inside to outside" communication (with respect to the View).
+
+An example of the second, event-driven approach was introduced in [Lecture 2]{#basic-events}. This involved _registering a listener_ for the event (after acquiring a reference to the View with `findViewById()`) and then specifying a **callback method** (by instantiating the Listener interface) that wiould be "called back to" when the event occurs.
+
+- It is also possible to specify the callback method in the XML resource itself by using e.g., the `android:onClick` attribute. This value of this attribute should be the _name_ of the callback method:
+It is also possible to
+
+	```xml
+	<Button
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:onClick="handleButtonClick" />
+	```
+
+	The callback method is declared in the Java code as taking in a `View` parameter (which will be a reference to whatever View caused the event to occur) and returning `void`:
+
+	```java
+	public void handleButtonClick(View view) { }
+	```
+
+- We will utilize a mix of both of these strategies (defining callbacks in both the Java and the XML) in this class.
+
+	<p class="alert">_Author's Opinion_: It is arguable about which approach is "better". Specifying the callback method in the Java code helps keep the appearance and behavior separate, and avoids introducing hidden dependencies for resources (the Activity must provide the required callback). However, as buttons are made to be pressed, it isn't unreasonable to give a "name" in the XML resource as to what the button will do, especially as the corresponding Java method may just be a "launcher" method that calls something else. Specifying the callback in the XML resource may often seem faster and easier, and we will use whichever option best supports clarity of our code.</p>
+
+Event callbacks are used to respond to all kind of input control widgets. CheckBoxes use an `onClick` callback, ToggleButtons use `onCheckedChanged`, etc. Other common events can be found in the [View documentation](https://developer.android.com/reference/android/view/View.html#nestedclasses), and are handled via listeners such as `OnDragListener` (for drags), `OnHoverListener` (for "hover" events), `OnKeyListener` (for when user types), or `OnLayoutChangeListener` (for when layout changes display).
+
+In addition to listening for events, it is possible to call methods directly on referenced Views to access their state. In addition to generic View methods such as `isVisible()` or `hasFocus()`, it is possible to inquire directly about the state of the input provided. For example, the `isChecked()` method returns whether or not a checkbox is ticked.
+
+This is also a good way of getting access to inputted content from the Java Code. For example, call `getText()` on an `EditText` control in order to fetch the contents of that View.
+
+- For practice, try to log out the contents of the included `EditText` control when the `Button` is pressed!
+
+Between listening for events and querying for state, we can fully interact with input controls. Check the official documentation for more details on how to use specific individual widgets.
+
+
+## ListViews and Adapters `r #[30min]`
+
+<p class="alert">The remainder of the lecture utilizes the `list_layout` Layout in the lecture code. Modify `MainActivity` so that it uses this resource as its `viewContent`.</p>
+
+Having covered basic controls, this section will now look at some more advanced interactive Views. In particular, it will discuss how to utilize a [ListView](https://developer.android.com/guide/topics/ui/layout/listview.html), which is a `ViewGroup` that displays a scrollable list of items! A `ListView` is basically a `LinearLayout` inside of a `ScrollView` (which is a `ViewGroup` that can be scrolled). Each element within the LinearLayout is another `View` (usually a Layout) representing a particular item in a list.
+
+But the `ListView` does extra work beyond just nesting Views: it keeps track of what items are already displayed on the screen, inflating only the visible items (plus a few extra on the top and bottom as buffers). Then as the user scrolls, the ListView takes the disappearing views and _recycles_ them (altering their content, but not reinflating from scratch) in order to reuse them for the new items that appear. This lets it save memory, provide better performance, and overall work more smoothly. See [this tutorial](https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#row-view-recycling) for diagrams and further explanation of this recycling behavior.
+
+- Note that a more advanced and flexible version of this behavior is offered by the [`RecyclerView`](https://developer.android.com/guide/topics/ui/layout/recyclerview.html). See also [this guide](https://developer.android.com/training/material/lists-cards.html) for more details.
+
+The `ListView` control uses a **Model-View-Controller (MVC)** architecture. This is a deisgn pattern common to UI systems which organizes programs into three parts:
+
+1. The **Model**, which is the data or information in the system
+2. The **View**, which is the display or representation of that data
+3. The **Controller**, which acts as an intermediary between the Model and View and hooks them together.
+
+The MVC pattern can be found all over Android. At a high level, the resources provide _models_ and _views_ (separately), while the Java Activities act as _controllers_.
+
+- _Fun fact_: The Model-View-Controller pattern was originally developed as part of the [Smalltalk](http://heim.ifi.uio.no/~trygver/themes/mvc/mvc-index.html) language, which was the first Object-Oriented language!
+
+Thus in order to utilize a `ListView`, we'll have some data to be displayed (the _model_), the _views_ (Layouts) to be shown, and the `ListView` itself will connect these together act as the _controller_. Specifically, the `ListView` is a subclass of [`AdapterView`](https://developer.android.com/reference/android/widget/AdapterView.html), which is a View backed by a data source&mdash;the `AdapterView` exists to hook the View and the data together (a controller!)
+
+- There are other `AdapterViews` as well. For example, [`GridView`](https://developer.android.com/guide/topics/ui/layout/gridview.html) works exactly the same way as a `ListView`, but lays out items in a scrollable grid rather than a scrollable list.
+
+In order to use a `ListView`, we need to get the pieces in place:
+
+1. First we specify the **model**: some raw data. We will start with a simple `String[]`, filling it with placeholder data:
+
+	```java
+	String[] data = new String[99];
+	for(int i=99; i>0; i--){
+		data[99-i] = i+ " bottles of beer on the wall";
+	}
+	```
+
+	While we could define this data as [an XML resource](https://developer.android.com/guide/topics/resources/string-resource.html#StringArray), we'll create it dynamically for testing (and to make it changeable later!)
+
+2. Next we specify the **view**: a `View` to show for each datum in the list. Define an XML layout resource for that (`list_item` is a good name and a common idiom).
+
+	For simplicity's sake we don't need to specify a full Layout, just a basic `TextView`. Have the width `match_parent` and the height `wrap_content`. _Don't forget an `id`!_
+
+	```xml
+	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/txtItem"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" />
+	```
+
+	To make it look better, you can specify `android:minHeight=?android:attr/listPreferredItemHeight` (using the framework's preferred height for lists), and some `center_vertical` gravity. The `android:lines` property is also useful if you need more space.
+
+3. Finally, we specify the **controller**: the `ListView` itself. At that item to the Activity's Layout resource (_practice_: what should its dimensions be?)
+
+To finish the controller `ListView`, we ned to provide it with an [`Adapter`](https://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews) which will connect the _model_ to the _view_. The Adapter does the "translation" work between model and view, performing a mapping from data types (e.g., a `String`) and View types (e.g., a `TextView`).
+
+Specifically, we will use an [`ArrayAdapter`](https://developer.android.com/reference/android/widget/ArrayAdapter.html), which is one of the simplest Adapters to use (and because we have an array of data!) An `ArrayAdapter` creates Views by calling `.toString()` on each item in the array, and setting that `String` as the content of a `TextView`!
+
+```java
+ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+	R.layout.list_item_layout, R.layout.list_item_txtView, myStringArray);
+```
+
+- Note the parameters of the constructor: a `Context`, the item layout resource, the TextView reource, and the data array. Also note that this instance utilizes _generics_, since we're using an array of `Strings` (as opposed to an array of `Dogs` or some other type).
+
+We acquire a reference to the `ListView` with `findViewById()`, and call `ListView#setAdapter()` to attach the adapter to that controller.
+
+```java
+ListView listView = (ListView)findViewById(R.id.listview);
+listView.setAdapter(adapter);
+```
+
+And that's all that is needed to create a scrollable list of data!
+
+Each item in this list is selectable (can have an `onClick` callback). This allows us to click on any item in order to (for example) view more details about the item. Utilize the `AdapterView#setOnClickListener(OnItemClickListener)` function to register the callback.
+
+- The `postion` parameter in the `onItemClick()` callback is the index of the item which was clicked. Use `(Type)parent.getItemAtPosition(position)` to access the data value associated with that View.
+
+Additionally, each item does have an individual layout, so we can customize these appearances (e.g., if our layout also wanted to include pictures). See [this tutorial](https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#row-view-recycling) for an example on making a custom adapter to fill in multiple `Views` with data from a list!
+
+<p class="alert alert-info">And remember, a `GridView` is basically the same thing (in fact, we can just change over that and have everything work, if we use _polymorphism_!)</p>
+
+<!--### **break**-->
+
+## Network Data `r #[40min]`
+In the previous section we created a `ListView` utilizing an adapter to display a list of Strings. But [Appendix C](#java-threads-http) provides an implementation for fetching data from the Internet which gave us a list of Strings. Can we combine these? You betchya!
+
+The lecture code provides a `MovieDownloader` class containing the exact same networking code utilized in the Appendix. We can then simply specify that the _model_ `String[]` should be the result of the `downloadMovieData()` method, rather than manually created with a loop.
+
+<p class="alert alert-warning">If you test this code, you'll notice that it doesn't work! The program will crash with a `NetworkOnMainThreadException`.</p>
+
+Android apps run by default on the ___Main Thread___ (also called the ___UI Thread___). This thread is in charge of all user interactions&mdash;handling button presses, scrolls, drags, etc.&mdash;but also UI _output_ like drawing and displaying text! See [Android Threads](https://developer.android.com/guide/components/processes-and-threads.html#Threads) for more details.
+
+- A thread is a piece of a program that is independently scheduled by the processor. Computers do exactly one thing at a time, but make it look like they are doing lots of tasks simultaneously by switching between them (i.e., between processes) really fast. Threads are a way that we can break up a single application or process into little "sub-process" that can be run simultaneously&mdash;by switching back and forth periodically so everyone has a chance to work
+
+Within a single thread, all method calls are **synchronous**&mdash;that is, one has to finish before the next occurs. You can't get to step 4 without finishing step 3. With an event-driven system like Android, each method call is fast enough that this isn't a problem (you're done handling one click by the time the next occurs). But long, drawn-out processes like network access (or processing bitmaps, or accessing a database), could cause other tasks to have to wait. It's like a traffic jam!
+
+- Tasks such as network access are **blocking** method calls, which stop the Thread from continuing. A blocked _Main Thread_ will lead to the infamous **"Application not responding" (ANR)** error!
+
+Thus we need to move the network code _off_ the Main Thread, onto a **background thread**, thereby allowing it to run without blocking the user interaction that occurs on the Main Thread. To do this, we will use a class called [`ASyncTask`](https://developer.android.com/reference/android/os/AsyncTask.html) to perform a task (such as network access) asynchronously&mdash;without waiting for other Threads.
+
+<p class="alert alert-info">Learning Android Development involves knowing about what classes exist, and can be used to solve problems, but how were we able to learn about the existing of this highly useful (and specialized) `ASyncTask` class? We started from the official API Guide on [Processes and Threads Guide](https://developer.android.com/guide/components/processes-and-threads.html), which introduces this class! Thus to learn about new Android options, _read the docs_.</p>
+
+Note that an `ASyncTask` background thread will be _tied to the lifecycle of the Activity_: if we close the Activity, the network connection will die as well. A better but _much_ more complex solution would be to use a `Service`&mdash;which is covered in a future lecture. But since this example just involves getting a small amount of data, we don't really care if the network connection gets dropped.
+
+`ASyncTask` can be fairly complicated, but is a good candidate to practice learning from the API documentation. Looking at that documentation, the first thing you should notice (or would if the API was a little more readable) is that `ASyncTask` is **`abstract`**, meaning you'll need to _subclass_ it in order to use it. Thus you can subclass it as an _inner_ class inside the Activity that will use it (`MovieDownloadTask` is a good name).
+
+You should also notice that `ASyncTask` is a _generic_ class with three (3) generic parameters: the type of the Parameter to the task, the type of the Progress measurement reported by the task, and the type of the task's Result. We can fill in what types of Parameter and Result we want from our asynchronous method (e.g., take in a `String` and return a `String[]`), and use the `Void` type for the Progress measurement (since we won't be tracking that).
+
+When we "run" an AsyncTask, it will do four (4) things, represented by four methods:
+
+1. `onPreExecute()` is called _on the UI thread_ before we run the task. This method can be used to perform any setup for the task.
+2. `doInBackground(Params...)` is called _on the background thread_ to do the work we want to be performed asynchronously. We **must** override this method (it's `abstract`!) The params and return type for the method need to match the `ASyncTask` generic types.
+3. `onProgressUpdate()` can be indirectly called _on the UI thread_ if we want to update our progress (e.g., update a progress bar). Note that UI changes can **only** be made on the UI thread!
+4. `onPostExecute(Result)` is called _on the UI thread_ to process any task results, which are passed as parameters to this method when `doInBackground` is finished.
+
+The `doInBackground()` is what occurs on the background thread (and is the heart of the task), so we put our network accessing method call in there.
+
+We can then _instantiate_ a new `ASyncTask` object in the Activity's `onCreate()` callback, and call `ASyncTask#execute(params)` to start the task running on its own thread.
+
+<p class="alert alert-warning">If you test this code, you'll notice that it still doesn't work! The program will crash with a `SecurityException`.</p>
+
+As a [security feature](https://developer.android.com/guide/topics/permissions/index.html), Android apps by default have very limited access to the overall operating system (e.g., to do anything other than show a layout). An app can't use the Internet (which might consume people's data plans!) without explicit permission from the user. This permission is given by the user at _install time_.
+
+In order to get permission, the app needs to ask for it ("Mother may I..."). We do that by declaring that the app uses the Internet in the `Manifest.xml` file (which has all the details of our app!)
+
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<!-- put this ABOVE the <application> tag -->
+```
+
+Note that Marshmallow introduced a [new security model](https://developer.android.com/training/permissions/requesting.html) in which users grant permissions at _run-time_, not install time, and can revoke permissions whenever they want. To handle this, you need to add code to request "dangerous" permissions (like Location, Phone, or SMS access; Internet is _not_ dangerous) each time you use it.
+
+- For "normal" permissions (e.g., Internet), you declare the permission need in the Manifest.
+- For "dangerous" permissions (e.g., Location), you declare the permission need in the Manifest **and** request permission programmatically in code each time you want to use it.
+
+Once we've requested permission (and have been granted that permission by virtue of the user installing our application), we can finally connect to the Internet to download data. We can log out the request results to provide it.
+
+In order to get the downloaded data into a ListView, we utilize the `doPostExecute()` method. This method is run on the _UI Thread_ so we can use it to update the View (we can _only_ change the View on the UI Thread, to avoid collisions). It also gets the results returned by `doInBackground()` passed to it!
+
+We take that passed in `String[]` and put that into the `ListView`. Specifically, we feed it into the `Adapter`, which then works to populate the views.
+
+- First clear out any previous data items in the adapter using `adapter.clear()`.
+- Then use `adapter.add()` or (`adapter.addAll()`) to add each of the new data items to the Adapter's model.
+- You can call `notifyDataSetChanged()` on the Adapter to make sure that the View knows the data has changed, but this method is already called by the `.add()` method so isn't necessary in this situation.
+
+To finalize the app: we can enable the user to search for different movies by copying the `EditText` and `Button` Views from the previous `input_layout` resource, accessing the text from the former when the later is pressed. We can then pass the `EditText` content String into the `ASyncTask#execute()` function (since we've declared that the generic `ASyncTask` takes that type as the first Parameter).
+
+- We can actually pass in multiple `String` arguments using the `String... params` spread operator syntax (representing an arbitrary number of items of that type). See [here](http://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs) for details. The value that the `ASyncTask` methods _actually_ get is an array of the arguments.
+
+In the end, we are able to downlod data from the Internet and show an interactive list of that data in the app! We've done a whirl-wind tour of Android in this process: Layouts in the XML, Adapters in the Activity, Threading in a new class, Security in the Manifest... bringing lots of parts together to provide a particular piece of functionality.

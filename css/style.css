@@ -26,6 +26,10 @@
   margin-bottom: .85em;
 }
 
+.page-inner li ul {
+  margin-top: .85em !important;
+}
+
 .footnotes ol li {
   margin-bottom: .5em;
 }

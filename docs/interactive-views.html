@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-04-02">
+<meta name="date" content="2017-04-03">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -160,9 +160,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="interactive-views.html"><a href="interactive-views.html"><i class="fa fa-check"></i><b>4</b> Interactive Views</a><ul>
-<li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs-20min"><i class="fa fa-check"></i><b>4.1</b> Inputs [20min]</a></li>
-<li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listview-and-adapters-30min"><i class="fa fa-check"></i><b>4.2</b> ListView and Adapters [30min]</a></li>
-<li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data-40min"><i class="fa fa-check"></i><b>4.3</b> Network Data [40min]</a></li>
+<li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs"><i class="fa fa-check"></i><b>4.1</b> Inputs</a></li>
+<li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listviews-and-adapters"><i class="fa fa-check"></i><b>4.2</b> ListViews and Adapters</a></li>
+<li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data"><i class="fa fa-check"></i><b>4.3</b> Network Data</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -179,12 +179,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="B.1" data-path="java-swing.html"><a href="java-swing.html#events"><i class="fa fa-check"></i><b>B.1</b> Events</a></li>
 <li class="chapter" data-level="B.2" data-path="java-swing.html"><a href="java-swing.html#layouts-and-composites"><i class="fa fa-check"></i><b>B.2</b> Layouts and Composites</a></li>
 </ul></li>
-<li class="chapter" data-level="C" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html"><i class="fa fa-check"></i><b>C</b> Threads and HTTP Requests</a><ul>
-<li class="chapter" data-level="C.1" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#concurrency"><i class="fa fa-check"></i><b>C.1</b> Concurrency</a><ul>
-<li class="chapter" data-level="C.1.1" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#an-example-algorithm-races"><i class="fa fa-check"></i><b>C.1.1</b> An Example: Algorithm Races!</a></li>
-<li class="chapter" data-level="C.1.2" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#threading-the-race"><i class="fa fa-check"></i><b>C.1.2</b> Threading the Race</a></li>
+<li class="chapter" data-level="C" data-path="java-threads-http.html"><a href="java-threads-http.html"><i class="fa fa-check"></i><b>C</b> Threads and HTTP Requests</a><ul>
+<li class="chapter" data-level="C.1" data-path="java-threads-http.html"><a href="java-threads-http.html#concurrency"><i class="fa fa-check"></i><b>C.1</b> Concurrency</a><ul>
+<li class="chapter" data-level="C.1.1" data-path="java-threads-http.html"><a href="java-threads-http.html#an-example-algorithm-races"><i class="fa fa-check"></i><b>C.1.1</b> An Example: Algorithm Races!</a></li>
+<li class="chapter" data-level="C.1.2" data-path="java-threads-http.html"><a href="java-threads-http.html#threading-the-race"><i class="fa fa-check"></i><b>C.1.2</b> Threading the Race</a></li>
 </ul></li>
-<li class="chapter" data-level="C.2" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#http-requests"><i class="fa fa-check"></i><b>C.2</b> HTTP Requests</a></li>
+<li class="chapter" data-level="C.2" data-path="java-threads-http.html"><a href="java-threads-http.html#http-requests"><i class="fa fa-check"></i><b>C.2</b> HTTP Requests</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -208,72 +208,172 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="interactive-views" class="section level1">
 <h1><span class="header-section-number">Lecture 4</span> Interactive Views</h1>
-<div id="inputs-20min" class="section level2">
-<h2><span class="header-section-number">4.1</span> Inputs [20min]</h2>
-<p>Yesterday we talked about <strong>Views</strong>. (<em>What’s a View?</em>). We discussed <code>ViewGroups</code> (Layouts), and we’ve used some basic <code>Views</code> like <code>TextView</code>, <code>ImageView</code>, and <code>Button</code>. That last one is an example of an <a href="http://developer.android.com/guide/topics/ui/controls.html">Input Control</a> - These are “simple” (read: single purpose) widgets that allow for use input. - We’ve already seen Button, but there are others! Mostly in the <a href="http://developer.android.com/reference/android/view/package-summary.html"><code>android.view</code></a> package</p>
-<p>[[Show off a demo activity with them all!]] - <a href="http://developer.android.com/guide/topics/ui/controls/button.html">Button</a> (afford clicking). Can have text, images, or both - <a href="http://developer.android.com/guide/topics/ui/controls/text.html">EditText</a> (text entry) - can control <code>android:inputType</code> (just like inputs in HTML!) - <a href="http://developer.android.com/guide/topics/ui/controls/checkbox.html">Checkbox</a> (on-off state) - <a href="http://developer.android.com/guide/topics/ui/controls/radiobutton.html">RadioButton</a> (select from a set of choices) - put these into a <code>RadioGroup</code> to make them mutually exclusive - <a href="http://developer.android.com/guide/topics/ui/controls/togglebutton.html">ToggleButton</a> (on-off state) - <a href="http://developer.android.com/reference/android/widget/Switch.html">Switch</a> (on-off state; ToggleButton with a slider UI). Introduced in API 14. - <a href="http://developer.android.com/guide/topics/ui/controls/spinner.html">Spinner</a> (pick from an array of choices) - define choices in resources (e.g., <code>strings.xml</code>)! - <a href="http://developer.android.com/guide/topics/ui/controls/pickers.html">Pickers</a>: compound controls around some specific input (dates, times, etc) - typically put in pop-up dialogs, which we’ll talk about next week - …and more! (see <a href="http://developer.android.com/reference/android/widget/package-summary.html"><code>android.widget</code></a>)</p>
-<p>These all mostly work the same way: you define them in the layout resource, and then can access them in Java in order to interact with them.</p>
-<p>There are two ways of interacting with controls (and Views in general) from Java: (1) calling methods on them and (2) listening for events from them - Can think of methods as “outside to in” (wrt the control) - Can think of events as “inside to out”</p>
-<p>We’ve already done the event-driven approach to respond to buttons. - We register a <strong>Listener</strong> and specify a <strong>callback method</strong> to get “called back to” when the event occurs. - Find the button, set a listener, etc. - Note that we can also specify a callback method in the resource using the <code>android:onClick</code> attribute. The value is the <em>name</em> of the method. <code>xml     &lt;Button         android:layout_width=&quot;wrap_content&quot;         android:layout_height=&quot;wrap_content&quot;         android:onClick=&quot;handleButtonClick&quot; /&gt;</code> We declare the callback method in Java as taking in a <code>View</code> parameter and returning <code>void</code>: <code>java     public void handleButtonClick(View view) { }</code> The <code>View</code> passed to the method will be whatever View caused the event to occur.</p>
+<p>This lecture discusses how to use Views to support user interaction and dynamic content, building on the previous lecture as while drawing on concepts introduced in the <a href="java-threads-http.html#java-threads-http">Threads and HTTP Requests Appendix</a>.</p>
+<p class="alert alert-info">
+This lecture references code found at <a href="https://github.com/info448-s17/lecture04-inputs-lists" class="uri">https://github.com/info448-s17/lecture04-inputs-lists</a>.
+<p>
+<div id="inputs" class="section level2">
+<h2><span class="header-section-number">4.1</span> Inputs</h2>
+<p>The previous lecture discussed <strong>Views</strong> and ViewGroups (<strong>Layouts</strong>), and introduced some basic Views such as <code>TextView</code>, <code>ImageView</code>, and <code>Button</code>.</p>
+<p>A <code>Button</code> is an example of an <a href="https://developer.android.com/guide/topics/ui/controls.html">Input Control</a>. These are simple (single-purpose; not necessarily lacking complexity) widgets that allow for user input. There are many such widgets in addition to <code>Button</code>, mostly found in the <a href="https://developer.android.com/reference/android/widget/package-summary.html"><code>android.widget</code></a> package. Many correspond to HTML <code>&lt;input&gt;</code> elements, but Android provided additional widgets at well.</p>
+<p>Launch the lecture code’s <code>MainActivity</code> with a content View of <code>R.id.input_control_layout</code> to see an example of many widgets (as well as a demonstration of a more complex layout!). These widgets include:</p>
 <ul>
-<li>We’ll actually use a mix of both of these strategies in this class.</li>
-<li><em>Opinion</em>: arguable about which is better–the resource is easier/faster, but starts mixing the “behavior” and the logic (though since buttons are made to be pressed, it’s not unreasonable to give an “name” to what they should do; this can always just be a “launcher” method that calls something else)</li>
+<li><a href="https://developer.android.com/guide/topics/ui/controls/button.html">Button</a>, a widget that affords clicking. Buttons can display text, images or both.</li>
+<li><a href="https://developer.android.com/reference/android/widget/EditText.html">EditText</a>, a widget for user text entry. Note that you can use the <code>android:inputType</code> property to <a href="https://developer.android.com/training/keyboard-input/style.html">specify the type</a> of the input similar to an HTML <code>&lt;input&gt;</code>.</li>
+<li><a href="https://developer.android.com/guide/topics/ui/controls/checkbox.html">Checkbox</a>, a widget for selecting an on-off state</li>
+<li><a href="https://developer.android.com/guide/topics/ui/controls/radiobutton.html">RadioButton</a>, a widget for selecting from a set of choices. Put <code>RadioButton</code> elements inside a <code>RadioGroup</code> element to make the buttons mutually exclusive.</li>
+<li><a href="https://developer.android.com/guide/topics/ui/controls/togglebutton.html">ToggleButton</a>, another widget for selecting an on-off state.</li>
+<li><a href="https://developer.android.com/reference/android/widget/Switch.html">Switch</a>, yet another widget for selecting an on-off state. This is just a <code>ToggleButton</code> with a slider UI. It was introduced in API 14 and is the “modern” way of supporting on-off input.</li>
+<li><a href="https://developer.android.com/guide/topics/ui/controls/spinner.html">Spinner</a>, a widget for picking from an array of choices, similar to a drop-down menu. Note that you should define the choices as a resource (e.g., in <code>strrings.xml</code>).</li>
+<li><a href="https://developer.android.com/guide/topics/ui/controls/pickers.html">Pickers</a>: a compound control around some specific input (dates, times, etc). These are typically used in pop-up dialogs, which will be discussed in a future lecture.</li>
+<li>…and more! See the <a href="http://developer.android.com/reference/android/widget/package-summary.html"><code>android.widget</code></a> package for further options.</li>
 </ul>
-<p>We can use listeners like this to respond to all kinds of controls. - Checkboxes use <code>onClick</code>, ToggleButtons use <code>onCheckedChanged</code>, etc. - Other common events in the <a href="http://developer.android.com/reference/android/view/View.html#NestedClasses">View documentation</a> - Include <code>OnDragListener</code> (for drags), <code>OnHoverListener</code> (“hover” events), <code>OnKeyListener</code> (when user types), <code>OnLayoutChangeListener</code> (when layout changes display), etc.</p>
-<p>In addition to listening for events, we can call methods directly on these Views to access their state. Methods such as <code>isVisible</code>, <code>hasFocus</code>, etc. give us information about state, but we can also inquire directly about the inputs - For example, the <code>isChecked()</code> method lets us look up if a checkbox is ticked whenever we want to know</p>
-<p>This is also a good way of getting inputs: for example, we can call <code>.getText()</code> on an <code>EditText</code> view to fetch the contents of that view - [[demo: log contents when button pressed]]</p>
-<p>Between listening for events and querying for state, we can interact with input controls however we want. Check the documentation for more details on how to use specific widgets!</p>
+<p>All these input controls basically work the same way: you define (instantiate) them in the layout resource, then access them in Java in order to define interaction behavior.</p>
+<p>There are two ways of interacting with controls (and Views in general) from the Java code:</p>
+<ol style="list-style-type: decimal">
+<li>Calling <strong>methods</strong> on the View to manipulate it. This represents “outside to inside” communication (with respect to the View).</li>
+<li>Listening for <strong>events</strong> produced by the View and responding to then. This represents “inside to outside” communication (with respect to the View).</li>
+</ol>
+<p>An example of the second, event-driven approach was introduced in <span id="basic-events">Lecture 2</span>. This involved <em>registering a listener</em> for the event (after acquiring a reference to the View with <code>findViewById()</code>) and then specifying a <strong>callback method</strong> (by instantiating the Listener interface) that wiould be “called back to” when the event occurs.</p>
+<ul>
+<li><p>It is also possible to specify the callback method in the XML resource itself by using e.g., the <code>android:onClick</code> attribute. This value of this attribute should be the <em>name</em> of the callback method: It is also possible to</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;Button</span>
+<span class="ot">    android:layout_width=</span><span class="st">&quot;wrap_content&quot;</span>
+<span class="ot">    android:layout_height=</span><span class="st">&quot;wrap_content&quot;</span>
+<span class="ot">    android:onClick=</span><span class="st">&quot;handleButtonClick&quot;</span> <span class="kw">/&gt;</span></code></pre></div>
+<p>The callback method is declared in the Java code as taking in a <code>View</code> parameter (which will be a reference to whatever View caused the event to occur) and returning <code>void</code>:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">handleButtonClick</span>(<span class="bu">View</span> view) { }</code></pre></div></li>
+<li><p>We will utilize a mix of both of these strategies (defining callbacks in both the Java and the XML) in this class.</p>
+<p class="alert">
+<em>Author’s Opinion</em>: It is arguable about which approach is “better”. Specifying the callback method in the Java code helps keep the appearance and behavior separate, and avoids introducing hidden dependencies for resources (the Activity must provide the required callback). However, as buttons are made to be pressed, it isn’t unreasonable to give a “name” in the XML resource as to what the button will do, especially as the corresponding Java method may just be a “launcher” method that calls something else. Specifying the callback in the XML resource may often seem faster and easier, and we will use whichever option best supports clarity of our code.
+</p></li>
+</ul>
+<p>Event callbacks are used to respond to all kind of input control widgets. CheckBoxes use an <code>onClick</code> callback, ToggleButtons use <code>onCheckedChanged</code>, etc. Other common events can be found in the <a href="https://developer.android.com/reference/android/view/View.html#nestedclasses">View documentation</a>, and are handled via listeners such as <code>OnDragListener</code> (for drags), <code>OnHoverListener</code> (for “hover” events), <code>OnKeyListener</code> (for when user types), or <code>OnLayoutChangeListener</code> (for when layout changes display).</p>
+<p>In addition to listening for events, it is possible to call methods directly on referenced Views to access their state. In addition to generic View methods such as <code>isVisible()</code> or <code>hasFocus()</code>, it is possible to inquire directly about the state of the input provided. For example, the <code>isChecked()</code> method returns whether or not a checkbox is ticked.</p>
+<p>This is also a good way of getting access to inputted content from the Java Code. For example, call <code>getText()</code> on an <code>EditText</code> control in order to fetch the contents of that View.</p>
+<ul>
+<li>For practice, try to log out the contents of the included <code>EditText</code> control when the <code>Button</code> is pressed!</li>
+</ul>
+<p>Between listening for events and querying for state, we can fully interact with input controls. Check the official documentation for more details on how to use specific individual widgets.</p>
 </div>
-<div id="listview-and-adapters-30min" class="section level2">
-<h2><span class="header-section-number">4.2</span> ListView and Adapters [30min]</h2>
-<p>((Switch to <code>list_layout</code> Layout))!</p>
-<p>Now that we’ve covered basic controls, let’s look at some more advanced Views. In particular, the <a href="http://developer.android.com/guide/topics/ui/layout/listview.html">ListView</a>. - It’s is a <em>ViewGroup</em> that displays a scrollable list of items! - This is basically a <code>LinearLayout</code> inside a <code>ScrollView</code> (a <code>ViewGroup</code> that can be scrolled). - Each item in the linear layout is another <code>View</code> (usually a layout) for that particular item - However, The <code>ListView</code> does extra work: it keeps track of what items are already laid on the screen, inflating only the visible items plus a few extra on the top and bottom as buffers. Then as the user scrolls, it takes the disappearing views and recycles them (altering the content) to reuse for the new Views that are appearing. This lets it save on memory and performance and work smoothly. See <a href="https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#row-view-recycling">here</a> for some diagrams. - A more advanced and flexible version of this behavior is offered by the <a href="http://developer.android.com/reference/android/support/v7/widget/RecyclerView.html">RecyclerView</a> class. See <a href="http://developer.android.com/training/material/lists-cards.html">this guide</a>.</p>
-<p>The <code>ListView</code> control uses a <strong>Model-View-Controller</strong> architecture. What’s that? - A design pattern common in UI systems - <strong>Model</strong> is the data, <strong>View</strong> is the representation/display of that data, and <strong>Controller</strong> hooks them together! - Originally developed as part of the <a href="http://heim.ifi.uio.no/~trygver/themes/mvc/mvc-index.html">Smalltalk</a> language - You’ll actually find this all over Android. The resources are models and views (separately), with the Java Activities act as controllers - So with a <code>ListView</code>, we’ll have some data to be displayed, the Views (layouts) to be shown, with the <code>ListView</code> control itself acting as a controller</p>
-<p>Specifically, the <code>ListView</code> is a subclass of <a href="http://developer.android.com/reference/android/widget/AdapterView.html"><code>AdapterView</code></a>, which is a view backed by a data source–the <code>AdapterView</code> hooks the two together (the controller)! - There are other <code>AdapterViews</code> as well; <a href="http://developer.android.com/guide/topics/ui/layout/gridview.html"><code>GridView</code></a> works exactly the same way, but lays out items in a scrollable grid rather than a scrollable list.</p>
-<p>Okay, so let’s get our pieces in place 1. First we need the <strong>model</strong>. Some raw data. Let’s use a String[] (and we can fill it with whatever data): <code>java     String[] data = new String[99];     for(int i=99; i&gt;0; i--){       data[99-i] = i+ &quot; bottles of beer on the wall&quot;;     }</code></p>
-<ol start="2" style="list-style-type: decimal">
-<li>Next we want the <strong>view</strong>. A <code>View</code> to show. Let’s make a layout resource for that (<code>list_item</code> is a good name and a common idiom)</li>
-</ol>
+<div id="listviews-and-adapters" class="section level2">
+<h2><span class="header-section-number">4.2</span> ListViews and Adapters</h2>
+<p class="alert">
+The remainder of the lecture utilizes the <code>list_layout</code> Layout in the lecture code. Modify <code>MainActivity</code> so that it uses this resource as its <code>viewContent</code>.
+</p>
+<p>Having covered basic controls, this section will now look at some more advanced interactive Views. In particular, it will discuss how to utilize a <a href="https://developer.android.com/guide/topics/ui/layout/listview.html">ListView</a>, which is a <code>ViewGroup</code> that displays a scrollable list of items! A <code>ListView</code> is basically a <code>LinearLayout</code> inside of a <code>ScrollView</code> (which is a <code>ViewGroup</code> that can be scrolled). Each element within the LinearLayout is another <code>View</code> (usually a Layout) representing a particular item in a list.</p>
+<p>But the <code>ListView</code> does extra work beyond just nesting Views: it keeps track of what items are already displayed on the screen, inflating only the visible items (plus a few extra on the top and bottom as buffers). Then as the user scrolls, the ListView takes the disappearing views and <em>recycles</em> them (altering their content, but not reinflating from scratch) in order to reuse them for the new items that appear. This lets it save memory, provide better performance, and overall work more smoothly. See <a href="https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#row-view-recycling">this tutorial</a> for diagrams and further explanation of this recycling behavior.</p>
 <ul>
-<li>Put a basic <code>TextView</code> in there; no layout needed! (width: <code>match_parent</code>, height: <code>wrap_content</code>)</li>
-<li>can give <code>android:minHeight=?android:attr/listPreferredItemHeight</code> (framework’s preferred height), and some <code>center_vertical</code> gravity</li>
-<li><code>android:lines</code> if we need more space</li>
-<li><strong>don’t forget an <code>id</code>!</strong></li>
+<li>Note that a more advanced and flexible version of this behavior is offered by the <a href="https://developer.android.com/guide/topics/ui/layout/recyclerview.html"><code>RecyclerView</code></a>. See also <a href="https://developer.android.com/training/material/lists-cards.html">this guide</a> for more details.</li>
 </ul>
-<ol start="3" style="list-style-type: decimal">
-<li>Finally, we want the <strong>controller</strong>. The <code>ListView</code> itself; let’s add that element to our Activity’s layout. How big should it be?</li>
+<p>The <code>ListView</code> control uses a <strong>Model-View-Controller (MVC)</strong> architecture. This is a deisgn pattern common to UI systems which organizes programs into three parts:</p>
+<ol style="list-style-type: decimal">
+<li>The <strong>Model</strong>, which is the data or information in the system</li>
+<li>The <strong>View</strong>, which is the display or representation of that data</li>
+<li>The <strong>Controller</strong>, which acts as an intermediary between the Model and View and hooks them together.</li>
 </ol>
-<p>To fill in the controller <code>ListView</code>, we need to provide it an <a href="http://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews"><code>Adapter</code></a> to use to connect the model to the view. The Adapter does the “translation” work of converting models to views (and getting the model for particular views to show) - We’re going to use an <a href="http://developer.android.com/reference/android/widget/ArrayAdapter.html"><code>ArrayAdapter</code></a>, because we have an array and because it’s the simplest to use. - An <code>ArrayAdapter</code> creates views by calling <code>.toString()</code> on each item in the array and putting that String inside a <code>TextView</code>! - Check the parameters of the constructor (and note the generics!)</p>
-<p><code>java   ArrayAdapter&lt;String&gt; adapter = new ArrayAdapter&lt;String&gt;(this,     R.layout.list_item_layout, R.layout.list_item_txtView, myStringArray);</code> - We then get a reference to the <code>ListView</code> with <code>findViewById</code>, and call <code>.setAdapter()</code> to attach the adapter to that controller.</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">ListView</span> listView = (<span class="bu">ListView</span>) <span class="fu">findViewById</span>(R.<span class="fu">id</span>.<span class="fu">listview</span>);
+<p>The MVC pattern can be found all over Android. At a high level, the resources provide <em>models</em> and <em>views</em> (separately), while the Java Activities act as <em>controllers</em>.</p>
+<ul>
+<li><em>Fun fact</em>: The Model-View-Controller pattern was originally developed as part of the <a href="http://heim.ifi.uio.no/~trygver/themes/mvc/mvc-index.html">Smalltalk</a> language, which was the first Object-Oriented language!</li>
+</ul>
+<p>Thus in order to utilize a <code>ListView</code>, we’ll have some data to be displayed (the <em>model</em>), the <em>views</em> (Layouts) to be shown, and the <code>ListView</code> itself will connect these together act as the <em>controller</em>. Specifically, the <code>ListView</code> is a subclass of <a href="https://developer.android.com/reference/android/widget/AdapterView.html"><code>AdapterView</code></a>, which is a View backed by a data source—the <code>AdapterView</code> exists to hook the View and the data together (a controller!)</p>
+<ul>
+<li>There are other <code>AdapterViews</code> as well. For example, <a href="https://developer.android.com/guide/topics/ui/layout/gridview.html"><code>GridView</code></a> works exactly the same way as a <code>ListView</code>, but lays out items in a scrollable grid rather than a scrollable list.</li>
+</ul>
+<p>In order to use a <code>ListView</code>, we need to get the pieces in place:</p>
+<ol style="list-style-type: decimal">
+<li><p>First we specify the <strong>model</strong>: some raw data. We will start with a simple <code>String[]</code>, filling it with placeholder data:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">String</span>[] data = <span class="kw">new</span> <span class="bu">String</span>[<span class="dv">99</span>];
+<span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">99</span>; i&gt;<span class="dv">0</span>; i--){
+    data[<span class="dv">99</span>-i] = i+ <span class="st">&quot; bottles of beer on the wall&quot;</span>;
+}</code></pre></div>
+<p>While we could define this data as <a href="https://developer.android.com/guide/topics/resources/string-resource.html#StringArray">an XML resource</a>, we’ll create it dynamically for testing (and to make it changeable later!)</p></li>
+<li><p>Next we specify the <strong>view</strong>: a <code>View</code> to show for each datum in the list. Define an XML layout resource for that (<code>list_item</code> is a good name and a common idiom).</p>
+<p>For simplicity’s sake we don’t need to specify a full Layout, just a basic <code>TextView</code>. Have the width <code>match_parent</code> and the height <code>wrap_content</code>. <em>Don’t forget an <code>id</code>!</em></p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;TextView</span><span class="ot"> xmlns:android=</span><span class="st">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+<span class="ot">    android:id=</span><span class="st">&quot;@+id/txtItem&quot;</span>
+<span class="ot">    android:layout_width=</span><span class="st">&quot;match_parent&quot;</span>
+<span class="ot">    android:layout_height=</span><span class="st">&quot;wrap_content&quot;</span> <span class="kw">/&gt;</span></code></pre></div>
+<p>To make it look better, you can specify <code>android:minHeight=?android:attr/listPreferredItemHeight</code> (using the framework’s preferred height for lists), and some <code>center_vertical</code> gravity. The <code>android:lines</code> property is also useful if you need more space.</p></li>
+<li><p>Finally, we specify the <strong>controller</strong>: the <code>ListView</code> itself. At that item to the Activity’s Layout resource (<em>practice</em>: what should its dimensions be?)</p></li>
+</ol>
+<p>To finish the controller <code>ListView</code>, we ned to provide it with an <a href="https://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews"><code>Adapter</code></a> which will connect the <em>model</em> to the <em>view</em>. The Adapter does the “translation” work between model and view, performing a mapping from data types (e.g., a <code>String</code>) and View types (e.g., a <code>TextView</code>).</p>
+<p>Specifically, we will use an <a href="https://developer.android.com/reference/android/widget/ArrayAdapter.html"><code>ArrayAdapter</code></a>, which is one of the simplest Adapters to use (and because we have an array of data!) An <code>ArrayAdapter</code> creates Views by calling <code>.toString()</code> on each item in the array, and setting that <code>String</code> as the content of a <code>TextView</code>!</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">ArrayAdapter&lt;<span class="bu">String</span>&gt; adapter = <span class="kw">new</span> ArrayAdapter&lt;<span class="bu">String</span>&gt;(<span class="kw">this</span>,
+    R.<span class="fu">layout</span>.<span class="fu">list_item_layout</span>, R.<span class="fu">layout</span>.<span class="fu">list_item_txtView</span>, myStringArray);</code></pre></div>
+<ul>
+<li>Note the parameters of the constructor: a <code>Context</code>, the item layout resource, the TextView reource, and the data array. Also note that this instance utilizes <em>generics</em>, since we’re using an array of <code>Strings</code> (as opposed to an array of <code>Dogs</code> or some other type).</li>
+</ul>
+<p>We acquire a reference to the <code>ListView</code> with <code>findViewById()</code>, and call <code>ListView#setAdapter()</code> to attach the adapter to that controller.</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">ListView</span> listView = (<span class="bu">ListView</span>)<span class="fu">findViewById</span>(R.<span class="fu">id</span>.<span class="fu">listview</span>);
 listView.<span class="fu">setAdapter</span>(adapter);</code></pre></div>
-<p>And voila! We have a scrollable list of data! What else can we do with it? - Each item in this list is selectable (can have an onClick), so we can click on them e.g., to go to a “detail” Activity - use <code>AdapterView#..setOnItemClickListener(ItemClickListener)</code> to register! - The <code>position</code> is where in the list they clicked, use <code>(Type)parent.getItemAtPostion(position)</code> to fetch the value. - Each item does have an individual layout, so we can customize these appearances (e.g., if our layout also wanted to include pictures) - See <a href="https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#row-view-recycling">this guide</a> for an example on making a custom adapter to fill in multiple <code>Views</code> with data from a list! You will <em>not</em> need to do this for your homework, though you can if you want.</p>
-<p>And remember, a <code>GridView</code> is basically the same thing (in fact, we can just change over that and have everything work, if we use <em>polymorphism</em>!)</p>
+<p>And that’s all that is needed to create a scrollable list of data!</p>
+<p>Each item in this list is selectable (can have an <code>onClick</code> callback). This allows us to click on any item in order to (for example) view more details about the item. Utilize the <code>AdapterView#setOnClickListener(OnItemClickListener)</code> function to register the callback.</p>
+<ul>
+<li>The <code>postion</code> parameter in the <code>onItemClick()</code> callback is the index of the item which was clicked. Use <code>(Type)parent.getItemAtPosition(position)</code> to access the data value associated with that View.</li>
+</ul>
+<p>Additionally, each item does have an individual layout, so we can customize these appearances (e.g., if our layout also wanted to include pictures). See <a href="https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#row-view-recycling">this tutorial</a> for an example on making a custom adapter to fill in multiple <code>Views</code> with data from a list!</p>
+<p class="alert alert-info">
+And remember, a <code>GridView</code> is basically the same thing (in fact, we can just change over that and have everything work, if we use <em>polymorphism</em>!)
+</p>
 <!--### **break**-->
 </div>
-<div id="network-data-40min" class="section level2">
-<h2><span class="header-section-number">4.3</span> Network Data [40min]</h2>
-<p>We have our lovely <code>ListView</code> hooked up to an adapter so it can show a list of Strings. But during lab we were using some code that fetched data from the Internet and gave us a list of Strings… can we combine them?! - You betchya!</p>
-<p>Let’s go ahead and add in the downloader method (copy and paste into this class, or can just access it in the other), and then we can call it to fill our <code>String[]</code> (instead of doing it by hand) - Does it work? What went wrong?! (look at the logs!) <code>NetworkOnMainThreadException</code></p>
-<p>Android apps run by default on the <strong><em>Main Thread</em></strong> (also called the <strong><em>UI Thread</em></strong>). This thread is in charge of all user interactions–handling button presses, scrolls, drags, etc.–but also ui <em>output</em> like drawing/displaying text! See <a href="http://developer.android.com/guide/components/processes-and-threads.html#Threads">Android Threads</a> for more details. - <em>What’s a thread?</em> (You played with these in lab!) A thread is a piece of a program that is independently scheduled by the processor. Computers do exactly one thing at a time, but make it look like you’re doing lots of stuff by switching between them (between processes) really fast. Threads are a way that we can break up a single application or process into little “sub-process” that can be run simultaneously—by switching back and forth periodically so everyone has a chance to work - Within a single thread, all method calls are <strong>synchronous</strong>—that is, one has to finish before the next occurs. We can’t get to step 4 without going past step 3. With an event-driven system like Android, each method call is fast enough that this isn’t a problem. - But for long, drawn-out processes like network access (or processing bitmaps, or accessing a database), this could cause all of the other stuff to have to wait. It’s like a traffic jam! - Things like network access are <strong>blocking</strong> method calls, which stop the Thread from continuing. - A blocked Main Thread will lead to the infamous <strong>“Application not responding” (ANR)</strong> error</p>
-<p>We need to move the network code <em>off</em> the Main Thread, onto a <strong>background thread</strong>. To do this, we’re going to use a class called <a href="http://developer.android.com/reference/android/os/AsyncTask.html"><code>ASyncTask</code></a> to let us perform a task (like network connecting) asynchronously (without waiting for other people). - How did we find this class? Look at the <a href="http://developer.android.com/guide/components/processes-and-threads.html">Processes and Threads Guide</a>! - Note that this background thread will be <em>tied to the lifecycle of the Activity</em>—if I close the Activity, the network connection will die as well. - A better, if <em>much</em> more complex solution would be to use a <code>Service</code>, which we will cover later in the course. But since we’re just fetching a small amount of data, we don’t really care if the network connection gets dropped. - This class can be pretty complicated to use, but let’s look at the documentation and walk through it.</p>
-<p>The first thing we should notice (if the API was a little more readable) is that <code>ASyncTask</code> is <strong><code>abstract</code></strong> What does that mean? (We need to subclass it to use it!) - We can also notice that it’s a generic class with three (3)! parameters: the type of the Params to the task, the type of the Progress measurement, and the type of the Result. We can start these as <code>Void</code> if we don’t know them, but we should be able to guess what kind of params/returns we want from our method (take in a <code>String</code>, return a <code>String[]</code>) - So we can make an <em>inner</em> class (non-static, because we want to be tied to <em>this</em> Activity) that extends <code>ASyncTask</code>. <code>MovieDownloadTask</code> is a good name</p>
-<p>But what goes inside this class? When we “run” an AsyncTask, it will do four (4) things: 1. <code>onPreExecute()</code> is called <em>on the UI thread</em> before we run the task. We can do setup here 2. <code>doInBackground(Params...)</code> is called <em>on the background thread</em> to do that work - we <em>must</em> override this (it’s <code>abstract</code>!) - note it’s params and return type needs to match the <code>ASyncTask</code> generic types! 3. <code>onProgressUpdate()</code> is called <em>on the UI thread</em> if we want to update our progress (e.g., update a progress bar) 4. <code>onPostExecute(Result)</code> is called <em>on the UI thread</em> to process any results (which are passed in when <code>doInBackground</code> finished)</p>
-<p>The <code>doInBackground()</code> is the heart of the method, so let’s move our networking code in there!</p>
-<p>We can then <em>instantiate</em> a new one of these classes in <code>onCreate()</code> and call <code>.execute(params)</code> to start it running. - Does it work? What went wrong? <code>SecurityException</code>!</p>
-<p>As a <a href="http://developer.android.com/guide/topics/security/permissions.html">security feature</a>, Android apps by default have very limited access to the system (e.g., to do anything other than show a layout). An app can’t use the Internet (which might eat at people’s data plans!) without explicit permission from the user. This permission is given at <em>install time</em>. - So in order to get permission we need to ask for it (“Mother may I…”). We do that by declaring that the app uses the Internet in the <code>Manifest</code> (which has all the details of our app!)</p>
+<div id="network-data" class="section level2">
+<h2><span class="header-section-number">4.3</span> Network Data</h2>
+<p>In the previous section we created a <code>ListView</code> utilizing an adapter to display a list of Strings. But <a href="java-threads-http.html#java-threads-http">Appendix C</a> provides an implementation for fetching data from the Internet which gave us a list of Strings. Can we combine these? You betchya!</p>
+<p>The lecture code provides a <code>MovieDownloader</code> class containing the exact same networking code utilized in the Appendix. We can then simply specify that the <em>model</em> <code>String[]</code> should be the result of the <code>downloadMovieData()</code> method, rather than manually created with a loop.</p>
+<p class="alert alert-warning">
+If you test this code, you’ll notice that it doesn’t work! The program will crash with a <code>NetworkOnMainThreadException</code>.
+</p>
+<p>Android apps run by default on the <strong><em>Main Thread</em></strong> (also called the <strong><em>UI Thread</em></strong>). This thread is in charge of all user interactions—handling button presses, scrolls, drags, etc.—but also UI <em>output</em> like drawing and displaying text! See <a href="https://developer.android.com/guide/components/processes-and-threads.html#Threads">Android Threads</a> for more details.</p>
+<ul>
+<li>A thread is a piece of a program that is independently scheduled by the processor. Computers do exactly one thing at a time, but make it look like they are doing lots of tasks simultaneously by switching between them (i.e., between processes) really fast. Threads are a way that we can break up a single application or process into little “sub-process” that can be run simultaneously—by switching back and forth periodically so everyone has a chance to work</li>
+</ul>
+<p>Within a single thread, all method calls are <strong>synchronous</strong>—that is, one has to finish before the next occurs. You can’t get to step 4 without finishing step 3. With an event-driven system like Android, each method call is fast enough that this isn’t a problem (you’re done handling one click by the time the next occurs). But long, drawn-out processes like network access (or processing bitmaps, or accessing a database), could cause other tasks to have to wait. It’s like a traffic jam!</p>
+<ul>
+<li>Tasks such as network access are <strong>blocking</strong> method calls, which stop the Thread from continuing. A blocked <em>Main Thread</em> will lead to the infamous <strong>“Application not responding” (ANR)</strong> error!</li>
+</ul>
+<p>Thus we need to move the network code <em>off</em> the Main Thread, onto a <strong>background thread</strong>, thereby allowing it to run without blocking the user interaction that occurs on the Main Thread. To do this, we will use a class called <a href="https://developer.android.com/reference/android/os/AsyncTask.html"><code>ASyncTask</code></a> to perform a task (such as network access) asynchronously—without waiting for other Threads.</p>
+<p class="alert alert-info">
+Learning Android Development involves knowing about what classes exist, and can be used to solve problems, but how were we able to learn about the existing of this highly useful (and specialized) <code>ASyncTask</code> class? We started from the official API Guide on <a href="https://developer.android.com/guide/components/processes-and-threads.html">Processes and Threads Guide</a>, which introduces this class! Thus to learn about new Android options, <em>read the docs</em>.
+</p>
+<p>Note that an <code>ASyncTask</code> background thread will be <em>tied to the lifecycle of the Activity</em>: if we close the Activity, the network connection will die as well. A better but <em>much</em> more complex solution would be to use a <code>Service</code>—which is covered in a future lecture. But since this example just involves getting a small amount of data, we don’t really care if the network connection gets dropped.</p>
+<p><code>ASyncTask</code> can be fairly complicated, but is a good candidate to practice learning from the API documentation. Looking at that documentation, the first thing you should notice (or would if the API was a little more readable) is that <code>ASyncTask</code> is <strong><code>abstract</code></strong>, meaning you’ll need to <em>subclass</em> it in order to use it. Thus you can subclass it as an <em>inner</em> class inside the Activity that will use it (<code>MovieDownloadTask</code> is a good name).</p>
+<p>You should also notice that <code>ASyncTask</code> is a <em>generic</em> class with three (3) generic parameters: the type of the Parameter to the task, the type of the Progress measurement reported by the task, and the type of the task’s Result. We can fill in what types of Parameter and Result we want from our asynchronous method (e.g., take in a <code>String</code> and return a <code>String[]</code>), and use the <code>Void</code> type for the Progress measurement (since we won’t be tracking that).</p>
+<p>When we “run” an AsyncTask, it will do four (4) things, represented by four methods:</p>
+<ol style="list-style-type: decimal">
+<li><code>onPreExecute()</code> is called <em>on the UI thread</em> before we run the task. This method can be used to perform any setup for the task.</li>
+<li><code>doInBackground(Params...)</code> is called <em>on the background thread</em> to do the work we want to be performed asynchronously. We <strong>must</strong> override this method (it’s <code>abstract</code>!) The params and return type for the method need to match the <code>ASyncTask</code> generic types.</li>
+<li><code>onProgressUpdate()</code> can be indirectly called <em>on the UI thread</em> if we want to update our progress (e.g., update a progress bar). Note that UI changes can <strong>only</strong> be made on the UI thread!</li>
+<li><code>onPostExecute(Result)</code> is called <em>on the UI thread</em> to process any task results, which are passed as parameters to this method when <code>doInBackground</code> is finished.</li>
+</ol>
+<p>The <code>doInBackground()</code> is what occurs on the background thread (and is the heart of the task), so we put our network accessing method call in there.</p>
+<p>We can then <em>instantiate</em> a new <code>ASyncTask</code> object in the Activity’s <code>onCreate()</code> callback, and call <code>ASyncTask#execute(params)</code> to start the task running on its own thread.</p>
+<p class="alert alert-warning">
+If you test this code, you’ll notice that it still doesn’t work! The program will crash with a <code>SecurityException</code>.
+</p>
+<p>As a <a href="https://developer.android.com/guide/topics/permissions/index.html">security feature</a>, Android apps by default have very limited access to the overall operating system (e.g., to do anything other than show a layout). An app can’t use the Internet (which might consume people’s data plans!) without explicit permission from the user. This permission is given by the user at <em>install time</em>.</p>
+<p>In order to get permission, the app needs to ask for it (“Mother may I…”). We do that by declaring that the app uses the Internet in the <code>Manifest.xml</code> file (which has all the details of our app!)</p>
 <div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;uses-permission</span><span class="ot"> android:name=</span><span class="st">&quot;android.permission.INTERNET&quot;</span><span class="kw">/&gt;</span>
 <span class="co">&lt;!-- put this ABOVE the &lt;application&gt; tag --&gt;</span></code></pre></div>
+<p>Note that Marshmallow introduced a <a href="https://developer.android.com/training/permissions/requesting.html">new security model</a> in which users grant permissions at <em>run-time</em>, not install time, and can revoke permissions whenever they want. To handle this, you need to add code to request “dangerous” permissions (like Location, Phone, or SMS access; Internet is <em>not</em> dangerous) each time you use it.</p>
 <ul>
-<li>Note that Marshmallow introduced a <a href="https://developer.android.com/training/permissions/requesting.html">new security model</a> in which users grant permissions at <em>run-time</em>, not install time, and can revoke permissions whenever they want. To handle this, you basically need to add code to request the permission each time you use it (for “dangerous” permissions, like location, phone or SMS. Internet is <em>not</em> dangerous).</li>
-<li>For “normal” permissions (Internet), you declare in the Manifest</li>
-<li>For “dangerous” permissions (Location), you declare in the Manifest <em>AND</em> request in code each time you want to use it.</li>
-<li>Since we’re targeting Lollipop, won’t affect us yet, but something to keep in mind (and we’ll look at exactly how to handle this later)</li>
+<li>For “normal” permissions (e.g., Internet), you declare the permission need in the Manifest.</li>
+<li>For “dangerous” permissions (e.g., Location), you declare the permission need in the Manifest <strong>and</strong> request permission programmatically in code each time you want to use it.</li>
 </ul>
-<p>Finally, we can connect to the bloody internet (Log out the results to prove it)!</p>
-<p>But how do we get this stuff back into our ListView? - Remember that <code>doPostExecute()</code> function? That happens on the <em>UI Thread</em> so we can use it to update the View (we can <em>only</em> change the View on the UI Thread, to avoid collisions). It also gets the results returned by <code>doInBackground()</code> passed to it! - So we can take that String[] and put it into our <code>ListView</code>. Specifically, we’ll feed it into the <code>Adapter</code> - make the Adapter an instance variable so we can access it in this other class - We’ll first clear out any previous entries in the adapter using <code>adapter.clear()</code> And then we use <code>.addAll()</code> to put all the items into the Adapter (or can loop through the data and <code>.add()</code> each item). - We can call <code>.notifyDataSetChanged()</code> on the <code>ArrayAdapter</code> to make sure that the View knows the data has changed, but this is already called by the <code>.add()</code> method so isn’t necessary here.</p>
-<p>How do we search for a different movie?! - Well we can take our <code>EditText</code> field and its button from the other Layout, and use it to get a String. We can then pass that String into the <code>execute</code> function, since we’ve declare that the Generic <code>ASyncTask</code> takes that type as the first param. - We can actually pass in a lot of Strings, using the <code>String... params</code> syntax (arbitrary number of items of that type). See <a href="http://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs">here</a>. The value we <em>actually</em> get is an array.</p>
-<p>Whew! We’ve now got some data downloading off the net and showing up on our screen! Spiffy! - We’ve done a whirl-wind tour of Android in this process: Layouts in the XML, Adapters in the Activity, Threading in a new class, Security in the Manifest… bringing lots of parts together to make a set of functionality. - Note that this is the same process you’ll need to do for your homework this week!</p>
+<p>Once we’ve requested permission (and have been granted that permission by virtue of the user installing our application), we can finally connect to the Internet to download data. We can log out the request results to provide it.</p>
+<p>In order to get the downloaded data into a ListView, we utilize the <code>doPostExecute()</code> method. This method is run on the <em>UI Thread</em> so we can use it to update the View (we can <em>only</em> change the View on the UI Thread, to avoid collisions). It also gets the results returned by <code>doInBackground()</code> passed to it!</p>
+<p>We take that passed in <code>String[]</code> and put that into the <code>ListView</code>. Specifically, we feed it into the <code>Adapter</code>, which then works to populate the views.</p>
+<ul>
+<li>First clear out any previous data items in the adapter using <code>adapter.clear()</code>.</li>
+<li>Then use <code>adapter.add()</code> or (<code>adapter.addAll()</code>) to add each of the new data items to the Adapter’s model.</li>
+<li>You can call <code>notifyDataSetChanged()</code> on the Adapter to make sure that the View knows the data has changed, but this method is already called by the <code>.add()</code> method so isn’t necessary in this situation.</li>
+</ul>
+<p>To finalize the app: we can enable the user to search for different movies by copying the <code>EditText</code> and <code>Button</code> Views from the previous <code>input_layout</code> resource, accessing the text from the former when the later is pressed. We can then pass the <code>EditText</code> content String into the <code>ASyncTask#execute()</code> function (since we’ve declared that the generic <code>ASyncTask</code> takes that type as the first Parameter).</p>
+<ul>
+<li>We can actually pass in multiple <code>String</code> arguments using the <code>String... params</code> spread operator syntax (representing an arbitrary number of items of that type). See <a href="http://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs">here</a> for details. The value that the <code>ASyncTask</code> methods <em>actually</em> get is an array of the arguments.</li>
+</ul>
+<p>In the end, we are able to downlod data from the Internet and show an interactive list of that data in the app! We’ve done a whirl-wind tour of Android in this process: Layouts in the XML, Adapters in the Activity, Threading in a new class, Security in the Manifest… bringing lots of parts together to provide a particular piece of functionality.</p>
 
 </div>
 </div>
@@ -315,7 +415,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/input-lists.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/inputs-lists.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

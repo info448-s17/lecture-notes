@@ -194,7 +194,7 @@ hugList.add(new TeddyBear()); //so are Teddybears!
 
 //enhanced for loop ("foreach" loop)
 //read: "for each Huggable in the hugList"
-for(Huggabble thing : hugList) {
+for(Huggable thing : hugList) {
     thing.hug();
 }
 ```

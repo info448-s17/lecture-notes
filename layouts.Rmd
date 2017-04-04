@@ -98,16 +98,10 @@ Technically, `Layouts` are simply `ViewGroups` that provide "ordering" and "posi
 
 <p class="alert alert-info">Android studio does come with a graphical [Layout Editor](https://developer.android.com/studio/write/layout-editor.html) (the "Design" tab) that can be used to create layouts. However, most developers stick with writing layouts in XML. This is mostly because early design tools were pathetic and unusable, so XML was all we had. Although Android Studio's graphical editor can be effective, for this course you should create layouts "by hand" in XML. This is helpful for making sure you understand the pieces underlying development, and is a skill you should be comfortable with anyway (similar to how we encourage people to use `git` from the command-line).</p>
 
-### View Properties
+### View Properties {#view-properties}
 Before we get into how to group Views, let's focus on the individual, basic `View` classes. As an example, consider the `activity_main` layout in the lecture code. This layout contains two individual `View` elements (inside a `Layout`): a `TextView` and a `Button`.
 
-All views have three basic aspects:
-
-- They have **properties** which define the state of the View
-- They have **methods** which the Java code can call to manipulate them ("outside to inside" communication)
-- They can produce **events** which they can use to notify the Java code ("inside to outside" communication)
-
-This lecture will primarily focus on the **properties**. Properties are usually defined within the resource XML as element _attributes_. Some examples of these property attributes are described below.
+All View have **properties**  which define the state of the View. Properties are usually defined within the resource XML as element _attributes_. Some examples of these property attributes are described below.
 
 - **`android:id`** specifies a unique identifier for the View. This identifier needs to be unique within the layout, though ideally is unique within the entire app (for clarity).
 

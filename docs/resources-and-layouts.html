@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-04-02">
+<meta name="date" content="2017-04-03">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -160,9 +160,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="interactive-views.html"><a href="interactive-views.html"><i class="fa fa-check"></i><b>4</b> Interactive Views</a><ul>
-<li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs-20min"><i class="fa fa-check"></i><b>4.1</b> Inputs [20min]</a></li>
-<li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listview-and-adapters-30min"><i class="fa fa-check"></i><b>4.2</b> ListView and Adapters [30min]</a></li>
-<li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data-40min"><i class="fa fa-check"></i><b>4.3</b> Network Data [40min]</a></li>
+<li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs"><i class="fa fa-check"></i><b>4.1</b> Inputs</a></li>
+<li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listviews-and-adapters"><i class="fa fa-check"></i><b>4.2</b> ListViews and Adapters</a></li>
+<li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data"><i class="fa fa-check"></i><b>4.3</b> Network Data</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -179,12 +179,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="B.1" data-path="java-swing.html"><a href="java-swing.html#events"><i class="fa fa-check"></i><b>B.1</b> Events</a></li>
 <li class="chapter" data-level="B.2" data-path="java-swing.html"><a href="java-swing.html#layouts-and-composites"><i class="fa fa-check"></i><b>B.2</b> Layouts and Composites</a></li>
 </ul></li>
-<li class="chapter" data-level="C" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html"><i class="fa fa-check"></i><b>C</b> Threads and HTTP Requests</a><ul>
-<li class="chapter" data-level="C.1" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#concurrency"><i class="fa fa-check"></i><b>C.1</b> Concurrency</a><ul>
-<li class="chapter" data-level="C.1.1" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#an-example-algorithm-races"><i class="fa fa-check"></i><b>C.1.1</b> An Example: Algorithm Races!</a></li>
-<li class="chapter" data-level="C.1.2" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#threading-the-race"><i class="fa fa-check"></i><b>C.1.2</b> Threading the Race</a></li>
+<li class="chapter" data-level="C" data-path="java-threads-http.html"><a href="java-threads-http.html"><i class="fa fa-check"></i><b>C</b> Threads and HTTP Requests</a><ul>
+<li class="chapter" data-level="C.1" data-path="java-threads-http.html"><a href="java-threads-http.html#concurrency"><i class="fa fa-check"></i><b>C.1</b> Concurrency</a><ul>
+<li class="chapter" data-level="C.1.1" data-path="java-threads-http.html"><a href="java-threads-http.html#an-example-algorithm-races"><i class="fa fa-check"></i><b>C.1.1</b> An Example: Algorithm Races!</a></li>
+<li class="chapter" data-level="C.1.2" data-path="java-threads-http.html"><a href="java-threads-http.html#threading-the-race"><i class="fa fa-check"></i><b>C.1.2</b> Threading the Race</a></li>
 </ul></li>
-<li class="chapter" data-level="C.2" data-path="threads-and-http-requests.html"><a href="threads-and-http-requests.html#http-requests"><i class="fa fa-check"></i><b>C.2</b> HTTP Requests</a></li>
+<li class="chapter" data-level="C.2" data-path="java-threads-http.html"><a href="java-threads-http.html#http-requests"><i class="fa fa-check"></i><b>C.2</b> HTTP Requests</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -312,13 +312,7 @@ Android studio does come with a graphical <a href="https://developer.android.com
 <div id="view-properties" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> View Properties</h3>
 <p>Before we get into how to group Views, let’s focus on the individual, basic <code>View</code> classes. As an example, consider the <code>activity_main</code> layout in the lecture code. This layout contains two individual <code>View</code> elements (inside a <code>Layout</code>): a <code>TextView</code> and a <code>Button</code>.</p>
-<p>All views have three basic aspects:</p>
-<ul>
-<li>They have <strong>properties</strong> which define the state of the View</li>
-<li>They have <strong>methods</strong> which the Java code can call to manipulate them (“outside to inside” communication)</li>
-<li>They can produce <strong>events</strong> which they can use to notify the Java code (“inside to outside” communication)</li>
-</ul>
-<p>This lecture will primarily focus on the <strong>properties</strong>. Properties are usually defined within the resource XML as element <em>attributes</em>. Some examples of these property attributes are described below.</p>
+<p>All View have <strong>properties</strong> which define the state of the View. Properties are usually defined within the resource XML as element <em>attributes</em>. Some examples of these property attributes are described below.</p>
 <ul>
 <li><p><strong><code>android:id</code></strong> specifies a unique identifier for the View. This identifier needs to be unique within the layout, though ideally is unique within the entire app (for clarity).</p>
 <p>Identifiers must be legal Java variable names (because they are turned into a variable name in the <code>R</code> class), and by convention are named in <code>lower_case</code> format.</p>

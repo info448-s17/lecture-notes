@@ -134,7 +134,7 @@ ___Demo:___ And now we can finally log out some of the Lifecycle callbacks to se
 
 <!--#### BREAK 5mins, resume 11:45 latest-->
 
-## Basic Events `r #[10min]`
+## Basic Events `r #[10min]` {#basic-events}
 Once you can "output" some content (via Log), the next step is to add some "input" via an interface element: for example, a Button we can click.
 
 In **`res/layouts/activity_main.xml`** (the Activity's layout), add the following code inside the  `<android.support.constraint.ConstraintLayout>` element, **replacing** the current `<TextView>` element.

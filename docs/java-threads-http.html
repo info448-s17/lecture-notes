@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="java-review.html">
-<link rel="next" href="java-threads-http.html">
+<link rel="prev" href="java-swing.html">
+
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -206,80 +206,93 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="java-swing" class="section level1">
-<h1><span class="header-section-number">B</span> Swing Framework</h1>
-<p>Android applications are user-driven graphical applications. In order to become familiar with some of the <em>coding patterns</em> involved in this kind of software (without the overhead of the Android framework), let’s consider how to build simple graphical applications in Java using the <a href="https://docs.oracle.com/javase/tutorial/uiswing/start/">Swing library</a></p>
+<div id="java-threads-http" class="section level1">
+<h1><span class="header-section-number">C</span> Threads and HTTP Requests</h1>
+<p>This appendix introduces concepts in <strong>concurrency and threading</strong>, which are used extensively by Android though a framework-specific classes and options. For clarity, these concepts are introduced though a set of practice exercises in straight Java (though similar code can be utilized in Android).</p>
 <p class="alert alert-info">
-This appendix references code found at <a href="https://github.com/info448-s17/lecture02-activities" class="uri">https://github.com/info448-s17/lecture02-activities</a>, in the <code>java/</code> folder. Note that this tutorial involves Java Programming: while it is possible to do this in Android Studio, it’s often easier to just utilize a light-weight text editor such as <a href="https://code.visualstudio.com/">Visual Studio Code</a> or <a href="https://www.sublimetext.com/">Sublime Text</a>.
+The code for these exercises can be found at <a href="https://github.com/info448-s17/lab-threads-http" class="uri">https://github.com/info448-s17/lab-threads-http</a>.
 </p>
-<p>The <strong>Swing</strong> library is a set of Java classes used to specify graphical user interfaces (GUIs). These classes can be found in the <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/package-summary.html"><code>javax.swing</code></a> package. They also rely on the <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/package-summary.html"><code>java.awt</code></a> package (the “Advanced Windowing Toolkit”), which is an older GUI library that Swing builds on top of.</p>
+<p>Additionally, this appendix introduces the Java code used to send <strong>network requests</strong>. Android will use <em>exactly</em> this code, but in order to experiment with it separate from the Android framework you’ll be making network connections directly from Java.</p>
+<div id="concurrency" class="section level2">
+<h2><span class="header-section-number">C.1</span> Concurrency</h2>
+<p><strong>Concurrency</strong> the process by which we have multiple <em>processes</em> (think: methods) running at the same time. This can be contrasted with processes that run <strong>serially</strong>, or one after another.</p>
+<div id="an-example-algorithm-races" class="section level3">
+<h3><span class="header-section-number">C.1.1</span> An Example: Algorithm Races!</h3>
+<p>As an example, note that one of the main concerns of computer science and software in general is speed: how fast will a particular program or algorithm run? For example, give two of the <a href="https://en.wikipedia.org/wiki/Sorting_algorithm#Popular_sorting_algorithms">many sorting algorithms</a> that have been invented, which one can sort a list of numbers more quickly?</p>
 <ul>
-<li>Fun fact: Swing library is named after the dance style: the developers wanted to name it after something hip and cool and popular. In the mid-90s.</li>
+<li>Sorting algorithms are usually covered in UW’s <em>CSE 373</em> course, but don’t worry if you haven’t taken that course yet! All you need to know is that there are different techniques for sorting numbers, these techniques are given funny names, and one technique may be faster than another</li>
 </ul>
-<p>Let’s look at an incredibly basic GUI class: <code>MyGUI</code> found in the <code>src/main/java/</code> folder. The class <em>subclasses</em> (extends) <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JFrame.html"><code>JFrame</code></a>. <code>JFrame</code> represents a “window” in your operating system, and does all the work of making that window show up and interact with the operating system in a normal way. By subclassing <code>JFrame</code>, we get that functionality for free! This is how we build all GUI applications using this framework.</p>
-<p>Most of the work defining a Swing GUI happens in the <code>JFrame</code> constructor (called when the GUI is “created”).</p>
-<ol style="list-style-type: decimal">
-<li><p>We first call the parent constructor (passing in the title for the window), and then call a method to specify what happens when we hit the “close” button.</p></li>
-<li><p>We then instantiate a <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JButton.html"><code>JButton</code></a>, which is a class representing a Java Button. Note that <code>JButton</code> is the Swing version of a button, building off of the older <code>java.awt.Button</code> class.</p></li>
-<li><p>We then <code>.add()</code> this button to the <code>JFrame</code>. This puts the button inside the window. This process is similar to using jQuery to add an HTML element to web page.</p></li>
-<li><p>Finally, we call <code>.pack()</code> to tell the Frame to resize itself to fit the contents, and then <code>.setVisible()</code> to make it actually appear.</p></li>
-<li><p>We run this program from <code>main</code> by just instantiating our specialized <code>JFrame</code>, which will contain the button.</p></li>
-</ol>
-<p>You can compile and run this program with <code>./gradlew -q run</code>. And voila, we have a basic button app!</p>
-<div id="events" class="section level2">
-<h2><span class="header-section-number">B.1</span> Events</h2>
-<p>If we click the button… nothing happens. Let’s make it print out a message when clicked. We can do this through <strong>event-based programming</strong> (if you remember handling <code>click</code> events from JavaScript, this is the same idea).</p>
-<p>Most computer systems see interactions with its GUI as a series of <strong>events</strong>: the <em>event</em> of clicking a button, the <em>event</em> of moving the mouse, the <em>event</em> of closing a window, etc. Each thing you interact with <em>generates</em> and <em>emits</em> these events. So when you click on a button, it creates and emits an “I was clicked!” event. (You can think of this like the button shouting “Hey hey! I was pressed!”) We can write code to respond to this shouting to have our application do something when the button is clicked.</p>
-<p>Events, like everything else in Java, are Objects (of the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/EventObject.html"><code>EventObject</code></a> type) that are created by the emitter. A <code>JButton</code> in particular emits <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionEvent.html"><code>ActionEvents</code></a> when pressed (the “action” being that it was pressed). In other words, when buttons are pressed, they shout out <code>ActionEvents</code>.</p>
-<p>In order to respond to this shouting, we need to “listen” for these events. Then whenever we hear that there is an event happening, we can react to it. This is like a person manning a submarine radar, or hooking up a baby monitor, or following someone on Twitter.</p>
-<p>But this is Java, and everything in Java is based on Objects, we need an object to listen for these events: a “listener” if you will. Luckily, Java provides a type that can listen for <code>ActionEvents</code>: <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionListener.html"><code>ActionListener</code></a>. This type has an <code>actionPerformed()</code> method that can be called in response to an event.</p>
-<p>We use the <a href="https://sourcemaking.com/design_patterns/observer">Observer Pattern</a> to connect this listener object to the button (<code>button.addActionListener(listener)</code>). This <em>registers</em> the listener, so that the Button knows who to shout at when something happens. (Again, like following someone on Twitter). When the button is pressed, it will go to any listeners registered with it and call their <code>actionPerformed()</code> methods, passing in the <code>ActionEvent</code> it generated.</p>
-<p>But look carefully: <code>ActionListener</code> is not a concrete class, but an abstract <strong>interface</strong>. This means if we want to make an <code>ActionListener</code> object, we need to create a class that <code>implements</code> this interface (and provides the <code>actionPerformed()</code> method that can be called when the event occurs). There are a few ways we can do this:</p>
-<ol style="list-style-type: decimal">
-<li><p>We already have a class we’re developing: <code>MyGUI</code>! So we can just make <em>that</em> class <code>implement ActionListener</code>. We’ll fill in the provided method, and then specify that <code>this</code> object is the listener, and voila.</p>
+<p>Consider the provided <code>SortRacer.java</code> class (found in the <code>src/main/java</code> folder). The <code>main</code> method for this program runs two different sorting algorithms (currently <a href="https://en.wikipedia.org/wiki/Merge_sort">Merge Sort</a> and <a href="https://en.wikipedia.org/wiki/Quicksort">Quicksort</a>), reporting when each one is finished.</p>
+<p><strong><em>Practice: Run this program using gradle</em></strong>: <code>./gradlew -q runSorts</code>. Note that it may take a few seconds for it to build and begin running, and the sorting itself may take a few seconds!</p>
+<p>Of course, it’s not really a “race” at the moment: rather, each sorting algorithm is run <strong>serially</strong> (that is, one after another). If we really wanted them to race, we’d like the algorithms to run <strong>concurrently</strong> (at the same time).</p>
+<p>Computers as a general rule do exactly one thing a time: your central processing unit (CPU) just adds two number together over and over again, billions of times a second</p>
 <ul>
-<li><p>This is my favorite way to create listeners in Java (since it keeps everything self-contained: the <code>JFrame</code> handles the events its buttons produce).</p></li>
-<li><p>We’ll utilize a variant of this pattern in Android: we’ll make classes implement listeners, and then “register” that listener somewhere else in the code (often in a nested class).</p></li>
-</ul></li>
-<li><p>But what if we want to <em>reuse</em> our listener across different classes, but don’t want to have to create a new <code>MyGUI</code> object to listen for a button to be clicked? We can instead use an <strong>inner</strong> or <strong>nested</strong> class. For example, create a nested class <code>MyActionListener</code> that implements the interface, and then just instantiate one of those to register with the button.</p>
-<ul>
-<li>This could be a <code>static</code> nested class, but then it wouldn’t be able to access instance variables (because it belongs to the <em>class</em>, not the <em>object</em>). So you might want to make it an inner class instead. Of course then you can’t re-use it elsewhere without making the <code>MyGUI</code> (whose instance variables it referenes anyway)… but at least we’ve organized the functionality.</li>
-</ul></li>
-<li><p>It seems sort of silly to create a whole new <code>MyActionListener</code> class that has one method and is just going to be instantiated once. So what if instead of giving it a name, we just made it an <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/anonymousclasses.html"><strong>anonymous class</strong></a>? This is similar to how you’ve made <em>anonymous variables</em> by instantiating objects without assigning them to named variables, you’re just doing the same thing with a class that just implements an interface. The syntax looks like:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">button.<span class="fu">addActionListener</span>(<span class="kw">new</span> <span class="bu">ActionListener</span>() {
-  <span class="co">//class declaration goes in here!</span>
-
-<span class="kw">public</span> <span class="dt">void</span> <span class="fu">actionPerformed</span>(<span class="bu">ActionEvent</span> event) { <span class="co">/*...*/</span>}
-});</code></pre></div>
-<p>This is how buttons are often used in Android: we’ll create an anonymous listener object to respond to the event that occurs when they are pressed.</p></li>
-</ol>
+<li>The standard measure for <em>rate</em> (how many times per second) is the <code>hertz</code> (Hz). So a 2 gigahertz (GHz) processor can do 2 billion operations per second.</li>
+</ul>
+<p>However, we don’t realize that computers do only one thing at a time! This is because computers are really good at <em>multitasking</em>: they will do a tiny bit of one task, and then jump over to another task and do a little of that, and then jump over to another task and do a little of that, and then back to the first task, and so on.</p>
+<div class="figure">
+<img src="img/threads/thread-switching.jpg" alt="Diagram of thread switching (source unknown)" />
+<p class="caption">Diagram of thread switching (source unknown)</p>
 </div>
-<div id="layouts-and-composites" class="section level2">
-<h2><span class="header-section-number">B.2</span> Layouts and Composites</h2>
-<p>What if we want to add a second button? If we try to just <code>.add()</code> another button… it replaces the one we previously had! This is because Java doesn’t know <em>where</em> to put the second button. Below? Above? Left? Right?</p>
-<p>In order to have the <code>JFrame</code> contain multiple components, we need to specify a <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/LayoutManager.html"><strong>layout</strong></a>, which knows how to organize items that are added to the Frame. We do this with the <code>.setLayout()</code> method. For example, we can give the frame a <code>BoxLayout()</code> with a <code>PAGE_AXIS</code> orientation to have it lay out the buttons in a vertical row.</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">container.<span class="fu">setLayout</span>(<span class="kw">new</span> <span class="bu">BoxLayout</span>(container, <span class="bu">BoxLayout</span>.<span class="fu">PAGE_AXIS</span>));
-container.<span class="fu">add</span>(theButton);
-container.<span class="fu">add</span>(otherButton);</code></pre></div>
+<p>These “tasks” are divided up into two types: <strong>processes</strong> and <strong>threads</strong>. <strong><em>Read <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/procthread.html">this brief summary</a> of the difference between them</em></strong>.</p>
+<p>So by breaking up a program into threads (which are “interwoven”), we can in effect cause the computer to do two tasks at once. This is <em>especially</em> useful if one of the “tasks” might take a really long time–rather than <strong>blocking</strong> the application, we can let other tasks also make some progress while we’re waiting for the long task to finish.</p>
+</div>
+<div id="threading-the-race" class="section level3">
+<h3><span class="header-section-number">C.1.2</span> Threading the Race</h3>
+<p>Currently the two sorting algorithms run in the same thread, one after another. You should break them into two <em>different</em> threads that can run <strong>concurrently</strong>, letting them actually be able to race!</p>
+<p>In Java, we create a Thread by creating a class that <code>implements</code> the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html"><strong><code>Runnable</code></strong></a> interface. This represents a class that can be “run” in a separate thread! The <code>run()</code> method required by the interface acts a bit like the “main” method for that Thread: when we start the Thread running, that is the method that will get called.</p>
+<p><strong><em>Practice: Create two new <code>Runnable</code> classes, one for each Sorting method</em></strong>.</p>
 <ul>
-<li>Java has different <code>LayoutManagers</code> that each have their own way of organizing components. We’ll see this same idea in Android.</li>
+<li><p>These should be <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html">nested classes</a> (think: should they be <code>static</code>?).</p></li>
+<li><p>When each <code>Runnable</code> is <code>run</code>, you should create a new <em>shuffled</em> array of numbers and then call the appropriate sorting method on that list. Remember to print out when you start and finish sorting (just like is currently done in the <code>main()</code> method).</p></li>
 </ul>
-<p>What if we want to do more complex layouts? We could look for a more complex <code>LayoutManager</code>, but we can actually achieve a lot of flexibility simply by using <em>multiple containers</em>.</p>
-<p>For example, we can make a <code>JPanel</code> object, which is basically an “empty” component. We can then add multiple buttons to this this panel, and add <em>that panel</em> to the <code>JFrame</code>. Because <code>JPanel</code> <strong>is a</strong> <code>Component</code> (just like <code>JButton</code> is), we can use the <code>JPanel</code> exactly as we used the <code>JButton</code>—this panel just happens to have multiple buttons.</p>
-<p>And since we can put any <code>Component</code> in a <code>JPanel</code>, and <code>JPanel</code> is itself a Component… we can create nest these components together into a tree in an example of the <a href="http://www.oodesign.com/composite-pattern.html">Composite Pattern</a>. This allows us to create very complex user interfaces with just a simple <code>BoxLayout</code>!</p>
+<p>If we just instantiate the <code>Runnable()</code> and call its <code>run()</code> method, that won’t actually execute the method on a different thread (remember: an interface is just a “sign”; we could have called the interface and method whatever we wanted and it would still compile). Instead, we execute code on a separate thread by using an instance of the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html"><strong><code>Thread</code></strong></a> class. This class actually does the work of running code on a separate thread.</p>
+<p><code>Thread</code> has a <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html#Thread-java.lang.Runnable-">constructor</a> that takes in a <code>Runnable</code> instance as a parameter—you pass an object representing the “code to run” to the <code>Thread</code> object (this is an example of the <em>Strategy Pattern</em>). You then can actually <strong>start</strong> the <code>Thread</code> by calling its <code>.start()</code> method (<em>not</em> the <code>run</code> method!).</p>
+<p><strong><em>Practice: Modify the <code>main()</code> method so you create new <code>Threads</code> to execute each <code>Runnable</code></em></strong> Make sure you actually <code>start()</code> the threads!</p>
 <ul>
-<li>This is similar to how we can create complex web layouts just by nesting lots of <code>&lt;div&gt;</code> elements.</li>
+<li>Anonymous variables will be useful here; you don’t need to assign a variable name to the <code>Runnable</code> objects or even the <code>Thread</code> objects if you just use them directly.</li>
 </ul>
+<p>Now run your program! Do you see the Threads running at the same time? Try running the program multiple times and see what kind of differences you get.</p>
+<ul>
+<li><p>There are some print statements you can uncomment in the <code>Sorting</code> class if you want to see more concrete evidence of the Threads running concurrently.</p></li>
+<li><p>You are also welcome to try racing different sorting algorithms (you’ll want to use a smaller list of numbers, particularly for the painfully slow BubbleSort). You can even race more than two algorithms—just create additional Threads!</p></li>
+</ul>
+<p>And that’s the basics of creating Threads in Java!</p>
+</div>
+</div>
+<div id="http-requests" class="section level2">
+<h2><span class="header-section-number">C.2</span> HTTP Requests</h2>
+<p>Consider the provided <code>MovieDownloader.java</code> class (found in the <code>src/main/java/</code> folder). This Java code (which is <em>directly</em> portable to Android) accesses the database at <a href="http://www.omdbapi.com/">omdbapi.com</a>, a wrapper around the IMDB API calls for getting information about movies.</p>
+<p>You can run this program with the <code>./gradlew -q runMovies</code> task. It will prompt you for a movies to search for, and then print out the results (in JSON format).</p>
+<p><strong><em>Practice: add descriptive comments to the <code>downloadMovieData()</code> method</em></strong>, explaining what the code does and how it works. The goal is to understand the classes and methods are that are being used here (particularly the use of <a href="https://docs.oracle.com/javase/8/docs/api/java/net/HttpURLConnection.html"><code>HttpUrlConnection</code></a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html"><code>InputStream</code></a>, and <a href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html"><code>BufferedReader</code></a>), and demonstrate that understanding through explanatory comments. You should also pay particular attention to the use of <code>try/catch</code> blocks (see <a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/handling.html">here</a> for one explanation).</p>
+<p>Note that we’ll utilize this exact code in Android, so you should be familiar with what it is doing!</p>
 
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="java-review.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="java-threads-http.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="java-swing.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -307,7 +320,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/java-swing.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/java-threads-http.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],
