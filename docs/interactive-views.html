@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-04-03">
+<meta name="date" content="2017-04-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -211,7 +211,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>This lecture discusses how to use Views to support user interaction and dynamic content, building on the previous lecture as while drawing on concepts introduced in the <a href="java-threads-http.html#java-threads-http">Threads and HTTP Requests Appendix</a>.</p>
 <p class="alert alert-info">
 This lecture references code found at <a href="https://github.com/info448-s17/lecture04-inputs-lists" class="uri">https://github.com/info448-s17/lecture04-inputs-lists</a>.
-<p>
+</p>
 <div id="inputs" class="section level2">
 <h2><span class="header-section-number">4.1</span> Inputs</h2>
 <p>The previous lecture discussed <strong>Views</strong> and ViewGroups (<strong>Layouts</strong>), and introduced some basic Views such as <code>TextView</code>, <code>ImageView</code>, and <code>Button</code>.</p>
@@ -261,7 +261,7 @@ This lecture references code found at <a href="https://github.com/info448-s17/le
 <p class="alert">
 The remainder of the lecture utilizes the <code>list_layout</code> Layout in the lecture code. Modify <code>MainActivity</code> so that it uses this resource as its <code>viewContent</code>.
 </p>
-<p>Having covered basic controls, this section will now look at some more advanced interactive Views. In particular, it will discuss how to utilize a <a href="https://developer.android.com/guide/topics/ui/layout/listview.html">ListView</a>, which is a <code>ViewGroup</code> that displays a scrollable list of items! A <code>ListView</code> is basically a <code>LinearLayout</code> inside of a <code>ScrollView</code> (which is a <code>ViewGroup</code> that can be scrolled). Each element within the LinearLayout is another <code>View</code> (usually a Layout) representing a particular item in a list.</p>
+<p>Having covered basic controls, this section will now look at some more advanced interactive Views. In particular, it will discuss how to utilize a <a href="https://developer.android.com/guide/topics/ui/layout/listview.html">ListView</a><a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a>, which is a <code>ViewGroup</code> that displays a scrollable list of items! A <code>ListView</code> is basically a <code>LinearLayout</code> inside of a <code>ScrollView</code> (which is a <code>ViewGroup</code> that can be scrolled). Each element within the LinearLayout is another <code>View</code> (usually a Layout) representing a particular item in a list.</p>
 <p>But the <code>ListView</code> does extra work beyond just nesting Views: it keeps track of what items are already displayed on the screen, inflating only the visible items (plus a few extra on the top and bottom as buffers). Then as the user scrolls, the ListView takes the disappearing views and <em>recycles</em> them (altering their content, but not reinflating from scratch) in order to reuse them for the new items that appear. This lets it save memory, provide better performance, and overall work more smoothly. See <a href="https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#row-view-recycling">this tutorial</a> for diagrams and further explanation of this recycling behavior.</p>
 <ul>
 <li>Note that a more advanced and flexible version of this behavior is offered by the <a href="https://developer.android.com/guide/topics/ui/layout/recyclerview.html"><code>RecyclerView</code></a>. See also <a href="https://developer.android.com/training/material/lists-cards.html">this guide</a> for more details.</li>
@@ -297,7 +297,7 @@ The remainder of the lecture utilizes the <code>list_layout</code> Layout in the
 <p>To make it look better, you can specify <code>android:minHeight=?android:attr/listPreferredItemHeight</code> (using the framework’s preferred height for lists), and some <code>center_vertical</code> gravity. The <code>android:lines</code> property is also useful if you need more space.</p></li>
 <li><p>Finally, we specify the <strong>controller</strong>: the <code>ListView</code> itself. At that item to the Activity’s Layout resource (<em>practice</em>: what should its dimensions be?)</p></li>
 </ol>
-<p>To finish the controller <code>ListView</code>, we ned to provide it with an <a href="https://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews"><code>Adapter</code></a> which will connect the <em>model</em> to the <em>view</em>. The Adapter does the “translation” work between model and view, performing a mapping from data types (e.g., a <code>String</code>) and View types (e.g., a <code>TextView</code>).</p>
+<p>To finish the controller <code>ListView</code>, we ned to provide it with an <a href="https://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews"><code>Adapter</code></a><a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> which will connect the <em>model</em> to the <em>view</em>. The Adapter does the “translation” work between model and view, performing a mapping from data types (e.g., a <code>String</code>) and View types (e.g., a <code>TextView</code>).</p>
 <p>Specifically, we will use an <a href="https://developer.android.com/reference/android/widget/ArrayAdapter.html"><code>ArrayAdapter</code></a>, which is one of the simplest Adapters to use (and because we have an array of data!) An <code>ArrayAdapter</code> creates Views by calling <code>.toString()</code> on each item in the array, and setting that <code>String</code> as the content of a <code>TextView</code>!</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">ArrayAdapter&lt;<span class="bu">String</span>&gt; adapter = <span class="kw">new</span> ArrayAdapter&lt;<span class="bu">String</span>&gt;(<span class="kw">this</span>,
     R.<span class="fu">layout</span>.<span class="fu">list_item_layout</span>, R.<span class="fu">layout</span>.<span class="fu">list_item_txtView</span>, myStringArray);</code></pre></div>
@@ -333,9 +333,9 @@ If you test this code, you’ll notice that it doesn’t work! The program will 
 <ul>
 <li>Tasks such as network access are <strong>blocking</strong> method calls, which stop the Thread from continuing. A blocked <em>Main Thread</em> will lead to the infamous <strong>“Application not responding” (ANR)</strong> error!</li>
 </ul>
-<p>Thus we need to move the network code <em>off</em> the Main Thread, onto a <strong>background thread</strong>, thereby allowing it to run without blocking the user interaction that occurs on the Main Thread. To do this, we will use a class called <a href="https://developer.android.com/reference/android/os/AsyncTask.html"><code>ASyncTask</code></a> to perform a task (such as network access) asynchronously—without waiting for other Threads.</p>
+<p>Thus we need to move the network code <em>off</em> the Main Thread, onto a <strong>background thread</strong>, thereby allowing it to run without blocking the user interaction that occurs on the Main Thread. To do this, we will use a class called <a href="https://developer.android.com/reference/android/os/AsyncTask.html"><code>ASyncTask</code></a><a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a> to perform a task (such as network access) asynchronously—without waiting for other Threads.</p>
 <p class="alert alert-info">
-Learning Android Development involves knowing about what classes exist, and can be used to solve problems, but how were we able to learn about the existing of this highly useful (and specialized) <code>ASyncTask</code> class? We started from the official API Guide on <a href="https://developer.android.com/guide/components/processes-and-threads.html">Processes and Threads Guide</a>, which introduces this class! Thus to learn about new Android options, <em>read the docs</em>.
+Learning Android Development involves knowing about what classes exist, and can be used to solve problems, but how were we able to learn about the existing of this highly useful (and specialized) <code>ASyncTask</code> class? We started from the official API Guide on <a href="https://developer.android.com/guide/components/processes-and-threads.html">Processes and Threads Guide</a><a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a>, which introduces this class! Thus to learn about new Android options, <em>read the docs</em>.
 </p>
 <p>Note that an <code>ASyncTask</code> background thread will be <em>tied to the lifecycle of the Activity</em>: if we close the Activity, the network connection will die as well. A better but <em>much</em> more complex solution would be to use a <code>Service</code>—which is covered in a future lecture. But since this example just involves getting a small amount of data, we don’t really care if the network connection gets dropped.</p>
 <p><code>ASyncTask</code> can be fairly complicated, but is a good candidate to practice learning from the API documentation. Looking at that documentation, the first thing you should notice (or would if the API was a little more readable) is that <code>ASyncTask</code> is <strong><code>abstract</code></strong>, meaning you’ll need to <em>subclass</em> it in order to use it. Thus you can subclass it as an <em>inner</em> class inside the Activity that will use it (<code>MovieDownloadTask</code> is a good name).</p>
@@ -371,7 +371,7 @@ If you test this code, you’ll notice that it still doesn’t work! The program
 </ul>
 <p>To finalize the app: we can enable the user to search for different movies by copying the <code>EditText</code> and <code>Button</code> Views from the previous <code>input_layout</code> resource, accessing the text from the former when the later is pressed. We can then pass the <code>EditText</code> content String into the <code>ASyncTask#execute()</code> function (since we’ve declared that the generic <code>ASyncTask</code> takes that type as the first Parameter).</p>
 <ul>
-<li>We can actually pass in multiple <code>String</code> arguments using the <code>String... params</code> spread operator syntax (representing an arbitrary number of items of that type). See <a href="http://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs">here</a> for details. The value that the <code>ASyncTask</code> methods <em>actually</em> get is an array of the arguments.</li>
+<li>We can actually pass in multiple <code>String</code> arguments using the <code>String... params</code> spread operator syntax (representing an arbitrary number of items of that type). See <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs">here</a> for details. The value that the <code>ASyncTask</code> methods <em>actually</em> get is an array of the arguments.</li>
 </ul>
 <p>In the end, we are able to downlod data from the Internet and show an interactive list of that data in the app! We’ve done a whirl-wind tour of Android in this process: Layouts in the XML, Adapters in the Activity, Threading in a new class, Security in the Manifest… bringing lots of parts together to provide a particular piece of functionality.</p>
 
@@ -380,6 +380,15 @@ If you test this code, you’ll notice that it still doesn’t work! The program
 
 
 
+</div>
+<div class="footnotes">
+<hr />
+<ol start="13">
+<li id="fn13"><p><a href="https://developer.android.com/guide/topics/ui/layout/listview.html" class="uri">https://developer.android.com/guide/topics/ui/layout/listview.html</a><a href="interactive-views.html#fnref13">↩</a></p></li>
+<li id="fn14"><p><a href="https://developer.android.com/reference/android/widget/Adapter.html" class="uri">https://developer.android.com/reference/android/widget/Adapter.html</a><a href="interactive-views.html#fnref14">↩</a></p></li>
+<li id="fn15"><p><a href="https://developer.android.com/reference/android/os/AsyncTask.html" class="uri">https://developer.android.com/reference/android/os/AsyncTask.html</a><a href="interactive-views.html#fnref15">↩</a></p></li>
+<li id="fn16"><p><a href="https://developer.android.com/guide/components/processes-and-threads.html" class="uri">https://developer.android.com/guide/components/processes-and-threads.html</a><a href="interactive-views.html#fnref16">↩</a></p></li>
+</ol>
 </div>
             </section>
 

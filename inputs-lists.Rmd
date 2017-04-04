@@ -1,7 +1,7 @@
 # Interactive Views
 This lecture discusses how to use Views to support user interaction and dynamic content, building on the previous lecture as while drawing on concepts introduced in the [Threads and HTTP Requests Appendix](#java-threads-http).
 
-<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture04-inputs-lists>.<p>
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture04-inputs-lists>.</p>
 
 ## Inputs `r #[20min]`
 The previous lecture discussed **Views** and ViewGroups (**Layouts**), and introduced some basic Views such as `TextView`, `ImageView`, and `Button`.
@@ -64,7 +64,7 @@ Between listening for events and querying for state, we can fully interact with 
 
 <p class="alert">The remainder of the lecture utilizes the `list_layout` Layout in the lecture code. Modify `MainActivity` so that it uses this resource as its `viewContent`.</p>
 
-Having covered basic controls, this section will now look at some more advanced interactive Views. In particular, it will discuss how to utilize a [ListView](https://developer.android.com/guide/topics/ui/layout/listview.html), which is a `ViewGroup` that displays a scrollable list of items! A `ListView` is basically a `LinearLayout` inside of a `ScrollView` (which is a `ViewGroup` that can be scrolled). Each element within the LinearLayout is another `View` (usually a Layout) representing a particular item in a list.
+Having covered basic controls, this section will now look at some more advanced interactive Views. In particular, it will discuss how to utilize a [ListView](https://developer.android.com/guide/topics/ui/layout/listview.html)^[https://developer.android.com/guide/topics/ui/layout/listview.html], which is a `ViewGroup` that displays a scrollable list of items! A `ListView` is basically a `LinearLayout` inside of a `ScrollView` (which is a `ViewGroup` that can be scrolled). Each element within the LinearLayout is another `View` (usually a Layout) representing a particular item in a list.
 
 But the `ListView` does extra work beyond just nesting Views: it keeps track of what items are already displayed on the screen, inflating only the visible items (plus a few extra on the top and bottom as buffers). Then as the user scrolls, the ListView takes the disappearing views and _recycles_ them (altering their content, but not reinflating from scratch) in order to reuse them for the new items that appear. This lets it save memory, provide better performance, and overall work more smoothly. See [this tutorial](https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#row-view-recycling) for diagrams and further explanation of this recycling behavior.
 
@@ -112,7 +112,7 @@ In order to use a `ListView`, we need to get the pieces in place:
 
 3. Finally, we specify the **controller**: the `ListView` itself. At that item to the Activity's Layout resource (_practice_: what should its dimensions be?)
 
-To finish the controller `ListView`, we ned to provide it with an [`Adapter`](https://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews) which will connect the _model_ to the _view_. The Adapter does the "translation" work between model and view, performing a mapping from data types (e.g., a `String`) and View types (e.g., a `TextView`).
+To finish the controller `ListView`, we ned to provide it with an [`Adapter`](https://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews)^[https://developer.android.com/reference/android/widget/Adapter.html] which will connect the _model_ to the _view_. The Adapter does the "translation" work between model and view, performing a mapping from data types (e.g., a `String`) and View types (e.g., a `TextView`).
 
 Specifically, we will use an [`ArrayAdapter`](https://developer.android.com/reference/android/widget/ArrayAdapter.html), which is one of the simplest Adapters to use (and because we have an array of data!) An `ArrayAdapter` creates Views by calling `.toString()` on each item in the array, and setting that `String` as the content of a `TextView`!
 
@@ -157,9 +157,9 @@ Within a single thread, all method calls are **synchronous**&mdash;that is, one 
 
 - Tasks such as network access are **blocking** method calls, which stop the Thread from continuing. A blocked _Main Thread_ will lead to the infamous **"Application not responding" (ANR)** error!
 
-Thus we need to move the network code _off_ the Main Thread, onto a **background thread**, thereby allowing it to run without blocking the user interaction that occurs on the Main Thread. To do this, we will use a class called [`ASyncTask`](https://developer.android.com/reference/android/os/AsyncTask.html) to perform a task (such as network access) asynchronously&mdash;without waiting for other Threads.
+Thus we need to move the network code _off_ the Main Thread, onto a **background thread**, thereby allowing it to run without blocking the user interaction that occurs on the Main Thread. To do this, we will use a class called [`ASyncTask`](https://developer.android.com/reference/android/os/AsyncTask.html)^[https://developer.android.com/reference/android/os/AsyncTask.html] to perform a task (such as network access) asynchronously&mdash;without waiting for other Threads.
 
-<p class="alert alert-info">Learning Android Development involves knowing about what classes exist, and can be used to solve problems, but how were we able to learn about the existing of this highly useful (and specialized) `ASyncTask` class? We started from the official API Guide on [Processes and Threads Guide](https://developer.android.com/guide/components/processes-and-threads.html), which introduces this class! Thus to learn about new Android options, _read the docs_.</p>
+<p class="alert alert-info">Learning Android Development involves knowing about what classes exist, and can be used to solve problems, but how were we able to learn about the existing of this highly useful (and specialized) `ASyncTask` class? We started from the official API Guide on [Processes and Threads Guide](https://developer.android.com/guide/components/processes-and-threads.html)^[https://developer.android.com/guide/components/processes-and-threads.html], which introduces this class! Thus to learn about new Android options, _read the docs_.</p>
 
 Note that an `ASyncTask` background thread will be _tied to the lifecycle of the Activity_: if we close the Activity, the network connection will die as well. A better but _much_ more complex solution would be to use a `Service`&mdash;which is covered in a future lecture. But since this example just involves getting a small amount of data, we don't really care if the network connection gets dropped.
 
@@ -206,6 +206,6 @@ We take that passed in `String[]` and put that into the `ListView`. Specifically
 
 To finalize the app: we can enable the user to search for different movies by copying the `EditText` and `Button` Views from the previous `input_layout` resource, accessing the text from the former when the later is pressed. We can then pass the `EditText` content String into the `ASyncTask#execute()` function (since we've declared that the generic `ASyncTask` takes that type as the first Parameter).
 
-- We can actually pass in multiple `String` arguments using the `String... params` spread operator syntax (representing an arbitrary number of items of that type). See [here](http://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs) for details. The value that the `ASyncTask` methods _actually_ get is an array of the arguments.
+- We can actually pass in multiple `String` arguments using the `String... params` spread operator syntax (representing an arbitrary number of items of that type). See [here](https://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs) for details. The value that the `ASyncTask` methods _actually_ get is an array of the arguments.
 
 In the end, we are able to downlod data from the Internet and show an interactive list of that data in the app! We've done a whirl-wind tour of Android in this process: Layouts in the XML, Adapters in the Activity, Threading in a new class, Security in the Manifest... bringing lots of parts together to provide a particular piece of functionality.

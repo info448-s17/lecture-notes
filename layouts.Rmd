@@ -1,7 +1,7 @@
 # Resources and Layouts
 This lecture discusses [**Resources**](https://developer.android.com/guide/topics/resources/overview.html), which are used to represent elements or data that are separate from the behavior (functional logic) of the app. In particular, this lecture focuses on how resources are used to define **Layouts** for user interfaces. While the [Activities](#activities) lecture focused on the Java portion of Android apps; this lecture focuses on the XML.
 
-<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture03-layouts>.<p>
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture03-layouts>.</p>
 
 ## Resources
 [Resources](https://developer.android.com/guide/topics/resources/overview.html) can be found in the **`res/`** folder, and represent elements or data that are "external" to the code. You can think of them as "media content": often images, but also things like text clippings (or short String constants). Textual resources are usually defined in XML files. This is because resources represent elements (e.g., content) that is _separate_ from the code (the behavior of the app), so is kept separate from the Java code to support the **Principle of Separation of Concerns**
