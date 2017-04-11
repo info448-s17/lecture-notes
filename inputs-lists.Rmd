@@ -108,9 +108,9 @@ In order to use a `ListView`, we need to get the pieces in place:
 	    android:layout_height="wrap_content" />
 	```
 
-	To make it look better, you can specify `android:minHeight=?android:attr/listPreferredItemHeight` (using the framework's preferred height for lists), and some `center_vertical` gravity. The `android:lines` property is also useful if you need more space.
+	To make it look better, you can specify `android:minHeight="?android:attr/listPreferredItemHeight"` (using the framework's preferred height for lists), and some `center_vertical` gravity. The `android:lines` property is also useful if you need more space.
 
-3. Finally, we specify the **controller**: the `ListView` itself. At that item to the Activity's Layout resource (_practice_: what should its dimensions be?)
+3. Finally, we specify the **controller**: the `ListView` itself. Add that item to the Activity's Layout resource (_practice_: what should its dimensions be?)
 
 To finish the controller `ListView`, we ned to provide it with an [`Adapter`](https://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews)^[https://developer.android.com/reference/android/widget/Adapter.html] which will connect the _model_ to the _view_. The Adapter does the "translation" work between model and view, performing a mapping from data types (e.g., a `String`) and View types (e.g., a `TextView`).
 
@@ -132,7 +132,7 @@ listView.setAdapter(adapter);
 
 And that's all that is needed to create a scrollable list of data!
 
-Each item in this list is selectable (can have an `onClick` callback). This allows us to click on any item in order to (for example) view more details about the item. Utilize the `AdapterView#setOnClickListener(OnItemClickListener)` function to register the callback.
+Each item in this list is selectable (can have an `onClick` callback). This allows us to click on any item in order to (for example) view more details about the item. Utilize the `AdapterView#setOnItemClickListener(OnItemClickListener)` function to register the callback.
 
 - The `postion` parameter in the `onItemClick()` callback is the index of the item which was clicked. Use `(Type)parent.getItemAtPosition(position)` to access the data value associated with that View.
 

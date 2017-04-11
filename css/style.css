@@ -54,3 +54,7 @@ pre {
 pre code {
   white-space: inherit;
 }
+
+.clear {
+  clear:both
+}

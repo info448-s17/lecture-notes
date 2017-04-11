@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-04-04">
+<meta name="date" content="2017-04-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
   
   
 <link rel="prev" href="resources-and-layouts.html">
-<link rel="next" href="java-review.html">
+<link rel="next" href="fragments.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -163,6 +163,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs"><i class="fa fa-check"></i><b>4.1</b> Inputs</a></li>
 <li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listviews-and-adapters"><i class="fa fa-check"></i><b>4.2</b> ListViews and Adapters</a></li>
 <li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data"><i class="fa fa-check"></i><b>4.3</b> Network Data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="fragments.html"><a href="fragments.html"><i class="fa fa-check"></i><b>5</b> Fragments</a><ul>
+<li class="chapter" data-level="5.1" data-path="fragments.html"><a href="fragments.html#creating-a-fragment"><i class="fa fa-check"></i><b>5.1</b> Creating a Fragment</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="fragments.html"><a href="fragments.html#activity-to-fragment-communication"><i class="fa fa-check"></i><b>5.1.1</b> Activity-to-Fragment Communication</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="fragments.html"><a href="fragments.html#dynamic-fragments"><i class="fa fa-check"></i><b>5.2</b> Dynamic Fragments</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fragments.html"><a href="fragments.html#instantiating-fragments"><i class="fa fa-check"></i><b>5.2.1</b> Instantiating Fragments</a></li>
+<li class="chapter" data-level="5.2.2" data-path="fragments.html"><a href="fragments.html#transactions"><i class="fa fa-check"></i><b>5.2.2</b> Transactions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="fragments.html"><a href="fragments.html#inter-fragment-communication"><i class="fa fa-check"></i><b>5.2.3</b> Inter-Fragment Communication</a></li>
+<li class="chapter" data-level="5.2.4" data-path="fragments.html"><a href="fragments.html#the-back-stack"><i class="fa fa-check"></i><b>5.2.4</b> The Back Stack</a></li>
+</ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -294,8 +305,8 @@ The remainder of the lecture utilizes the <code>list_layout</code> Layout in the
 <span class="ot">    android:id=</span><span class="st">&quot;@+id/txtItem&quot;</span>
 <span class="ot">    android:layout_width=</span><span class="st">&quot;match_parent&quot;</span>
 <span class="ot">    android:layout_height=</span><span class="st">&quot;wrap_content&quot;</span> <span class="kw">/&gt;</span></code></pre></div>
-<p>To make it look better, you can specify <code>android:minHeight=?android:attr/listPreferredItemHeight</code> (using the framework’s preferred height for lists), and some <code>center_vertical</code> gravity. The <code>android:lines</code> property is also useful if you need more space.</p></li>
-<li><p>Finally, we specify the <strong>controller</strong>: the <code>ListView</code> itself. At that item to the Activity’s Layout resource (<em>practice</em>: what should its dimensions be?)</p></li>
+<p>To make it look better, you can specify <code>android:minHeight=&quot;?android:attr/listPreferredItemHeight&quot;</code> (using the framework’s preferred height for lists), and some <code>center_vertical</code> gravity. The <code>android:lines</code> property is also useful if you need more space.</p></li>
+<li><p>Finally, we specify the <strong>controller</strong>: the <code>ListView</code> itself. Add that item to the Activity’s Layout resource (<em>practice</em>: what should its dimensions be?)</p></li>
 </ol>
 <p>To finish the controller <code>ListView</code>, we ned to provide it with an <a href="https://developer.android.com/guide/topics/ui/declaring-layout.html#AdapterViews"><code>Adapter</code></a><a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> which will connect the <em>model</em> to the <em>view</em>. The Adapter does the “translation” work between model and view, performing a mapping from data types (e.g., a <code>String</code>) and View types (e.g., a <code>TextView</code>).</p>
 <p>Specifically, we will use an <a href="https://developer.android.com/reference/android/widget/ArrayAdapter.html"><code>ArrayAdapter</code></a>, which is one of the simplest Adapters to use (and because we have an array of data!) An <code>ArrayAdapter</code> creates Views by calling <code>.toString()</code> on each item in the array, and setting that <code>String</code> as the content of a <code>TextView</code>!</p>
@@ -308,7 +319,7 @@ The remainder of the lecture utilizes the <code>list_layout</code> Layout in the
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">ListView</span> listView = (<span class="bu">ListView</span>)<span class="fu">findViewById</span>(R.<span class="fu">id</span>.<span class="fu">listview</span>);
 listView.<span class="fu">setAdapter</span>(adapter);</code></pre></div>
 <p>And that’s all that is needed to create a scrollable list of data!</p>
-<p>Each item in this list is selectable (can have an <code>onClick</code> callback). This allows us to click on any item in order to (for example) view more details about the item. Utilize the <code>AdapterView#setOnClickListener(OnItemClickListener)</code> function to register the callback.</p>
+<p>Each item in this list is selectable (can have an <code>onClick</code> callback). This allows us to click on any item in order to (for example) view more details about the item. Utilize the <code>AdapterView#setOnItemClickListener(OnItemClickListener)</code> function to register the callback.</p>
 <ul>
 <li>The <code>postion</code> parameter in the <code>onItemClick()</code> callback is the index of the item which was clicked. Use <code>(Type)parent.getItemAtPosition(position)</code> to access the data value associated with that View.</li>
 </ul>
@@ -377,10 +388,6 @@ If you test this code, you’ll notice that it still doesn’t work! The program
 
 </div>
 </div>
-
-
-
-</div>
 <div class="footnotes">
 <hr />
 <ol start="13">
@@ -396,7 +403,7 @@ If you test this code, you’ll notice that it still doesn’t work! The program
         </div>
       </div>
 <a href="resources-and-layouts.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="java-review.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="fragments.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Android Development: Lecture Notes</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="Lecture notes for Info 448 Mobile Development: Android.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Android Development: Lecture Notes" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes for Info 448 Mobile Development: Android." />
+  <meta name="github-repo" content="info448-s17/lecture-notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Android Development: Lecture Notes" />
+  
+  <meta name="twitter:description" content="Lecture notes for Info 448 Mobile Development: Android." />
+  
+
+<meta name="author" content="Joel Ross">
+
+
+<meta name="date" content="2017-04-11">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="interactive-views.html">
+<link rel="next" href="java-review.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Android Development</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About this Book</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#android-history"><i class="fa fa-check"></i><b>1.1</b> Android History</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="introduction.html"><a href="introduction.html#android-versions"><i class="fa fa-check"></i><b>1.1.1</b> Android Versions</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introduction.html"><a href="introduction.html#legal-battles"><i class="fa fa-check"></i><b>1.1.2</b> Legal Battles</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#android-architecture-and-code"><i class="fa fa-check"></i><b>1.2</b> Android Architecture and Code</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="introduction.html"><a href="introduction.html#programming-languages"><i class="fa fa-check"></i><b>1.2.1</b> Programming Languages</a></li>
+<li class="chapter" data-level="1.2.2" data-path="introduction.html"><a href="introduction.html#building-apps"><i class="fa fa-check"></i><b>1.2.2</b> Building Apps</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#development-tools"><i class="fa fa-check"></i><b>1.3</b> Development Tools</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#hardware"><i class="fa fa-check"></i><b>1.3.1</b> Hardware</a></li>
+<li class="chapter" data-level="1.3.2" data-path="introduction.html"><a href="introduction.html#software"><i class="fa fa-check"></i><b>1.3.2</b> Software</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#hello-world"><i class="fa fa-check"></i><b>1.4</b> Hello World</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="introduction.html"><a href="introduction.html#the-emulator"><i class="fa fa-check"></i><b>1.4.1</b> The Emulator</a></li>
+<li class="chapter" data-level="1.4.2" data-path="introduction.html"><a href="introduction.html#project-contents"><i class="fa fa-check"></i><b>1.4.2</b> Project Contents</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="activities.html"><a href="activities.html"><i class="fa fa-check"></i><b>2</b> Activities and Logging</a><ul>
+<li class="chapter" data-level="2.1" data-path="activities.html"><a href="activities.html#making-activities"><i class="fa fa-check"></i><b>2.1</b> Making Activities</a></li>
+<li class="chapter" data-level="2.2" data-path="activities.html"><a href="activities.html#the-activity-lifecycle"><i class="fa fa-check"></i><b>2.2</b> The Activity Lifecycle</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="activities.html"><a href="activities.html#overriding-the-callback-methods"><i class="fa fa-check"></i><b>2.2.1</b> Overriding the Callback Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="activities.html"><a href="activities.html#logging-adb"><i class="fa fa-check"></i><b>2.3</b> Logging &amp; ADB</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="activities.html"><a href="activities.html#log-methods"><i class="fa fa-check"></i><b>2.3.1</b> Log Methods</a></li>
+<li class="chapter" data-level="2.3.2" data-path="activities.html"><a href="activities.html#logcat"><i class="fa fa-check"></i><b>2.3.2</b> Logcat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="activities.html"><a href="activities.html#basic-events"><i class="fa fa-check"></i><b>2.4</b> Basic Events</a></li>
+<li class="chapter" data-level="2.5" data-path="activities.html"><a href="activities.html#multiple-activities"><i class="fa fa-check"></i><b>2.5</b> Multiple Activities</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="activities.html"><a href="activities.html#intents-and-context"><i class="fa fa-check"></i><b>2.5.1</b> Intents and Context</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="activities.html"><a href="activities.html#back-tasks"><i class="fa fa-check"></i><b>2.6</b> Back &amp; Tasks</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="activities.html"><a href="activities.html#up-navigation"><i class="fa fa-check"></i><b>2.6.1</b> Up Navigation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="activities.html"><a href="activities.html#toasts"><i class="fa fa-check"></i><b>2.7</b> Toasts</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html"><i class="fa fa-check"></i><b>3</b> Resources and Layouts</a><ul>
+<li class="chapter" data-level="3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#resources"><i class="fa fa-check"></i><b>3.1</b> Resources</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#alternate-resources"><i class="fa fa-check"></i><b>3.1.1</b> Alternate Resources</a></li>
+<li class="chapter" data-level="3.1.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#xml-details"><i class="fa fa-check"></i><b>3.1.2</b> XML Details</a></li>
+<li class="chapter" data-level="3.1.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#r"><i class="fa fa-check"></i><b>3.1.3</b> R</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#views"><i class="fa fa-check"></i><b>3.2</b> Views</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#view-properties"><i class="fa fa-check"></i><b>3.2.1</b> View Properties</a></li>
+<li class="chapter" data-level="3.2.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#practice"><i class="fa fa-check"></i><b>3.2.2</b> Practice</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#layouts"><i class="fa fa-check"></i><b>3.3</b> Layouts</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#linearlayout"><i class="fa fa-check"></i><b>3.3.1</b> LinearLayout</a></li>
+<li class="chapter" data-level="3.3.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#relativelayout"><i class="fa fa-check"></i><b>3.3.2</b> RelativeLayout</a></li>
+<li class="chapter" data-level="3.3.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#constraintlayout"><i class="fa fa-check"></i><b>3.3.3</b> ConstraintLayout</a></li>
+<li class="chapter" data-level="3.3.4" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#other-layouts"><i class="fa fa-check"></i><b>3.3.4</b> Other Layouts</a></li>
+<li class="chapter" data-level="3.3.5" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#combining-and-inflating-layouts"><i class="fa fa-check"></i><b>3.3.5</b> Combining and Inflating Layouts</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="interactive-views.html"><a href="interactive-views.html"><i class="fa fa-check"></i><b>4</b> Interactive Views</a><ul>
+<li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs"><i class="fa fa-check"></i><b>4.1</b> Inputs</a></li>
+<li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listviews-and-adapters"><i class="fa fa-check"></i><b>4.2</b> ListViews and Adapters</a></li>
+<li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data"><i class="fa fa-check"></i><b>4.3</b> Network Data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="fragments.html"><a href="fragments.html"><i class="fa fa-check"></i><b>5</b> Fragments</a><ul>
+<li class="chapter" data-level="5.1" data-path="fragments.html"><a href="fragments.html#creating-a-fragment"><i class="fa fa-check"></i><b>5.1</b> Creating a Fragment</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="fragments.html"><a href="fragments.html#activity-to-fragment-communication"><i class="fa fa-check"></i><b>5.1.1</b> Activity-to-Fragment Communication</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="fragments.html"><a href="fragments.html#dynamic-fragments"><i class="fa fa-check"></i><b>5.2</b> Dynamic Fragments</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fragments.html"><a href="fragments.html#instantiating-fragments"><i class="fa fa-check"></i><b>5.2.1</b> Instantiating Fragments</a></li>
+<li class="chapter" data-level="5.2.2" data-path="fragments.html"><a href="fragments.html#transactions"><i class="fa fa-check"></i><b>5.2.2</b> Transactions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="fragments.html"><a href="fragments.html#inter-fragment-communication"><i class="fa fa-check"></i><b>5.2.3</b> Inter-Fragment Communication</a></li>
+<li class="chapter" data-level="5.2.4" data-path="fragments.html"><a href="fragments.html#the-back-stack"><i class="fa fa-check"></i><b>5.2.4</b> The Back Stack</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix: Java</b></span></li>
+<li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
+<li class="chapter" data-level="A.1" data-path="java-review.html"><a href="java-review.html#building-apps-with-gradle"><i class="fa fa-check"></i><b>A.1</b> Building Apps with Gradle</a></li>
+<li class="chapter" data-level="A.2" data-path="java-review.html"><a href="java-review.html#class-basics"><i class="fa fa-check"></i><b>A.2</b> Class Basics</a></li>
+<li class="chapter" data-level="A.3" data-path="java-review.html"><a href="java-review.html#inheritance"><i class="fa fa-check"></i><b>A.3</b> Inheritance</a></li>
+<li class="chapter" data-level="A.4" data-path="java-review.html"><a href="java-review.html#interfaces"><i class="fa fa-check"></i><b>A.4</b> Interfaces</a></li>
+<li class="chapter" data-level="A.5" data-path="java-review.html"><a href="java-review.html#polymorphism"><i class="fa fa-check"></i><b>A.5</b> Polymorphism</a></li>
+<li class="chapter" data-level="A.6" data-path="java-review.html"><a href="java-review.html#abstract-methods-and-classes"><i class="fa fa-check"></i><b>A.6</b> Abstract Methods and Classes</a></li>
+<li class="chapter" data-level="A.7" data-path="java-review.html"><a href="java-review.html#generics"><i class="fa fa-check"></i><b>A.7</b> Generics</a></li>
+<li class="chapter" data-level="A.8" data-path="java-review.html"><a href="java-review.html#nested-classes"><i class="fa fa-check"></i><b>A.8</b> Nested Classes</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="java-swing.html"><a href="java-swing.html"><i class="fa fa-check"></i><b>B</b> Swing Framework</a><ul>
+<li class="chapter" data-level="B.1" data-path="java-swing.html"><a href="java-swing.html#events"><i class="fa fa-check"></i><b>B.1</b> Events</a></li>
+<li class="chapter" data-level="B.2" data-path="java-swing.html"><a href="java-swing.html#layouts-and-composites"><i class="fa fa-check"></i><b>B.2</b> Layouts and Composites</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="java-threads-http.html"><a href="java-threads-http.html"><i class="fa fa-check"></i><b>C</b> Threads and HTTP Requests</a><ul>
+<li class="chapter" data-level="C.1" data-path="java-threads-http.html"><a href="java-threads-http.html#concurrency"><i class="fa fa-check"></i><b>C.1</b> Concurrency</a><ul>
+<li class="chapter" data-level="C.1.1" data-path="java-threads-http.html"><a href="java-threads-http.html#an-example-algorithm-races"><i class="fa fa-check"></i><b>C.1.1</b> An Example: Algorithm Races!</a></li>
+<li class="chapter" data-level="C.1.2" data-path="java-threads-http.html"><a href="java-threads-http.html#threading-the-race"><i class="fa fa-check"></i><b>C.1.2</b> Threading the Race</a></li>
+</ul></li>
+<li class="chapter" data-level="C.2" data-path="java-threads-http.html"><a href="java-threads-http.html#http-requests"><i class="fa fa-check"></i><b>C.2</b> HTTP Requests</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Android Development: Lecture Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="fragments" class="section level1">
+<h1><span class="header-section-number">Lecture 5</span> Fragments</h1>
+<p>This lecture discusses Android <a href="https://developer.android.com/guide/components/fragments.html"><strong>Fragments</strong></a>. A Fragment is “a behavior or a <em>portion</em> of user interface in Activity.” You can think of them as “mini-activities” or “sub-activities”. Fragments are designed to be <strong>reusable</strong> and <strong>composable</strong>, so you can mix and match them within a single screen of a user interface. While XML resource provide reusable and composable <em>views</em>, Fragments provide reusable and composable <em>controllers</em>. Fragments allow us to make re-usable pieces of Activities that can have their own layouts, data models, event callbacks, etc.</p>
+<p class="alert alert-info">
+This lecture references code found at <a href="https://github.com/info448-s17/lecture05-fragments" class="uri">https://github.com/info448-s17/lecture05-fragments</a>. Note that this code builds upon the example developed in Lecture 4.
+</p>
+<p>Fragments were introduced in API 11 (Honeycomb), which provided the first “tablet” version of Android. Fragments were designed to provide a UI component that would allow for side-by-side activity displays appropriate to larger screens.</p>
+<div class="figure">
+<img src="img/fragments/fragments.png" alt="Fragment example, from Google" />
+<p class="caption">Fragment example, from Google<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a></p>
+</div>
+<p>Instead of needing to navigate between two related views (particularly for this “master and detail” setup), the user can see both views within the same Activity… but those “views” could also be easily split between two Activities for smaller screens, because their required <em>controller logic</em> has been isolated into a Fragment.</p>
+<p class="alert alert-warning">
+Fragments are intended to be <strong>modular</strong>, <strong>reusable</strong> components. They should <strong><em>not</em></strong> depend on the Activity they are inside, so that you can be flexible about when and where they are displayed!
+</p>
+<p>Although Fragments are like “mini-Activities”, they are <em>always</em> embedded inside an <code>Activity</code>; they cannot exist independently. While it’s possible to have Fragments that are not visible or that don’t have a UI, they still are part of an Activity. Because of this, a Fragment’s lifecycle is directly tied to its containing Activity’s lifecycle. (e.g., if the Activity is paused, the Fragment is too. If the Activity is destroyed, the Fragment is too). However, Fragments also have their own lifecycle with corresponding lifecycle callbacks functions.</p>
+<div class="pull-right">
+<div class="figure">
+<img src="img/fragments/fragment_lifecycle.png" alt="Fragment lifecycle state diagram, from Google" />
+<p class="caption">Fragment lifecycle state diagram,<br>from Google<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a></p>
+</div>
+</div>
+<p>The Fragment lifecycle is very similar to the Activity lifecycle, with a a couple of additional steps:</p>
+<ul>
+<li><p><strong><code>onAttach()</code></strong>: called when the Fragment is first associated with (“added to”) an Activity, and thus gains a <strong>Context</strong>. This callback is generally used for initializing communication between the Fragment and its Activity.</p>
+<p>This callback is mirrored by <code>onDetach()</code>, for when the Fragment is removed from an Activity.</p></li>
+<li><p><strong><code>onCreateView()</code></strong>: called when the View (the user interface) is about to be drawn. This callback is used to establish any details dependent on the View (including adding event listeners, etc).</p>
+<p>Note that code intializing data models, or anything that needs to be <em>persisted</em> across configuration changes, should instead be done in the <code>onCreate()</code> callback. <code>onCreate()</code> is not called if the fragment is <em>retained</em> (see below).</p>
+<p>This callback is mirrored by <code>onDestroyView()</code>, for when the Fragment’s UI View hierarchy is being removed from the screen.</p></li>
+<li><p><strong><code>onActivityCreated()</code></strong>: called when the <em>containing Activity’s</em> <code>onCreate()</code> method has returned, and thus indicates that the Activity is fully created. This is useful for <em>retained</em> Fragments.</p>
+<p>This callback has no mirror!</p></li>
+</ul>
+<div id="creating-a-fragment" class="section level2 clear">
+<h2><span class="header-section-number">5.1</span> Creating a Fragment</h2>
+<p>In order to illustrate how to make a Fragment, we will <a href="https://en.wikipedia.org/wiki/Code_refactoring"><strong>refactor</strong></a> the <code>MainActivity</code> to use Fragments for displaying the list of movies. This will help to illustrate the relationship between Activities and Fragments.</p>
+<p>To create a Fragment, you subclass the <code>Fragment</code> class. Let’s make one called <code>MovieFragment</code> (in the <code>MovieFragment.java</code> file). You can use Android Studio to do this work: via the <code>File &gt; New &gt; Fragment &gt; Fragment (blank)</code> menu option. (<strong>DO NOT</strong> select any of the other options for in the wizard for now; they provide template code that can distract from the core principles).</p>
+<p>There are two versions of the <code>Fragment</code> class: one in the framework’s <code>android.app</code> package and one in the <code>android.support.v4</code> package. The later package refers to the <a href="https://developer.android.com/topic/libraries/support-library/index.html">Support Library</a>. These are libraries of classes designed to make Android applications <em>backwards compatible</em>: for example, <code>Fragment</code> and its related classes came out in API 11 so aren’t in the <code>android.app</code> package for earlier devices. By including the support library, we can include those classes as well!</p>
+<ul>
+<li><p>Support libraries <em>also</em> include additional convenience and helper classes that are not part of the core Android package. These include interface elements (e.g., <code>ConstraintLayout</code>, <code>RecyclerView</code>, or <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html"><code>ViewPager</code></a>) and <a href="https://developer.android.com/reference/android/support/v4/view/accessibility/package-summary.html">accessibility</a> classes. See <a href="https://developer.android.com/topic/libraries/support-library/features.html">the features list</a> for details. Thus it is often useful to include and utilize support library versions of classes so that you don’t need to “roll your own” versions of these convenience classes.</p></li>
+<li><p>The main disadvantage to using support libraries is that they need to be included in your application, so will make the final <code>.apk</code> file larger (and may potentially require workarounds for method count limitations). You will also run into problems if you try and mix and match versions of the classes (e.g., from different versions of the support library). But as always, you should <em>avoid premature optimization</em>. Thus in this course you should <strong>default</strong> to using the support library version of a class when given a choice!</p></li>
+</ul>
+<p>After we’ve created the <code>MovieFragment</code> Java file, we’ll want to specify a layout for that Fragment (so it can be shown on the screen). As part of using the New Fragment Wizard we were provided with a <code>fragment_movie</code> layout that we can use.</p>
+<ul>
+<li>Since we want the Movie list to live in that Fragment, we can move (copy) the View definitions from <code>activity_main</code> into <code>fragment_movie</code>.</li>
+<li>We will then adjust <code>activity_main</code> so that it instead contains an empty <code>FrameLayout</code>. This will act as a simple <strong>“container”</strong> for our Fragment (similar to an empty <code>&lt;div&gt;</code> in HTML). <em>Be sure to give it an <code>id</code> so we can refer to it later!</em>.</li>
+</ul>
+<p>It is possible to include the Fragment directly through the XML, using the XML to instantiate the Fragment (the same way that we have the XML instantiate Buttons). We do this by specifying a <code>&lt;fragment&gt;</code> element, with a <code>android:name</code> attribute assigned a reference to the <code>Fragment</code> class:</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;fragment</span>
+<span class="ot">   android:id=</span><span class="st">&quot;@+id/frag_movie&quot;</span>
+<span class="ot">     android:name=</span><span class="st">&quot;edu.uw.fragmentdemo.MovieFragment&quot;</span>
+<span class="ot">     android:layout_width=</span><span class="st">&quot;match_parent&quot;</span>
+<span class="ot">     android:layout_height=</span><span class="st">&quot;match_parent&quot;</span><span class="kw">/&gt;</span></code></pre></div>
+<p>Defining the Fragment in the XML works (and will be fine to start with), but in practice it is <em>much</em> more worthwhile to instantiate the Fragemnts <strong>dynamically</strong> at runtime in the Java code—thereby allowing the Fragments to be dynamically determined and changed. We will start with the XML version to built the Fragment, and then shift to the Java version.</p>
+<p>We can next begin filling in the Java logic for the Fragment. Android Studio provides a little starter code: a constructor and the <code>onCreateView()</code> callback—the later is more relevant since we will use that to set up the layout (similar to in the <code>onCreate()</code> function of <code>MainActivity</code>). But the <code>MainActivity#onCreate()</code> method specifies a layout by calling <code>setContentView()</code> and pasing a resource id. With Fragments, we can’t just “set” the View because the Fragment <em>belongs to</em> an Activity, and so will exist <em>inside</em> its View hierarchy! Instead, we need to figure out which ViewGroup the Fragment is inside of, and then <strong>inflate</strong> the Fragment inside that View.</p>
+<p>This “inflated” View is referred to as the <strong><em>root view</em></strong>: it is the “root” of the Fragment’s View tree (the View that all the Views inside the Fragment’s layout will be attached to). We access the root view by <em>inflating</em> the fragment’s layout, and saving a reference to the inflated View:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">View</span> rootView = inflater.<span class="fu">inflate</span>(R.<span class="fu">layout</span>.<span class="fu">fragment_layout</span>, container, <span class="kw">false</span>);</code></pre></div>
+<ul>
+<li>Note that the <code>inflater</code> object we are calling <code>inflate()</code> on is passed as a parameter to the <code>onCreateView()</code> callback. The parameters to the <code>inflate()</code> method are: the layout to inflate, the <code>ViewGroup</code> (<code>container</code>) into which the layout should be inflated (also passed as a parameter to the callback), and whether ot not to “attach” the inflated layout to the container (<code>false</code> in this case because the Fragment system already handles the attachment, so the inflate method doesn’t need to). The <code>onCreateView()</code> callback must <code>return</code> the inflated <em>root view</em>, so that the system can perform this attachment.</li>
+</ul>
+<p>With the Fragment’s layout defined, we can start moving functionality from the Activity into the Fragment.</p>
+<ul>
+<li>The the background <code>ASyncTask</code> can be moved over directly, so that it belongs to the Fragment instead of the Activity.</li>
+<li>The <code>adapter</code> declaration will need to be moved as well.</li>
+<li><p>The UI setup (including initializing the Adapter) will be moved from the Activity’s <code>onCreate()</code> to the Fragment’s <code>onCreateView()</code>. However, you will need to make a few changes during this refactoring:</p>
+<ul>
+<li><p>The <code>findViewById()</code> method is a method of the <code>Activity</code> class, and thus can’t be called on an implicit <code>this</code> inside the Fragment. Instead, the method can be called on the <strong>root view</strong>, searching just that View and its children.</p></li>
+<li><p>The Adapter’s constructor requires a <code>Context</code> as its first parameter; while an <code>Activity</code> is a <code>Context</code>, a <code>Fragment</code> is not—Fragments operate in the Context of their containing Activity! Fragments can refer to the Activity that they are inside (and the <code>Context</code> it represents) by using the <code>getActivity()</code> method. Note that this method is used <em>primarily</em> for getting a reference to a <code>Context</code>, not for arbitrart commuication withe Activity (see below for details)</p></li>
+</ul></li>
+</ul>
+<div id="activity-to-fragment-communication" class="section level3">
+<h3><span class="header-section-number">5.1.1</span> Activity-to-Fragment Communication</h3>
+<p>The example code intentionally has left the <em>input controls</em> (the search field and button) in the Activity, rather than making them part of the Fragment. Apart from being a useful demonstration, this allows the Fragment to have a single purpose (showing the list of movies) and would let us change the search UI independent of the displayed results. But since the the button is in the Activity but the downloading functionality is in the Fragment, we need a way for the Activity to “talk” to the Fragment. We thus need a reference to the contained Fragment—access to the XML similar to that provided by <code>findViewById</code>.</p>
+<p>We can get a reference to a contained Fragment from an Activity by using a <a href="https://developer.android.com/reference/android/support/v4/app/FragmentManager.html"><code>FragmentManager</code></a>. This is an object responsible for (ahem) managing Fragment. It allows us to “look up” Fragments, as well as to manipulate which Fragments are shown. We access this FragmentManager by calling the <code>getSupportFragmentManager()</code> method on the Activity, and then can use <code>findFragmentById()</code> to look up an XML-defined Fragment by its <code>id</code>:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//MovieFragment example</span>
+MovieFragment fragment = (MovieFragment)<span class="fu">getSupportFragmentManager</span>().<span class="fu">findFragmentById</span>(R.<span class="fu">id</span>.<span class="fu">fragment</span>);</code></pre></div>
+<ul>
+<li>Note that we’re using a method to explicit access the <strong>support</strong> <code>FragmentManager</code>. The Activity class (API level 15+) is able to work with both the platform and support <code>FragmentManager</code> classes. But because these classes don’t have a shared <code>interface</code>, the Activity needs to provide different Java methods which can return the correct type.</li>
+</ul>
+<p>Once you have a reference to the Fragment, this acts just like an other object—you can call any <code>public</code> methods it has! For example, if you give the Fragment a public method (e.g., <code>searchMovies()</code>), then this method can be called from the Activity:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//called from Activity on the referenced fragment</span>
+fragment.<span class="fu">searchMovies</span>(searchTerm)</code></pre></div>
+<p>(The parameter to this public method allows the Activity to provide information to the Fragment!)</p>
+<p>At this point, the program should be able to be executed… and continue to function in exactly the same way! The program has just been refactored, so that all the movie downloading and listing work is <strong>encapsulated</strong> inside a Fragment that can be used in different Activities.</p>
+<ul>
+<li>In effect, we’ve created our own “widget” that can be included in any other screen, such as if we always wanted the list of movies to be available alongside some other user interface components.</li>
+</ul>
+</div>
+</div>
+<div id="dynamic-fragments" class="section level2">
+<h2><span class="header-section-number">5.2</span> Dynamic Fragments</h2>
+<p>The real benefit from encapsulating behavior in a Fragment is to be able to support multiple Fragments within a single Activity. For example, in the the archetypal <a href="https://developer.android.com/training/implementing-navigation/descendant.html#master-detail">“master/detail”</a> navgiation flow, one screen (Fragment) holds the “master” (list) and another screen (Fragment) holds details about a particular item. This is a very common navigation pattern for Android apps, and can be seen in most email or news apps.</p>
+<ul>
+<li>On large screens, Fragments allow these two screens to be placed side by side!</li>
+</ul>
+<p>In this section, we will continue to refine the Movie app so that when the user clicks on a Movie in the list, the app shows a screen (Fragment) with details about the selected movie.</p>
+<div id="instantiating-fragments" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Instantiating Fragments</h3>
+<p>To do this, we will need to instantiate the Fragments dynamically (in Java code), rather than statically in the XML using the <code>&lt;fragment&gt;</code> element. This is because we need to be able to dynamically change which Fragment is currently being shown, which is not possibly for Fragments that are “hard-coded” in the XML.</p>
+<p>Unlike Activities, Fragments (such as <code>MovieFragment</code>) <strong>do</strong> have constructor methods that can be called—in fact, Android <em>requires</em> that every Fragment include a default (no-argument) constructor that is called when Fragments are created by the system. While we are able to call this constructor, it is considered best practice to <strong>not</strong> call this constructor directly when you want to instantiate a Fragment, and to in fact leave the method empty. This is because we do not have full control over when the constructor is executed: the Android system may call the no-argument constructor whenever it needs to recreate the Activity (or just the Fragment), which can happen at arbitrary times. Since only this default constructor is called, we can’t add an additional constructor with any arguments we may want the Fragment to have (e.g., the <code>searchTerm</code>)… and thus it’s best to not use it at all.</p>
+<p>Instead, we specify a <strong>simple factory</strong> method (by convention called <code>newInstance()</code>) which is able to “create” an instance of the Fragment for us. This factory method can take as many arguments as we want, and then does the work of passing these arguments into the Fragment instantiated with the default constructor:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> MyFragment <span class="fu">newInstance</span>(<span class="bu">String</span> argument) {
+    MyFragment fragment = <span class="kw">new</span> <span class="fu">MyFragment</span>(); <span class="co">//instantiate the Fragment</span>
+    Bundle args = <span class="kw">new</span> <span class="fu">Bundle</span>(); <span class="co">//an (empty) Bundle for the arguments</span>
+    args.<span class="fu">putString</span>(ARG_PARAM_KEY, argument); <span class="co">//add the argument to the Bundle</span>
+    fragment.<span class="fu">setArguments</span>(args); <span class="co">//add the Bundle to the Fragment</span>
+    <span class="kw">return</span> fragment; <span class="co">//return the Fragment</span>
+}</code></pre></div>
+<p>In order to pass the arguments into the new Fragment, we wrap them up in a <a href="https://developer.android.com/reference/android/os/Bundle.html"><code>Bundle</code></a> (an object containing basic <em>key-value pairs</em>). Values can be added to a <code>Bundle</code> using an appropriate <code>putType()</code> method; note that these do need to be primative types (<code>int</code>, <code>String</code>, etc.). The <code>Bundle</code> of arguments can then be assignment to the Fragment by calling the <a href="http://developer.android.com/reference/android/app/Fragment.html#setArguments(android.os.Bundle)"><code>setArguments()</code></a> method.</p>
+<ul>
+<li><p>We will be able to access this <code>Bundle</code> from inside the Fragment (e.g., in the <code>onCreateView()</code> callback) by using the <code>getArguments()</code> method (and <code>getType()</code> to retrieve the values from it). This allows us to dynamically adjust the content of the Fragment’s Views! For example, we can run the <code>downloadMovieData()</code> function using this argument, fetching movie results as soon as the Fragment is created (e.g., on a button press).</p></li>
+<li><p>Since the <code>Bundle</code> is a set of <em>key-value</em> pairs, each value needs to have a particular key. These keys are usually defined as private constants (e.g., <code>ARG_PARAM_KEY</code> in the above example) to make storage and retrieval easier.</p></li>
+</ul>
+<p>We will then be able to instantiate the Fragment (e.g., in the Activity class), passing it any arguments we wish:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">MyFragment fragment = MyFragment.<span class="fu">newInstance</span>(<span class="st">&quot;My Argument&quot;</span>);</code></pre></div>
+</div>
+<div id="transactions" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> Transactions</h3>
+<p>Once we’ve instantiated a Fragment in the Java, we need to attach it to the view hierarchy: since we’re no longer using the XML <code>&lt;fragment&gt;</code> element, we need some other way to load the Fragment into the <code>&lt;FrameLayout&gt;</code> container.</p>
+<p>We do this loading using a <a href="https://developer.android.com/guide/components/fragments.html#Transactions"><strong><code>FragmentTransaction</code></strong></a><a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a>. A transaction represents a <em>change</em> in the Fragment that is being displayed. You can think of this like a bank (or database) transaction: they allow you to add or remove Fragments like we would add or remove money from a bank account. We instantiate new transactions representing the change we wish to make, and then “run” that transaction in order to apply the change.</p>
+<p>To create a transaction, we utilize the <code>FragmentManager</code> again; the <code>FragmentManager#beginTransaction()</code> method is used to instantiate a <strong>new</strong> <a href="https://developer.android.com/reference/android/support/v4/app/FragmentTransaction.html"><code>FragmentTransaction</code></a>.</p>
+<p>Transactions represent a set of Fragment changes that are all “applied” at the same time (similar to depositing and withdrawing money from multiple accounts all at once). We specify these transactions using by calling the <code>add()</code>, <code>remove()</code>, or <code>.replace()</code> methods on the <code>FragmentTransaction</code>.</p>
+<ul>
+<li><p>The <code>add()</code> method lets you specify which View <strong>container</strong> you want to add a particular Fragment to. The <code>remove()</code> method lets you remove a Fragment you have a reference to. The <code>replace()</code> method removes any Fragments in a container and then adds the specified Fragment instead.</p></li>
+<li><p>Each of these methods returns the modified <code>FragmentTransaction</code>, so they can be “chained” together.</p></li>
+</ul>
+<p>Finally, we call the <code>commit()</code> method on the transaction in order to “submit” it and have all of the changes go into effect.</p>
+<p>We can do this work in the Activity’s search click handler to add a Fragment, rather than specifying the Fragment in the XML:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">FragmentTransaction transaction = <span class="fu">getSupportFragmentManager</span>().<span class="fu">beginTransaction</span>();
+<span class="co">//params: container to add to, Fragment to add, (optional) tag</span>
+transaction.<span class="fu">add</span>(R.<span class="fu">id</span>.<span class="fu">container</span>, myFragment, MOVIE_LIST_FRAGMENT_TAG);
+transaction.<span class="fu">commit</span>();</code></pre></div>
+<ul>
+<li>The third argument for the <code>add()</code> method is a “tag” we apply to the Fragment beign added. This gives it a name that we can use to find a reference to this Fragment later if we want (via <code>FragmentManager#findFragmentByTag(tag)</code>). Alternatively, we can save a reference to the Fragment as an instance variable; this is faster but more memory intensive (and can cause possible leaks, since the reference keeps the Fragment from being reclaimed by the system).</li>
+</ul>
+</div>
+<div id="inter-fragment-communication" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> Inter-Fragment Communication</h3>
+<p>We can use this structure for instantiating and loading (via transactions) a <strong>second Fragment</strong> (e.g., a “detail” view for a selected Movie). We can add functionality (e.g., in the <code>onClick()</code> handler) so that when the user clicks on a movie in the list, we <strong><code>replace()</code></strong> the currently displayed Fragment with this new detailed Fragment.</p>
+<p>However, remember that Fragments are supposed to be <strong>modular</strong>—each Fragment should be <em>self-contained</em>, and not know about any other Fragments that may exist (after all, what if we wanted the master/detail views to be side-by-side on a large screen?)</p>
+<p class="alert alert-warning">
+Using <code>getActivity()</code> to reference the Activity and <code>getSupportFragmentManager()</code> to access the manager is a violation of the <a href="">Law of Demeter</a>—don’t do it!
+</p>
+<p>Instead, we have Fragments communicate by passing messages through their contained Activity: the <code>MovieFragment</code> should tell its Activity that a particular movie has been selected, and then that Activity can determine what to do about it (e.g., creating a <code>DetailFragment</code> to dispaly that information).</p>
+<p>The recommended way to provide <a href="https://developer.android.com/training/basics/fragments/communicating.html">Fragment-to-Activity communication</a> is to define an <strong>interface</strong>. The Fragment class should specify an <code>interface</code> (for one or more public methods) that its containing Activity <em>must</em> support—and since the Fragment can only exist within an Activity that implements that interface, it knows the Activity has the specified public methods that it can call to pass information to that Activity.</p>
+<p>As an example of this process:</p>
+<ul>
+<li><p>Create a new <code>interface</code> inside the Fragment (e.g., <code>OnMovieSelectedListener</code>). This interface needs a public method (e.g., <code>onMovieSelected(Movie movie)</code>) that the Fragment can call to give instructions or messages to the Activity.</p></li>
+<li><p>In the Fragment’s <code>onAttach()</code> callback (called when the Fragment is first associated with an Activity), we can check that the Activity actually implements the interface by trying to <em>cast</em> it to that interface. We can also save a reference to this Activity for later:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">onAttach</span>(<span class="bu">Context</span> context) {
+    <span class="kw">super</span>.<span class="fu">onAttach</span>(context);
+
+    <span class="kw">try</span> {
+        callback = (OnMovieSelectedListener)context;
+    } <span class="kw">catch</span> (<span class="bu">ClassCastException</span> e) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">ClassCastException</span>(context.<span class="fu">toString</span>() + <span class="st">&quot; must implement OnMovieSelectedListener&quot;</span>);
+    }
+}</code></pre></div></li>
+<li><p>Then when an action occurs in the Fragment (e.g., a movie is selected), you call the interface’s method on the <code>callback</code> reference.</p></li>
+<li><p>Finally, you will need to make sure that the Activity <code>implements</code> this callback. Remember that a class can implement multiple interfaces!</p>
+<p>In the Activity’s implementation of the interface, you can handle the information provided. For example, use the <code>FragmentManager</code> to create a <code>replace()</code> transaction to load a new <code>DetailFragment</code> for the appropriate data.</p></li>
+</ul>
+<p>In the end, this will allow you to have one Fragment cause the application to switch to another!</p>
+<p class="alert alert-info">
+This is not the only way for Fragments to communicate. It is also possible to have a Fragment send an <code>Intent</code> to the Activity, who then responds to that as appropriate. But using the Intent system is more resource-intensive than using interfaces.
+</p>
+</div>
+<div id="the-back-stack" class="section level3">
+<h3><span class="header-section-number">5.2.4</span> The Back Stack</h3>
+<p>But what happens when we hit the “back” button? The Activity exits! <em>Why?</em> Because “back” normally says to “leave the Activity”—we only had one Activity, just multiple fragments.</p>
+<p>Recall that the Android system may have lots of Activities (even across multiple apps!) with the user moving back and forth between them. As described in <span id="back-tasks">lecture2</span>, each new Activity is associated with a “task” and placed on a <strong>stack</strong><a href="#fn20" class="footnoteRef" id="fnref20"><sup>20</sup></a>. When the “back” button is pressed, that Activity is popped off the stack, and the user is taken to the Activity that is now at the top.</p>
+<p>Fragments by default are not part of this “back-stack”, since they are just components of Activities. However, you <em>can</em> <a href="(https://developer.android.com/training/implementing-navigation/temporal.html#back-fragments)">specify</a> that a transaction should include the Fragment change as part of the stack navigation by calling <code>FragmentTransaction#addToBackStack()</code> as part of your transaction (e.g., right before you <code>commit()</code>):</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="fu">getSupportFragmentManager</span>().<span class="fu">beginTransaction</span>()
+                           .<span class="fu">add</span>(detailFragment, <span class="st">&quot;detail&quot;</span>)
+                           <span class="co">// Add this transaction to the back stack</span>
+                           .<span class="fu">addToBackStack</span>()
+                           .<span class="fu">commit</span>();</code></pre></div>
+<p>Note that the “back” button will cause <em>the entire transaction</em> to “reverse”. Thus if you performed a <code>remove()</code> then an <code>add()</code> (e.g., via a <code>replace()</code>), then hitting “back” will cause the the previously added Fragment to be removed <em>and</em> the previously removed Fragment to be added.</p>
+<ul>
+<li><code>FragmentManager</code> also includes numerous methods for manually manipulating the back-stack (e.g., “popping” off transactions) if necessary.</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+
+</div>
+<div class="footnotes">
+<hr />
+<ol start="17">
+<li id="fn17"><p><a href="https://developer.android.com/images/fundamentals/fragments.png" class="uri">https://developer.android.com/images/fundamentals/fragments.png</a><a href="fragments.html#fnref17">↩</a></p></li>
+<li id="fn18"><p><a href="https://developer.android.com/images/fragment_lifecycle.png" class="uri">https://developer.android.com/images/fragment_lifecycle.png</a><a href="fragments.html#fnref18">↩</a></p></li>
+<li id="fn19"><p><a href="https://developer.android.com/reference/android/support/v4/app/FragmentTransaction.html" class="uri">https://developer.android.com/reference/android/support/v4/app/FragmentTransaction.html</a><a href="fragments.html#fnref19">↩</a></p></li>
+<li id="fn20"><p><a href="http://developer.android.com/images/fundamentals/diagram_backstack.png" class="uri">http://developer.android.com/images/fundamentals/diagram_backstack.png</a><a href="fragments.html#fnref20">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="interactive-views.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="java-review.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["github", "facebook", "twitter", "google"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/fragments.Rmd",
+"text": "Edit"
+},
+"download": ["android-dev-book.pdf", "android-dev-book.epub"],
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+</body>
+
+</html>

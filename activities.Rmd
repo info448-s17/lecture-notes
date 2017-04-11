@@ -35,7 +35,7 @@ When each of these events occur, Android executes a **callback method**, similar
 
 What is the lifecycle?
 
-![Lifecycle state diagram, from Google. See also an alternative, simplified diagram [here](http://developer.android.com/images/training/basics/basic-lifecycle.png).^[http://developer.android.com/images/activity_lifecycle.png]](img/activities/activity_lifecycle.png)
+![Lifecycle state diagram, from Google^[http://developer.android.com/images/activity_lifecycle.png]. See also an alternative, simplified diagram [here](http://developer.android.com/images/training/basics/basic-lifecycle.png).](img/activities/activity_lifecycle.png)
 
 There are 7 "events" that occur in the Activity Lifecycle, which are designated by the _callback function_ that they execute:
 
@@ -230,10 +230,10 @@ There are actually a couple of different kinds of `Intents` (this is an **Explic
 
 - For example, if you look back at the Manifest, you can see that the `MainActivity` has an `<intent-filter>` child element that allows it to receive particular kinds of Intents&mdash;including ones for when an App is launched for the first time!
 
-## Back & Tasks `r #[5-10min]`
+## Back & Tasks `r #[5-10min]` {#back-tasks}
 We've shown that we can have lots of Activities (and of course many more can exist cross multiple apps), and we are able to move between them by sending Intents and clicking the "Back" button. But how exactly is that "Back" button able to keep track of where to go to?
 
-The abstarct data type normally associated with "back" or "undo" functionality is a **stack**, and that is exactly what Android uses. Every time you _start_ a new Activity, Android instantiates that object and puts it on the top of a stack. Then when you hit the back button, that activity is "popped" off the stack and you're taken to the Activity that is now at the top.
+The abstract data type normally associated with "back" or "undo" functionality is a **stack**, and that is exactly what Android uses. Every time you _start_ a new Activity, Android instantiates that object and puts it on the top of a stack. Then when you hit the back button, that activity is "popped" off the stack and you're taken to the Activity that is now at the top.
 
 ![An example of the Activity stack, from Google^[http://developer.android.com/images/fundamentals/diagram_backstack.png].](img/activities/diagram_backstack.png)
 

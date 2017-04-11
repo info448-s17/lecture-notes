@@ -92,6 +92,8 @@ The most common type of element we'll define in resources are [**Views**](https:
 
 Here's the big trick: one subclass of `View` is [`ViewGroup`](https://developer.android.com/reference/android/view/ViewGroup.html)^[http://developer.android.com/reference/android/view/ViewGroup.html]. A `ViewGroup` can contain other "child" Views. But since `ViewGroup` is a `View`... it can contain more `ViewGroups` inside it! Thus we can **nest** Views within Views, following the [Composite Pattern](http://www.oodesign.com/composite-pattern.html). This ends up working a lot like HTML (which can have DOM elements like `<div>` inside other DOM elements), allowing for complex user interfaces.
 
+- Thus Views are structured into a <a href="https://en.wikipedia.org/wiki/Tree_(data_structure)">_tree_</a>, what is known as the **View hierarchy**.
+
 Views are defined inside of [Layouts](https://developer.android.com/guide/topics/ui/declaring-layout.html)&mdash;that is, inside a layout resource, which is an XML file describing Views. These resources are "inflated" (rendered) into UI objects that are part of the application.
 
 Technically, `Layouts` are simply `ViewGroups` that provide "ordering" and "positioning" information for the Views inside of them. they let the system "lay out" the Views intelligently and effectively. _Individual views shouldn't know their own position_; this follows from good good object-oriented design and keeps the Views encapsulated.

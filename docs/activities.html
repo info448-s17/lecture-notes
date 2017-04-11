@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-04-04">
+<meta name="date" content="2017-04-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -164,6 +164,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listviews-and-adapters"><i class="fa fa-check"></i><b>4.2</b> ListViews and Adapters</a></li>
 <li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data"><i class="fa fa-check"></i><b>4.3</b> Network Data</a></li>
 </ul></li>
+<li class="chapter" data-level="5" data-path="fragments.html"><a href="fragments.html"><i class="fa fa-check"></i><b>5</b> Fragments</a><ul>
+<li class="chapter" data-level="5.1" data-path="fragments.html"><a href="fragments.html#creating-a-fragment"><i class="fa fa-check"></i><b>5.1</b> Creating a Fragment</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="fragments.html"><a href="fragments.html#activity-to-fragment-communication"><i class="fa fa-check"></i><b>5.1.1</b> Activity-to-Fragment Communication</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="fragments.html"><a href="fragments.html#dynamic-fragments"><i class="fa fa-check"></i><b>5.2</b> Dynamic Fragments</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fragments.html"><a href="fragments.html#instantiating-fragments"><i class="fa fa-check"></i><b>5.2.1</b> Instantiating Fragments</a></li>
+<li class="chapter" data-level="5.2.2" data-path="fragments.html"><a href="fragments.html#transactions"><i class="fa fa-check"></i><b>5.2.2</b> Transactions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="fragments.html"><a href="fragments.html#inter-fragment-communication"><i class="fa fa-check"></i><b>5.2.3</b> Inter-Fragment Communication</a></li>
+<li class="chapter" data-level="5.2.4" data-path="fragments.html"><a href="fragments.html#the-back-stack"><i class="fa fa-check"></i><b>5.2.4</b> The Back Stack</a></li>
+</ul></li>
+</ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
 <li class="chapter" data-level="A.1" data-path="java-review.html"><a href="java-review.html#building-apps-with-gradle"><i class="fa fa-check"></i><b>A.1</b> Building Apps with Gradle</a></li>
@@ -240,7 +251,7 @@ To make this change, you will need to import the <code>Activity</code> class! Th
 <p>What is the lifecycle?</p>
 <div class="figure">
 <img src="img/activities/activity_lifecycle.png" alt="Lifecycle state diagram, from Google. See also an alternative, simplified diagram here." />
-<p class="caption">Lifecycle state diagram, from Google. See also an alternative, simplified diagram <a href="http://developer.android.com/images/training/basics/basic-lifecycle.png">here</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<p class="caption">Lifecycle state diagram, from Google<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. See also an alternative, simplified diagram <a href="http://developer.android.com/images/training/basics/basic-lifecycle.png">here</a>.</p>
 </div>
 <p>There are 7 “events” that occur in the Activity Lifecycle, which are designated by the <em>callback function</em> that they execute:</p>
 <ul>
@@ -390,7 +401,7 @@ button.<span class="fu">setOnClickListener</span>(<span class="kw">new</span> <s
 <div id="back-tasks" class="section level2">
 <h2><span class="header-section-number">2.6</span> Back &amp; Tasks</h2>
 <p>We’ve shown that we can have lots of Activities (and of course many more can exist cross multiple apps), and we are able to move between them by sending Intents and clicking the “Back” button. But how exactly is that “Back” button able to keep track of where to go to?</p>
-<p>The abstarct data type normally associated with “back” or “undo” functionality is a <strong>stack</strong>, and that is exactly what Android uses. Every time you <em>start</em> a new Activity, Android instantiates that object and puts it on the top of a stack. Then when you hit the back button, that activity is “popped” off the stack and you’re taken to the Activity that is now at the top.</p>
+<p>The abstract data type normally associated with “back” or “undo” functionality is a <strong>stack</strong>, and that is exactly what Android uses. Every time you <em>start</em> a new Activity, Android instantiates that object and puts it on the top of a stack. Then when you hit the back button, that activity is “popped” off the stack and you’re taken to the Activity that is now at the top.</p>
 <div class="figure">
 <img src="img/activities/diagram_backstack.png" alt="An example of the Activity stack, from Google." />
 <p class="caption">An example of the Activity stack, from Google<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a>.</p>

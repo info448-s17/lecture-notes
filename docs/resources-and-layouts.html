@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-04-04">
+<meta name="date" content="2017-04-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -163,6 +163,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs"><i class="fa fa-check"></i><b>4.1</b> Inputs</a></li>
 <li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listviews-and-adapters"><i class="fa fa-check"></i><b>4.2</b> ListViews and Adapters</a></li>
 <li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data"><i class="fa fa-check"></i><b>4.3</b> Network Data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="fragments.html"><a href="fragments.html"><i class="fa fa-check"></i><b>5</b> Fragments</a><ul>
+<li class="chapter" data-level="5.1" data-path="fragments.html"><a href="fragments.html#creating-a-fragment"><i class="fa fa-check"></i><b>5.1</b> Creating a Fragment</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="fragments.html"><a href="fragments.html#activity-to-fragment-communication"><i class="fa fa-check"></i><b>5.1.1</b> Activity-to-Fragment Communication</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="fragments.html"><a href="fragments.html#dynamic-fragments"><i class="fa fa-check"></i><b>5.2</b> Dynamic Fragments</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fragments.html"><a href="fragments.html#instantiating-fragments"><i class="fa fa-check"></i><b>5.2.1</b> Instantiating Fragments</a></li>
+<li class="chapter" data-level="5.2.2" data-path="fragments.html"><a href="fragments.html#transactions"><i class="fa fa-check"></i><b>5.2.2</b> Transactions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="fragments.html"><a href="fragments.html#inter-fragment-communication"><i class="fa fa-check"></i><b>5.2.3</b> Inter-Fragment Communication</a></li>
+<li class="chapter" data-level="5.2.4" data-path="fragments.html"><a href="fragments.html#the-back-stack"><i class="fa fa-check"></i><b>5.2.4</b> The Back Stack</a></li>
+</ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -304,6 +315,9 @@ The <code>R</code> class is regenerated all time (any time you change a resource
 <li><code>View</code> is a superclass for these components because it allows us to use <strong>polymorphism</strong> to treat all these visual elements the same way as instances of the same type. We can lay them out, draw them, click on them, move them, etc. And all the behavior will be the same—though subclasses can also have “extra” features</li>
 </ul>
 <p>Here’s the big trick: one subclass of <code>View</code> is <a href="https://developer.android.com/reference/android/view/ViewGroup.html"><code>ViewGroup</code></a><a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>. A <code>ViewGroup</code> can contain other “child” Views. But since <code>ViewGroup</code> is a <code>View</code>… it can contain more <code>ViewGroups</code> inside it! Thus we can <strong>nest</strong> Views within Views, following the <a href="http://www.oodesign.com/composite-pattern.html">Composite Pattern</a>. This ends up working a lot like HTML (which can have DOM elements like <code>&lt;div&gt;</code> inside other DOM elements), allowing for complex user interfaces.</p>
+<ul>
+<li>Thus Views are structured into a <a href="https://en.wikipedia.org/wiki/Tree_(data_structure)"><em>tree</em></a>, what is known as the <strong>View hierarchy</strong>.</li>
+</ul>
 <p>Views are defined inside of <a href="https://developer.android.com/guide/topics/ui/declaring-layout.html">Layouts</a>—that is, inside a layout resource, which is an XML file describing Views. These resources are “inflated” (rendered) into UI objects that are part of the application.</p>
 <p>Technically, <code>Layouts</code> are simply <code>ViewGroups</code> that provide “ordering” and “positioning” information for the Views inside of them. they let the system “lay out” the Views intelligently and effectively. <em>Individual views shouldn’t know their own position</em>; this follows from good good object-oriented design and keeps the Views encapsulated.</p>
 <p class="alert alert-info">

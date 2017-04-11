@@ -10,6 +10,8 @@ rmd_files:
   - activities.Rmd
   - layouts.Rmd
   - inputs-lists.Rmd
+  - fragments.Rmd
+
   - appendix.Rmd
   - java-review.Rmd
   - java-swing.Rmd
