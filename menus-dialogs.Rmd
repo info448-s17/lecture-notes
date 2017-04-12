@@ -1,0 +1,183 @@
+# UI Components
+This lecture discusses how to include **menus** and **pop-up dialogs** in an Android application as additional navigation and display components. Note that this lecture aims to provide _exposure_ rather than _depth_ to these concepts; for further details and options, see [the official Android documentation]().
+
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture06-menus-dialogs>. <!--Note that this code builds upon the example developed in Lecture 5.--></p>
+
+## The Action Bar
+Let's start one of the most prominent visual components in the default app: the [___App Bar___](https://developer.android.com/training/appbar/index.html) or ___Action Bar___. This acts as the sort of "header" for your app, providing a dedicated space for navigation and interaction (e.g., through menus). The [`ActionBar`](https://developer.android.com/reference/android/support/v7/app/ActionBar.html)^[http://developer.android.com/reference/android/support/v7/app/ActionBar.html] is a specific type of [`Toolbar`](https://developer.android.com/reference/android/support/v7/widget/Toolbar.html) that is most frequenly used as the App Bar, offering a particular "look and feel" common to Android applications.
+
+While the `AppCompatActivity` used throughout this course automatically provides an Action Bar for the app, it is also possible to add it directly (such as if you are using a different Activity subclass). To add your own Action Bar, you specify a **theme** that does _not_ include an `ActionBar`, and then include an `<android.support.v7.window.Toolbar>` element inside your layout wherever you want the toolbar to go. See [Setting up the App Bar](http://developer.android.com/training/appbar/setting-up.html) for details. This will also allow you to put the Toolbar anywhere in the application's layout (e.g., if you want it to be stuck to the bottom).
+
+- To see this in action, change the `android:theme` attribute of the `<application>` element in the `Manifest` to `"@style/Theme.AppCompat.Light.NoActionBar"`. We'll discuss this process in more detail when we talk about Themes and Styles.
+
+From in the Activity's Java code, we can get access to the Action Bar by calling the `getSupportActionBar()` method (for a support Toolbar). We can then call utility methods on this object to interact with it; for example `.hide()` will hide the toolbar!
+
+## Menus
+However, the main use for the Action Bar is a place to hold [___Menus___](https://developer.android.com/guide/topics/ui/menus.html). A Menu (specifically, an [**options menu**](https://developer.android.com/guide/topics/ui/menus.html#options-menu)) is a set of items (think: buttons) that appear in the Action Bar. Menus can be specified both in the `Activity` and in a `Fragment`; if declared in both places, they are combined into a single menu in the Action Bar. This allows you to easily make "context-specific" options menus that are only available for an appropriate Fragment, while keeping Fragments modular and self-contained.
+
+- _Fun fact:_ before API 11, options menus appeared as buttons at the bottom of the screen!
+
+Menus, like all other user-facing elements, are defined as XML resources, specifically of type **`menu`**. You can create a new menu resource through Android studio using `File > New > Android resource file` and then choosing the `Menu` Resource type. This will create an XML file with a main [`<menu>`](https://developer.android.com/reference/android/view/Menu.html) element.
+
+Options can be added to the menu by specifying child XML elements, particularly [`<item>`](https://developer.android.com/reference/android/view/MenuItem.html) elements. Common `<item>` attributes include:
+
+- **`android:id`**: a unique id used to refer to the specific option in the Java code
+- **`android:title`** (**required** attribute): the text to display for the option. As user-facing text, the content should ideally be defined as an XML String resource.
+- **`app:showAsAction`**: whether or not the option should be listed in the Action Bar, or collapsed under a "three-dots" button. Note when working with the `appcompat` library, this option uses the `app` namespace (instead of `android`); you will need to include this schema in the `<menu>` with the attribute `xmlns:app="http://schemas.android.com/apk/res-auto"`.
+- <p>**`android:icon`**: an image to use when showing the option as a button on the menu **//CHECK THIS**</p>
+  <p class="alert alert-info">You can use one of the many icons built into the Android, referenced as `"@android:drawable/ic_*"`. [Android Drawables](http://androiddrawables.com/)^[http://androiddrawables.com/] includes the full list, though not all drawables are publicly available through Android Studio.</p>
+- **`android:orderInCategory`**: used to order the item in the menu (or in a group). This acts as a "priority" (default 0; low comes first). Such prioritizing can be useful if you want to add suggestions about whether Fragment options should come before or after the Actiity options.
+
+See the [Menu resources guide](https://developer.android.com/guide/topics/resources/menu-resource.html)^[https://developer.android.com/guide/topics/resources/menu-resource.html] for the full list of options!
+
+It is possible to include **one level** of sub-menus (a `<menu>` element inside an `<item>` element). Menu items can also be grouped together by placing them inside of a `<group>` element. All items in a group will be shown or hidden together, and can be further ordered within that group. Grouped icons can also be made [checkable](https://developer.android.com/guide/topics/ui/menus.html#checkable).
+
+
+In order to show the menu in the running application, we need to tell the Action Bar which menu resource it should use (there may be a lot of resources). To do this, we override the `onCreateOptionsMenu()` callback in the Activity or Fragment, and then use the component's `MenuInflater` object to expand the menu:
+
+```java
+public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.main_menu, menu); //inflate into this menu
+    return true;
+}
+```
+
+- This procedure is similar in concept to how a Fragment's `onViewCreated()` method would inflate the Fragment into the Activity. In this case, the Menu is being inflated into the Action Bar.
+
+We can respond to the menu items being selected by overriding the `onOptionsItemSelected()` callback. By convention, we use a `switch` on the `item.getItemId()` to determine what item was selected, and then act accordingly.
+
+```java
+public boolean onOptionsItemSelected(MenuItem item) {
+    switch(item.getItemId()){
+        case R.id.menu_item1 :
+            //do thing;
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+    }
+}
+```
+
+- On `default` (if the item selected isn't handled by any cases), we pass the callback up to `super` for "higher-level" components to check. For exampe, if a the menu option isn't handled by the Fragment (because the Fragment didn't add it), the event can be passed up through the Framework for eventually handling by the Activity (who did add it).
+- This method should return `true` if the selection even has been handled (and thus should not be considered by anyone else). Return `false` if you want other components (e.g., other Fragments) to be able to respond to this option as well.
+
+There are many other menu items that can be placed on Action Bar as well. We can also add [Action Views](https://developer.android.com/training/appbar/action-views.html) that provide more complex interactions than just clicking buttons (for example, including a search bar). An [Action Provider](https://developer.android.com/training/appbar/action-views.html#action-provider) (like [`ShareActionProvider`](https://developer.android.com/training/sharing/shareaction.html)) is an action with its own customized layout, expanding into a separate View when clicked. We wil discuss how to utilize these features in a [future lecture](#intents).
+
+
+### Context Menus
+In addition to options menus available in the Action Bar, we can also specify [contextual menus](https://developer.android.com/guide/topics/ui/menus.html#context-menu) that pop up when the user long-presses on an element. This works similarly to using an options menu, but with a different set off callbacks:
+
+- When setting up the the View layout (e.g., in an Activity's `onCreate()`), we specify that an element has a context menu using the `registerForContextMenu()` method, passing it the `View` we want to be able to create the menu for.
+
+- Specify the context menu to use through the `onCreateContextMenu()` callback. This works exactly like setting up an options menu.
+
+  - In fact, a context menu can even use _the same menu_ as an options menu! This reuse is one of the advantages of defining the user interface as XML.
+
+- And mirroring the options menu, respond to context menu items being selected with the `onContextItemSelected()` callback.
+
+This section has provided a very brief introduction to menus, but there are many more complex interactions that they support. I _highly_ recommend that you read through [the guide](https://developer.android.com/guide/topics/ui/menus.html) in order to learn what features may be available.
+
+<p class="alert alert-info">If you ever are using an app and wonder "how did they add this interface feature?", look it up! There is almost always a documented procedure and example for providing that kind of component.</p>
+
+
+## Dialogs `r #[30min]`
+While it is simple enough to make menu items that log out some text, logs cannot be seen the user. Instead, we woud like to show the message to the user as a kind of "pop-up" message.
+
+A [___Dialog___](https://developer.android.com/guide/topics/ui/dialogs.html)^[https://developer.android.com/guide/topics/ui/dialogs.html] is a "pop-up" [modal](https://en.wikipedia.org/wiki/Modal_window) (a view which doesn't fill the screen) that either asks the user to make a decision or provides some additional information. At it's most basic, Dialogs are similar to the `window.alert()` function used in JavaScript.
+
+There is a base `Dialog` class, but almost always we use a pre-defined subclass instead (similar to how we've use `AppCompatActivity`). [`AlertDialog`](https://developer.android.com/reference/android/support/v7/app/AlertDialog.html)^[https://developer.android.com/reference/android/support/v7/app/AlertDialog.html] is the most common version: a simple message with buttons you can respond with (confirm, cancel, etc).
+
+We don't actually instantiate an `AlertDialog` directly (in fact, it's constructors are `protected` so inaccessible to us). Instead we use a helper _factory_ class called an [`AlertDialog.Builder`](https://developer.android.com/reference/android/support/v7/app/AlertDialog.Builder.html). There are a number of steps to use a builder to create a Dialog:
+
+1. Instantiate a new builder for this particular dialog. The constructor takes in a `Context` under which to create the Dialog. Note that once the builder is initialized, you can create and recreate the same dialog with a single method call&mdash;that's the benefits of using a factory.
+2. Call "setter" methods on the builder in orer to specify the title, message, etc. for the dialog that will appear. This can be hard-coded text or a reference to an XML String resource (as a user-facing String, the later is more appropriate for published applications). Each setter method will return a reference to the builder, making it easy to chain them.
+3. Use appropriate setter methods to specify callbacks (via a `DialogInterface.OnClickListener`) for individual buttons. Note that the "positive" button normally has the text `"OK"`, but this can be customized.
+4. Finally, actually instantiate the `AlertDialog` with the `builder.create()` method, using the **`show()`** method to make the dialog appear on the screen!
+
+```java
+AlertDialog.Builder builder = new AlertDialog.Builder(this);
+builder.setTitle("Alert!")
+       .setMessage("Danger Will Robinson!");
+builder.setPositiveButton("I see it!", new DialogInterface.OnClickListener() {
+  public void onClick(DialogInterface dialog, int id) {
+    // User clicked OK button
+  }
+});
+
+AlertDialog dialog = builder.create();
+dialog.show();
+```
+
+<p class="alert alert-info">An important part of learning to develop Android applications is being able to read the API to discover effective options. For example, can you read the [AlertDialog.Builder API](https://developer.android.com/reference/android/support/v7/app/AlertDialog.Builder.html) and determine how to add a "cancel" button to the alert?</p>
+
+While `AlertDialog` is the most common Dialog, Android supports other subclasses as well. For example, [`DatePickerDialog`](https://developer.android.com/reference/android/app/DatePickerDialog.html) and [`TimePickerDialog`](https://developer.android.com/reference/android/app/TimePickerDialog.html) provide pre-defined user interfaces for picking a date or a time respectively. See the [Pickers guide](https://developer.android.com/guide/topics/ui/controls/pickers.html) for details about how to utilize these.
+
+
+### DialogFragments
+The process described above will create and show a Dialog, but that dialog has a few problems in how it interacts with the rest of the Android framework&mdash;namely with the lifecycle of the Activity in which it is embedded.
+
+For example, if the device changes configurations (e.g., is rotated from portrait to landscape) then the Activity is destroyed and re-created (it's `onCreate()` method will be called again). But if this happens while a Dialog is being shown, then a `android.view.WindowLeaked` error will be displayed and the Dialog is lost!
+
+To avoid these problems, we need to have a way of giving that Dialog its own lifecycle which can interact with the the Activity's lifecycle... sort of like making it a _modular_ piece of an Activity... that's right, we need to make it a Fragment! Specifically, we will use a subclass of Fragment called [`DialogFragment`](http://developer.android.com/guide/topics/ui/dialogs.html#DialogFragment), which is a Fragment that displays as a modal dialog floating above the Activity (no extra work needed).
+
+Just like with the Fragment examples from the previous lecture, we'll need to create our own subclass of `DialogFragment`. It's often easiest to make this a _nested class_ if the Dialog won't be doing a lot of work (e.g., shows a simple confirmation).
+
+Rathern than specifying a Fragment layout through `onCreateView()`, we can instead override the `onCreateDialog()` callback to specify a `Dialog` object that will provide the view hierarchy for the Fragment. This Dialog can be created with the `AlertDialog.Builder` class as before!
+
+```java
+public static class MyDialogFragment extends DialogFragment {
+
+    public static HelloDialogFragment newInstance() {
+        Bundle args = new Bundle();
+        HelloDialogFragment fragment = new HelloDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        //...
+        AlertDialog dialog = builder.create();
+        return dialog;
+    }
+}
+```
+
+Finally, we can actually show this `DialogFragment` by instantiating it (remember to use a `newInstance()` factory method!) and then calling the `show()` method on it to make it show as a Dialog. The `show()` method takes in a `FragmentManager` used to manage this transaction. By using a DialogFragment, it is possible to change the device configuration (rotate the phone) and the Dialog is retained.
+
+Here's the other neat trick: a `DialogFragment` is just a `Fragment`. That means we can use it _anywhere_ we normally used Fragments... including embedding them into layouts! For example if you made the `MoviesFragment` subclass `DialogFragment` instead of `Fragment`, it would be able to be used in the exact same as before. It's still a Fragment, just with extra features&mdash;one of which is a `show()` method that will show it as a Dialog!
+
+  - Use `setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog)` to make the Fragment look a little more like a dialog.
+
+<p class="alert alert-info">The truth is that Dialogs are not very commonly used in Android (compare to other GU systems). Apps are more likely to just dynamically change the Fragment or Activity being shown, rather than interrupt the user flow by creating a pop-up modal. And 80% of the Dialogs that _are_ used are AlertDialogs. Nevertheless, it is worth being familiar with this process and the patterns it draws upon!</p>
+
+
+## Toasts
+Dialogs are a powerful way of providing messages and information to users, but they are pretty "heavy" in terms of both their interaction (they stop all other interaction to show the user a message) and the effort required to implement them. Sometimes you just want a "pop-up" message that isn't quite as prominent and doesn't require the user to click "okay" once they've seen it.
+
+A simple, quick way of giving some short visual feedback is to use what is called a [**Toast**](http://developer.android.com/guide/topics/ui/notifiers/toasts.html). This is a tiny little text box that pops up at the bottom of the screen for a moment to quickly display a message.
+
+- It's called a "Toast" because it pops up!
+
+Toasts are pretty simple to implement, as with the following example (from the official documentation):
+
+```java
+Context context = this; //getApplicationContext(); //use application context to avoid disappearing if Activity is closed quickly.
+String text = "Hello toast!";
+int duration = Toast.LENGTH_SHORT;
+
+//use factory method instead of constructor
+Toast toast = Toast.makeText(context, text, duration);
+toast.show();
+```
+
+But since `this` Activity _is_ a `Context`, and we can just use the Toast anonymously, we can shorten this to a one-liner:
+
+```java
+Toast.makeText(this, "Hello toast!", Toast.LENGTH_SHORT).show();
+```
+
+Boom, a quick visual alert method we can use for proof-of-concept stuff!
+
+Toasts are intended to be a way to provide information to the user (e.g., giving them quick feedback), but they can possibly be useful for testing too (though in the end, Logcat is going to be your best bet for debugging, especially when trying to solve crashes or see more complex output).

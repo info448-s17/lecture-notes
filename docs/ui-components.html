@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Android Development: Lecture Notes</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="Lecture notes for Info 448 Mobile Development: Android.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Android Development: Lecture Notes" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes for Info 448 Mobile Development: Android." />
+  <meta name="github-repo" content="info448-s17/lecture-notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Android Development: Lecture Notes" />
+  
+  <meta name="twitter:description" content="Lecture notes for Info 448 Mobile Development: Android." />
+  
+
+<meta name="author" content="Joel Ross">
+
+
+<meta name="date" content="2017-04-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="fragments.html">
+<link rel="next" href="java-review.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Android Development</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About this Book</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#android-history"><i class="fa fa-check"></i><b>1.1</b> Android History</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="introduction.html"><a href="introduction.html#android-versions"><i class="fa fa-check"></i><b>1.1.1</b> Android Versions</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introduction.html"><a href="introduction.html#legal-battles"><i class="fa fa-check"></i><b>1.1.2</b> Legal Battles</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#android-architecture-and-code"><i class="fa fa-check"></i><b>1.2</b> Android Architecture and Code</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="introduction.html"><a href="introduction.html#programming-languages"><i class="fa fa-check"></i><b>1.2.1</b> Programming Languages</a></li>
+<li class="chapter" data-level="1.2.2" data-path="introduction.html"><a href="introduction.html#building-apps"><i class="fa fa-check"></i><b>1.2.2</b> Building Apps</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#development-tools"><i class="fa fa-check"></i><b>1.3</b> Development Tools</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#hardware"><i class="fa fa-check"></i><b>1.3.1</b> Hardware</a></li>
+<li class="chapter" data-level="1.3.2" data-path="introduction.html"><a href="introduction.html#software"><i class="fa fa-check"></i><b>1.3.2</b> Software</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#hello-world"><i class="fa fa-check"></i><b>1.4</b> Hello World</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="introduction.html"><a href="introduction.html#the-emulator"><i class="fa fa-check"></i><b>1.4.1</b> The Emulator</a></li>
+<li class="chapter" data-level="1.4.2" data-path="introduction.html"><a href="introduction.html#project-contents"><i class="fa fa-check"></i><b>1.4.2</b> Project Contents</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="activities.html"><a href="activities.html"><i class="fa fa-check"></i><b>2</b> Activities and Logging</a><ul>
+<li class="chapter" data-level="2.1" data-path="activities.html"><a href="activities.html#making-activities"><i class="fa fa-check"></i><b>2.1</b> Making Activities</a></li>
+<li class="chapter" data-level="2.2" data-path="activities.html"><a href="activities.html#the-activity-lifecycle"><i class="fa fa-check"></i><b>2.2</b> The Activity Lifecycle</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="activities.html"><a href="activities.html#overriding-the-callback-methods"><i class="fa fa-check"></i><b>2.2.1</b> Overriding the Callback Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="activities.html"><a href="activities.html#logging-adb"><i class="fa fa-check"></i><b>2.3</b> Logging &amp; ADB</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="activities.html"><a href="activities.html#log-methods"><i class="fa fa-check"></i><b>2.3.1</b> Log Methods</a></li>
+<li class="chapter" data-level="2.3.2" data-path="activities.html"><a href="activities.html#logcat"><i class="fa fa-check"></i><b>2.3.2</b> Logcat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="activities.html"><a href="activities.html#basic-events"><i class="fa fa-check"></i><b>2.4</b> Basic Events</a></li>
+<li class="chapter" data-level="2.5" data-path="activities.html"><a href="activities.html#multiple-activities"><i class="fa fa-check"></i><b>2.5</b> Multiple Activities</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="activities.html"><a href="activities.html#intents-and-context"><i class="fa fa-check"></i><b>2.5.1</b> Intents and Context</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="activities.html"><a href="activities.html#back-tasks"><i class="fa fa-check"></i><b>2.6</b> Back &amp; Tasks</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="activities.html"><a href="activities.html#up-navigation"><i class="fa fa-check"></i><b>2.6.1</b> Up Navigation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html"><i class="fa fa-check"></i><b>3</b> Resources and Layouts</a><ul>
+<li class="chapter" data-level="3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#resources"><i class="fa fa-check"></i><b>3.1</b> Resources</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#alternate-resources"><i class="fa fa-check"></i><b>3.1.1</b> Alternate Resources</a></li>
+<li class="chapter" data-level="3.1.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#xml-details"><i class="fa fa-check"></i><b>3.1.2</b> XML Details</a></li>
+<li class="chapter" data-level="3.1.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#r"><i class="fa fa-check"></i><b>3.1.3</b> R</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#views"><i class="fa fa-check"></i><b>3.2</b> Views</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#view-properties"><i class="fa fa-check"></i><b>3.2.1</b> View Properties</a></li>
+<li class="chapter" data-level="3.2.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#practice"><i class="fa fa-check"></i><b>3.2.2</b> Practice</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#layouts"><i class="fa fa-check"></i><b>3.3</b> Layouts</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#linearlayout"><i class="fa fa-check"></i><b>3.3.1</b> LinearLayout</a></li>
+<li class="chapter" data-level="3.3.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#relativelayout"><i class="fa fa-check"></i><b>3.3.2</b> RelativeLayout</a></li>
+<li class="chapter" data-level="3.3.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#constraintlayout"><i class="fa fa-check"></i><b>3.3.3</b> ConstraintLayout</a></li>
+<li class="chapter" data-level="3.3.4" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#other-layouts"><i class="fa fa-check"></i><b>3.3.4</b> Other Layouts</a></li>
+<li class="chapter" data-level="3.3.5" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#combining-and-inflating-layouts"><i class="fa fa-check"></i><b>3.3.5</b> Combining and Inflating Layouts</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="interactive-views.html"><a href="interactive-views.html"><i class="fa fa-check"></i><b>4</b> Interactive Views</a><ul>
+<li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs"><i class="fa fa-check"></i><b>4.1</b> Inputs</a></li>
+<li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listviews-and-adapters"><i class="fa fa-check"></i><b>4.2</b> ListViews and Adapters</a></li>
+<li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data"><i class="fa fa-check"></i><b>4.3</b> Network Data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="fragments.html"><a href="fragments.html"><i class="fa fa-check"></i><b>5</b> Fragments</a><ul>
+<li class="chapter" data-level="5.1" data-path="fragments.html"><a href="fragments.html#creating-a-fragment"><i class="fa fa-check"></i><b>5.1</b> Creating a Fragment</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="fragments.html"><a href="fragments.html#activity-to-fragment-communication"><i class="fa fa-check"></i><b>5.1.1</b> Activity-to-Fragment Communication</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="fragments.html"><a href="fragments.html#dynamic-fragments"><i class="fa fa-check"></i><b>5.2</b> Dynamic Fragments</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fragments.html"><a href="fragments.html#instantiating-fragments"><i class="fa fa-check"></i><b>5.2.1</b> Instantiating Fragments</a></li>
+<li class="chapter" data-level="5.2.2" data-path="fragments.html"><a href="fragments.html#transactions"><i class="fa fa-check"></i><b>5.2.2</b> Transactions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="fragments.html"><a href="fragments.html#inter-fragment-communication"><i class="fa fa-check"></i><b>5.2.3</b> Inter-Fragment Communication</a></li>
+<li class="chapter" data-level="5.2.4" data-path="fragments.html"><a href="fragments.html#the-back-stack"><i class="fa fa-check"></i><b>5.2.4</b> The Back Stack</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ui-components.html"><a href="ui-components.html"><i class="fa fa-check"></i><b>6</b> UI Components</a><ul>
+<li class="chapter" data-level="6.1" data-path="ui-components.html"><a href="ui-components.html#the-action-bar"><i class="fa fa-check"></i><b>6.1</b> The Action Bar</a></li>
+<li class="chapter" data-level="6.2" data-path="ui-components.html"><a href="ui-components.html#menus"><i class="fa fa-check"></i><b>6.2</b> Menus</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="ui-components.html"><a href="ui-components.html#context-menus"><i class="fa fa-check"></i><b>6.2.1</b> Context Menus</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="ui-components.html"><a href="ui-components.html#dialogs"><i class="fa fa-check"></i><b>6.3</b> Dialogs</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="ui-components.html"><a href="ui-components.html#dialogfragments"><i class="fa fa-check"></i><b>6.3.1</b> DialogFragments</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="ui-components.html"><a href="ui-components.html#toasts"><i class="fa fa-check"></i><b>6.4</b> Toasts</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix: Java</b></span></li>
+<li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
+<li class="chapter" data-level="A.1" data-path="java-review.html"><a href="java-review.html#building-apps-with-gradle"><i class="fa fa-check"></i><b>A.1</b> Building Apps with Gradle</a></li>
+<li class="chapter" data-level="A.2" data-path="java-review.html"><a href="java-review.html#class-basics"><i class="fa fa-check"></i><b>A.2</b> Class Basics</a></li>
+<li class="chapter" data-level="A.3" data-path="java-review.html"><a href="java-review.html#inheritance"><i class="fa fa-check"></i><b>A.3</b> Inheritance</a></li>
+<li class="chapter" data-level="A.4" data-path="java-review.html"><a href="java-review.html#interfaces"><i class="fa fa-check"></i><b>A.4</b> Interfaces</a></li>
+<li class="chapter" data-level="A.5" data-path="java-review.html"><a href="java-review.html#polymorphism"><i class="fa fa-check"></i><b>A.5</b> Polymorphism</a></li>
+<li class="chapter" data-level="A.6" data-path="java-review.html"><a href="java-review.html#abstract-methods-and-classes"><i class="fa fa-check"></i><b>A.6</b> Abstract Methods and Classes</a></li>
+<li class="chapter" data-level="A.7" data-path="java-review.html"><a href="java-review.html#generics"><i class="fa fa-check"></i><b>A.7</b> Generics</a></li>
+<li class="chapter" data-level="A.8" data-path="java-review.html"><a href="java-review.html#nested-classes"><i class="fa fa-check"></i><b>A.8</b> Nested Classes</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="java-swing.html"><a href="java-swing.html"><i class="fa fa-check"></i><b>B</b> Swing Framework</a><ul>
+<li class="chapter" data-level="B.1" data-path="java-swing.html"><a href="java-swing.html#events"><i class="fa fa-check"></i><b>B.1</b> Events</a></li>
+<li class="chapter" data-level="B.2" data-path="java-swing.html"><a href="java-swing.html#layouts-and-composites"><i class="fa fa-check"></i><b>B.2</b> Layouts and Composites</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="java-threads-http.html"><a href="java-threads-http.html"><i class="fa fa-check"></i><b>C</b> Threads and HTTP Requests</a><ul>
+<li class="chapter" data-level="C.1" data-path="java-threads-http.html"><a href="java-threads-http.html#concurrency"><i class="fa fa-check"></i><b>C.1</b> Concurrency</a><ul>
+<li class="chapter" data-level="C.1.1" data-path="java-threads-http.html"><a href="java-threads-http.html#an-example-algorithm-races"><i class="fa fa-check"></i><b>C.1.1</b> An Example: Algorithm Races!</a></li>
+<li class="chapter" data-level="C.1.2" data-path="java-threads-http.html"><a href="java-threads-http.html#threading-the-race"><i class="fa fa-check"></i><b>C.1.2</b> Threading the Race</a></li>
+</ul></li>
+<li class="chapter" data-level="C.2" data-path="java-threads-http.html"><a href="java-threads-http.html#http-requests"><i class="fa fa-check"></i><b>C.2</b> HTTP Requests</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Android Development: Lecture Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ui-components" class="section level1">
+<h1><span class="header-section-number">Lecture 6</span> UI Components</h1>
+<p>This lecture discusses how to include <strong>menus</strong> and <strong>pop-up dialogs</strong> in an Android application as additional navigation and display components. Note that this lecture aims to provide <em>exposure</em> rather than <em>depth</em> to these concepts; for further details and options, see <a href="">the official Android documentation</a>.</p>
+<p class="alert alert-info">
+This lecture references code found at <a href="https://github.com/info448-s17/lecture06-menus-dialogs" class="uri">https://github.com/info448-s17/lecture06-menus-dialogs</a>. <!--Note that this code builds upon the example developed in Lecture 5.-->
+</p>
+<div id="the-action-bar" class="section level2">
+<h2><span class="header-section-number">6.1</span> The Action Bar</h2>
+<p>Let’s start one of the most prominent visual components in the default app: the <a href="https://developer.android.com/training/appbar/index.html"><strong><em>App Bar</em></strong></a> or <strong><em>Action Bar</em></strong>. This acts as the sort of “header” for your app, providing a dedicated space for navigation and interaction (e.g., through menus). The <a href="https://developer.android.com/reference/android/support/v7/app/ActionBar.html"><code>ActionBar</code></a><a href="#fn21" class="footnoteRef" id="fnref21"><sup>21</sup></a> is a specific type of <a href="https://developer.android.com/reference/android/support/v7/widget/Toolbar.html"><code>Toolbar</code></a> that is most frequenly used as the App Bar, offering a particular “look and feel” common to Android applications.</p>
+<p>While the <code>AppCompatActivity</code> used throughout this course automatically provides an Action Bar for the app, it is also possible to add it directly (such as if you are using a different Activity subclass). To add your own Action Bar, you specify a <strong>theme</strong> that does <em>not</em> include an <code>ActionBar</code>, and then include an <code>&lt;android.support.v7.window.Toolbar&gt;</code> element inside your layout wherever you want the toolbar to go. See <a href="http://developer.android.com/training/appbar/setting-up.html">Setting up the App Bar</a> for details. This will also allow you to put the Toolbar anywhere in the application’s layout (e.g., if you want it to be stuck to the bottom).</p>
+<ul>
+<li>To see this in action, change the <code>android:theme</code> attribute of the <code>&lt;application&gt;</code> element in the <code>Manifest</code> to <code>&quot;@style/Theme.AppCompat.Light.NoActionBar&quot;</code>. We’ll discuss this process in more detail when we talk about Themes and Styles.</li>
+</ul>
+<p>From in the Activity’s Java code, we can get access to the Action Bar by calling the <code>getSupportActionBar()</code> method (for a support Toolbar). We can then call utility methods on this object to interact with it; for example <code>.hide()</code> will hide the toolbar!</p>
+</div>
+<div id="menus" class="section level2">
+<h2><span class="header-section-number">6.2</span> Menus</h2>
+<p>However, the main use for the Action Bar is a place to hold <a href="https://developer.android.com/guide/topics/ui/menus.html"><strong><em>Menus</em></strong></a>. A Menu (specifically, an <a href="https://developer.android.com/guide/topics/ui/menus.html#options-menu"><strong>options menu</strong></a>) is a set of items (think: buttons) that appear in the Action Bar. Menus can be specified both in the <code>Activity</code> and in a <code>Fragment</code>; if declared in both places, they are combined into a single menu in the Action Bar. This allows you to easily make “context-specific” options menus that are only available for an appropriate Fragment, while keeping Fragments modular and self-contained.</p>
+<ul>
+<li><em>Fun fact:</em> before API 11, options menus appeared as buttons at the bottom of the screen!</li>
+</ul>
+<p>Menus, like all other user-facing elements, are defined as XML resources, specifically of type <strong><code>menu</code></strong>. You can create a new menu resource through Android studio using <code>File &gt; New &gt; Android resource file</code> and then choosing the <code>Menu</code> Resource type. This will create an XML file with a main <a href="https://developer.android.com/reference/android/view/Menu.html"><code>&lt;menu&gt;</code></a> element.</p>
+<p>Options can be added to the menu by specifying child XML elements, particularly <a href="https://developer.android.com/reference/android/view/MenuItem.html"><code>&lt;item&gt;</code></a> elements. Common <code>&lt;item&gt;</code> attributes include:</p>
+<ul>
+<li><strong><code>android:id</code></strong>: a unique id used to refer to the specific option in the Java code</li>
+<li><strong><code>android:title</code></strong> (<strong>required</strong> attribute): the text to display for the option. As user-facing text, the content should ideally be defined as an XML String resource.</li>
+<li><strong><code>app:showAsAction</code></strong>: whether or not the option should be listed in the Action Bar, or collapsed under a “three-dots” button. Note when working with the <code>appcompat</code> library, this option uses the <code>app</code> namespace (instead of <code>android</code>); you will need to include this schema in the <code>&lt;menu&gt;</code> with the attribute <code>xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</code>.</li>
+<li><p>
+<strong><code>android:icon</code></strong>: an image to use when showing the option as a button on the menu <strong>//CHECK THIS</strong>
+</p>
+<p class="alert alert-info">
+You can use one of the many icons built into the Android, referenced as <code>&quot;@android:drawable/ic_*&quot;</code>. <a href="http://androiddrawables.com/">Android Drawables</a><a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a> includes the full list, though not all drawables are publicly available through Android Studio.
+</p></li>
+<li><strong><code>android:orderInCategory</code></strong>: used to order the item in the menu (or in a group). This acts as a “priority” (default 0; low comes first). Such prioritizing can be useful if you want to add suggestions about whether Fragment options should come before or after the Actiity options.</li>
+</ul>
+<p>See the <a href="https://developer.android.com/guide/topics/resources/menu-resource.html">Menu resources guide</a><a href="#fn23" class="footnoteRef" id="fnref23"><sup>23</sup></a> for the full list of options!</p>
+<p>It is possible to include <strong>one level</strong> of sub-menus (a <code>&lt;menu&gt;</code> element inside an <code>&lt;item&gt;</code> element). Menu items can also be grouped together by placing them inside of a <code>&lt;group&gt;</code> element. All items in a group will be shown or hidden together, and can be further ordered within that group. Grouped icons can also be made <a href="https://developer.android.com/guide/topics/ui/menus.html#checkable">checkable</a>.</p>
+<p>In order to show the menu in the running application, we need to tell the Action Bar which menu resource it should use (there may be a lot of resources). To do this, we override the <code>onCreateOptionsMenu()</code> callback in the Activity or Fragment, and then use the component’s <code>MenuInflater</code> object to expand the menu:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">onCreateOptionsMenu</span>(<span class="bu">Menu</span> menu) {
+    MenuInflater inflater = <span class="fu">getMenuInflater</span>();
+    inflater.<span class="fu">inflate</span>(R.<span class="fu">menu</span>.<span class="fu">main_menu</span>, menu); <span class="co">//inflate into this menu</span>
+    <span class="kw">return</span> <span class="kw">true</span>;
+}</code></pre></div>
+<ul>
+<li>This procedure is similar in concept to how a Fragment’s <code>onViewCreated()</code> method would inflate the Fragment into the Activity. In this case, the Menu is being inflated into the Action Bar.</li>
+</ul>
+<p>We can respond to the menu items being selected by overriding the <code>onOptionsItemSelected()</code> callback. By convention, we use a <code>switch</code> on the <code>item.getItemId()</code> to determine what item was selected, and then act accordingly.</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">onOptionsItemSelected</span>(<span class="bu">MenuItem</span> item) {
+    <span class="kw">switch</span>(item.<span class="fu">getItemId</span>()){
+        <span class="kw">case</span> R.<span class="fu">id</span>.<span class="fu">menu_item1</span> :
+            <span class="co">//do thing;</span>
+            <span class="kw">return</span> <span class="kw">true</span>;
+        <span class="kw">default</span>:
+            <span class="kw">return</span> <span class="kw">super</span>.<span class="fu">onOptionsItemSelected</span>(item);
+    }
+}</code></pre></div>
+<ul>
+<li>On <code>default</code> (if the item selected isn’t handled by any cases), we pass the callback up to <code>super</code> for “higher-level” components to check. For exampe, if a the menu option isn’t handled by the Fragment (because the Fragment didn’t add it), the event can be passed up through the Framework for eventually handling by the Activity (who did add it).</li>
+<li>This method should return <code>true</code> if the selection even has been handled (and thus should not be considered by anyone else). Return <code>false</code> if you want other components (e.g., other Fragments) to be able to respond to this option as well.</li>
+</ul>
+<p>There are many other menu items that can be placed on Action Bar as well. We can also add <a href="https://developer.android.com/training/appbar/action-views.html">Action Views</a> that provide more complex interactions than just clicking buttons (for example, including a search bar). An <a href="https://developer.android.com/training/appbar/action-views.html#action-provider">Action Provider</a> (like <a href="https://developer.android.com/training/sharing/shareaction.html"><code>ShareActionProvider</code></a>) is an action with its own customized layout, expanding into a separate View when clicked. We wil discuss how to utilize these features in a <a href="#intents">future lecture</a>.</p>
+<div id="context-menus" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Context Menus</h3>
+<p>In addition to options menus available in the Action Bar, we can also specify <a href="https://developer.android.com/guide/topics/ui/menus.html#context-menu">contextual menus</a> that pop up when the user long-presses on an element. This works similarly to using an options menu, but with a different set off callbacks:</p>
+<ul>
+<li><p>When setting up the the View layout (e.g., in an Activity’s <code>onCreate()</code>), we specify that an element has a context menu using the <code>registerForContextMenu()</code> method, passing it the <code>View</code> we want to be able to create the menu for.</p></li>
+<li><p>Specify the context menu to use through the <code>onCreateContextMenu()</code> callback. This works exactly like setting up an options menu.</p></li>
+<li><p>In fact, a context menu can even use <em>the same menu</em> as an options menu! This reuse is one of the advantages of defining the user interface as XML.</p></li>
+<li><p>And mirroring the options menu, respond to context menu items being selected with the <code>onContextItemSelected()</code> callback.</p></li>
+</ul>
+<p>This section has provided a very brief introduction to menus, but there are many more complex interactions that they support. I <em>highly</em> recommend that you read through <a href="https://developer.android.com/guide/topics/ui/menus.html">the guide</a> in order to learn what features may be available.</p>
+<p class="alert alert-info">
+If you ever are using an app and wonder “how did they add this interface feature?”, look it up! There is almost always a documented procedure and example for providing that kind of component.
+</p>
+</div>
+</div>
+<div id="dialogs" class="section level2">
+<h2><span class="header-section-number">6.3</span> Dialogs</h2>
+<p>While it is simple enough to make menu items that log out some text, logs cannot be seen the user. Instead, we woud like to show the message to the user as a kind of “pop-up” message.</p>
+<p>A <a href="https://developer.android.com/guide/topics/ui/dialogs.html"><strong><em>Dialog</em></strong></a><a href="#fn24" class="footnoteRef" id="fnref24"><sup>24</sup></a> is a “pop-up” <a href="https://en.wikipedia.org/wiki/Modal_window">modal</a> (a view which doesn’t fill the screen) that either asks the user to make a decision or provides some additional information. At it’s most basic, Dialogs are similar to the <code>window.alert()</code> function used in JavaScript.</p>
+<p>There is a base <code>Dialog</code> class, but almost always we use a pre-defined subclass instead (similar to how we’ve use <code>AppCompatActivity</code>). <a href="https://developer.android.com/reference/android/support/v7/app/AlertDialog.html"><code>AlertDialog</code></a><a href="#fn25" class="footnoteRef" id="fnref25"><sup>25</sup></a> is the most common version: a simple message with buttons you can respond with (confirm, cancel, etc).</p>
+<p>We don’t actually instantiate an <code>AlertDialog</code> directly (in fact, it’s constructors are <code>protected</code> so inaccessible to us). Instead we use a helper <em>factory</em> class called an <a href="https://developer.android.com/reference/android/support/v7/app/AlertDialog.Builder.html"><code>AlertDialog.Builder</code></a>. There are a number of steps to use a builder to create a Dialog:</p>
+<ol style="list-style-type: decimal">
+<li>Instantiate a new builder for this particular dialog. The constructor takes in a <code>Context</code> under which to create the Dialog. Note that once the builder is initialized, you can create and recreate the same dialog with a single method call—that’s the benefits of using a factory.</li>
+<li>Call “setter” methods on the builder in orer to specify the title, message, etc. for the dialog that will appear. This can be hard-coded text or a reference to an XML String resource (as a user-facing String, the later is more appropriate for published applications). Each setter method will return a reference to the builder, making it easy to chain them.</li>
+<li>Use appropriate setter methods to specify callbacks (via a <code>DialogInterface.OnClickListener</code>) for individual buttons. Note that the “positive” button normally has the text <code>&quot;OK&quot;</code>, but this can be customized.</li>
+<li>Finally, actually instantiate the <code>AlertDialog</code> with the <code>builder.create()</code> method, using the <strong><code>show()</code></strong> method to make the dialog appear on the screen!</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">AlertDialog.<span class="fu">Builder</span> builder = <span class="kw">new</span> AlertDialog.<span class="fu">Builder</span>(<span class="kw">this</span>);
+builder.<span class="fu">setTitle</span>(<span class="st">&quot;Alert!&quot;</span>)
+       .<span class="fu">setMessage</span>(<span class="st">&quot;Danger Will Robinson!&quot;</span>);
+builder.<span class="fu">setPositiveButton</span>(<span class="st">&quot;I see it!&quot;</span>, <span class="kw">new</span> DialogInterface.<span class="fu">OnClickListener</span>() {
+  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">onClick</span>(DialogInterface dialog, <span class="dt">int</span> id) {
+    <span class="co">// User clicked OK button</span>
+  }
+});
+
+AlertDialog dialog = builder.<span class="fu">create</span>();
+dialog.<span class="fu">show</span>();</code></pre></div>
+<p class="alert alert-info">
+An important part of learning to develop Android applications is being able to read the API to discover effective options. For example, can you read the <a href="https://developer.android.com/reference/android/support/v7/app/AlertDialog.Builder.html">AlertDialog.Builder API</a> and determine how to add a “cancel” button to the alert?
+</p>
+<p>While <code>AlertDialog</code> is the most common Dialog, Android supports other subclasses as well. For example, <a href="https://developer.android.com/reference/android/app/DatePickerDialog.html"><code>DatePickerDialog</code></a> and <a href="https://developer.android.com/reference/android/app/TimePickerDialog.html"><code>TimePickerDialog</code></a> provide pre-defined user interfaces for picking a date or a time respectively. See the <a href="https://developer.android.com/guide/topics/ui/controls/pickers.html">Pickers guide</a> for details about how to utilize these.</p>
+<div id="dialogfragments" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> DialogFragments</h3>
+<p>The process described above will create and show a Dialog, but that dialog has a few problems in how it interacts with the rest of the Android framework—namely with the lifecycle of the Activity in which it is embedded.</p>
+<p>For example, if the device changes configurations (e.g., is rotated from portrait to landscape) then the Activity is destroyed and re-created (it’s <code>onCreate()</code> method will be called again). But if this happens while a Dialog is being shown, then a <code>android.view.WindowLeaked</code> error will be displayed and the Dialog is lost!</p>
+<p>To avoid these problems, we need to have a way of giving that Dialog its own lifecycle which can interact with the the Activity’s lifecycle… sort of like making it a <em>modular</em> piece of an Activity… that’s right, we need to make it a Fragment! Specifically, we will use a subclass of Fragment called <a href="http://developer.android.com/guide/topics/ui/dialogs.html#DialogFragment"><code>DialogFragment</code></a>, which is a Fragment that displays as a modal dialog floating above the Activity (no extra work needed).</p>
+<p>Just like with the Fragment examples from the previous lecture, we’ll need to create our own subclass of <code>DialogFragment</code>. It’s often easiest to make this a <em>nested class</em> if the Dialog won’t be doing a lot of work (e.g., shows a simple confirmation).</p>
+<p>Rathern than specifying a Fragment layout through <code>onCreateView()</code>, we can instead override the <code>onCreateDialog()</code> callback to specify a <code>Dialog</code> object that will provide the view hierarchy for the Fragment. This Dialog can be created with the <code>AlertDialog.Builder</code> class as before!</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> <span class="kw">class</span> MyDialogFragment <span class="kw">extends</span> DialogFragment {
+
+    <span class="kw">public</span> <span class="dt">static</span> HelloDialogFragment <span class="fu">newInstance</span>() {
+        Bundle args = <span class="kw">new</span> <span class="fu">Bundle</span>();
+        HelloDialogFragment fragment = <span class="kw">new</span> <span class="fu">HelloDialogFragment</span>();
+        fragment.<span class="fu">setArguments</span>(args);
+        <span class="kw">return</span> fragment;
+    }
+
+    <span class="kw">public</span> <span class="bu">Dialog</span> <span class="fu">onCreateDialog</span>(Bundle savedInstanceState) {
+        AlertDialog.<span class="fu">Builder</span> builder = <span class="kw">new</span> AlertDialog.<span class="fu">Builder</span>(<span class="fu">getActivity</span>());
+        <span class="co">//...</span>
+        AlertDialog dialog = builder.<span class="fu">create</span>();
+        <span class="kw">return</span> dialog;
+    }
+}</code></pre></div>
+<p>Finally, we can actually show this <code>DialogFragment</code> by instantiating it (remember to use a <code>newInstance()</code> factory method!) and then calling the <code>show()</code> method on it to make it show as a Dialog. The <code>show()</code> method takes in a <code>FragmentManager</code> used to manage this transaction. By using a DialogFragment, it is possible to change the device configuration (rotate the phone) and the Dialog is retained.</p>
+<p>Here’s the other neat trick: a <code>DialogFragment</code> is just a <code>Fragment</code>. That means we can use it <em>anywhere</em> we normally used Fragments… including embedding them into layouts! For example if you made the <code>MoviesFragment</code> subclass <code>DialogFragment</code> instead of <code>Fragment</code>, it would be able to be used in the exact same as before. It’s still a Fragment, just with extra features—one of which is a <code>show()</code> method that will show it as a Dialog!</p>
+<ul>
+<li>Use <code>setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog)</code> to make the Fragment look a little more like a dialog.</li>
+</ul>
+<p class="alert alert-info">
+The truth is that Dialogs are not very commonly used in Android (compare to other GU systems). Apps are more likely to just dynamically change the Fragment or Activity being shown, rather than interrupt the user flow by creating a pop-up modal. And 80% of the Dialogs that <em>are</em> used are AlertDialogs. Nevertheless, it is worth being familiar with this process and the patterns it draws upon!
+</p>
+</div>
+</div>
+<div id="toasts" class="section level2">
+<h2><span class="header-section-number">6.4</span> Toasts</h2>
+<p>Dialogs are a powerful way of providing messages and information to users, but they are pretty “heavy” in terms of both their interaction (they stop all other interaction to show the user a message) and the effort required to implement them. Sometimes you just want a “pop-up” message that isn’t quite as prominent and doesn’t require the user to click “okay” once they’ve seen it.</p>
+<p>A simple, quick way of giving some short visual feedback is to use what is called a <a href="http://developer.android.com/guide/topics/ui/notifiers/toasts.html"><strong>Toast</strong></a>. This is a tiny little text box that pops up at the bottom of the screen for a moment to quickly display a message.</p>
+<ul>
+<li>It’s called a “Toast” because it pops up!</li>
+</ul>
+<p>Toasts are pretty simple to implement, as with the following example (from the official documentation):</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">Context</span> context = <span class="kw">this</span>; <span class="co">//getApplicationContext(); //use application context to avoid disappearing if Activity is closed quickly.</span>
+<span class="bu">String</span> text = <span class="st">&quot;Hello toast!&quot;</span>;
+<span class="dt">int</span> duration = Toast.<span class="fu">LENGTH_SHORT</span>;
+
+<span class="co">//use factory method instead of constructor</span>
+Toast toast = Toast.<span class="fu">makeText</span>(context, text, duration);
+toast.<span class="fu">show</span>();</code></pre></div>
+<p>But since <code>this</code> Activity <em>is</em> a <code>Context</code>, and we can just use the Toast anonymously, we can shorten this to a one-liner:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Toast.<span class="fu">makeText</span>(<span class="kw">this</span>, <span class="st">&quot;Hello toast!&quot;</span>, Toast.<span class="fu">LENGTH_SHORT</span>).<span class="fu">show</span>();</code></pre></div>
+<p>Boom, a quick visual alert method we can use for proof-of-concept stuff!</p>
+<p>Toasts are intended to be a way to provide information to the user (e.g., giving them quick feedback), but they can possibly be useful for testing too (though in the end, Logcat is going to be your best bet for debugging, especially when trying to solve crashes or see more complex output).</p>
+
+</div>
+</div>
+
+
+
+</div>
+<div class="footnotes">
+<hr />
+<ol start="21">
+<li id="fn21"><p><a href="http://developer.android.com/reference/android/support/v7/app/ActionBar.html" class="uri">http://developer.android.com/reference/android/support/v7/app/ActionBar.html</a><a href="ui-components.html#fnref21">↩</a></p></li>
+<li id="fn22"><p><a href="http://androiddrawables.com/" class="uri">http://androiddrawables.com/</a><a href="ui-components.html#fnref22">↩</a></p></li>
+<li id="fn23"><p><a href="https://developer.android.com/guide/topics/resources/menu-resource.html" class="uri">https://developer.android.com/guide/topics/resources/menu-resource.html</a><a href="ui-components.html#fnref23">↩</a></p></li>
+<li id="fn24"><p><a href="https://developer.android.com/guide/topics/ui/dialogs.html" class="uri">https://developer.android.com/guide/topics/ui/dialogs.html</a><a href="ui-components.html#fnref24">↩</a></p></li>
+<li id="fn25"><p><a href="https://developer.android.com/reference/android/support/v7/app/AlertDialog.html" class="uri">https://developer.android.com/reference/android/support/v7/app/AlertDialog.html</a><a href="ui-components.html#fnref25">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="fragments.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="java-review.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["github", "facebook", "twitter", "google"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/menus-dialogs.Rmd",
+"text": "Edit"
+},
+"download": ["android-dev-book.pdf", "android-dev-book.epub"],
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-04-11">
+<meta name="date" content="2017-04-13">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -139,7 +139,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.6" data-path="activities.html"><a href="activities.html#back-tasks"><i class="fa fa-check"></i><b>2.6</b> Back &amp; Tasks</a><ul>
 <li class="chapter" data-level="2.6.1" data-path="activities.html"><a href="activities.html#up-navigation"><i class="fa fa-check"></i><b>2.6.1</b> Up Navigation</a></li>
 </ul></li>
-<li class="chapter" data-level="2.7" data-path="activities.html"><a href="activities.html#toasts"><i class="fa fa-check"></i><b>2.7</b> Toasts</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html"><i class="fa fa-check"></i><b>3</b> Resources and Layouts</a><ul>
 <li class="chapter" data-level="3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#resources"><i class="fa fa-check"></i><b>3.1</b> Resources</a><ul>
@@ -174,6 +173,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.2.3" data-path="fragments.html"><a href="fragments.html#inter-fragment-communication"><i class="fa fa-check"></i><b>5.2.3</b> Inter-Fragment Communication</a></li>
 <li class="chapter" data-level="5.2.4" data-path="fragments.html"><a href="fragments.html#the-back-stack"><i class="fa fa-check"></i><b>5.2.4</b> The Back Stack</a></li>
 </ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ui-components.html"><a href="ui-components.html"><i class="fa fa-check"></i><b>6</b> UI Components</a><ul>
+<li class="chapter" data-level="6.1" data-path="ui-components.html"><a href="ui-components.html#the-action-bar"><i class="fa fa-check"></i><b>6.1</b> The Action Bar</a></li>
+<li class="chapter" data-level="6.2" data-path="ui-components.html"><a href="ui-components.html#menus"><i class="fa fa-check"></i><b>6.2</b> Menus</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="ui-components.html"><a href="ui-components.html#context-menus"><i class="fa fa-check"></i><b>6.2.1</b> Context Menus</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="ui-components.html"><a href="ui-components.html#dialogs"><i class="fa fa-check"></i><b>6.3</b> Dialogs</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="ui-components.html"><a href="ui-components.html#dialogfragments"><i class="fa fa-check"></i><b>6.3.1</b> DialogFragments</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="ui-components.html"><a href="ui-components.html#toasts"><i class="fa fa-check"></i><b>6.4</b> Toasts</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -323,6 +332,10 @@ Android apps run on devices with significant hardware constraints in terms of bo
 <li><code>onDestroy()</code> can easily be called if you set the phone to “Don’t Keep Activities” (at bottom of developer settings). Or you can simply <em>rotate</em> the phone (which causes the Activity to be destroyed and then recreated in the new orientation).</li>
 <li>Something else to test: Cause the app to throw a runtime <code>Exception</code> in one of the handlers. For example, you could make a new local array and try to access an item out of bounds. Or just <code>throw new RuntimeException()</code> (which is slightly less interesting). <em>Can you see the <strong>Stack Trace</strong> in the logs?</em></li>
 </ul>
+<p>Logging is fantastic and one of the the best techniques we have for debugging, both in how Activities are being used or for any kind of bug (also <code>RuntimeExceptions</code>). It harkens back to printline debugging, which is still a legitimate debugging process.</p>
+<p class="alert alert-info">
+Note that Android Studio does have a built-in <a href="https://developer.android.com/studio/debug/index.html">debugger</a> if you’re comfortable with such systems.
+</p>
 <!--#### BREAK 5mins, resume 11:45 latest-->
 </div>
 </div>
@@ -430,34 +443,8 @@ button.<span class="fu">setOnClickListener</span>(<span class="kw">new</span> <s
 <span class="kw">&lt;/activity&gt;</span></code></pre></div>
 <p>The <code>&lt;meta-data&gt;</code> element is to provide backwards compatibilit for API level 15 (since the <code>android:parentActivityName</code> is only defined for API level 16+).</p></li>
 </ul>
-</div>
-</div>
-<div id="toasts" class="section level2">
-<h2><span class="header-section-number">2.7</span> Toasts</h2>
-<p>We have previously demonstrated how to use <code>Log</code> to output messages to logcat. Logging is fantastic and one of the the best techniques we have for debugging, both in how Activities are being used or for any kind of bug (also <code>RuntimeExceptions</code>). It harkens back to printline debugging, which is still a legitimate debugging process.</p>
-<p class="alert alert-info">
-Note that Android Studio does have a built-in <a href="https://developer.android.com/studio/debug/index.html">debugger</a> if you’re comfortable with such systems.
-</p>
-<p>However, sometimes you want to check some output/interaction without logging it. You just want to see some feedback while the app is running! Or you want to give a quick message to the user (and users can’t normally read logs). Android provides a number of different classes for doing visual notifications, including alert-style and customizable <a href="https://developer.android.com/guide/topics/ui/dialogs.html">Dialogs</a>, which we’ll talk about in a later lecture.</p>
-<p>But a simple, quick way of giving some short visual feedback is to use what is called a <a href="http://developer.android.com/guide/topics/ui/notifiers/toasts.html"><strong>Toast</strong></a>. This is a tiny little text box that pops up at the bottom of the screen for a moment to quickly display a message.</p>
-<ul>
-<li>It’s called a “Toast” because it pops up!</li>
-</ul>
-<p>Toasts are pretty simple to implement, as with the following example (from the official documentation):</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">Context</span> context = <span class="kw">this</span>; <span class="co">//getApplicationContext(); //use application context to avoid disappearing if app is closed quickly.</span>
-<span class="bu">String</span> text = <span class="st">&quot;Hello toast!&quot;</span>;
-<span class="dt">int</span> duration = Toast.<span class="fu">LENGTH_SHORT</span>;
 
-Toast toast = Toast.<span class="fu">makeText</span>(context, text, duration);
-toast.<span class="fu">show</span>();</code></pre></div>
-<p>But since <code>this</code> Activity <em>is</em> a <code>Context</code>, and we can just use the Toast anonymously, we can shorten this to a one-liner:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Toast.<span class="fu">makeText</span>(<span class="kw">this</span>, <span class="st">&quot;Hello world&quot;</span>, Toast.<span class="fu">LENGTH_SHORT</span>).<span class="fu">show</span>();</code></pre></div>
-<p>Boom, a quick visual alert method we can use for proof-of-concept stuff!</p>
-<ul>
-<li>Note that this code uses a <code>static</code> <code>makeToast()</code> method, rather than a constructor. This is an example of a Factory method—a design pattern we’ll see a lot!</li>
-</ul>
-<p>Toasts are intended to be a way to provide information to the user (e.g., giving them quick feedback), but can possibly be useful for testing too! Though in the end, Logcat is going to be your best bet for debugging, especially when trying to solve crashes or see more complex output.</p>
-
+</div>
 </div>
 </div>
 <div class="footnotes">

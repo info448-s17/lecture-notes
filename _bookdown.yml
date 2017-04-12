@@ -11,6 +11,7 @@ rmd_files:
   - layouts.Rmd
   - inputs-lists.Rmd
   - fragments.Rmd
+  - menus-dialogs.Rmd
 
   - appendix.Rmd
   - java-review.Rmd

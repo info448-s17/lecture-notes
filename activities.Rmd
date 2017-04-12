@@ -132,6 +132,12 @@ ___Demo:___ And now we can finally log out some of the Lifecycle callbacks to se
 - `onDestroy()` can easily be called if you set the phone to "Don't Keep Activities" (at bottom of developer settings). Or you can simply _rotate_ the phone (which causes the Activity to be destroyed and then recreated in the new orientation).
 - Something else to test: Cause the app to throw a runtime `Exception` in one of the handlers. For example, you could make a new local array and try to access an item out of bounds. Or just `throw new RuntimeException()` (which is slightly less interesting). _Can you see the **Stack Trace** in the logs?_
 
+
+Logging is fantastic and one of the the best techniques we have for debugging, both in how Activities are being used or for any kind of bug (also `RuntimeExceptions`). It harkens back to printline debugging, which is still a legitimate debugging process.
+
+<p class="alert alert-info">Note that Android Studio does have a built-in [debugger](https://developer.android.com/studio/debug/index.html) if you're comfortable with such systems.</p>
+
+
 <!--#### BREAK 5mins, resume 11:45 latest-->
 
 ## Basic Events `r #[10min]` {#basic-events}
@@ -271,37 +277,3 @@ We can make this "back" navigation a little more intuitive for users by providin
 	```
 
 	The `<meta-data>` element is to provide backwards compatibilit for API level 15 (since the `android:parentActivityName` is only defined for API level 16+).
-
-## Toasts `r #[5min]`
-We have previously demonstrated how to use `Log` to output messages to logcat. Logging is fantastic and one of the the best techniques we have for debugging, both in how Activities are being used or for any kind of bug (also `RuntimeExceptions`). It harkens back to printline debugging, which is still a legitimate debugging process.
-
-<p class="alert alert-info">Note that Android Studio does have a built-in [debugger](https://developer.android.com/studio/debug/index.html) if you're comfortable with such systems.</p>
-
-However, sometimes you want to check some output/interaction without logging it. You just want to see some feedback while the app is running! Or you want to give a quick message to the user (and users can't normally read logs). Android provides a number of different classes for doing visual notifications, including alert-style and customizable [Dialogs](https://developer.android.com/guide/topics/ui/dialogs.html), which we'll talk about in a later lecture.
-
-But a simple, quick way of giving some short visual feedback is to use what is called a [**Toast**](http://developer.android.com/guide/topics/ui/notifiers/toasts.html). This is a tiny little text box that pops up at the bottom of the screen for a moment to quickly display a message.
-
-- It's called a "Toast" because it pops up!
-
-Toasts are pretty simple to implement, as with the following example (from the official documentation):
-
-```java
-Context context = this; //getApplicationContext(); //use application context to avoid disappearing if app is closed quickly.
-String text = "Hello toast!";
-int duration = Toast.LENGTH_SHORT;
-
-Toast toast = Toast.makeText(context, text, duration);
-toast.show();
-```
-
-But since `this` Activity _is_ a `Context`, and we can just use the Toast anonymously, we can shorten this to a one-liner:
-
-```java
-Toast.makeText(this, "Hello world", Toast.LENGTH_SHORT).show();
-```
-
-Boom, a quick visual alert method we can use for proof-of-concept stuff!
-
-- Note that this code uses a `static` `makeToast()` method, rather than a constructor. This is an example of a Factory method&mdash;a design pattern we'll see a lot!
-
-Toasts are intended to be a way to provide information to the user (e.g., giving them quick feedback), but can possibly be useful for testing too! Though in the end, Logcat is going to be your best bet for debugging, especially when trying to solve crashes or see more complex output.
