@@ -33,7 +33,7 @@ As introduced in [Lecture 1]{#introduction}, there are a number of different [re
 
 The details about these different kinds of resources is a bit scattered throughout the documentation, but [Resource Types](http://developer.android.com/guide/topics/resources/available-resources.html)^[https://developer.android.com/guide/topics/resources/available-resources.html] is a good place to start, as is [Providing Resources](https://developer.android.com/guide/topics/resources/providing-resources.html#ResourceTypes).
 
-### Alternate Resources
+### Alternate Resources {#alternative-resources}
 These aren't the only names for resource folders: as mentioned above, part of the goal of resources is that they can be **localized**: changed depending on the device! You are thus able to specify folders for "alternative" resources (e.g., special handling for another language, or for low-resolution devices). At runtime, Android will check the configuration of the device, and try to find an alternative resource that matches that config. If it it _can't_ find a relevant alternative resource, it will fall back to the "default" resource.
 
 There are many different configurations that can be used to influence resources; see [Providing Resources](https://developer.android.com/guide/topics/resources/providing-resources.html#AlternativeResources)^[http://developer.android.com/guide/topics/resources/providing-resources.html]. To highlight a few options, you can specify different resources based on:

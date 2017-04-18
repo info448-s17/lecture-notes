@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="java-review.html">
-<link rel="next" href="java-threads-http.html">
+<link rel="prev" href="providers-and-loaders.html">
+<link rel="next" href="accessibility.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,19 +194,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="part"><span><b>II Additional Topics</b></span></li>
-<li class="chapter" data-level="8" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>8</b> Accessibility</a><ul>
-<li class="chapter" data-level="8.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>8.1</b> Universal Usability</a></li>
-<li class="chapter" data-level="8.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>8.2</b> Implementing Accessibility</a><ul>
-<li class="chapter" data-level="8.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>8.2.1</b> Supporting Vision Impairment</a></li>
-<li class="chapter" data-level="8.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>8.2.2</b> Supporting Alternative Inputs</a></li>
-<li class="chapter" data-level="8.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>8.2.3</b> Supporting Internationalization</a></li>
-<li class="chapter" data-level="8.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>8.2.4</b> Further Testing</a></li>
+<li class="chapter" data-level="8" data-path="view-pager.html"><a href="view-pager.html"><i class="fa fa-check"></i><b>8</b> View Pager</a><ul>
+<li class="chapter" data-level="8.1" data-path="view-pager.html"><a href="view-pager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>8.1</b> Define a SearchFragment</a></li>
+<li class="chapter" data-level="8.2" data-path="view-pager.html"><a href="view-pager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>8.2</b> Add the ViewPager and Adapter</a></li>
+<li class="chapter" data-level="8.3" data-path="view-pager.html"><a href="view-pager.html#add-user-interaction"><i class="fa fa-check"></i><b>8.3</b> Add User Interaction</a></li>
 </ul></li>
+<li class="chapter" data-level="9" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>9</b> Accessibility</a><ul>
+<li class="chapter" data-level="9.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>9.1</b> Universal Usability</a></li>
+<li class="chapter" data-level="9.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>9.2</b> Implementing Accessibility</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>9.2.1</b> Supporting Vision Impairment</a></li>
+<li class="chapter" data-level="9.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>9.2.2</b> Supporting Alternative Inputs</a></li>
+<li class="chapter" data-level="9.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>9.2.3</b> Supporting Internationalization</a></li>
+<li class="chapter" data-level="9.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>9.2.4</b> Further Testing</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>9</b> Fragments: ViewPager</a><ul>
-<li class="chapter" data-level="9.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>9.1</b> Define a SearchFragment</a></li>
-<li class="chapter" data-level="9.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>9.2</b> Add the ViewPager and Adapter</a></li>
-<li class="chapter" data-level="9.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>9.3</b> Add User Interaction</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -250,70 +250,74 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="java-swing" class="section level1">
-<h1><span class="header-section-number">B</span> Swing Framework</h1>
-<p>Android applications are user-driven graphical applications. In order to become familiar with some of the <em>coding patterns</em> involved in this kind of software (without the overhead of the Android framework), let’s consider how to build simple graphical applications in Java using the <a href="https://docs.oracle.com/javase/tutorial/uiswing/start/">Swing library</a></p>
-<p class="alert alert-info">
-This appendix references code found at <a href="https://github.com/info448-s17/lecture02-activities" class="uri">https://github.com/info448-s17/lecture02-activities</a>, in the <code>java/</code> folder. Note that this tutorial involves Java Programming: while it is possible to do this in Android Studio, it’s often easier to just utilize a light-weight text editor such as <a href="https://code.visualstudio.com/">Visual Studio Code</a> or <a href="https://www.sublimetext.com/">Sublime Text</a>.
+<div id="view-pager" class="section level1">
+<h1><span class="header-section-number">Lecture 8</span> View Pager</h1>
+<p>In this chapter, you will practice working with Fragments and layouts. Specifically, you will modify the Movie application so that it uses a <a href="https://developer.android.com/training/animation/screen-slide.html"><strong>ViewPager</strong></a>, an interactive View offered by the Android Support Library that will allow you to “page” (swipe) through different Fragments. You will modify the application so that the user can swipe through a “search” screen, the list of search results, and the details about a particular movie.</p>
+<p class="alert alert-warning">
+IMPORTANT NOTE: you should <strong>not</strong> modify the <code>MovieFragment</code> or the <code>DetailFragment</code> (those Fragments are self-contained and so can be used in multiple layouts!). You will need to create one new Fragment though, and make substantial modifications to the <code>MainActivity</code>
 </p>
-<p>The <strong>Swing</strong> library is a set of Java classes used to specify graphical user interfaces (GUIs). These classes can be found in the <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/package-summary.html"><code>javax.swing</code></a> package. They also rely on the <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/package-summary.html"><code>java.awt</code></a> package (the “Advanced Windowing Toolkit”), which is an older GUI library that Swing builds on top of.</p>
+<p>This chapter will build on the lecture code found at <strong><a href="https://github.com/info448-s17/lecture05-fragments" class="uri">https://github.com/info448-s17/lecture05-fragments</a></strong>.</p>
+<p>If you haven’t already, you should <strong>Fork and Clone</strong> this repo in order to complete the tutorial. Note that you should complete this tutorial on a separate <strong><code>viewpager-work</code></strong> branch. You can create this branch either off of the <code>completed</code> branch (containing the completed lecture code), or from the <code>master</code> branch of code if you were able to complete the work described <a href="fragments.html#fragments">in lecture 5</a>:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">git</span> checkout completed
+<span class="fu">git</span> checkout -b lab-work</code></pre></div>
+<!-- You will need to `commit` and `push` your completed work back to your forked repo by the deadline, and submit a link to your forked repo to this Canvas assignment. Note that you are **not** required to create a separate pull request, though you should work on the separate `lab-work` branch! -->
+<div id="define-a-searchfragment" class="section level2">
+<h2><span class="header-section-number">8.1</span> Define a SearchFragment</h2>
+<p>Your <code>ViewPager</code> will need to support three different Fragments. While the <code>MovieFragment</code> and <code>DetailFragment</code> are defined already, you will need to create a third.</p>
+<p>Create a new Fragment called <strong><code>SearchFragment</code></strong> (use the <code>File &gt; New &gt; Fragment &gt; Fragment (Blank)</code> menu in Android Studio). Your <code>SearchFragment</code> will need to include the following components</p>
+<ol style="list-style-type: decimal">
+<li><p>The layout for the Fragment should contain the seach <code>EditText</code> and <code>Button</code> <em>taken from</em> the <code>activity_main</code> layoout. You can add some <code>layout_gravity</code> to center the inputs. You can also remove the <code>onClick</code> XML attribute, as click handling will be specified in the Java</p></li>
+<li><p>In the <code>SearchFragment</code> class, be sure to define a <code>newInstance()</code> factory method. The method doesn’t need to take any arguments (and thus you don’t need to specify an argument bundle).</p></li>
+</ol>
 <ul>
-<li>Fun fact: Swing library is named after the dance style: the developers wanted to name it after something hip and cool and popular. In the mid-90s.</li>
+<li>Typing <code>newInstance</code> will allow Android Studio to tab-complete the method!</li>
 </ul>
-<p>Let’s look at an incredibly basic GUI class: <code>MyGUI</code> found in the <code>src/main/java/</code> folder. The class <em>subclasses</em> (extends) <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JFrame.html"><code>JFrame</code></a>. <code>JFrame</code> represents a “window” in your operating system, and does all the work of making that window show up and interact with the operating system in a normal way. By subclassing <code>JFrame</code>, we get that functionality for free! This is how we build all GUI applications using this framework.</p>
-<p>Most of the work defining a Swing GUI happens in the <code>JFrame</code> constructor (called when the GUI is “created”).</p>
-<ol style="list-style-type: decimal">
-<li><p>We first call the parent constructor (passing in the title for the window), and then call a method to specify what happens when we hit the “close” button.</p></li>
-<li><p>We then instantiate a <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JButton.html"><code>JButton</code></a>, which is a class representing a Java Button. Note that <code>JButton</code> is the Swing version of a button, building off of the older <code>java.awt.Button</code> class.</p></li>
-<li><p>We then <code>.add()</code> this button to the <code>JFrame</code>. This puts the button inside the window. This process is similar to using jQuery to add an HTML element to web page.</p></li>
-<li><p>Finally, we call <code>.pack()</code> to tell the Frame to resize itself to fit the contents, and then <code>.setVisible()</code> to make it actually appear.</p></li>
-<li><p>We run this program from <code>main</code> by just instantiating our specialized <code>JFrame</code>, which will contain the button.</p></li>
+<ol start="3" style="list-style-type: decimal">
+<li>The <code>SearchFragment</code> will need to communicate with other Fragments, and thus you will need to define an <code>interface</code> (e.g., <code>OnSearchListener</code>) that the containing Activity can implement. This interface should support a single public method (e.g., <code>onSearchSubmitted(String searchTerm)</code>) which will allow the Fragment to pass the entered search term to the Activity.</li>
 </ol>
-<p>You can compile and run this program with <code>./gradlew -q run</code>. And voila, we have a basic button app!</p>
-<div id="events" class="section level2">
-<h2><span class="header-section-number">B.1</span> Events</h2>
-<p>If we click the button… nothing happens. Let’s make it print out a message when clicked. We can do this through <strong>event-based programming</strong> (if you remember handling <code>click</code> events from JavaScript, this is the same idea).</p>
-<p>Most computer systems see interactions with its GUI as a series of <strong>events</strong>: the <em>event</em> of clicking a button, the <em>event</em> of moving the mouse, the <em>event</em> of closing a window, etc. Each thing you interact with <em>generates</em> and <em>emits</em> these events. So when you click on a button, it creates and emits an “I was clicked!” event. (You can think of this like the button shouting “Hey hey! I was pressed!”) We can write code to respond to this shouting to have our application do something when the button is clicked.</p>
-<p>Events, like everything else in Java, are Objects (of the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/EventObject.html"><code>EventObject</code></a> type) that are created by the emitter. A <code>JButton</code> in particular emits <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionEvent.html"><code>ActionEvents</code></a> when pressed (the “action” being that it was pressed). In other words, when buttons are pressed, they shout out <code>ActionEvents</code>.</p>
-<p>In order to respond to this shouting, we need to “listen” for these events. Then whenever we hear that there is an event happening, we can react to it. This is like a person manning a submarine radar, or hooking up a baby monitor, or following someone on Twitter.</p>
-<p>But this is Java, and everything in Java is based on Objects, we need an object to listen for these events: a “listener” if you will. Luckily, Java provides a type that can listen for <code>ActionEvents</code>: <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionListener.html"><code>ActionListener</code></a>. This type has an <code>actionPerformed()</code> method that can be called in response to an event.</p>
-<p>We use the <a href="https://sourcemaking.com/design_patterns/observer">Observer Pattern</a> to connect this listener object to the button (<code>button.addActionListener(listener)</code>). This <em>registers</em> the listener, so that the Button knows who to shout at when something happens. (Again, like following someone on Twitter). When the button is pressed, it will go to any listeners registered with it and call their <code>actionPerformed()</code> methods, passing in the <code>ActionEvent</code> it generated.</p>
-<p>But look carefully: <code>ActionListener</code> is not a concrete class, but an abstract <strong>interface</strong>. This means if we want to make an <code>ActionListener</code> object, we need to create a class that <code>implements</code> this interface (and provides the <code>actionPerformed()</code> method that can be called when the event occurs). There are a few ways we can do this:</p>
-<ol style="list-style-type: decimal">
-<li><p>We already have a class we’re developing: <code>MyGUI</code>! So we can just make <em>that</em> class <code>implement ActionListener</code>. We’ll fill in the provided method, and then specify that <code>this</code> object is the listener, and voila.</p>
 <ul>
-<li><p>This is my favorite way to create listeners in Java (since it keeps everything self-contained: the <code>JFrame</code> handles the events its buttons produce).</p></li>
-<li><p>We’ll utilize a variant of this pattern in Android: we’ll make classes implement listeners, and then “register” that listener somewhere else in the code (often in a nested class).</p></li>
-</ul></li>
-<li><p>But what if we want to <em>reuse</em> our listener across different classes, but don’t want to have to create a new <code>MyGUI</code> object to listen for a button to be clicked? We can instead use an <strong>inner</strong> or <strong>nested</strong> class. For example, create a nested class <code>MyActionListener</code> that implements the interface, and then just instantiate one of those to register with the button.</p>
-<ul>
-<li>This could be a <code>static</code> nested class, but then it wouldn’t be able to access instance variables (because it belongs to the <em>class</em>, not the <em>object</em>). So you might want to make it an inner class instead. Of course then you can’t re-use it elsewhere without making the <code>MyGUI</code> (whose instance variables it referenes anyway)… but at least we’ve organized the functionality.</li>
-</ul></li>
-<li><p>It seems sort of silly to create a whole new <code>MyActionListener</code> class that has one method and is just going to be instantiated once. So what if instead of giving it a name, we just made it an <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/anonymousclasses.html"><strong>anonymous class</strong></a>? This is similar to how you’ve made <em>anonymous variables</em> by instantiating objects without assigning them to named variables, you’re just doing the same thing with a class that just implements an interface. The syntax looks like:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">button.<span class="fu">addActionListener</span>(<span class="kw">new</span> <span class="bu">ActionListener</span>() {
-  <span class="co">//class declaration goes in here!</span>
-
-<span class="kw">public</span> <span class="dt">void</span> <span class="fu">actionPerformed</span>(<span class="bu">ActionEvent</span> event) { <span class="co">/*...*/</span>}
-});</code></pre></div>
-<p>This is how buttons are often used in Android: we’ll create an anonymous listener object to respond to the event that occurs when they are pressed.</p></li>
+<li>Remember to check that the containing Activity implements the interface in the Fragment’s <code>onAttach()</code> callback.</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>Finally, in the <code>onCreateView()</code> callback, add a click listener to the button so that when it is clicked, it calls the <code>onSeachSubmitted()</code> callback function on the containing Activity (which you’ve established has that method!)</li>
 </ol>
+<ul>
+<li>Remember that you can call <code>findViewById()</code> on the <em>root view</em>.</li>
+</ul>
 </div>
-<div id="layouts-and-composites" class="section level2">
-<h2><span class="header-section-number">B.2</span> Layouts and Composites</h2>
-<p>What if we want to add a second button? If we try to just <code>.add()</code> another button… it replaces the one we previously had! This is because Java doesn’t know <em>where</em> to put the second button. Below? Above? Left? Right?</p>
-<p>In order to have the <code>JFrame</code> contain multiple components, we need to specify a <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/LayoutManager.html"><strong>layout</strong></a>, which knows how to organize items that are added to the Frame. We do this with the <code>.setLayout()</code> method. For example, we can give the frame a <code>BoxLayout()</code> with a <code>PAGE_AXIS</code> orientation to have it lay out the buttons in a vertical row.</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">container.<span class="fu">setLayout</span>(<span class="kw">new</span> <span class="bu">BoxLayout</span>(container, <span class="bu">BoxLayout</span>.<span class="fu">PAGE_AXIS</span>));
-container.<span class="fu">add</span>(theButton);
-container.<span class="fu">add</span>(otherButton);</code></pre></div>
+<div id="add-the-viewpager-and-adapter" class="section level2">
+<h2><span class="header-section-number">8.2</span> Add the ViewPager and Adapter</h2>
+<p>Your <code>MainActivity</code> will need to contain a <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html"><code>ViewPager</code></a> View (since all the other Views have been moved to Fragments!).</p>
+<p>Add a <code>android.support.v4.view.ViewPager</code> element in the <code>activity_main.xml</code> layout resource, finding this View in the Activity’s <code>onCreate()</code> callback.</p>
+<p>Just like with a <code>ListView</code>, a <code>ViewPager</code> requires a (custom) <strong>adapter</strong> in order to map from which “page” is shown to the Fragment that is rendered. Add a new inner class (e.g., <code>MoviePagerAdapter</code>) that subclasses <a href="https://developer.android.com/reference/android/support/v4/app/FragmentStatePagerAdapter.html"><code>FragmentStatePagerAdapter</code></a>.</p>
 <ul>
-<li>Java has different <code>LayoutManagers</code> that each have their own way of organizing components. We’ll see this same idea in Android.</li>
+<li><p>As in the <a href="https://developer.android.com/training/animation/screen-slide.html#viewpager">documentation example</a>, You will need to provide a constructor that takes in a (Support) <code>FragmentManager</code>, and calls the appropriate super constructor.</p></li>
+<li>The <code>getItem()</code> function returns <em>which</em> Fragment is shown for a particular page number. You should implement this function so that page 0 shows a <code>SearchFragment</code>, page 1 shows a <code>MoviesFragment</code>, and page 2 shows a <code>DetailsFragment</code>.</li>
+<li>You can declear each of these three Fragments as <strong>instance variables</strong>, then simply return them from this method.</li>
+<li><p>It’s okay to “hard-code” this logic for the purposes of this demonstration.</p></li>
+<li><p>The <code>getCount()</code> function returns how many pages the Pager supports. Note that you will need to include some logic for this: before a search has occured, there is only one page! After the search, there are two pages (the search and the results), and after a result option is selected there are three pages (the search, the results, and the details).</p></li>
+<li><p>Finally, we will be “replacing” Fragments inside the Pager as the user interacts with the app (e.g., changing the <code>MoviesFragment</code> to one with different search results)—such as by changing the objects that the instance variables refer to. However, the ViewPager “preloads” adjacent Fragment pages as an optimization technique; thus it “caches” the Fragments and won’t actually load any updated Views.</p></li>
 </ul>
-<p>What if we want to do more complex layouts? We could look for a more complex <code>LayoutManager</code>, but we can actually achieve a lot of flexibility simply by using <em>multiple containers</em>.</p>
-<p>For example, we can make a <code>JPanel</code> object, which is basically an “empty” component. We can then add multiple buttons to this this panel, and add <em>that panel</em> to the <code>JFrame</code>. Because <code>JPanel</code> <strong>is a</strong> <code>Component</code> (just like <code>JButton</code> is), we can use the <code>JPanel</code> exactly as we used the <code>JButton</code>—this panel just happens to have multiple buttons.</p>
-<p>And since we can put any <code>Component</code> in a <code>JPanel</code>, and <code>JPanel</code> is itself a Component… we can create nest these components together into a tree in an example of the <a href="http://www.oodesign.com/composite-pattern.html">Composite Pattern</a>. This allows us to create very complex user interfaces with just a simple <code>BoxLayout</code>!</p>
+<p>As a work-around, override the <code>getItemPosition()</code> function (which is called whenever the Pager needs to determine if an item’s position has changed):</p>
+<p><code>java   public int getItemPosition(Object object) {       return POSITION_NONE;   }</code></p>
+<p>Note that this is a memory-intensive workaround (but works for demonstration purposes); for a cleaner solution, see <a href="http://stackoverflow.com/questions/7263291/viewpager-pageradapter-not-updating-the-view/8024557#8024557">this discussion</a>.</p>
+<p>Once you’ve defined the your adapter, instantiate it in the Activity’s <code>onCreate()</code> callback, and use <code>ViewPager#setAdapter()</code> to specify the Pager’s adapter.</p>
+<p>If you also instantiate a <code>SearchFragment</code> in the <code>onCreate()</code> callback, then you should be able to run the application and see that Fragment appear as a page (though there is nothing else to swipe to yet).</p>
+</div>
+<div id="add-user-interaction" class="section level2">
+<h2><span class="header-section-number">8.3</span> Add User Interaction</h2>
+<p>Finally, you will need to adjust the Fragment callback methods inside the Activity (e.g., <code>onSearchSubmitted()</code> and <code>onMovieSelected()</code>) so that they interact with the ViewPager. Note that this will involve removing previous code (the ViewPager does not need to utilize FragmentTransactions).</p>
+<p>When the search term is submitted from the <code>SearchFragment</code>, your Activity should instantiate a new (potentially different) <code>MoviesFragment</code> result list for that search term. The PagerAdapter should return an appropriate page count depending on whether a result list has been instantiated or not.</p>
 <ul>
-<li>This is similar to how we can create complex web layouts just by nesting lots of <code>&lt;div&gt;</code> elements.</li>
+<li>However, simply creating a different Fragment will not cause the Adapter to change—you need to let the Adapter know that the <em>model</em> it is adapting into a <em>view</em> has changed! You can do this by calling the <code>notifyDataSetChanged()</code> method on the adapter.</li>
 </ul>
+<p>After you’ve modified (and notified!) the Adapter, you can change which page is displayed using the <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html#setCurrentItem(int)"><code>ViewPager#setCurrentItem()</code></a> method. This will let you take the user to the “results” page!</p>
+<p>Similarly, modify the movie selection callback so that when a movie is selected from the list, your Activity instantiates a new (potentially different) <code>DetailFragment</code>. Remember to notify the adapter that the data set has changed, and to change which page is currently shown.</p>
+<ul>
+<li>This will replace the previous behavior of the callback.</li>
+</ul>
+<p>Once you’ve made these changes, you should be able to search for movies, see the results, and view the details for movies. Swipe left and right to navigate between pages!</p>
+<!-- Remember to `commit` and `push` your changes to GitHub and submit this lab once completed. -->
 
 </div>
 </div>
@@ -322,8 +326,8 @@ container.<span class="fu">add</span>(otherButton);</code></pre></div>
           </div>
         </div>
       </div>
-<a href="java-review.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="java-threads-http.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="providers-and-loaders.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="accessibility.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -351,7 +355,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/java-swing.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/viewpager.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

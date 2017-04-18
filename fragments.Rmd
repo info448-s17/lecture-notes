@@ -1,4 +1,4 @@
-# Fragments
+# Fragments {#fragments}
 This lecture discusses Android [**Fragments**](https://developer.android.com/guide/components/fragments.html). A Fragment is "a behavior or a _portion_ of user interface in Activity." You can think of them as "mini-activities" or "sub-activities". Fragments are designed to be **reusable** and **composable**, so you can mix and match them within a single screen of a user interface. While XML resource provide reusable and composable _views_, Fragments provide reusable and composable _controllers_. Fragments allow us to make re-usable pieces of Activities that can have their own layouts, data models, event callbacks, etc.
 
 <p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture05-fragments>. Note that this code builds upon the example developed in Lecture 4.</p>

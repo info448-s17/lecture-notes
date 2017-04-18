@@ -1,0 +1,83 @@
+# Fragments: ViewPager
+In this chapter, you will practice working with Fragments and layouts. Specifically, you will modify the Movie application so that it uses a [**ViewPager**](https://developer.android.com/training/animation/screen-slide.html), an interactive View offered by the Android Support Library that will allow you to "page" (swipe) through different Fragments. You will modify the application so that the user can swipe through a "search" screen, the list of search results, and the details about a particular movie.
+
+<p class="alert alert-warning">IMPORTANT NOTE: you should **not** modify the `MovieFragment` or the `DetailFragment` (those Fragments are self-contained and so can be used in multiple layouts!). You will need to create one new Fragment though, and make substantial modifications to the `MainActivity`</p>
+
+This chapter will build on the lecture code found at **<https://github.com/info448-s17/lecture05-fragments>**.
+
+If you haven't already, you should **Fork and Clone** this repo in order to complete the tutorial. Note that you should complete this tutorial on a separate **`viewpager-work`** branch. You can create this branch either off of the `completed` branch (containing the completed lecture code), or from the `master` branch of code if you were able to complete the work described [in lecture 5](#fragments):
+
+```bash
+git checkout completed
+git checkout -b lab-work
+```
+
+<!-- You will need to `commit` and `push` your completed work back to your forked repo by the deadline, and submit a link to your forked repo to this Canvas assignment. Note that you are **not** required to create a separate pull request, though you should work on the separate `lab-work` branch! -->
+
+
+## Define a SearchFragment
+Your `ViewPager` will need to support three different Fragments. While the `MovieFragment` and `DetailFragment` are defined already, you will need to create a third.
+
+Create a new Fragment called **`SearchFragment`** (use the `File > New > Fragment > Fragment (Blank)` menu in Android Studio). Your `SearchFragment` will need to include the following components
+
+1. The layout for the Fragment should contain the seach `EditText` and `Button` _taken from_ the `activity_main` layoout. You can add some `layout_gravity` to center the inputs. You can also remove the `onClick` XML attribute, as click handling will be specified in the Java
+
+2. In the `SearchFragment` class, be sure to define a `newInstance()` factory method. The method doesn't need to take any arguments (and thus you don't need to specify an argument bundle).
+
+	- Typing `newInstance` will allow Android Studio to tab-complete the method!
+
+3. The `SearchFragment` will need to communicate with other Fragments, and thus you will need to define an `interface` (e.g., `OnSearchListener`) that the containing Activity can implement. This interface should support a single public method (e.g., `onSearchSubmitted(String searchTerm)`) which will allow the Fragment to pass the entered search term to the Activity.
+
+	- Remember to check that the containing Activity implements the interface in the Fragment's `onAttach()` callback.
+
+4. Finally, in the `onCreateView()` callback, add a click listener to the button so that when it is clicked, it calls the `onSeachSubmitted()` callback function on the containing Activity (which you've established has that method!)
+
+	- Remember that you can call `findViewById()` on the _root view_.
+
+## Add the ViewPager and Adapter
+Your `MainActivity` will need to contain a [`ViewPager`](https://developer.android.com/reference/android/support/v4/view/ViewPager.html) View (since all the other Views have been moved to Fragments!).
+
+Add a `android.support.v4.view.ViewPager` element in the `activity_main.xml` layout resource, finding this View in the Activity's `onCreate()` callback.
+
+Just like with a `ListView`, a `ViewPager` requires a (custom) **adapter** in order to map from which "page" is shown to the Fragment that is rendered. Add a new inner class (e.g., `MoviePagerAdapter`) that subclasses [`FragmentStatePagerAdapter`](https://developer.android.com/reference/android/support/v4/app/FragmentStatePagerAdapter.html).
+
+- As in the [documentation example](https://developer.android.com/training/animation/screen-slide.html#viewpager), You will need to provide a constructor that takes in a (Support) `FragmentManager`, and calls the appropriate super constructor.
+
+- The `getItem()` function returns _which_ Fragment is shown for a particular page number. You should implement this function so that page 0 shows a `SearchFragment`, page 1 shows a `MoviesFragment`, and page 2 shows a `DetailsFragment`.
+	- You can declear each of these three Fragments as **instance variables**, then simply return them from this method.
+	- It's okay to "hard-code" this logic for the purposes of this demonstration.
+
+- The `getCount()` function returns how many pages the Pager supports. Note that you will need to include some logic for this: before a search has occured, there is only one page! After the search, there are two pages (the search and the results), and after a result option is selected there are three pages (the search, the results, and the details).
+
+- Finally, we will be "replacing" Fragments inside the Pager as the user interacts with the app (e.g., changing the `MoviesFragment` to one with different search results)&mdash;such as by changing the objects that the instance variables refer to. However, the ViewPager "preloads" adjacent Fragment pages as an optimization technique; thus it "caches" the Fragments and won't actually load any updated Views.
+
+	As a work-around, override the `getItemPosition()` function (which is called whenever the Pager needs to determine if an item's position has changed):
+
+	```java
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
+	}
+	```
+
+	Note that this is a memory-intensive workaround (but works for demonstration purposes); for a cleaner solution, see [this discussion](http://stackoverflow.com/questions/7263291/viewpager-pageradapter-not-updating-the-view/8024557#8024557).
+
+Once you've defined the your adapter, instantiate it in the Activity's `onCreate()` callback, and use `ViewPager#setAdapter()` to specify the Pager's adapter.
+
+If you also instantiate a `SearchFragment` in the `onCreate()` callback, then you should be able to run the application and see that Fragment appear as a page (though there is nothing else to swipe to yet).
+
+## Add User Interaction
+Finally, you will need to adjust the Fragment callback methods inside the Activity (e.g., `onSearchSubmitted()` and `onMovieSelected()`) so that they interact with the ViewPager. Note that this will involve removing previous code (the ViewPager does not need to utilize FragmentTransactions).
+
+When the search term is submitted from the `SearchFragment`, your Activity should instantiate a new (potentially different) `MoviesFragment` result list for that search term. The PagerAdapter should return an appropriate page count depending on whether a result list has been instantiated or not.
+
+- However, simply creating a different Fragment will not cause the Adapter to change&mdash;you need to let the Adapter know that the _model_ it is adapting into a _view_ has changed! You can do this by calling the `notifyDataSetChanged()` method on the adapter.
+
+After you've modified (and notified!) the Adapter, you can change which page is displayed using the <a href="https://developer.android.com/reference/android/support/v4/view/ViewPager.html#setCurrentItem(int)">`ViewPager#setCurrentItem()`</a> method. This will let you take the user to the "results" page!
+
+Similarly, modify the movie selection callback so that when a movie is selected from the list, your Activity instantiates a new (potentially different) `DetailFragment`. Remember to notify the adapter that the data set has changed, and to change which page is currently shown.
+
+- This will replace the previous behavior of the callback.
+
+Once you've made these changes, you should be able to search for movies, see the results, and view the details for movies. Swipe left and right to navigate between pages!
+
+<!-- Remember to `commit` and `push` your changes to GitHub and submit this lab once completed. -->

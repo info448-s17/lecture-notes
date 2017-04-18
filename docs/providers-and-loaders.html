@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="java-review.html">
-<link rel="next" href="java-threads-http.html">
+<link rel="prev" href="ui-components.html">
+<link rel="next" href="accessibility.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -250,80 +250,110 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="java-swing" class="section level1">
-<h1><span class="header-section-number">B</span> Swing Framework</h1>
-<p>Android applications are user-driven graphical applications. In order to become familiar with some of the <em>coding patterns</em> involved in this kind of software (without the overhead of the Android framework), let’s consider how to build simple graphical applications in Java using the <a href="https://docs.oracle.com/javase/tutorial/uiswing/start/">Swing library</a></p>
+<div id="providers-and-loaders" class="section level1">
+<h1><span class="header-section-number">Lecture 7</span> Providers and Loaders</h1>
+<p>This lecture discusses how to access data from a <strong>Content Provider</strong> using a <a href="http:..."><strong>Loader</strong></a>. A <em>Content Provider</em> is an abstraction of a data base or other data store, allowing us easily systematically work with that data in Java (rather than in a separate data manipulation language such as SQL). A <em>Loader</em> is then used to efficiently perform this data access in the background (off the UI Thread), while also easily connecting that data to Views.</p>
 <p class="alert alert-info">
-This appendix references code found at <a href="https://github.com/info448-s17/lecture02-activities" class="uri">https://github.com/info448-s17/lecture02-activities</a>, in the <code>java/</code> folder. Note that this tutorial involves Java Programming: while it is possible to do this in Android Studio, it’s often easier to just utilize a light-weight text editor such as <a href="https://code.visualstudio.com/">Visual Studio Code</a> or <a href="https://www.sublimetext.com/">Sublime Text</a>.
+This lecture references code found at <a href="https://github.com/info448-s17/lecture07-loaders" class="uri">https://github.com/info448-s17/lecture07-loaders</a>.
 </p>
-<p>The <strong>Swing</strong> library is a set of Java classes used to specify graphical user interfaces (GUIs). These classes can be found in the <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/package-summary.html"><code>javax.swing</code></a> package. They also rely on the <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/package-summary.html"><code>java.awt</code></a> package (the “Advanced Windowing Toolkit”), which is an older GUI library that Swing builds on top of.</p>
+<div id="content-providers" class="section level2">
+<h2><span class="header-section-number">7.1</span> Content Providers</h2>
+<p>Consider the <code>WordListFragment</code> utilized by the example code (though these concepts apply to any Fragment or Activity). This Fragment includes a <code>ListView</code> that shows a list of words. Recall that a <code>ListView</code> utilizes the <strong>model-view-controller</strong> architecture… and in this case, the “model” (data) is a hard-coded list of array of words. But there are other lists of words as well! Entire databases of words! Previous lectures have discussed how to use <em>network requests</em> to access online data APIs, but there are also databases (of words no less) built into your Android phone.</p>
+<p>For example, Android keeps track of the list of the spellings of “non-standard” words in what is called the <strong>User Dictionary</strong>. You can view this list on the device at <code>Settings &gt; Language &amp; Input &gt; Personal Dictionary</code>. You can even use this Settings interface to add new words to the dictionary (e.g., “embiggen”, “cromulent”, “fleek”).</p>
+<!-- check from here -->
+<p>Note that the User Dictionary keeps track of a <a href="http://developer.android.com/guide/topics/providers/content-provider-basics.html#Basics"><strong>database</strong></a> of words. You can think of this database as being like a single SQL table: it’s a set of <em>entries</em> (rows) each of which have some <em>values</em> (columns). The primary key of the table is named (by convention) <code>ID</code>.</p>
+<p class="alert alert-info">
+While you don’t need to know SQL to utilize a built-in database like the User Dictionary, it helps to have a passing familiarity with relational databases (e.g., what is taught in the iSchool’s INFO 340 course).
+</p>
+<p>Since this data is stored in a simple SQL table, it is possible for us to access and modify it programmatically&amp;mash;moreover, the Android framework allows us to do this without needing to know or write SQL! For example, we can access this list of words in order to show them in the WordFragment’s ListView.</p>
 <ul>
-<li>Fun fact: Swing library is named after the dance style: the developers wanted to name it after something hip and cool and popular. In the mid-90s.</li>
+<li><p>To do this, we’ll need to request permission to access the database, just as we asked permission to access the Internet. Include the following in the <em>Manifest</em>:</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;uses-permission</span><span class="ot"> android:name=</span><span class="st">&quot;android.permission.READ_USER_DICTIONARY&quot;</span><span class="kw">&gt;</span></code></pre></div></li>
 </ul>
-<p>Let’s look at an incredibly basic GUI class: <code>MyGUI</code> found in the <code>src/main/java/</code> folder. The class <em>subclasses</em> (extends) <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JFrame.html"><code>JFrame</code></a>. <code>JFrame</code> represents a “window” in your operating system, and does all the work of making that window show up and interact with the operating system in a normal way. By subclassing <code>JFrame</code>, we get that functionality for free! This is how we build all GUI applications using this framework.</p>
-<p>Most of the work defining a Swing GUI happens in the <code>JFrame</code> constructor (called when the GUI is “created”).</p>
-<ol style="list-style-type: decimal">
-<li><p>We first call the parent constructor (passing in the title for the window), and then call a method to specify what happens when we hit the “close” button.</p></li>
-<li><p>We then instantiate a <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JButton.html"><code>JButton</code></a>, which is a class representing a Java Button. Note that <code>JButton</code> is the Swing version of a button, building off of the older <code>java.awt.Button</code> class.</p></li>
-<li><p>We then <code>.add()</code> this button to the <code>JFrame</code>. This puts the button inside the window. This process is similar to using jQuery to add an HTML element to web page.</p></li>
-<li><p>Finally, we call <code>.pack()</code> to tell the Frame to resize itself to fit the contents, and then <code>.setVisible()</code> to make it actually appear.</p></li>
-<li><p>We run this program from <code>main</code> by just instantiating our specialized <code>JFrame</code>, which will contain the button.</p></li>
-</ol>
-<p>You can compile and run this program with <code>./gradlew -q run</code>. And voila, we have a basic button app!</p>
-<div id="events" class="section level2">
-<h2><span class="header-section-number">B.1</span> Events</h2>
-<p>If we click the button… nothing happens. Let’s make it print out a message when clicked. We can do this through <strong>event-based programming</strong> (if you remember handling <code>click</code> events from JavaScript, this is the same idea).</p>
-<p>Most computer systems see interactions with its GUI as a series of <strong>events</strong>: the <em>event</em> of clicking a button, the <em>event</em> of moving the mouse, the <em>event</em> of closing a window, etc. Each thing you interact with <em>generates</em> and <em>emits</em> these events. So when you click on a button, it creates and emits an “I was clicked!” event. (You can think of this like the button shouting “Hey hey! I was pressed!”) We can write code to respond to this shouting to have our application do something when the button is clicked.</p>
-<p>Events, like everything else in Java, are Objects (of the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/EventObject.html"><code>EventObject</code></a> type) that are created by the emitter. A <code>JButton</code> in particular emits <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionEvent.html"><code>ActionEvents</code></a> when pressed (the “action” being that it was pressed). In other words, when buttons are pressed, they shout out <code>ActionEvents</code>.</p>
-<p>In order to respond to this shouting, we need to “listen” for these events. Then whenever we hear that there is an event happening, we can react to it. This is like a person manning a submarine radar, or hooking up a baby monitor, or following someone on Twitter.</p>
-<p>But this is Java, and everything in Java is based on Objects, we need an object to listen for these events: a “listener” if you will. Luckily, Java provides a type that can listen for <code>ActionEvents</code>: <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionListener.html"><code>ActionListener</code></a>. This type has an <code>actionPerformed()</code> method that can be called in response to an event.</p>
-<p>We use the <a href="https://sourcemaking.com/design_patterns/observer">Observer Pattern</a> to connect this listener object to the button (<code>button.addActionListener(listener)</code>). This <em>registers</em> the listener, so that the Button knows who to shout at when something happens. (Again, like following someone on Twitter). When the button is pressed, it will go to any listeners registered with it and call their <code>actionPerformed()</code> methods, passing in the <code>ActionEvent</code> it generated.</p>
-<p>But look carefully: <code>ActionListener</code> is not a concrete class, but an abstract <strong>interface</strong>. This means if we want to make an <code>ActionListener</code> object, we need to create a class that <code>implements</code> this interface (and provides the <code>actionPerformed()</code> method that can be called when the event occurs). There are a few ways we can do this:</p>
-<ol style="list-style-type: decimal">
-<li><p>We already have a class we’re developing: <code>MyGUI</code>! So we can just make <em>that</em> class <code>implement ActionListener</code>. We’ll fill in the provided method, and then specify that <code>this</code> object is the listener, and voila.</p>
-<ul>
-<li><p>This is my favorite way to create listeners in Java (since it keeps everything self-contained: the <code>JFrame</code> handles the events its buttons produce).</p></li>
-<li><p>We’ll utilize a variant of this pattern in Android: we’ll make classes implement listeners, and then “register” that listener somewhere else in the code (often in a nested class).</p></li>
-</ul></li>
-<li><p>But what if we want to <em>reuse</em> our listener across different classes, but don’t want to have to create a new <code>MyGUI</code> object to listen for a button to be clicked? We can instead use an <strong>inner</strong> or <strong>nested</strong> class. For example, create a nested class <code>MyActionListener</code> that implements the interface, and then just instantiate one of those to register with the button.</p>
-<ul>
-<li>This could be a <code>static</code> nested class, but then it wouldn’t be able to access instance variables (because it belongs to the <em>class</em>, not the <em>object</em>). So you might want to make it an inner class instead. Of course then you can’t re-use it elsewhere without making the <code>MyGUI</code> (whose instance variables it referenes anyway)… but at least we’ve organized the functionality.</li>
-</ul></li>
-<li><p>It seems sort of silly to create a whole new <code>MyActionListener</code> class that has one method and is just going to be instantiated once. So what if instead of giving it a name, we just made it an <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/anonymousclasses.html"><strong>anonymous class</strong></a>? This is similar to how you’ve made <em>anonymous variables</em> by instantiating objects without assigning them to named variables, you’re just doing the same thing with a class that just implements an interface. The syntax looks like:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">button.<span class="fu">addActionListener</span>(<span class="kw">new</span> <span class="bu">ActionListener</span>() {
-  <span class="co">//class declaration goes in here!</span>
-
-<span class="kw">public</span> <span class="dt">void</span> <span class="fu">actionPerformed</span>(<span class="bu">ActionEvent</span> event) { <span class="co">/*...*/</span>}
-});</code></pre></div>
-<p>This is how buttons are often used in Android: we’ll create an anonymous listener object to respond to the event that occurs when they are pressed.</p></li>
-</ol>
+<p>So these words are stored in a database or some kind that we’d like to access. But we don’t know the format of this database, and don’t want to have to write specific code to deal with that exact format (e.g., is it an SQLite database or a file?) - Android does include support for working directly with SQLite databases… but that’s a lot of work that we don’t want to deal with (though we’ll look at it eventually maybe)</p>
+<p>Because we don’t want to deal with the specific format of how the data is stored, Android offers an <em>abstraction</em> in the form of a <a href="http://developer.android.com/guide/topics/providers/content-providers.html"><strong>Content Provider</strong></a>. A Content Provider offers an interface to interact with structured data, whether that data is stored in a database, in a file, online, whatever. - You can think of a Content Provider as a “Data Source”. - We’ll talk about defining these later in the course, but for now we’re just interested in <em>using</em> them.</p>
+<p>A Content Provider is basically a “data source” that has a <strong>URI</strong> (Universal Resource Indicator: think URL but not necessarily on the Internet) that you can query, similar in concept to how you get data from a website by sending a query. In particular, these Uri’s specify the <code>content://</code> protocol, allowing you to access the data as content (rather than, say, HTTP). - The “URI” for the Dictionary’s content is at <code>UserDictionary.Words.CONTENT_URI</code>. We don’t care about the exact path, because that’s stored as a constant!</p>
+<p>We are able to access this provider via a <a href="http://developer.android.com/reference/android/content/ContentResolver.html"><code>ContentResolver</code></a>, which is a class used to access the data stored in <code>ContentProviders</code>. We fetch the <code>ContentResolver</code> for the current Context (e.g., Activity) by calling <code>getContentResolver()</code> (note that for a Fragment we’ll need to fetch the Context with <code>getActivity()</code>). - The <code>ContentResolver</code> contains various “CRUD” style methods we can use to access the data stored in that provider (whatever format it takes): <code>.insert()</code>, <code>.query()</code>, <code>.update()</code>, <code>.delete()</code>. These are named after equivalent commands in databases.</p>
+<p>Let’s take a look at the <a href="http://developer.android.com/reference/android/content/ContentResolver.html#query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String)"><code>query()</code></a> method:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="fu">getContentResolver</span>().<span class="fu">query</span>(
+        uri,              <span class="co">// The content URI</span>
+        mProjection,      <span class="co">// The columns to return for each row</span>
+        mSelectionClause  <span class="co">// Selection criteria</span>
+        mSelectionArgs,   <span class="co">// Selection criteria</span>
+        mSortOrder);      <span class="co">// The sort order for the returned rows</span></code></pre></div>
+<p>This is basically a wrapper around an SQL <code>SELECT</code> statement. - We start by specifying the URI for the Provider (data source) - We then specify a <strong>projection</strong>. This is a <code>String[]</code> of all the “columns” (attributes) we want to fetch from the data source. This is what you’d put instead of the <code>*</code> in SQL. (Note we can pass in <code>null</code>, but that’s inefficient–better to give a list of everything). - We can see what column names are available for the User Dictionary in <a href="http://developer.android.com/reference/android/provider/UserDictionary.Words.html"><code>UserDictionary.Words</code></a> - Make sure you grab <code>_ID</code>; we’ll need it for later! - We can then specify the selection criteria. This is what goes after <code>WHERE</code> in an SQL statement. Leave null for “all rows” - After that we specify values to enter into that <code>WHERE</code> statement, which will be escaped against SQL injection attacks. null for nothing - Finally, we can pass in a sort order (<code>ORDER BY</code> in SQL). null for nothing.</p>
+<p>So overall, the query is breaking apart an SQL Select statement into different pieces as parameters to a method, so you don’t <em>quite</em> have to write the selection yourself.</p>
 </div>
-<div id="layouts-and-composites" class="section level2">
-<h2><span class="header-section-number">B.2</span> Layouts and Composites</h2>
-<p>What if we want to add a second button? If we try to just <code>.add()</code> another button… it replaces the one we previously had! This is because Java doesn’t know <em>where</em> to put the second button. Below? Above? Left? Right?</p>
-<p>In order to have the <code>JFrame</code> contain multiple components, we need to specify a <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/LayoutManager.html"><strong>layout</strong></a>, which knows how to organize items that are added to the Frame. We do this with the <code>.setLayout()</code> method. For example, we can give the frame a <code>BoxLayout()</code> with a <code>PAGE_AXIS</code> orientation to have it lay out the buttons in a vertical row.</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">container.<span class="fu">setLayout</span>(<span class="kw">new</span> <span class="bu">BoxLayout</span>(container, <span class="bu">BoxLayout</span>.<span class="fu">PAGE_AXIS</span>));
-container.<span class="fu">add</span>(theButton);
-container.<span class="fu">add</span>(otherButton);</code></pre></div>
+<div id="cursors" class="section level2">
+<h2><span class="header-section-number">7.2</span> Cursors</h2>
+<p>What kind of object does this method return? A <a href="http://developer.android.com/reference/android/database/Cursor.html"><code>Cursor</code></a>. A <code>Cursor</code> is a lot like an <code>Iterator</code> in Java (have you worked with those?) It basically represents a set of entries from a database, and it keeps track of where you are in a list (e.g., what <code>i</code> would be on in a loop). It then provides methods that let us fetch values from the object at that spot in the list. For example:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">cursor.<span class="fu">moveToFirst</span>(); <span class="co">//move to the first item</span>
+<span class="bu">String</span> field0 = cursor.<span class="fu">getString</span>(<span class="dv">0</span>); <span class="co">//get the first field (column you specified) as a String</span>
+<span class="bu">String</span> name = cursor.<span class="fu">getString</span>(cursor.<span class="fu">getColumnIndexOrThrow</span>(<span class="st">&quot;word&quot;</span>)); <span class="co">//get the &quot;name&quot; field as a String</span>
+cursor.<span class="fu">moveToNext</span>(); <span class="co">//go to the next item</span></code></pre></div>
 <ul>
-<li>Java has different <code>LayoutManagers</code> that each have their own way of organizing components. We’ll see this same idea in Android.</li>
+<li>Again, we can see what columns are available at <code>UserDictionary.Words</code></li>
 </ul>
-<p>What if we want to do more complex layouts? We could look for a more complex <code>LayoutManager</code>, but we can actually achieve a lot of flexibility simply by using <em>multiple containers</em>.</p>
-<p>For example, we can make a <code>JPanel</code> object, which is basically an “empty” component. We can then add multiple buttons to this this panel, and add <em>that panel</em> to the <code>JFrame</code>. Because <code>JPanel</code> <strong>is a</strong> <code>Component</code> (just like <code>JButton</code> is), we can use the <code>JPanel</code> exactly as we used the <code>JButton</code>—this panel just happens to have multiple buttons.</p>
-<p>And since we can put any <code>Component</code> in a <code>JPanel</code>, and <code>JPanel</code> is itself a Component… we can create nest these components together into a tree in an example of the <a href="http://www.oodesign.com/composite-pattern.html">Composite Pattern</a>. This allows us to create very complex user interfaces with just a simple <code>BoxLayout</code>!</p>
+<p>The nice thing about <code>Cursors</code> though is that they can easily be fed into <code>AdapterViews</code> by using a <a href="http://developer.android.com/reference/android/widget/CursorAdapter.html"><code>CursorAdapter</code></a> (as opposed to the <code>ArrayAdapter</code> we’ve used previously). The <a href="http://developer.android.com/reference/android/widget/SimpleCursorAdapter.html"><strong><code>SimpleCursorAdapter</code></strong></a> is a concrete implementation that is almost as easy to use as an <code>ArrayAdapter</code>. - You instantiate a new <code>SimpleCursorAdapter</code>, passing it: - a <code>Context</code> - a layout resource to inflate, - a <code>Cursor</code> (which can be <code>null</code>) - an array of column names to fetch from each entry in the Cursor (the <strong>projection</strong>) - a matching list of view resource ids (which should all be <code>TextViews</code>) to assign each column to. - any flags (<code>0</code> means no flags, and is the correct option for us).</p>
 <ul>
-<li>This is similar to how we can create complex web layouts just by nesting lots of <code>&lt;div&gt;</code> elements.</li>
+<li>Then we can set this adapter just like we did with <code>ArrayAdapter</code>!</li>
 </ul>
+</div>
+<div id="loaders" class="section level2">
+<h2><span class="header-section-number">7.3</span> Loaders</h2>
+<p>In order to get the <code>Cursor</code> to pass into the adapter, we need to <code>.query()</code> the database. But we’ll be doing this a lot (and so would like to do it off the UI Thread—database accessing is slow!). And every time we do that query, we also want to update the <code>Adapter</code> so that the changes to the list show up!</p>
+<p>In order to easily update your list with new data loaded on a background thread, we’re going to use a class called a <a href="http://developer.android.com/guide/components/loaders.html"><code>Loader</code></a>. This is basically a wrapper around <code>ASyncTask</code>, but one that let’s you quickly specify what action should occur in the background thread. In particular, Android provides a <a href="http://developer.android.com/reference/android/content/CursorLoader.html"><code>CursorLoader</code></a> specifically used to load Cursors, which can then be “swapped” into the adapter.</p>
+<p>To use a <code>CursorLoader</code>, we need to specify that our <em>Fragment</em> implements the <a href="http://developer.android.com/reference/android/support/v4/app/LoaderManager.LoaderCallbacks.html"><code>LoaderManager.LoaderCallback&lt;Cursor&gt;</code></a> interface—basically saying that this fragment can react to Loader events.</p>
+<pre><code>- (Loaders need to work with Fragments. If you have your Activity extends [`FragmentActivity`](http://developer.android.com/reference/android/support/v4/app/FragmentActivity.html), you can get the &quot;Fragment&quot; capabilities to use a `Loader` in an Activity). Note that `AppCompatActivity` is a subclass of this, so everything can work for Activities as well!</code></pre>
+<p>We then fill in the callbacks to write the code to use the <code>CursorLoader</code>. - In <code>onCreateLoader()</code> we specify what the Loader should <em>do</em>. Here we would instantiate and return a <code>new CursorLoader(...)</code> that queries the <code>ContentProvider</code>. This looks a lot like the <code>.query()</code> method we wrote earlier, but will run on a background thread!</p>
+<ul>
+<li><p>In the <code>onLoadFinished()</code> callback, we can <code>swap()</code> the <code>Cursor</code> into our <code>SimpleCursorAdapter</code> in order to feed that model data into our controller (for display in the view). See the <a href="http://developer.android.com/guide/components/loaders.html">guide</a> for more details.</p></li>
+<li><p>In the <code>onLoaderReset()</code> callback just swap in <code>null</code> for our Cursor, since there now is no content (it is “reset”).</p></li>
+</ul>
+<p>Finally, in order to actually <em>start</em> our background activity, we’ll use the <code>getLoaderManager().initLoader(...)</code> method. This is similar in flavor to the <code>AsyncTask.execute()</code> method we’ve used before (using a manager similar to the <code>FragmentManager</code>).</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="fu">getLoaderManager</span>().<span class="fu">initLoader</span>(<span class="dv">0</span>, <span class="kw">null</span>, <span class="kw">this</span>);</code></pre></div>
+<ul>
+<li>The first parameter to the <code>initLoader()</code> method is an id number for <em>which cursor you want to load</em>, and is passed in as the first param to <code>onCreateLoader()</code> (or is accessible via <code>Loader#getId()</code>).</li>
+<li>Second param is a <code>Bundle</code> of args, and the third is the <code>LoaderCallbacks</code> (e.g., who handles the results)!</li>
+<li>Note that you can use the <code>.restartLoader()</code> method to “recreate” the <code>CursorLoader</code>, like if you want to change the arguments passed to it.</li>
+</ul>
+<p>And with that, we can fetch the words from our database on a background thread–and if we update the words it will automatically change!</p>
+</div>
+<div id="other-provider-actions" class="section level2">
+<h2><span class="header-section-number">7.4</span> Other Provider Actions</h2>
+<div id="adding-words-if-time" class="section level3">
+<h3><span class="header-section-number">7.4.1</span> Adding Words (if time)</h3>
+<p>To <code>insert</code> a new Word into the <code>ContentProvider</code>, we just call a different method on the <code>ContentResolver</code>:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//Example from Google:</span>
+ContentValues mNewValues = <span class="kw">new</span> <span class="fu">ContentValues</span>();
+mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">APP_ID</span>, <span class="st">&quot;edu.uw.decorations&quot;</span>);
+mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">LOCALE</span>, <span class="st">&quot;en_US&quot;</span>);
+mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">WORD</span>, word);
+mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">FREQUENCY</span>, <span class="st">&quot;100&quot;</span>);
+
+Uri mNewUri = <span class="fu">getContentResolver</span>().<span class="fu">insert</span>(
+        UserDictionary.<span class="fu">Words</span>.<span class="fu">CONTENT_URI</span>,   <span class="co">// the user dictionary content URI</span>
+        mNewValues                          <span class="co">// the values to insert</span>
+);</code></pre></div>
+<ul>
+<li>Note that we specify the “details” of the Word in a <a href="http://developer.android.com/reference/android/content/ContentValues.html"><code>ContentValues</code></a> object, which is a HashMap almost exactly like a <code>Bundle</code> (but only supports values that work with <code>ContentProviders</code>)</li>
+</ul>
+<p>Whew! And that covers what you should need for the next assignment: you’ll be working with a <code>ContentProvider</code> I’ve provided, and doing some work to display its content, insert new items into it, and update the items that are there—all in a 2-pane layout (but you don’t need to worry about switching between landscape and portrait!)</p>
 
 </div>
+</div>
+</div>
+
+
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="java-review.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="java-threads-http.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="ui-components.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="accessibility.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -351,7 +381,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/java-swing.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/loaders.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

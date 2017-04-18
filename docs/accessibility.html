@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="java-review.html">
-<link rel="next" href="java-threads-http.html">
+<link rel="prev" href="providers-and-loaders.html">
+<link rel="next" href="fragments-viewpager.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -250,71 +250,91 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="java-swing" class="section level1">
-<h1><span class="header-section-number">B</span> Swing Framework</h1>
-<p>Android applications are user-driven graphical applications. In order to become familiar with some of the <em>coding patterns</em> involved in this kind of software (without the overhead of the Android framework), let’s consider how to build simple graphical applications in Java using the <a href="https://docs.oracle.com/javase/tutorial/uiswing/start/">Swing library</a></p>
-<p class="alert alert-info">
-This appendix references code found at <a href="https://github.com/info448-s17/lecture02-activities" class="uri">https://github.com/info448-s17/lecture02-activities</a>, in the <code>java/</code> folder. Note that this tutorial involves Java Programming: while it is possible to do this in Android Studio, it’s often easier to just utilize a light-weight text editor such as <a href="https://code.visualstudio.com/">Visual Studio Code</a> or <a href="https://www.sublimetext.com/">Sublime Text</a>.
-</p>
-<p>The <strong>Swing</strong> library is a set of Java classes used to specify graphical user interfaces (GUIs). These classes can be found in the <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/package-summary.html"><code>javax.swing</code></a> package. They also rely on the <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/package-summary.html"><code>java.awt</code></a> package (the “Advanced Windowing Toolkit”), which is an older GUI library that Swing builds on top of.</p>
+<div id="accessibility" class="section level1">
+<h1><span class="header-section-number">Lecture 8</span> Accessibility</h1>
+<p>This chapter will discuss how to support <a href="https://developer.android.com/training/accessibility/index.html"><strong>Accessibility</strong></a> when developing Android applications—specifically, supporting users with levels of physical disability. Accessibility is an incredibly important software quality that is often overlooked, but making Android apps accessible requires only a few minor changes to the implementation details discussed in this course.</p>
+<div id="universal-usability" class="section level2">
+<h2><span class="header-section-number">8.1</span> Universal Usability</h2>
+<p>When developing any kind of interactive system, there are different <em>design principles</em> (e.g., <a href="https://www.cs.umd.edu/users/ben/goldenrules.html">Shneiderman and Plaisant’s Golden Rules</a>) that can provide guidelines for how to develop effective and usable system.</p>
+<p>One of the most important design principles is <strong>Universal Usability</strong> (also known as <a href="https://en.wikipedia.org/wiki/Universal_design">Universal Design</a>), which is the principle that designed products should be <em>inherently accessible</em>. This principle takes as its premise that designing for <em>accessibility</em>—to be usable by all people no matter their ability (physical or otherwise)—benefits not just those with some form of limitation or disability, but <strong><em>everyone</em></strong>.</p>
+<p>The classic example of Universal Design are <a href="https://en.wikipedia.org/wiki/Curb_cut">curb cuts</a>: the “slopes” built into curbs to accommodate people in wheelchairs. However, this design decision end up making curbs more usability for <em>everyone</em>: curb cuts help people with rollerbags, strollers, temporary injuries, or who just have problems climbing steps.</p>
 <ul>
-<li>Fun fact: Swing library is named after the dance style: the developers wanted to name it after something hip and cool and popular. In the mid-90s.</li>
+<li>If you design a piece of technology to be used by a person with only one arm, then you support people with a disablity. But you <strong>also</strong> support people with a <em>temporary disability</em> (e.g., their arm is unusable because it is in a sling or a cast), <em>and</em> people who are just currently inconvenienced (e.g., they are holding a baby in that arm). You make the interaction and life better for everyone.</li>
 </ul>
-<p>Let’s look at an incredibly basic GUI class: <code>MyGUI</code> found in the <code>src/main/java/</code> folder. The class <em>subclasses</em> (extends) <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JFrame.html"><code>JFrame</code></a>. <code>JFrame</code> represents a “window” in your operating system, and does all the work of making that window show up and interact with the operating system in a normal way. By subclassing <code>JFrame</code>, we get that functionality for free! This is how we build all GUI applications using this framework.</p>
-<p>Most of the work defining a Swing GUI happens in the <code>JFrame</code> constructor (called when the GUI is “created”).</p>
-<ol style="list-style-type: decimal">
-<li><p>We first call the parent constructor (passing in the title for the window), and then call a method to specify what happens when we hit the “close” button.</p></li>
-<li><p>We then instantiate a <a href="https://docs.oracle.com/javase/8/docs/api/javax/swing/JButton.html"><code>JButton</code></a>, which is a class representing a Java Button. Note that <code>JButton</code> is the Swing version of a button, building off of the older <code>java.awt.Button</code> class.</p></li>
-<li><p>We then <code>.add()</code> this button to the <code>JFrame</code>. This puts the button inside the window. This process is similar to using jQuery to add an HTML element to web page.</p></li>
-<li><p>Finally, we call <code>.pack()</code> to tell the Frame to resize itself to fit the contents, and then <code>.setVisible()</code> to make it actually appear.</p></li>
-<li><p>We run this program from <code>main</code> by just instantiating our specialized <code>JFrame</code>, which will contain the button.</p></li>
-</ol>
-<p>You can compile and run this program with <code>./gradlew -q run</code>. And voila, we have a basic button app!</p>
-<div id="events" class="section level2">
-<h2><span class="header-section-number">B.1</span> Events</h2>
-<p>If we click the button… nothing happens. Let’s make it print out a message when clicked. We can do this through <strong>event-based programming</strong> (if you remember handling <code>click</code> events from JavaScript, this is the same idea).</p>
-<p>Most computer systems see interactions with its GUI as a series of <strong>events</strong>: the <em>event</em> of clicking a button, the <em>event</em> of moving the mouse, the <em>event</em> of closing a window, etc. Each thing you interact with <em>generates</em> and <em>emits</em> these events. So when you click on a button, it creates and emits an “I was clicked!” event. (You can think of this like the button shouting “Hey hey! I was pressed!”) We can write code to respond to this shouting to have our application do something when the button is clicked.</p>
-<p>Events, like everything else in Java, are Objects (of the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/EventObject.html"><code>EventObject</code></a> type) that are created by the emitter. A <code>JButton</code> in particular emits <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionEvent.html"><code>ActionEvents</code></a> when pressed (the “action” being that it was pressed). In other words, when buttons are pressed, they shout out <code>ActionEvents</code>.</p>
-<p>In order to respond to this shouting, we need to “listen” for these events. Then whenever we hear that there is an event happening, we can react to it. This is like a person manning a submarine radar, or hooking up a baby monitor, or following someone on Twitter.</p>
-<p>But this is Java, and everything in Java is based on Objects, we need an object to listen for these events: a “listener” if you will. Luckily, Java provides a type that can listen for <code>ActionEvents</code>: <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/ActionListener.html"><code>ActionListener</code></a>. This type has an <code>actionPerformed()</code> method that can be called in response to an event.</p>
-<p>We use the <a href="https://sourcemaking.com/design_patterns/observer">Observer Pattern</a> to connect this listener object to the button (<code>button.addActionListener(listener)</code>). This <em>registers</em> the listener, so that the Button knows who to shout at when something happens. (Again, like following someone on Twitter). When the button is pressed, it will go to any listeners registered with it and call their <code>actionPerformed()</code> methods, passing in the <code>ActionEvent</code> it generated.</p>
-<p>But look carefully: <code>ActionListener</code> is not a concrete class, but an abstract <strong>interface</strong>. This means if we want to make an <code>ActionListener</code> object, we need to create a class that <code>implements</code> this interface (and provides the <code>actionPerformed()</code> method that can be called when the event occurs). There are a few ways we can do this:</p>
-<ol style="list-style-type: decimal">
-<li><p>We already have a class we’re developing: <code>MyGUI</code>! So we can just make <em>that</em> class <code>implement ActionListener</code>. We’ll fill in the provided method, and then specify that <code>this</code> object is the listener, and voila.</p>
+<p>Universal usability is equally important in the domain of mobile design:</p>
 <ul>
-<li><p>This is my favorite way to create listeners in Java (since it keeps everything self-contained: the <code>JFrame</code> handles the events its buttons produce).</p></li>
-<li><p>We’ll utilize a variant of this pattern in Android: we’ll make classes implement listeners, and then “register” that listener somewhere else in the code (often in a nested class).</p></li>
-</ul></li>
-<li><p>But what if we want to <em>reuse</em> our listener across different classes, but don’t want to have to create a new <code>MyGUI</code> object to listen for a button to be clicked? We can instead use an <strong>inner</strong> or <strong>nested</strong> class. For example, create a nested class <code>MyActionListener</code> that implements the interface, and then just instantiate one of those to register with the button.</p>
-<ul>
-<li>This could be a <code>static</code> nested class, but then it wouldn’t be able to access instance variables (because it belongs to the <em>class</em>, not the <em>object</em>). So you might want to make it an inner class instead. Of course then you can’t re-use it elsewhere without making the <code>MyGUI</code> (whose instance variables it referenes anyway)… but at least we’ve organized the functionality.</li>
-</ul></li>
-<li><p>It seems sort of silly to create a whole new <code>MyActionListener</code> class that has one method and is just going to be instantiated once. So what if instead of giving it a name, we just made it an <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/anonymousclasses.html"><strong>anonymous class</strong></a>? This is similar to how you’ve made <em>anonymous variables</em> by instantiating objects without assigning them to named variables, you’re just doing the same thing with a class that just implements an interface. The syntax looks like:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">button.<span class="fu">addActionListener</span>(<span class="kw">new</span> <span class="bu">ActionListener</span>() {
-  <span class="co">//class declaration goes in here!</span>
-
-<span class="kw">public</span> <span class="dt">void</span> <span class="fu">actionPerformed</span>(<span class="bu">ActionEvent</span> event) { <span class="co">/*...*/</span>}
-});</code></pre></div>
-<p>This is how buttons are often used in Android: we’ll create an anonymous listener object to respond to the event that occurs when they are pressed.</p></li>
-</ol>
+<li><p>If you support people with vision impairments (e.g., by providing touch and voice controls), you also support people who just want to use the app while driving or otherwise visually occupied.</p></li>
+<li><p>If you support people who cannot afford high-end devices with unlimited 4G connections (e.g., by functioning on older versions of Android, or being frugal when downloading data), you also support people who are currently without data connections (being out in the woords, on an airplane, over their data plan, etc).</p></li>
+</ul>
+<p>People with disabilities cannot ethically be excluded from consideration in app design, and by considering their needs you will also improve the usability of your app for all population—two for the price of one! This guideline is <a href="http://www.fastcodesign.com/3054927/the-big-idea/microsofts-inspiring-bet-on-a-radical-new-type-of-design-thinking">increasingly being acknowledged</a> by companies as key to usability, and thus it is important that you apply it to your own design work.</p>
 </div>
-<div id="layouts-and-composites" class="section level2">
-<h2><span class="header-section-number">B.2</span> Layouts and Composites</h2>
-<p>What if we want to add a second button? If we try to just <code>.add()</code> another button… it replaces the one we previously had! This is because Java doesn’t know <em>where</em> to put the second button. Below? Above? Left? Right?</p>
-<p>In order to have the <code>JFrame</code> contain multiple components, we need to specify a <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/LayoutManager.html"><strong>layout</strong></a>, which knows how to organize items that are added to the Frame. We do this with the <code>.setLayout()</code> method. For example, we can give the frame a <code>BoxLayout()</code> with a <code>PAGE_AXIS</code> orientation to have it lay out the buttons in a vertical row.</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">container.<span class="fu">setLayout</span>(<span class="kw">new</span> <span class="bu">BoxLayout</span>(container, <span class="bu">BoxLayout</span>.<span class="fu">PAGE_AXIS</span>));
-container.<span class="fu">add</span>(theButton);
-container.<span class="fu">add</span>(otherButton);</code></pre></div>
+<div id="implementing-accessibility" class="section level2">
+<h2><span class="header-section-number">8.2</span> Implementing Accessibility</h2>
+<p>The Android framework provides a number of ways to <a href="https://developer.android.com/guide/topics/ui/accessibility/apps.html"><strong>make apps more accessible</strong></a>, including a handy <a href="https://developer.android.com/guide/topics/ui/accessibility/checklist.html"><strong>accessibility developer checklist</strong></a> that you can follow. Some specific actions are described in more detail below: you should perform the listed tasks to test and improve an app’s accessibility.</p>
+<p class="alert alert-info">
+These exercises build on the lecture code found at <a href="https://github.com/info448-s17/lecture07-loaders" class="uri">https://github.com/info448-s17/lecture07-loaders</a>. You will need to adjust <code>MainActivity</code> so that it shows the provided <code>MovieFragment</code> by default; you will be testing and improving the accessibility of that Fragment.
+</p>
+<div id="supporting-vision-impairment" class="section level3">
+<h3><span class="header-section-number">8.2.1</span> Supporting Vision Impairment</h3>
+<p>One of the most important ways to support accessibility is to make sure your app is accessible to users with vision impairments.</p>
+<p>As mentioned previously, one way to support users with trouble seeing content on small screens is to always use <em>scalable pixels</em> (<strong><code>sp</code></strong>) as units on TextViews. This allows the size of the content to <em>scale</em> with user preferences: so if someone wants everything on the phone to be large, it can be!</p>
+<p>However, users who are <em>blind</em> require extra support. This support is provided by <a href="https://developer.android.com/guide/topics/ui/accessibility/services.html">Accessibility Services</a>, which are “background services” that can respond to specific accessibility events (we will discuss Services more in a future lecture). The most common built-in service is called <a href="https://developer.android.com/training/accessibility/testing.html#talkback"><strong>TalkBack</strong></a>, which is the Google-developed <a href="https://en.wikipedia.org/wiki/Screen_reader">screen reader</a> for Android. This service will “speak” the name of UI elements as the user focuses on them, as well as allow the user to drag a finger around a screen and get verbal feedback of what is there.</p>
 <ul>
-<li>Java has different <code>LayoutManagers</code> that each have their own way of organizing components. We’ll see this same idea in Android.</li>
+<li><p><em>TalkBack</em> can be turned enabled by going to <code>Settings &gt; Accessibility &gt; TalkBack</code>. This service is available on most consumer devices, but will need to be installed manually on the emulator. You can download the packaged <code>.apk</code> from <a href="http://www.apkmirror.com/apk/google-inc/talkback/">here</a> (version 5.1.0 works fine), and install it on the emulator using <code>adb</code> on the Terminal:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># replace with the package-name</span>
+<span class="ex">adb</span> install package-name.apk</code></pre></div></li>
 </ul>
-<p>What if we want to do more complex layouts? We could look for a more complex <code>LayoutManager</code>, but we can actually achieve a lot of flexibility simply by using <em>multiple containers</em>.</p>
-<p>For example, we can make a <code>JPanel</code> object, which is basically an “empty” component. We can then add multiple buttons to this this panel, and add <em>that panel</em> to the <code>JFrame</code>. Because <code>JPanel</code> <strong>is a</strong> <code>Component</code> (just like <code>JButton</code> is), we can use the <code>JPanel</code> exactly as we used the <code>JButton</code>—this panel just happens to have multiple buttons.</p>
-<p>And since we can put any <code>Component</code> in a <code>JPanel</code>, and <code>JPanel</code> is itself a Component… we can create nest these components together into a tree in an example of the <a href="http://www.oodesign.com/composite-pattern.html">Composite Pattern</a>. This allows us to create very complex user interfaces with just a simple <code>BoxLayout</code>!</p>
+<p><strong><em>Turn on TalkBack and use it to explore your phone and the test the <code>Loader Demo</code> app.</em></strong> You should do this <strong>without looking at your phone</strong> (avert you eyes, flip it upside down, etc)—try acting as if you were blind but still need to use the device!</p>
 <ul>
-<li>This is similar to how we can create complex web layouts just by nesting lots of <code>&lt;div&gt;</code> elements.</li>
+<li><p>The TalkBack service will start with a tutorial that you can complete (you can also read the <a href="https://support.google.com/accessibility/android/?hl=en#topic=3529932">user documentation</a>).</p>
+<p>In short: drag your finger to browse the device (letting TalkBack tell you what you are selecting), and then double-tap to “click” on an element.</p></li>
 </ul>
+<p>As you <em>should</em> notice in testing your app, many interface designs give usability hints (e.g., what a button does) though visual cus: images, icons, and labels. While this may cause the app to “look” nice, it is not very effective for vision-impaired users—such as how the “icon” buttons are just explored as (e.g.) “Button 59”.</p>
+<p>Thus for these purely visual elements (e.g., <code>ImageButton</code>, <code>ImageView</code>) we need to <a href="https://developer.android.com/training/accessibility/accessible-app.html#contentdesc">specify what text should be read</a> by TalkBack. Do this by including an <strong><code>android:contentDescription</code></strong> attribute on these elements, which are given a value of the text that TalkBack should read. <strong><em>Do this</em></strong> for all of the visual elements in the <code>MovieFragment</code> layout. (You can also set this description for dynamic elements using the <code>setContentDescription()</code> function in Java).</p>
+<ul>
+<li>This is equivalent to adding an <code>alt</code> or ARIA attribute in HTML.</li>
+</ul>
+<p>Incuding the <code>android:contentDescription</code> attribute is an incredibly easy addition (low-hanging fruit!) that does quite a lot to support accessibility of Android apps.</p>
+</div>
+<div id="supporting-alternative-inputs" class="section level3">
+<h3><span class="header-section-number">8.2.2</span> Supporting Alternative Inputs</h3>
+<p>A second easy change involves supporting interaction that <em>doesn’t</em> use the Touch Screen. This could be because of physical limitations: the user may interact with the device through an external device such as a keyboard, trackball, or <a href="https://developer.android.com/training/accessibility/testing.html#switch-access">switch</a>.</p>
+<p>The best way to support these alternative inputs is by making sure that each navigational element (things the user may select) are <a href="https://developer.android.com/training/accessibility/accessible-app.html#focus">focusable</a>. You can do this by specifying the <code>android:focusable</code> attribute in the XML (or use the <code>View#setFocusable()</code> method in Java).</p>
+<p>Buttons are already focusable by default. But you can also specify the <em>order</em> by whch elements get focus (similar to the “tab order” in <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex">HTML</a>). This is done using XML attributes <code>android:nextFocusDown</code>, <code>android:nextFocusUp</code>, <code>android:nextFocusLeft</code>, <code>android:nextFocusRight</code>. Each of these takes an <code>id</code> reference as a value (e.g., <code>&quot;@id/nextElement&quot;</code>), which refers to which View should gain focus <em>instead of the “natural” order</em>.</p>
+<ul>
+<li><p>To practice this, <strong><em>modify the focus order</em></strong> so that the the “search input” has focus first, with the “search button” gaining focus on down from there and the “clear button” gaining focus on up.</p></li>
+<li><p>In order to test this, you will need to make sure your device supports a physical keyboard and/or D-Pad, but you can also use the arrow keys for the emulator.</p></li>
+</ul>
+</div>
+<div id="supporting-internationalization" class="section level3">
+<h3><span class="header-section-number">8.2.3</span> Supporting Internationalization</h3>
+<p>Finally you can make an application accessible to a wider diversity of users by providing <a href="https://developer.android.com/training/basics/supporting-devices/languages.html">Internationalization</a> and supporting different languages and cultures.</p>
+<p>Internationalization (<a href="https://en.wikipedia.org/wiki/Internationalization_and_localization">i18n</a>) is primarily done by specifying <a href="https://developer.android.com/guide/topics/resources/providing-resources.html#AlternativeResources">alternative resource</a>, such as using XML to define user-facing Strings in multiple languages. We did an example of this in <a href="resources-and-layouts.html#alternative-resources">lecture 3</a></p>
+<p>However, changes in language may also require adjustments to the layout resources themselves: phrases in some languages are significantly longer or shorter than in English, and so may cause problems with spacing or word wrapping.</p>
+<ul>
+<li>One way to test this is to enable <a href="https://androidbycode.wordpress.com/2015/04/19/pseudo-localization-testing-in-android/">pseudo-localization</a>, a “fake” language that <em>almost</em> looks like English, but utilizes special characters and extraneous text to help test what the application may look like with different length content. See the link for details on enabling this.</li>
+</ul>
+<p>Another significant change involves support <a href="https://en.wikipedia.org/wiki/Right-to-left">right-to-left (RTL) languages</a> such as Arabic. With these languages the “flow” of text goes in the opposite direction than in English, so many positioning elements in layouts may need to be reversed:</p>
+<div class="figure">
+<img src="img/accessibility/ltr-rtl.png" alt="English and Arabic layouts. Image by Ryder Ziola." />
+<p class="caption">English and Arabic layouts. Image by <a href="https://www.linkedin.com/in/ryder-ziola-9b93b34">Ryder Ziola</a>.</p>
+</div>
+<p>In particular, do the following to best support both LTR and RTL languages:</p>
+<ol style="list-style-type: decimal">
+<li><p>Declare that your app supports RTL in the <em>Manifest</em> by including an attribute <code>android:supportsRtl=&quot;true&quot;</code> in the <code>&lt;application&gt;</code> element.</p></li>
+<li><p>With <em>RelativeLayouts</em>, use positioning attributes based on <em>start</em> and <em>end</em> rather than <em>left</em> and <em>right</em>. For example, <code>android:layout_toRightOf</code> should instead be <code>android:layout_toEndOf</code>. This will allow the relative positioning to automatically “switch” between LTR and RTL. Note that <em>LinearLayouts</em> automatically reverse direction!</p></li>
+<li><p>For custom icons and drawables: define separate resources for LTR and RTL (use the <code>ldrtl</code> resource qualitifier to specify the “layout direction” as right-to-left). This will allow for icons (such as the arrows in the upper start corner of the example) to change direction with the text—you want “back” to actually point “back”!</p></li>
+</ol>
+<p><strong><em>Make these changes</em></strong> to the <code>MovieFragment</code> (there are no custom drawables to adjust). You can test that your changes work by selecting <code>Settings &gt; Developer options &gt; Force RTL layout direction</code>.</p>
+</div>
+<div id="further-testing" class="section level3">
+<h3><span class="header-section-number">8.2.4</span> Further Testing</h3>
+<p>These are fairly trivial changes you can make to how you define and implement user interfaces, that will go a long way to supporting use by <em>all</em> users no matter their level of ability.</p>
+<p>The Android Studio IDE will identify and suggest additional changes as “linted” style suggestions—watch out for these warnings and learn to correct them as you develop.</p>
+<p>Finally, Google has also developed an <a href="https://developer.android.com/training/accessibility/testing.html#accessibility-scanner">Accessibility Scanner</a> app that can be used to check for further accessibility issues (such as contrast levels or touchable areas).</p>
+<p>And of course, keep the <a href="https://developer.android.com/guide/topics/ui/accessibility/checklist.html">checklist</a> handy to help you design applications to support universal usability.</p>
 
+</div>
 </div>
 </div>
             </section>
@@ -322,8 +342,8 @@ container.<span class="fu">add</span>(otherButton);</code></pre></div>
           </div>
         </div>
       </div>
-<a href="java-review.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="java-threads-http.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="providers-and-loaders.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="fragments-viewpager.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -351,7 +371,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/java-swing.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/accessibility.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],
