@@ -321,35 +321,35 @@ cursor.<span class="fu">moveToNext</span>(); <span class="co">//go to the next i
 </div>
 <div id="loaders" class="section level2">
 <h2><span class="header-section-number">7.3</span> Loaders</h2>
-<p>In order to get the <code>Cursor</code> to pass into the adapter, we need to <code>.query()</code> the database. But we’ll be doing this a lot (and so would like to do it off the UI Thread—database accessing is slow!). And every time we do that query, we also want to update the <code>Adapter</code> so that the changes to the list show up!</p>
-<p>In order to easily update your list with new data loaded on a background thread, we’re going to use a class called a <a href="http://developer.android.com/guide/components/loaders.html"><code>Loader</code></a>. This is basically a wrapper around <code>ASyncTask</code>, but one that let’s you quickly specify what action should occur in the background thread. In particular, Android provides a <a href="http://developer.android.com/reference/android/content/CursorLoader.html"><code>CursorLoader</code></a> specifically used to load Cursors, which can then be “swapped” into the adapter.</p>
+<p>In order to get the <code>Cursor</code> to pass into the adapter, we need to <code>.query()</code> the database. But we’ll be doing this a lot, and so would like to do it off the UI Thread—database accessing is slow! And every time we do that query (or any other database manipulation), we want to update the <code>Adapter</code> so that the changes to the list show up.</p>
+<p>In order to easily update your list with new data loaded on a background thread, we’re going to use a class called a <a href="http://developer.android.com/guide/components/loaders.html"><code>Loader</code></a>. This is basically a wrapper around <code>ASyncTask</code>, but one that lets you execute a backgroup task repeatedly <em>whenever the data source changes</em>. In particular, Android provides a <a href="http://developer.android.com/reference/android/content/CursorLoader.html"><code>CursorLoader</code></a> specifically used to load data from ContentProviders through Cursors—whenever the content changes, a new Cursor is produced which can be “swapped” into the adapter.</p>
 <p>To use a <code>CursorLoader</code>, we need to specify that our <em>Fragment</em> implements the <a href="http://developer.android.com/reference/android/support/v4/app/LoaderManager.LoaderCallbacks.html"><code>LoaderManager.LoaderCallback&lt;Cursor&gt;</code></a> interface—basically saying that this fragment can react to Loader events.</p>
 <ul>
-<li>(Loaders need to work with Fragments. If you have your Activity extends <a href="http://developer.android.com/reference/android/support/v4/app/FragmentActivity.html"><code>FragmentActivity</code></a>, you can get the “Fragment” capabilities to use a <code>Loader</code> in an Activity). Note that <code>AppCompatActivity</code> is a subclass of this, so everything can work for Activities as well!</li>
+<li>Loaders need to work with Fragments, unless the Activity subclasses <a href="http://developer.android.com/reference/android/support/v4/app/FragmentActivity.html"><code>FragmentActivity</code></a> (as <code>AppCompatActivity</code> does) and thereby provides the “Fragment” capabilities needed to use a <code>Loader</code>. So we can use Loaders in <em>our</em> Activities or Fragments.</li>
 </ul>
-<p>We then fill in the callbacks to write the code to use the <code>CursorLoader</code>.</p>
+<!-- clean up below -->
+<p>We will need to fill in the interfaces callbacks functions in order to use the <code>CursorLoader</code>:</p>
 <ul>
 <li><p>In <code>onCreateLoader()</code> we specify what the Loader should <em>do</em>. Here we would instantiate and return a <code>new CursorLoader(...)</code> that queries the <code>ContentProvider</code>. This looks a lot like the <code>.query()</code> method we wrote earlier, but will run on a background thread!</p></li>
 <li><p>In the <code>onLoadFinished()</code> callback, we can <code>swap()</code> the <code>Cursor</code> into our <code>SimpleCursorAdapter</code> in order to feed that model data into our controller (for display in the view). See the <a href="http://developer.android.com/guide/components/loaders.html">guide</a> for more details.</p></li>
-<li><p>In the <code>onLoaderReset()</code> callback just swap in <code>null</code> for our Cursor, since there now is no content (it is “reset”).</p></li>
+<li><p>In the <code>onLoaderReset()</code> callback just swap in <code>null</code> for our Cursor, since there now is no content to show (the loaded data has been “reset”).</p></li>
 </ul>
 <p>Finally, in order to actually <em>start</em> our background activity, we’ll use the <code>getLoaderManager().initLoader(...)</code> method. This is similar in flavor to the <code>AsyncTask.execute()</code> method we’ve used before (using a manager similar to the <code>FragmentManager</code>).</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="fu">getLoaderManager</span>().<span class="fu">initLoader</span>(<span class="dv">0</span>, <span class="kw">null</span>, <span class="kw">this</span>);</code></pre></div>
+<p>The first parameter to the <code>initLoader()</code> method is an id number for <em>which cursor you want to load</em>, and is passed in as the first param to <code>onCreateLoader()</code> (or is accessible via <code>Loader#getId()</code>). This allows you to have multiple Loaders using the same callback function (e.g., a Fragment can handle multiple Loaders for multiple data sources). The second param is a <code>Bundle</code> of args, and the third is the <code>LoaderCallbacks</code> (e.g., who handles the results)!</p>
 <ul>
-<li>The first parameter to the <code>initLoader()</code> method is an id number for <em>which cursor you want to load</em>, and is passed in as the first param to <code>onCreateLoader()</code> (or is accessible via <code>Loader#getId()</code>).</li>
-<li>Second param is a <code>Bundle</code> of args, and the third is the <code>LoaderCallbacks</code> (e.g., who handles the results)!</li>
-<li>Note that you can use the <code>.restartLoader()</code> method to “recreate” the <code>CursorLoader</code>, like if you want to change the arguments passed to it.</li>
+<li>Note that you can use the <code>.restartLoader()</code> method to “recreate” the <code>CursorLoader</code> (without losing other references), such as if you want to change the arguments passed to it.</li>
 </ul>
-<p>And with that, we can fetch the words from our database on a background thread–and if we update the words it will automatically change!</p>
+<p>And with that, we can fetch the words from our database on a background thread—and if we update the words it will automatically change!</p>
 </div>
 <div id="other-provider-actions" class="section level2">
 <h2><span class="header-section-number">7.4</span> Other Provider Actions</h2>
 <div id="adding-words" class="section level3">
 <h3><span class="header-section-number">7.4.1</span> Adding Words</h3>
-<p>To <code>insert</code> a new Word into the <code>ContentProvider</code>, we just call a different method on the <code>ContentResolver</code>:</p>
+<p>To <em>insert</em> a new Word into the <code>ContentProvider</code>, we just call a different method on the <code>ContentResolver</code>:</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//Example from Google:</span>
 ContentValues mNewValues = <span class="kw">new</span> <span class="fu">ContentValues</span>();
-mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">APP_ID</span>, <span class="st">&quot;edu.uw.decorations&quot;</span>);
+mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">APP_ID</span>, <span class="st">&quot;edu.uw.loaderdemo&quot;</span>);
 mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">LOCALE</span>, <span class="st">&quot;en_US&quot;</span>);
 mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">WORD</span>, word);
 mNewValues.<span class="fu">put</span>(UserDictionary.<span class="fu">Words</span>.<span class="fu">FREQUENCY</span>, <span class="st">&quot;100&quot;</span>);
@@ -361,7 +361,6 @@ Uri mNewUri = <span class="fu">getContentResolver</span>().<span class="fu">inse
 <ul>
 <li>Note that we specify the “details” of the Word in a <a href="http://developer.android.com/reference/android/content/ContentValues.html"><code>ContentValues</code></a> object, which is a HashMap almost exactly like a <code>Bundle</code> (but only supports values that work with <code>ContentProviders</code>)</li>
 </ul>
-<p>Whew! And that covers what you should need for the next assignment: you’ll be working with a <code>ContentProvider</code> I’ve provided, and doing some work to display its content, insert new items into it, and update the items that are there—all in a 2-pane layout (but you don’t need to worry about switching between landscape and portrait!)</p>
 
 </div>
 </div>

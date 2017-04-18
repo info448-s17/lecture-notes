@@ -92,21 +92,23 @@ Then we can use this adapter for the ListView in place of the `ArrayAdapter`!
 
 
 ## Loaders
-In order to get the `Cursor` to pass into the adapter, we need to `.query()` the database. But we'll be doing this a lot (and so would like to do it off the UI Thread---database accessing is slow!). And every time we do that query, we also want to update the `Adapter` so that the changes to the list show up!
+In order to get the `Cursor` to pass into the adapter, we need to `.query()` the database. But we'll be doing this a lot, and so would like to do it off the UI Thread&mdash;database accessing is slow! And every time we do that query (or any other database manipulation), we want to update the `Adapter` so that the changes to the list show up.
 
-In order to easily update your list with new data loaded on a background thread, we're going to use a class called a [`Loader`](http://developer.android.com/guide/components/loaders.html). This is basically a wrapper around `ASyncTask`, but one that let's you quickly specify what action should occur in the background thread. In particular, Android provides a [`CursorLoader`](http://developer.android.com/reference/android/content/CursorLoader.html) specifically used to load Cursors, which can then be "swapped" into the adapter.
+In order to easily update your list with new data loaded on a background thread, we're going to use a class called a [`Loader`](http://developer.android.com/guide/components/loaders.html). This is basically a wrapper around `ASyncTask`, but one that lets you execute a backgroup task repeatedly _whenever the data source changes_. In particular, Android provides a [`CursorLoader`](http://developer.android.com/reference/android/content/CursorLoader.html) specifically used to load data from ContentProviders through Cursors&mdash;whenever the content changes, a new Cursor is produced which can be "swapped" into the adapter.
 
-To use a `CursorLoader`, we need to specify that our _Fragment_ implements the [`LoaderManager.LoaderCallback<Cursor>`](http://developer.android.com/reference/android/support/v4/app/LoaderManager.LoaderCallbacks.html) interface---basically saying that this fragment can react to Loader events.
+To use a `CursorLoader`, we need to specify that our _Fragment_ implements the [`LoaderManager.LoaderCallback<Cursor>`](http://developer.android.com/reference/android/support/v4/app/LoaderManager.LoaderCallbacks.html) interface&mdash;basically saying that this fragment can react to Loader events.
 
-- (Loaders need to work with Fragments. If you have your Activity extends [`FragmentActivity`](http://developer.android.com/reference/android/support/v4/app/FragmentActivity.html), you can get the "Fragment" capabilities to use a `Loader` in an Activity). Note that `AppCompatActivity` is a subclass of this, so everything can work for Activities as well!
+- Loaders need to work with Fragments, unless the Activity subclasses [`FragmentActivity`](http://developer.android.com/reference/android/support/v4/app/FragmentActivity.html) (as `AppCompatActivity` does) and thereby provides the "Fragment" capabilities needed to use a `Loader`. So we can use Loaders in _our_ Activities or Fragments.
 
-We then fill in the callbacks to write the code to use the `CursorLoader`.
+<!-- clean up below -->
+
+We will need to fill in the interfaces callbacks functions in order to use the `CursorLoader`:
 
 - In `onCreateLoader()` we specify what the Loader should _do_. Here we would instantiate and return a `new CursorLoader(...)` that queries the `ContentProvider`. This looks a lot like the `.query()` method we wrote earlier, but will run on a background thread!
 
 - In the `onLoadFinished()` callback, we can `swap()` the `Cursor` into our `SimpleCursorAdapter` in order to feed that model data into our controller (for display in the view). See the [guide](http://developer.android.com/guide/components/loaders.html) for more details.
 
-- In the `onLoaderReset()` callback just swap in `null` for our Cursor, since there now is no content (it is "reset").
+- In the `onLoaderReset()` callback just swap in `null` for our Cursor, since there now is no content to show (the loaded data has been "reset").
 
 
 Finally, in order to actually _start_ our background activity, we'll use the `getLoaderManager().initLoader(...)` method. This is similar in flavor to the `AsyncTask.execute()` method we've used before (using a manager similar to the `FragmentManager`).
@@ -115,21 +117,21 @@ Finally, in order to actually _start_ our background activity, we'll use the `ge
 getLoaderManager().initLoader(0, null, this);
 ```
 
-- The first parameter to the `initLoader()` method is an id number for _which cursor you want to load_, and is passed in as the first param to `onCreateLoader()` (or is accessible via `Loader#getId()`).
-- Second param is a `Bundle` of args, and the third is the `LoaderCallbacks` (e.g., who handles the results)!
-- Note that you can use the `.restartLoader()` method to "recreate" the `CursorLoader`, like if you want to change the arguments passed to it.
+The first parameter to the `initLoader()` method is an id number for _which cursor you want to load_, and is passed in as the first param to `onCreateLoader()` (or is accessible via `Loader#getId()`). This allows you to have multiple Loaders using the same callback function (e.g., a Fragment can handle multiple Loaders for multiple data sources). The second param is a `Bundle` of args, and the third is the `LoaderCallbacks` (e.g., who handles the results)!
 
-And with that, we can fetch the words from our database on a background thread--and if we update the words it will automatically change!
+- Note that you can use the `.restartLoader()` method to "recreate" the `CursorLoader` (without losing other references), such as if you want to change the arguments passed to it.
+
+And with that, we can fetch the words from our database on a background thread&mdash;and if we update the words it will automatically change!
 
 ## Other Provider Actions
 
 ### Adding Words
-To `insert` a new Word into the `ContentProvider`, we just call a different method on the `ContentResolver`:
+To _insert_ a new Word into the `ContentProvider`, we just call a different method on the `ContentResolver`:
 
 ```java
 //Example from Google:
 ContentValues mNewValues = new ContentValues();
-mNewValues.put(UserDictionary.Words.APP_ID, "edu.uw.decorations");
+mNewValues.put(UserDictionary.Words.APP_ID, "edu.uw.loaderdemo");
 mNewValues.put(UserDictionary.Words.LOCALE, "en_US");
 mNewValues.put(UserDictionary.Words.WORD, word);
 mNewValues.put(UserDictionary.Words.FREQUENCY, "100");
@@ -141,5 +143,3 @@ Uri mNewUri = getContentResolver().insert(
 ```
 
 - Note that we specify the "details" of the Word in a [`ContentValues`](http://developer.android.com/reference/android/content/ContentValues.html) object, which is a HashMap almost exactly like a `Bundle` (but only supports values that work with `ContentProviders`)
-
-Whew! And that covers what you should need for the next assignment: you'll be working with a `ContentProvider` I've provided, and doing some work to display its content, insert new items into it, and update the items that are there---all in a 2-pane layout (but you don't need to worry about switching between landscape and portrait!)
