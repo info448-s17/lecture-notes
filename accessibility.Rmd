@@ -22,7 +22,7 @@ People with disabilities cannot ethically be excluded from consideration in app 
 ## Implementing Accessibility
 The Android framework provides a number of ways to [**make apps more accessible**](https://developer.android.com/guide/topics/ui/accessibility/apps.html), including a handy [**accessibility developer checklist**](https://developer.android.com/guide/topics/ui/accessibility/checklist.html) that you can follow. Some specific actions are described in more detail below: you should perform the listed tasks to test and improve an app's accessibility.
 
-<p class="alert alert-info">These exercises build on the lecture code found at <https://github.com/info448-s17/lecture07-loaders>. You will need to adjust `MainActivity` so that it shows the provided `MovieFragment` by default; you will be testing and improving the accessibility of that Fragment.</p>
+<p class="alert alert-info">These exercises build on the lecture code found at <https://github.com/info448-s17/lecture07-loaders> (use the `completed` branch). You will need to adjust `MainActivity` so that it shows the provided `MovieFragment` by default; you will be testing and improving the accessibility of that Fragment.</p>
 
 ### Supporting Vision Impairment
 One of the most important ways to support accessibility is to make sure your app is accessible to users with vision impairments.
