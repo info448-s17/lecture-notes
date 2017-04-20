@@ -15,6 +15,7 @@ rmd_files:
   - fragments.Rmd
   - menus-dialogs.Rmd
   - loaders.Rmd
+  - intents.Rmd
 
   - part-labs.Rmd
   - accessibility.Rmd

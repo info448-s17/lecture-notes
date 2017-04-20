@@ -178,6 +178,8 @@ Finally, we can fill in the method to have it log out something when clicked.
 Overall, this button is an example of an [Input Control](http://developer.android.com/guide/topics/ui/controls.html). These will be discussed in more detail in Lecture 4.
 
 
+<!-- Move this section out! -->
+
 ## Multiple Activities `r #[15mins]`
 The whole point of interfacing with the Activity Lifecycle is handle the fact that Android applications can have multiple activities and interact with multiple other applications. In this section we'll briefly discuss how to include multiple Activities within an app (in order to sense how the life cycle may affect them). Note that working with multiple Activities will be discussed in more detail in a later lecture.
 
@@ -198,6 +200,7 @@ In Android, we don't start new Activities by instantiating them (remember, _we n
 
 - You can think of Intents as like _envelopes_: they are addressed to a particular target (e.g., another Activity&mdash;or more properly a [`Context`](https://developer.android.com/reference/android/content/Context.html)), and contain a brief message about what to do.
 
+<!-- Cut most of this -->
 An [`Intent`](http://developer.android.com/reference/android/content/Intent.html) is an object we _can_ instantiate: for example, we can create a `new Intent` in the event handler for when we click the button on `MainActivity`. The `Intent` class has a number of different cnstructors, but the one we'll start with looks like:
 
 ```java
