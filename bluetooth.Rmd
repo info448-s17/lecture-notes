@@ -1,0 +1,64 @@
+# Bluetooth
+In this chapter you will learn about some of the pieces for creating a connection between two co-located devices using [Bluetooth](https://en.wikipedia.org/wiki/Bluetooth). This will let you gain some familiarity with the [Bluetooth API](https://developer.android.com/guide/topics/connectivity/bluetooth.html), as well as further practice working with _Intents_.
+
+<p class="alert alert-info">The code for this tutorial can be found at <https://github.com/info448-s17/lab-bluetooth>.</p>
+
+This tutorial involves filling in the remaining pieces from a Sample Project provided by Google. Google includes [lots of samples](http://developer.android.com/samples/index.html) demonstrating how to use particular pieces of functionality; reading and adapting the provided projects is a great way to learn new skills. There are _a lot_ of comments, though that sometimes makes it hard to follow all the pieces. Read carefully!
+
+- Also be sure to open the [API documentation](https://developer.android.com/guide/topics/connectivity/bluetooth.html) for reference!
+
+<p class="alert alert-warning">The emulator doesn't support Bluetooth, so you will need to run this project on a physical device.</p>
+
+Your task is to fill in the missing pieces of code, following the instructions below. I've marked each location with a `TODO` comment, which should show up in blue in Android Studio.
+
+1. Start by reading through [The Basics](http://developer.android.com/guide/topics/connectivity/bluetooth.html#TheBasics) to get a sense for what classes will be used and what their roles are. You only need to focus on the first 4: `BluetoothAdapter`, `BluetoothDevice`, `BluetoothSocket`, and `BluetoothServerSocket` (the rest are for other kinds of Bluetooth connections, like audio transfer and stuff). You don't need to know all the methods or details of these classes, but should be familiar with their general, one-sentence purposes!
+
+2. You'll need to request [permission](http://developer.android.com/guide/topics/connectivity/bluetooth.html#Permissions) to use Bluetooth. Add the appropriate `<uses-permission>` attributes: one for `BLUETOOTH` (for communication; included) and one for `BLUETOOTH_ADMIN` (to "discover" devices and make connections).
+
+3. The main UI is defined in the `BluetoothChatFragment` class, which is a Fragment that holds the chat system. Start by filling in the `onCreate()` callback by <a href="http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getDefaultAdapter()">fetching the default Bluetooth adapter</a> and saving it to an instance variable (`mBluetoothAdapter`). If the adapter doesn't exist (is `null`), you should `Toast` a message that Bluetooth isn't available (using the `Activity's` <a href="http://developer.android.com/reference/android/content/ContextWrapper.html#getApplicationContext()">`Application Context`</a> so that the Toast lasts), and then call `finish()` on the Fragment's _Activity_ (to close the application).
+
+4. You'll want your app to make sure that the user has Bluetooth turned on. In the Fragment's `onCreate()`, check whether the the `BluetoothAdapter` is `enabled`. If **not**, you'll want to prompt the user to enable it, such as by launching the "Settings" app. Create an **Implicit Intent** for the action `BluetoothAdapter.ACTION_REQUEST_ENABLE`, and send this Intent ___for a result___ (with the result code of `REQUEST_ENABLE_BT`). Look in the Fragment's `onActivityResult()` method to see what happens when we get a response back!
+
+    - The `BluetoothChatService` (stored in the instance variable `mChatService`) is an object representing a "background service"&mdash;think an AsyncTask but with a much longer lifespan. This particular service handles sending bytes of data back and forth over Bluetooth. We'll talk about `Services` more later in the course.
+
+5. In order for a device to connect to yours over Bluetooth, your device will need to be **discoverable**: effectively, it has to respond to public queries about its existence (sort of like having your instant messaging status as "Online/Available"). In the Fragment's `ensureDiscoverable()` helper method, check if the device is currently discoverable by calling `getScanMode()` on the `BluetoothAdapter`; it should return a value of `BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE`.
+
+    - If this **IS NOT** the case, then you should send another _Implicit Intent_ to handle the `BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE` action.
+
+    This intent should include (put) an **extra** that has the key `BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION` and a value of `300`, so that we are in "discoverable" mode for 300 seconds.
+
+    Note that this intent does **NOT** need to be started for a result!
+
+6. The discovery of devices is controlled by the `DeviceListActivity` Activity. This is a separate Activity that will actually appear as a popup dialog (though it doesn't use `DialogFragment`; it just "themes" the Activity as a dialog in the `Manifest`). The Activity's `onCreate()` does a lot of UI work (including setting up an Adapter!), but it also needs to set up a `BroadcastReceiver` to listen for events like when devices are found. (This is the equivalent of declaring a `<receiver>` and `<intent-filter>` in the `Manifest`, but we need to do it in Java since the Receiver isn't a separate class and since we want to do it dynamically).
+
+    - First instantiate a new <a href="http://developer.android.com/reference/android/content/IntentFilter.html#IntentFilter(java.lang.String)">`IntentFilter`</a> object (giving it the `BluetoothDevice.ACTION_FOUND` action).
+
+    - Then use the <a href="http://developer.android.com/reference/android/content/Context.html#registerReceiver(android.content.BroadcastReceiver, android.content.IntentFilter)">`registerReceiver(receiver, intentFilter)`</a> method, passing it the already-existing receiver (`mReceiver`) and the `IntentFilter` you just created!
+
+    - Then repeat the above two steps, but this time for the `Bluetooth.ACTION_DISCOVERY_FINISHED` action. This will register an additional `IntentFilter` on the same receiver.
+
+7. We can actually begin searching for devices by filling in the Activity's `doDiscovery()` helper method (which is called when the Scan button is pressed).
+
+    - Add a check to see if the `BluetoothAdapter` currently `isDiscovering()`. If so, then you should tell the adapter to `cancelDiscovery()`.
+
+    - Whether or not the check was `true` (so even if we canceled the discovery), tell the adapter to `startDiscovery()` to begin searching for devices!
+
+8. Once the user has selected a device to connect to, we handle that connection back in the `BluetoothChatFragment`. Fill in that class's `connectDevice()` helper method to connect to the device!
+
+    - First you'll want to get the device's "address" (a [MAC address](https://en.wikipedia.org/wiki/MAC_address) that acts as a unique identifier) ___from___ the Intent's extras: get the `Bundle` of extras from the Intent, then get the String with the key `DeviceListActivity.EXTRA_DEVICE_ADDRESS`.
+
+    - You can then find the device (a `BluetoothDevice` object) by calling the `.getRemoteDevice()` method on the `BluetoothAdapter` and passing this address.
+
+    - Finally, you can use the `mChatService`'s `.connect()` method to connect to this device (passing down the `secure` option as a second parameter). The `BluetoothChatService#connect()` method creates a new `Thread` to do the communication work, and opens up network sockets so that messages can be passed between the devices. (This is actually part of the hard part or working with Bluetooth; luckily we have a class to abstract that for us!)
+
+9. The last part is to actually send a message! In the `sendMessage()` helper in `BluetoothChatFragment`, fill in the details so that the String can be sent to the socket in the chat service.
+
+    - First you need to convert the message String into a `byte[]` (for communication over the socket). Use the String's `getBytes()` method to convert.
+
+    - Then you can tell `mChatService` to `.write()` those bytes!
+
+    - We then need to reset the `mOutStringBuffer` instance variable (which keeps track of the message that has been typed so far). Use `.setLength()` to give it a length of **0**, which will effectively make it empty.
+
+    - And finally, because we've changed the outgoing message, set the text of the `mOutEditText` TextView to be the (now empty) `mOutStringBuffer`.
+
+And that's it! You should now have a working chat system! Search for and connect to someone else's device and try saying "hello"!

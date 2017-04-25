@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="introduction.html">
+<link rel="prev" href="intents.html">
+<link rel="next" href="accessibility.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -271,20 +271,158 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Android Development: Lecture Notes</h1>
-<h4 class="author"><em>Joel Ross</em></h4>
-<h4 class="date"><em>2017-04-25</em></h4>
-</div>
-<div id="about-this-book" class="section level1 unnumbered">
-<h1>About this Book</h1>
-<p>This book compiles lecture notes and tutorials for the <strong>INFO 448 Mobile Development: Android</strong> course taught at the <a href="https://ischool.uw.edu/">University of Washington Information School</a> (most recently in <a href="https://canvas.uw.edu/courses/1139926">Spring 2017</a>). The goal of these notes is to provide learning materials for students in the course or anyone else who wishes to learn the basics of developing Android applications.</p>
-<p>These notes are primarily adapted from the <a href="https://developer.android.com/develop/index.html">official Android developer documentation</a>, compiling and synthesizing those guidelines for pedagogical purposes (and the author’s own interpretation/biases). Please refer to that documentation for the latest information and official guidance.</p>
-<p class="alert alert-warning">
-This book is currently in <strong>alpha</strong> status, as pure lecture notes are converted into more generic formats.
+<div id="ui-components-ii" class="section level1">
+<h1><span class="header-section-number">Lecture 9</span> UI Components II</h1>
+<p>This lecture discusses how to include additional user interface components in an Android application: namely <a href="https://developer.android.com/guide/topics/ui/notifiers/notifications.html"><strong>Notifications</strong></a> and <a href="https://developer.android.com/guide/topics/ui/settings.html"><strong>Settings Menus</strong></a>. As before, this lecture aims to provide <em>exposure</em> rather than complete coverage to these concepts; for more options and examples, see the official Android documentation.</p>
+<p class="alert alert-info">
+This lecture references code found at <a href="https://github.com/info448-s17/lecture09-notifications-settings" class="uri">https://github.com/info448-s17/lecture09-notifications-settings</a>. <!--Note that this code builds upon the example developed in Lecture 8.-->
 </p>
-<p><img src="img/index/by-nc-sa.png" alt="Creative Commons License" /> This book is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<div id="notifications" class="section level2">
+<h2><span class="header-section-number">9.1</span> Notifications</h2>
+<p>We have previously covered how to let the user know what’s going on by popping up a toast or even an <code>AlertDialog</code>, but often we want to notify the user of something outside of the normal Activity UI (e.g., when the app isn’t running, or without getting in the way of other interactions). To do this, we can use <a href="https://developer.android.com/guide/topics/ui/notifiers/notifications.html">Notifications</a>. These are specialized views that show up in the <strong>notification area</strong> (the icons at the top of the operating system display) and in the system’s <strong>notification drawer</strong>, which the user can get to at any point—even when outside the app—by swiping down on the screen.</p>
+<p>Android’s documentation for UI components is overall quite thorough and usable (after all, Google wants to make sure that developers can build effective apps, thereby making the platform worthwhile). And because there are so many different UI elements and they change all the time, in order to do real-world Android development you need to be able to read, synthesize, and apply this documentation.</p>
+<p>As such this lecture will detail how to utilize the documentation and apply it to create notifications (yes, it is a tutorial for how to read a tutorial). To do this, open up the <a href="https://developer.android.com/guide/topics/ui/notifiers/notifications.html"><strong>Notifications</strong></a> documentation and follow along with this page’s annotated explanation. We will utilize this documentation in order to add a feature that when we click on the appropriate <em>menu</em> button, a notification will appear that reports how many times we’ve selected that option.</p>
+<p>Okay, looking at the documentation we see an overview. Also a link to the <strong>Design Guide</strong>, which is a good place to go to figure out how to design <em>effective</em> notifications.</p>
+<ul>
+<li>This is not a design class, but this is really good advice for Android development!</li>
+</ul>
+<p>There is a lot of text about how to make a Notification… I personally prefer to work off of sample code, modifying until I have something that does what I want, so I’m going to scroll down <strong>slowly</strong> until I find an example I can copy/paste in, or at least reference.</p>
+<ul>
+<li>Then we can scroll back up to see how this woks!</li>
+<li>Hey look “Creating a Simple Notification”. Sounds great!</li>
+</ul>
+<p>The first part of this Notification is using <code>NotificationCompat.Builder</code> (use <code>v4</code>). Where else have we seen Builders? The <code>AlertBuilder</code>! Same idea here</p>
+<ul>
+<li>I don’t have a drawable resource that makes me want to comment out the icon… but scrolling back up I can see that it is <em>required</em>. So we can generate an Image Asset just like we did with icons (cause hey, notifications are a thing that happens!)</li>
+</ul>
+<p>The next line makes an Intent. We’ve done that… but why are we creating an Intent? Well if we scroll up and look where where <code>Intent</code> is referenced, we can find out about Notification Actions (e.g., what happens when someone clicks the Notification). And since <code>Intents</code> are messages to open Activities, it makes sense that clicking a Notification might send an <code>Intent</code>, right?</p>
+<ul>
+<li>Notice that the <code>Intent</code> will actually be wrapped in a <code>PendingIntent</code>. So what we’re going to do is send the Notification a <code>PendingIntent</code>, which contains an “RSVP” that it can send back to us when someone clicks on it.</li>
+<li>The idea being that the Notification “component” (which is not our Activity!) will be able to run this intent.. which wakes up our Activity! The Intent is “pending” delivery/activation by the other service.</li>
+</ul>
+<p>The notification is using the a <a href="http://developer.android.com/reference/android/support/v4/app/TaskStackBuilder.html"><code>TaskStackBuilder</code></a> to <a href="http://developer.android.com/guide/topics/ui/notifiers/notifications.html#NotificationResponse">construct an “artificial” backstack</a>. The idea here is that if we click on the notification and jump to a “detail” view (say), we’d like to still be able to hit the back button and return to the “master” view.</p>
+<ul>
+<li>Or how when we launched the phone dialer, hitting back returned to the list of contacts.</li>
+<li>We build this backstack not just with methods, but by integrating with the “parent-child” relationship we’ve otherwise set up between Activities</li>
+<li>In the <code>Manifest</code>, we had specified that <code>SecondActivity's</code> parent is <code>MainActivity</code>. This is what gave us the nice back button in the ActionBar. These sequence of <code>parentActivityName</code> attributes forms a hierarchy that will be the “back navigation hierarchy.”</li>
+<li>We add the “end” of the hierarchy to the builder using <code>addParentStack(ResultActivity.class)</code>, and then finally put the <code>Intent</code> we actually want to use “on top” of the stack with <code>addNextIntent(resultIntent)</code>. The <code>resultIntent</code> is <em>not</em> the <code>PendingIntent</code>… yet</li>
+</ul>
+<p>Instead, we can have this <code>TaskStackBuilder</code> build us an appropriate <code>PendingIntent</code> (using the <code>getPendingIntent()</code> method).</p>
+<ul>
+<li>Pass it an <em>ID</em> to refer to that request (like we’ve done before), and a flag <code>PendingIntent.FLAG_CURRENT_UPDATE</code> so that if we re-issue the pending intent it update instead of replacing.</li>
+<li>We can then assign that <code>Intent</code> to the <em>notification</em> builder (with <code>setContentIntent</code>).</li>
+</ul>
+<p>Finally, we can use the <code>NotificationManager</code> (similar to the <code>FragmentManager</code>, <code>SmsManager</code>, <code>BluetoothManager</code>, etc.) to fetch the <em>notification service</em> (the “application” that handles all the notifications for the OS).</p>
+<ul>
+<li>We’ll then tell this manager to actually issue the <code>Notification</code></li>
+<li>Other parameter: an <code>ID</code> number to refer to a particular notification. This is similar to the ID number we used for <code>Intent</code> results.</li>
+</ul>
+<p>And Boom we have notifications :)</p>
+<ul>
+<li>We can click on that notification and get taken to our app! Which has a back stack!</li>
+</ul>
+<p>We can also <strong>update</strong> this notification later, and it’s really straightforward: we simply re-issue a notification with the same <strong>id</strong> number you assigned, and it will “replace” the previous one!</p>
+<ul>
+<li>Thus we can have our text be based on some instance variable, and have the Notification track the number of clicks!</li>
+</ul>
+<p>You may notice that this notification doesn’t <a href="http://developer.android.com/guide/topics/ui/notifiers/notifications.html#Heads-up">“pop up”</a> in a way we might expect. This is because its <a href="http://developer.android.com/guide/topics/ui/notifiers/notifications.html#Priority">priority</a> isn’t high enough (needs to be <code>NotificationCompat.PRIORITY_HIGH</code> or higher) <strong>and</strong> because it doesn’t use either sound or vibration! (It needs to be <em>really important</em> to get a heads-up pop).</p>
+<ul>
+<li>We can make it vibrate but using the <a href="http://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#setVibrate(long[])"><code>setVibrate()</code></a> method, passing it an array of times (in milliseconds) which to turn vibration on and off.</li>
+<li>Pattern is <code>[delay, vibrate, sleep, vibrate, sleep, ...]</code></li>
+<li>May need permission? <code>&lt;uses-permission android:name=&quot;android.permission.VIBRATE&quot; /&gt;</code></li>
+<li>We can also assign a default sound with <code>builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);</code></li>
+<li>See the <a href="http://developer.android.com/design/patterns/notifications.html#correctly_set_and_manage_notification_priority">design guide</a> for best practices on priority.</li>
+</ul>
+<p>As always, there are a number of other pieces/details we can specify, but I leave those to you to look up in the documentation :)</p>
+<div id="designing-notifications" class="section level3">
+<h3><span class="header-section-number">9.1.1</span> Designing Notifications</h3>
+<p>Again, you may have noticed that what we did <strong>not</strong> talking about is the UI Design guidelines: e.g., what kind of text should I put in my notification? <em>When</em> should I choose to use a notification? Android has lots of guidance on these questions in their “design” documentation, and further HCI and Mobile Design topics apply here just as well (has anyone taken the Mobile Design class? Does it cover this stuff?)</p>
+<ul>
+<li>Leaving the UI design up to you. But major guidelines apply (e.g., make actions obvious, give feedback, avoid irreversible actions, etc.). There are some notes about good interface design guidelines in the <em>final project</em> write-up, since you’ll need to have a good UI for that.</li>
+</ul>
+<!-- ### Break 5mins -->
+</div>
+</div>
+<div id="settings" class="section level2">
+<h2><span class="header-section-number">9.2</span> Settings</h2>
+<div id="sharedpreferences" class="section level3">
+<h3><span class="header-section-number">9.2.1</span> SharedPreferences</h3>
+<p>Last piece I want to talk about today: what if we wanted to let the user decide whether the clicking should create notifications or not? Maybe sometimes they just want to see Toasts! The cleanest way to do this is to create some <a href="http://developer.android.com/guide/topics/ui/settings.html">Settings</a> using <code>Preferences</code>.</p>
+<p><a href="http://developer.android.com/guide/topics/data/data-storage.html#pref">Shared Preferences</a> are another way that we can <strong>persist</strong> data in application (besides doing something like putting it into a database via a ContentProvider).</p>
+<ul>
+<li>Shared Preferences stores <em>key-value pairs</em> of primitives (Strings, ints, etc), similar to what we’ve been putting in Bundles. This data will be stored across application sessions: if I save some data to the Preferences and close the app, it will be there when I come back.</li>
+<li>Preferences are stored in an <strong>XML File</strong> (not a resource though!). So basically we put in lists of key-value paris in XML.</li>
+<li>This is not great for structured data (since only stores key-value pairs), hence why we used <code>ContentProviders</code> and databases for more complex data. But for simple values? It’s great.</li>
+<li><strong>Important note</strong>: even though they are <em>called</em> “Preferences”, they not just for “user preferences”. We can persist any small bits of primitive data in a Preferences file.</li>
+</ul>
+<div id="accessing-sharedpreferences" class="section level4">
+<h4><span class="header-section-number">9.2.1.1</span> Accessing SharedPreferences</h4>
+<p>We can get access to this SharedPreferences file using the <code>.getSharedPreferences(String, int)</code> method.</p>
+<ul>
+<li>The String is going to be the name of the Preference File we want to access (so we can have multiple XML files). Just use <code>getPreferences()</code> to use a single default.</li>
+<li>The <code>int</code> is a flag about whether other apps should have access to that file. <code>MODE_PRIVATE</code> (0) is the default, <code>MODE_WORLD_READABLE</code> and <code>MODE_WORLD_WRITEABLE</code> are the other options.</li>
+</ul>
+<p>We can edit this XML file by calling <code>.edit()</code> on the <code>SharedPreferences</code> object to get a <code>SharedPreferences.Editor</code>, which is basically our bundle-esque hashmap we can <code>put</code> values into.</p>
+<ul>
+<li>We need to call <code>.commit()</code> on the editor to save our changes!</li>
+</ul>
+<p>Finally, we can just call <code>get</code> methods on the <code>SharedPreferences</code> object in order to fetch data out of it!</p>
+<ul>
+<li>Second param is a default value if preference doesn’t exist! Yay!</li>
+</ul>
+<p>[[Quick demo in <code>onStop()</code>/<code>notify</code> and <code>onCreate()</code>]]</p>
+</div>
+</div>
+<div id="preference-settings" class="section level3">
+<h3><span class="header-section-number">9.2.2</span> Preference Settings</h3>
+<p>While this is a generic data store, it’s called <code>SharedPreferences</code> because it’s most commonly used for “user preferences”: think the “Settings” for an app.</p>
+<p>The “Preference Menu” is a user-facing element, so we’ll want to define it as an <a href="http://developer.android.com/guide/topics/ui/settings.html#DefiningPrefs">XML resource</a>. But we’re not going to try and create our own layout: instead we’re just going to define the list of <a href="http://developer.android.com/reference/android/preference/Preference.html"><code>Preferences</code></a> themselves as a resource!</p>
+<ul>
+<li>We can create a new resource using Android Studio. The “type” for this is actually just <code>XML</code> (generic), though our “root element” will be a <code>PreferenceScreen</code> (thanks intelligent defaults!)</li>
+<li>By convention, the preferences resource is named <code>preferences.xml</code></li>
+</ul>
+<p>Inside the <code>PreferenceScreen</code>, we add more elements: one to represent each “line” of the screen settings window (or preference we want to let the user adjust).</p>
+<ul>
+<li>We can define different types of <code>Preference</code> objects, such as <code>&lt;CheckBoxPreference&gt;</code>, <code>&lt;EditTextPreference&gt;</code>, <code>&lt;SwitchPreference&gt;</code>, or <code>&lt;ListPreference&gt;</code> (for a dialog of radio buttons). There are a couple of other options as well, see the <a href="http://developer.android.com/reference/android/preference/Preference.html"><code>Preference</code></a> base class.</li>
+<li>These elements should include (among others) the following XML attributes:</li>
+<li><code>android:key</code> the key to store the preference in the SharedPreferences file</li>
+<li><code>android:title</code> a user-visible name</li>
+<li><code>android:defaultvalue</code> guess :p (true or false for checked).</li>
+<li>More options cam be found in the the <a href="http://developer.android.com/reference/android/preference/Preference.html#lattrs">Preference</a> documentation.</li>
+</ul>
+<p>We can also further divide these Preferences to organize them: we can place them inside a <code>PreferenceCategory</code> tag (with its own <code>title</code> and <code>key</code>) in order to group them together.</p>
+<p>Finally we can specify that our Preferences have multiple screens by nesting <code>PreferenceScreen</code> elements. This produces “subscreens” (like submenus): when we click on the item it will take us to the next screen.</p>
+<ul>
+<li>Note that a cleaner (but more work) way to do this if you have <em>lots</em> of settings is to use <a href="http://developer.android.com/guide/topics/ui/settings.html#PreferenceHeaders"><code>preference-headers</code></a> which allows for better multi-pane layouts… but since we’re not making any apps with that many settings I’ll leave it as exercise for the reader.</li>
+</ul>
+<p>So we’ve got our Preferences all defined in XML: we just need to show them in our application! To do this, we’re going to use the <code>PreferenceFragment</code> class (a specialized Fragment for showing lists of <code>Preference</code> objects).</p>
+<ul>
+<li>We don’t need to specify an <code>onCreateView()</code> method, instead we’re just going to load that <code>Preference</code> resource in the <code>onCreate()</code> method using <code>addPreferencesFromResource(R.xml.preferences)</code>. This will cause the <code>PreferenceFragment</code> to create the appropriate layout!</li>
+</ul>
+<p>We’ll put this Fragment inside a plain <code>Activity</code>, which just loads that Fragment via a Transaction</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="fu">getFragmentManager</span>().<span class="fu">beginTransaction</span>()
+                .<span class="fu">replace</span>(android.<span class="fu">R</span>.<span class="fu">id</span>.<span class="fu">content</span>, <span class="kw">new</span> <span class="fu">SettingsFragment</span>())
+                .<span class="fu">commit</span>();</code></pre></div>
+<ul>
+<li>And the Activity doesn’t even need to load a layout: just specify a transaction!</li>
+<li>Note that <code>android.R.id.content</code> refers to the “root element” of the current View–basically what <code>setContentView()</code> is normally inflating into.</li>
+<li>But if we want to include other stuff (e.g., an ActionBar), we’d need to structure the Activity and it’s layout in more detail (particularly for multiple screens)</li>
+<li>Also note that there is a <code>PreferenceActivity</code> class as well, but <strong>do not use it</strong>. Many of it’s methods are deprecated, and since we’re targeting later than Honeycomb we should use the Fragment.</li>
+</ul>
+<p>Finally, how do we interact with these settings? Here’s the trick: a <code>preferences</code> XML resource is <strong>automatically</strong> associated with a <code>SharedPreferences</code> file. And in fact, every time we adjust a setting in the <code>PreferenceFragment</code>, the values in that file are edited as well!</p>
+<ul>
+<li>So we never need to write to the file, just read from it!</li>
+</ul>
+<p>The <code>preference</code> XML corresponds to the “default” <code>SharedPreferences</code> file, which we’ll access via</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">SharedPreferences sharedPref = PreferenceManager.<span class="fu">getDefaultSharedPreferences</span>(<span class="kw">this</span>);</code></pre></div>
+<ul>
+<li>And then we have this object we can fetch data from with <code>getString()</code>, <code>getBoolean()</code>, etc.</li>
+<li>So we can check the preferences before we show a notification!</li>
+</ul>
+<p>That’s the basics of using Settings. For more details see the <a href="http://developer.android.com/guide/topics/ui/settings.html">documentation</a>, as well as the <a href="http://developer.android.com/design/patterns/settings.html">design guide</a> for best practices on how to organize your settings.</p>
 
+</div>
+</div>
 </div>
 
 
@@ -295,8 +433,8 @@ This book is currently in <strong>alpha</strong> status, as pure lecture notes a
           </div>
         </div>
       </div>
-
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="intents.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="accessibility.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -324,7 +462,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/index.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/notifications-settings.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

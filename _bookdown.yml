@@ -16,10 +16,12 @@ rmd_files:
   - menus-dialogs.Rmd
   - loaders.Rmd
   - intents.Rmd
+  - notifications-settings.Rmd
 
   - part-labs.Rmd
   - accessibility.Rmd
   - viewpager.Rmd
+  - bluetooth.Rmd
 
   - appendix-java.Rmd
   - java-review.Rmd

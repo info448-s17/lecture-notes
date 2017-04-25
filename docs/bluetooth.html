@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="introduction.html">
+<link rel="prev" href="fragments-viewpager.html">
+<link rel="next" href="java-review.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -271,19 +271,60 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Android Development: Lecture Notes</h1>
-<h4 class="author"><em>Joel Ross</em></h4>
-<h4 class="date"><em>2017-04-25</em></h4>
-</div>
-<div id="about-this-book" class="section level1 unnumbered">
-<h1>About this Book</h1>
-<p>This book compiles lecture notes and tutorials for the <strong>INFO 448 Mobile Development: Android</strong> course taught at the <a href="https://ischool.uw.edu/">University of Washington Information School</a> (most recently in <a href="https://canvas.uw.edu/courses/1139926">Spring 2017</a>). The goal of these notes is to provide learning materials for students in the course or anyone else who wishes to learn the basics of developing Android applications.</p>
-<p>These notes are primarily adapted from the <a href="https://developer.android.com/develop/index.html">official Android developer documentation</a>, compiling and synthesizing those guidelines for pedagogical purposes (and the author’s own interpretation/biases). Please refer to that documentation for the latest information and official guidance.</p>
-<p class="alert alert-warning">
-This book is currently in <strong>alpha</strong> status, as pure lecture notes are converted into more generic formats.
+<div id="bluetooth" class="section level1">
+<h1><span class="header-section-number">Lecture 12</span> Bluetooth</h1>
+<p>In this chapter you will learn about some of the pieces for creating a connection between two co-located devices using <a href="https://en.wikipedia.org/wiki/Bluetooth">Bluetooth</a>. This will let you gain some familiarity with the <a href="https://developer.android.com/guide/topics/connectivity/bluetooth.html">Bluetooth API</a>, as well as further practice working with <em>Intents</em>.</p>
+<p class="alert alert-info">
+The code for this tutorial can be found at <a href="https://github.com/info448-s17/lab-bluetooth" class="uri">https://github.com/info448-s17/lab-bluetooth</a>.
 </p>
-<p><img src="img/index/by-nc-sa.png" alt="Creative Commons License" /> This book is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<p>This tutorial involves filling in the remaining pieces from a Sample Project provided by Google. Google includes <a href="http://developer.android.com/samples/index.html">lots of samples</a> demonstrating how to use particular pieces of functionality; reading and adapting the provided projects is a great way to learn new skills. There are <em>a lot</em> of comments, though that sometimes makes it hard to follow all the pieces. Read carefully!</p>
+<ul>
+<li>Also be sure to open the <a href="https://developer.android.com/guide/topics/connectivity/bluetooth.html">API documentation</a> for reference!</li>
+</ul>
+<p class="alert alert-warning">
+The emulator doesn’t support Bluetooth, so you will need to run this project on a physical device.
+</p>
+<p>Your task is to fill in the missing pieces of code, following the instructions below. I’ve marked each location with a <code>TODO</code> comment, which should show up in blue in Android Studio.</p>
+<ol style="list-style-type: decimal">
+<li><p>Start by reading through <a href="http://developer.android.com/guide/topics/connectivity/bluetooth.html#TheBasics">The Basics</a> to get a sense for what classes will be used and what their roles are. You only need to focus on the first 4: <code>BluetoothAdapter</code>, <code>BluetoothDevice</code>, <code>BluetoothSocket</code>, and <code>BluetoothServerSocket</code> (the rest are for other kinds of Bluetooth connections, like audio transfer and stuff). You don’t need to know all the methods or details of these classes, but should be familiar with their general, one-sentence purposes!</p></li>
+<li><p>You’ll need to request <a href="http://developer.android.com/guide/topics/connectivity/bluetooth.html#Permissions">permission</a> to use Bluetooth. Add the appropriate <code>&lt;uses-permission&gt;</code> attributes: one for <code>BLUETOOTH</code> (for communication; included) and one for <code>BLUETOOTH_ADMIN</code> (to “discover” devices and make connections).</p></li>
+<li><p>The main UI is defined in the <code>BluetoothChatFragment</code> class, which is a Fragment that holds the chat system. Start by filling in the <code>onCreate()</code> callback by <a href="http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getDefaultAdapter()">fetching the default Bluetooth adapter</a> and saving it to an instance variable (<code>mBluetoothAdapter</code>). If the adapter doesn’t exist (is <code>null</code>), you should <code>Toast</code> a message that Bluetooth isn’t available (using the <code>Activity's</code> <a href="http://developer.android.com/reference/android/content/ContextWrapper.html#getApplicationContext()"><code>Application Context</code></a> so that the Toast lasts), and then call <code>finish()</code> on the Fragment’s <em>Activity</em> (to close the application).</p></li>
+<li><p>You’ll want your app to make sure that the user has Bluetooth turned on. In the Fragment’s <code>onCreate()</code>, check whether the the <code>BluetoothAdapter</code> is <code>enabled</code>. If <strong>not</strong>, you’ll want to prompt the user to enable it, such as by launching the “Settings” app. Create an <strong>Implicit Intent</strong> for the action <code>BluetoothAdapter.ACTION_REQUEST_ENABLE</code>, and send this Intent <strong><em>for a result</em></strong> (with the result code of <code>REQUEST_ENABLE_BT</code>). Look in the Fragment’s <code>onActivityResult()</code> method to see what happens when we get a response back!</p>
+<ul>
+<li>The <code>BluetoothChatService</code> (stored in the instance variable <code>mChatService</code>) is an object representing a “background service”—think an AsyncTask but with a much longer lifespan. This particular service handles sending bytes of data back and forth over Bluetooth. We’ll talk about <code>Services</code> more later in the course.</li>
+</ul></li>
+<li><p>In order for a device to connect to yours over Bluetooth, your device will need to be <strong>discoverable</strong>: effectively, it has to respond to public queries about its existence (sort of like having your instant messaging status as “Online/Available”). In the Fragment’s <code>ensureDiscoverable()</code> helper method, check if the device is currently discoverable by calling <code>getScanMode()</code> on the <code>BluetoothAdapter</code>; it should return a value of <code>BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE</code>.</p>
+<ul>
+<li>If this <strong>IS NOT</strong> the case, then you should send another <em>Implicit Intent</em> to handle the <code>BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE</code> action.</li>
+</ul>
+<p>This intent should include (put) an <strong>extra</strong> that has the key <code>BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION</code> and a value of <code>300</code>, so that we are in “discoverable” mode for 300 seconds.</p>
+<p>Note that this intent does <strong>NOT</strong> need to be started for a result!</p></li>
+<li><p>The discovery of devices is controlled by the <code>DeviceListActivity</code> Activity. This is a separate Activity that will actually appear as a popup dialog (though it doesn’t use <code>DialogFragment</code>; it just “themes” the Activity as a dialog in the <code>Manifest</code>). The Activity’s <code>onCreate()</code> does a lot of UI work (including setting up an Adapter!), but it also needs to set up a <code>BroadcastReceiver</code> to listen for events like when devices are found. (This is the equivalent of declaring a <code>&lt;receiver&gt;</code> and <code>&lt;intent-filter&gt;</code> in the <code>Manifest</code>, but we need to do it in Java since the Receiver isn’t a separate class and since we want to do it dynamically).</p>
+<ul>
+<li><p>First instantiate a new <a href="http://developer.android.com/reference/android/content/IntentFilter.html#IntentFilter(java.lang.String)"><code>IntentFilter</code></a> object (giving it the <code>BluetoothDevice.ACTION_FOUND</code> action).</p></li>
+<li><p>Then use the <a href="http://developer.android.com/reference/android/content/Context.html#registerReceiver(android.content.BroadcastReceiver, android.content.IntentFilter)"><code>registerReceiver(receiver, intentFilter)</code></a> method, passing it the already-existing receiver (<code>mReceiver</code>) and the <code>IntentFilter</code> you just created!</p></li>
+<li><p>Then repeat the above two steps, but this time for the <code>Bluetooth.ACTION_DISCOVERY_FINISHED</code> action. This will register an additional <code>IntentFilter</code> on the same receiver.</p></li>
+</ul></li>
+<li><p>We can actually begin searching for devices by filling in the Activity’s <code>doDiscovery()</code> helper method (which is called when the Scan button is pressed).</p>
+<ul>
+<li><p>Add a check to see if the <code>BluetoothAdapter</code> currently <code>isDiscovering()</code>. If so, then you should tell the adapter to <code>cancelDiscovery()</code>.</p></li>
+<li><p>Whether or not the check was <code>true</code> (so even if we canceled the discovery), tell the adapter to <code>startDiscovery()</code> to begin searching for devices!</p></li>
+</ul></li>
+<li><p>Once the user has selected a device to connect to, we handle that connection back in the <code>BluetoothChatFragment</code>. Fill in that class’s <code>connectDevice()</code> helper method to connect to the device!</p>
+<ul>
+<li><p>First you’ll want to get the device’s “address” (a <a href="https://en.wikipedia.org/wiki/MAC_address">MAC address</a> that acts as a unique identifier) <strong><em>from</em></strong> the Intent’s extras: get the <code>Bundle</code> of extras from the Intent, then get the String with the key <code>DeviceListActivity.EXTRA_DEVICE_ADDRESS</code>.</p></li>
+<li><p>You can then find the device (a <code>BluetoothDevice</code> object) by calling the <code>.getRemoteDevice()</code> method on the <code>BluetoothAdapter</code> and passing this address.</p></li>
+<li><p>Finally, you can use the <code>mChatService</code>’s <code>.connect()</code> method to connect to this device (passing down the <code>secure</code> option as a second parameter). The <code>BluetoothChatService#connect()</code> method creates a new <code>Thread</code> to do the communication work, and opens up network sockets so that messages can be passed between the devices. (This is actually part of the hard part or working with Bluetooth; luckily we have a class to abstract that for us!)</p></li>
+</ul></li>
+<li><p>The last part is to actually send a message! In the <code>sendMessage()</code> helper in <code>BluetoothChatFragment</code>, fill in the details so that the String can be sent to the socket in the chat service.</p>
+<ul>
+<li><p>First you need to convert the message String into a <code>byte[]</code> (for communication over the socket). Use the String’s <code>getBytes()</code> method to convert.</p></li>
+<li><p>Then you can tell <code>mChatService</code> to <code>.write()</code> those bytes!</p></li>
+<li><p>We then need to reset the <code>mOutStringBuffer</code> instance variable (which keeps track of the message that has been typed so far). Use <code>.setLength()</code> to give it a length of <strong>0</strong>, which will effectively make it empty.</p></li>
+<li><p>And finally, because we’ve changed the outgoing message, set the text of the <code>mOutEditText</code> TextView to be the (now empty) <code>mOutStringBuffer</code>.</p></li>
+</ul></li>
+</ol>
+<p>And that’s it! You should now have a working chat system! Search for and connect to someone else’s device and try saying “hello”!</p>
 
 </div>
 
@@ -295,8 +336,8 @@ This book is currently in <strong>alpha</strong> status, as pure lecture notes a
           </div>
         </div>
       </div>
-
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="fragments-viewpager.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="java-review.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -324,7 +365,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/index.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/bluetooth.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

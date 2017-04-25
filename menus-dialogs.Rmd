@@ -1,5 +1,5 @@
 # UI Components
-This lecture discusses how to include **menus** and **pop-up dialogs** in an Android application as additional navigation and display components. Note that this lecture aims to provide _exposure_ rather than _depth_ to these concepts; for further details and options, see [the official Android documentation]().
+This lecture discusses how to include **menus** and **pop-up dialogs** in an Android application as additional navigation and display components. Note that this lecture aims to provide _exposure_ rather than _depth_ to these concepts; for further details and options, see [the official Android documentation](https://developer.android.com/develop/index.html).
 
 <p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture06-menus-dialogs>. <!--Note that this code builds upon the example developed in Lecture 5.--></p>
 
