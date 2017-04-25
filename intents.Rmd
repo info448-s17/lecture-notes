@@ -236,10 +236,9 @@ this.registerReceiver(new MyReceiver(), batteryFilter);
 
 
 ## An Example: SMS
-For your homework this week, you'll be doing this kind of integration in order to be able to send and receive text messages (SMS, Short Messaging Service, the most popular form of data communication in the world). Most of the process is the same: you register a receiver in order listen for incoming text messages. We can fetch the list of messages received using a `ContentProvider` (like for the Todoer). It's also possible to send SMS as well, and we'll actually demo that now to show off one more type of `Intent`.
+One specific use of Intents is when working with text messages (SMS, Short Messaging Service, the most popular form of data communication in the world). While it is possile to fetch a list of messages usin a `ContentProvider`, it is also possible to send SMS as well. This will also let us show off one more type of `Intent`.
 
 - _Important note:_ the SMS APIs changed *drastically* in KitKat (API 19). So we're going to make sure that is our minimum so we can get all the helpful methods and support newer stuff (check gradle to confirm!).
-
 
 The main thing to note about sending SMS is that as of KitKat, each system has a _default_ messaging client---who is the only one who can actually send messages. Luckily, the API lets you get access to that messaging client's services in order to send a message _through_ it:
 

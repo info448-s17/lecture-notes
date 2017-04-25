@@ -205,9 +205,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.7" data-path="intents.html"><a href="intents.html#shareactionprovider"><i class="fa fa-check"></i><b>8.7</b> ShareActionProvider</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="ui-components-ii.html"><a href="ui-components-ii.html"><i class="fa fa-check"></i><b>9</b> UI Components II</a><ul>
-<li class="chapter" data-level="9.1" data-path="ui-components-ii.html"><a href="ui-components-ii.html#notifications"><i class="fa fa-check"></i><b>9.1</b> Notifications</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="ui-components-ii.html"><a href="ui-components-ii.html#designing-notifications"><i class="fa fa-check"></i><b>9.1.1</b> Designing Notifications</a></li>
-</ul></li>
+<li class="chapter" data-level="9.1" data-path="ui-components-ii.html"><a href="ui-components-ii.html#notifications"><i class="fa fa-check"></i><b>9.1</b> Notifications</a></li>
 <li class="chapter" data-level="9.2" data-path="ui-components-ii.html"><a href="ui-components-ii.html#settings"><i class="fa fa-check"></i><b>9.2</b> Settings</a><ul>
 <li class="chapter" data-level="9.2.1" data-path="ui-components-ii.html"><a href="ui-components-ii.html#sharedpreferences"><i class="fa fa-check"></i><b>9.2.1</b> SharedPreferences</a></li>
 <li class="chapter" data-level="9.2.2" data-path="ui-components-ii.html"><a href="ui-components-ii.html#preference-settings"><i class="fa fa-check"></i><b>9.2.2</b> Preference Settings</a></li>
@@ -454,7 +452,7 @@ batteryFilter.<span class="fu">addAction</span>(Intent.<span class="fu">ACTION_P
 </div>
 <div id="an-example-sms" class="section level2">
 <h2><span class="header-section-number">8.6</span> An Example: SMS</h2>
-<p>For your homework this week, you’ll be doing this kind of integration in order to be able to send and receive text messages (SMS, Short Messaging Service, the most popular form of data communication in the world). Most of the process is the same: you register a receiver in order listen for incoming text messages. We can fetch the list of messages received using a <code>ContentProvider</code> (like for the Todoer). It’s also possible to send SMS as well, and we’ll actually demo that now to show off one more type of <code>Intent</code>.</p>
+<p>One specific use of Intents is when working with text messages (SMS, Short Messaging Service, the most popular form of data communication in the world). While it is possile to fetch a list of messages usin a <code>ContentProvider</code>, it is also possible to send SMS as well. This will also let us show off one more type of <code>Intent</code>.</p>
 <ul>
 <li><em>Important note:</em> the SMS APIs changed <em>drastically</em> in KitKat (API 19). So we’re going to make sure that is our minimum so we can get all the helpful methods and support newer stuff (check gradle to confirm!).</li>
 </ul>
