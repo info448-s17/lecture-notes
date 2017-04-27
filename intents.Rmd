@@ -1,4 +1,4 @@
-# Intents
+# Intents {#intents}
 This lecture discusses how to use [**Intents**](https://developer.android.com/guide/components/intents-filters.html) to communicate between different Activities and Applications. The Intent system allows Activities to communicate, even though they don't have references to each other (and thus we can't just call a method on them).
 
 <p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture08-intents>. Note that you will need to have a working camera on your device. To enable the camera in the emulator, use the `Tools > Android > AVD` menu to modify the emulator, and select "webcam" for the front camera option. Confirm that it is enabled by launching the Camera app.</p>

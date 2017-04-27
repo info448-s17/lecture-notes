@@ -17,6 +17,7 @@ rmd_files:
   - loaders.Rmd
   - intents.Rmd
   - notifications-settings.Rmd
+  - files-permissions.Rmd
 
   - part-labs.Rmd
   - accessibility.Rmd

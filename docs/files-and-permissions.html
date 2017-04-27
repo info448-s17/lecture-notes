@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Android Development: Lecture Notes</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="Lecture notes for Info 448 Mobile Development: Android.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Android Development: Lecture Notes" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes for Info 448 Mobile Development: Android." />
+  <meta name="github-repo" content="info448-s17/lecture-notes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Android Development: Lecture Notes" />
+  
+  <meta name="twitter:description" content="Lecture notes for Info 448 Mobile Development: Android." />
+  
+
+<meta name="author" content="Joel Ross">
+
+
+<meta name="date" content="2017-04-26">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="ui-components-ii.html">
+<link rel="next" href="accessibility.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Android Development</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About this Book</a></li>
+<li class="part"><span><b>I Lectures</b></span></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#android-history"><i class="fa fa-check"></i><b>1.1</b> Android History</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="introduction.html"><a href="introduction.html#android-versions"><i class="fa fa-check"></i><b>1.1.1</b> Android Versions</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introduction.html"><a href="introduction.html#legal-battles"><i class="fa fa-check"></i><b>1.1.2</b> Legal Battles</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#android-architecture-and-code"><i class="fa fa-check"></i><b>1.2</b> Android Architecture and Code</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="introduction.html"><a href="introduction.html#programming-languages"><i class="fa fa-check"></i><b>1.2.1</b> Programming Languages</a></li>
+<li class="chapter" data-level="1.2.2" data-path="introduction.html"><a href="introduction.html#building-apps"><i class="fa fa-check"></i><b>1.2.2</b> Building Apps</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#development-tools"><i class="fa fa-check"></i><b>1.3</b> Development Tools</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#hardware"><i class="fa fa-check"></i><b>1.3.1</b> Hardware</a></li>
+<li class="chapter" data-level="1.3.2" data-path="introduction.html"><a href="introduction.html#software"><i class="fa fa-check"></i><b>1.3.2</b> Software</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#hello-world"><i class="fa fa-check"></i><b>1.4</b> Hello World</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="introduction.html"><a href="introduction.html#the-emulator"><i class="fa fa-check"></i><b>1.4.1</b> The Emulator</a></li>
+<li class="chapter" data-level="1.4.2" data-path="introduction.html"><a href="introduction.html#project-contents"><i class="fa fa-check"></i><b>1.4.2</b> Project Contents</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="activities.html"><a href="activities.html"><i class="fa fa-check"></i><b>2</b> Activities and Logging</a><ul>
+<li class="chapter" data-level="2.1" data-path="activities.html"><a href="activities.html#making-activities"><i class="fa fa-check"></i><b>2.1</b> Making Activities</a></li>
+<li class="chapter" data-level="2.2" data-path="activities.html"><a href="activities.html#the-activity-lifecycle"><i class="fa fa-check"></i><b>2.2</b> The Activity Lifecycle</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="activities.html"><a href="activities.html#overriding-the-callback-methods"><i class="fa fa-check"></i><b>2.2.1</b> Overriding the Callback Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="activities.html"><a href="activities.html#logging-adb"><i class="fa fa-check"></i><b>2.3</b> Logging &amp; ADB</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="activities.html"><a href="activities.html#log-methods"><i class="fa fa-check"></i><b>2.3.1</b> Log Methods</a></li>
+<li class="chapter" data-level="2.3.2" data-path="activities.html"><a href="activities.html#logcat"><i class="fa fa-check"></i><b>2.3.2</b> Logcat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="activities.html"><a href="activities.html#basic-events"><i class="fa fa-check"></i><b>2.4</b> Basic Events</a></li>
+<li class="chapter" data-level="2.5" data-path="activities.html"><a href="activities.html#multiple-activities"><i class="fa fa-check"></i><b>2.5</b> Multiple Activities</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="activities.html"><a href="activities.html#intents-and-context"><i class="fa fa-check"></i><b>2.5.1</b> Intents and Context</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="activities.html"><a href="activities.html#back-tasks"><i class="fa fa-check"></i><b>2.6</b> Back &amp; Tasks</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="activities.html"><a href="activities.html#up-navigation"><i class="fa fa-check"></i><b>2.6.1</b> Up Navigation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html"><i class="fa fa-check"></i><b>3</b> Resources and Layouts</a><ul>
+<li class="chapter" data-level="3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#resources"><i class="fa fa-check"></i><b>3.1</b> Resources</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#alternative-resources"><i class="fa fa-check"></i><b>3.1.1</b> Alternate Resources</a></li>
+<li class="chapter" data-level="3.1.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#xml-details"><i class="fa fa-check"></i><b>3.1.2</b> XML Details</a></li>
+<li class="chapter" data-level="3.1.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#r"><i class="fa fa-check"></i><b>3.1.3</b> R</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#views"><i class="fa fa-check"></i><b>3.2</b> Views</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#view-properties"><i class="fa fa-check"></i><b>3.2.1</b> View Properties</a></li>
+<li class="chapter" data-level="3.2.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#practice"><i class="fa fa-check"></i><b>3.2.2</b> Practice</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#layouts"><i class="fa fa-check"></i><b>3.3</b> Layouts</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#linearlayout"><i class="fa fa-check"></i><b>3.3.1</b> LinearLayout</a></li>
+<li class="chapter" data-level="3.3.2" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#relativelayout"><i class="fa fa-check"></i><b>3.3.2</b> RelativeLayout</a></li>
+<li class="chapter" data-level="3.3.3" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#constraintlayout"><i class="fa fa-check"></i><b>3.3.3</b> ConstraintLayout</a></li>
+<li class="chapter" data-level="3.3.4" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#other-layouts"><i class="fa fa-check"></i><b>3.3.4</b> Other Layouts</a></li>
+<li class="chapter" data-level="3.3.5" data-path="resources-and-layouts.html"><a href="resources-and-layouts.html#combining-and-inflating-layouts"><i class="fa fa-check"></i><b>3.3.5</b> Combining and Inflating Layouts</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="interactive-views.html"><a href="interactive-views.html"><i class="fa fa-check"></i><b>4</b> Interactive Views</a><ul>
+<li class="chapter" data-level="4.1" data-path="interactive-views.html"><a href="interactive-views.html#inputs"><i class="fa fa-check"></i><b>4.1</b> Inputs</a></li>
+<li class="chapter" data-level="4.2" data-path="interactive-views.html"><a href="interactive-views.html#listviews-and-adapters"><i class="fa fa-check"></i><b>4.2</b> ListViews and Adapters</a></li>
+<li class="chapter" data-level="4.3" data-path="interactive-views.html"><a href="interactive-views.html#network-data"><i class="fa fa-check"></i><b>4.3</b> Network Data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="fragments.html"><a href="fragments.html"><i class="fa fa-check"></i><b>5</b> Fragments</a><ul>
+<li class="chapter" data-level="5.1" data-path="fragments.html"><a href="fragments.html#creating-a-fragment"><i class="fa fa-check"></i><b>5.1</b> Creating a Fragment</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="fragments.html"><a href="fragments.html#activity-to-fragment-communication"><i class="fa fa-check"></i><b>5.1.1</b> Activity-to-Fragment Communication</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="fragments.html"><a href="fragments.html#dynamic-fragments"><i class="fa fa-check"></i><b>5.2</b> Dynamic Fragments</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fragments.html"><a href="fragments.html#instantiating-fragments"><i class="fa fa-check"></i><b>5.2.1</b> Instantiating Fragments</a></li>
+<li class="chapter" data-level="5.2.2" data-path="fragments.html"><a href="fragments.html#transactions"><i class="fa fa-check"></i><b>5.2.2</b> Transactions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="fragments.html"><a href="fragments.html#inter-fragment-communication"><i class="fa fa-check"></i><b>5.2.3</b> Inter-Fragment Communication</a></li>
+<li class="chapter" data-level="5.2.4" data-path="fragments.html"><a href="fragments.html#the-back-stack"><i class="fa fa-check"></i><b>5.2.4</b> The Back Stack</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ui-components.html"><a href="ui-components.html"><i class="fa fa-check"></i><b>6</b> UI Components</a><ul>
+<li class="chapter" data-level="6.1" data-path="ui-components.html"><a href="ui-components.html#the-action-bar"><i class="fa fa-check"></i><b>6.1</b> The Action Bar</a></li>
+<li class="chapter" data-level="6.2" data-path="ui-components.html"><a href="ui-components.html#menus"><i class="fa fa-check"></i><b>6.2</b> Menus</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="ui-components.html"><a href="ui-components.html#context-menus"><i class="fa fa-check"></i><b>6.2.1</b> Context Menus</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="ui-components.html"><a href="ui-components.html#dialogs"><i class="fa fa-check"></i><b>6.3</b> Dialogs</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="ui-components.html"><a href="ui-components.html#dialogfragments"><i class="fa fa-check"></i><b>6.3.1</b> DialogFragments</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="ui-components.html"><a href="ui-components.html#toasts"><i class="fa fa-check"></i><b>6.4</b> Toasts</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html"><i class="fa fa-check"></i><b>7</b> Providers and Loaders</a><ul>
+<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
+<li class="chapter" data-level="7.2" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#cursors"><i class="fa fa-check"></i><b>7.2</b> Cursors</a></li>
+<li class="chapter" data-level="7.3" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#loaders"><i class="fa fa-check"></i><b>7.3</b> Loaders</a></li>
+<li class="chapter" data-level="7.4" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#other-provider-actions"><i class="fa fa-check"></i><b>7.4</b> Other Provider Actions</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#adding-words"><i class="fa fa-check"></i><b>7.4.1</b> Adding Words</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="intents.html"><a href="intents.html"><i class="fa fa-check"></i><b>8</b> Intents</a><ul>
+<li class="chapter" data-level="8.1" data-path="intents.html"><a href="intents.html#intents-for-another-activity-explicit"><i class="fa fa-check"></i><b>8.1</b> Intents for Another Activity (Explicit)</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="intents.html"><a href="intents.html#extras"><i class="fa fa-check"></i><b>8.1.1</b> Extras</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="intents.html"><a href="intents.html#intents-for-another-app-implicit"><i class="fa fa-check"></i><b>8.2</b> Intents for Another App (Implicit)</a></li>
+<li class="chapter" data-level="8.3" data-path="intents.html"><a href="intents.html#intents-for-a-response"><i class="fa fa-check"></i><b>8.3</b> Intents for a Response</a></li>
+<li class="chapter" data-level="8.4" data-path="intents.html"><a href="intents.html#listening-for-intents"><i class="fa fa-check"></i><b>8.4</b> Listening for Intents</a></li>
+<li class="chapter" data-level="8.5" data-path="intents.html"><a href="intents.html#broadcasts-and-receivers"><i class="fa fa-check"></i><b>8.5</b> Broadcasts and Receivers</a></li>
+<li class="chapter" data-level="8.6" data-path="intents.html"><a href="intents.html#an-example-sms"><i class="fa fa-check"></i><b>8.6</b> An Example: SMS</a></li>
+<li class="chapter" data-level="8.7" data-path="intents.html"><a href="intents.html#shareactionprovider"><i class="fa fa-check"></i><b>8.7</b> ShareActionProvider</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="ui-components-ii.html"><a href="ui-components-ii.html"><i class="fa fa-check"></i><b>9</b> UI Components II</a><ul>
+<li class="chapter" data-level="9.1" data-path="ui-components-ii.html"><a href="ui-components-ii.html#notifications"><i class="fa fa-check"></i><b>9.1</b> Notifications</a></li>
+<li class="chapter" data-level="9.2" data-path="ui-components-ii.html"><a href="ui-components-ii.html#settings"><i class="fa fa-check"></i><b>9.2</b> Settings</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="ui-components-ii.html"><a href="ui-components-ii.html#sharedpreferences"><i class="fa fa-check"></i><b>9.2.1</b> SharedPreferences</a></li>
+<li class="chapter" data-level="9.2.2" data-path="ui-components-ii.html"><a href="ui-components-ii.html#preference-settings"><i class="fa fa-check"></i><b>9.2.2</b> Preference Settings</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="files-and-permissions.html"><a href="files-and-permissions.html"><i class="fa fa-check"></i><b>10</b> Files and Permissions</a><ul>
+<li class="chapter" data-level="10.1" data-path="files-and-permissions.html"><a href="files-and-permissions.html#file-storage-locations"><i class="fa fa-check"></i><b>10.1</b> File Storage Locations</a></li>
+<li class="chapter" data-level="10.2" data-path="files-and-permissions.html"><a href="files-and-permissions.html#permissions"><i class="fa fa-check"></i><b>10.2</b> Permissions</a></li>
+<li class="chapter" data-level="10.3" data-path="files-and-permissions.html"><a href="files-and-permissions.html#external-storage"><i class="fa fa-check"></i><b>10.3</b> External Storage</a></li>
+<li class="chapter" data-level="10.4" data-path="files-and-permissions.html"><a href="files-and-permissions.html#internal-storage-cache"><i class="fa fa-check"></i><b>10.4</b> Internal Storage &amp; Cache</a></li>
+<li class="chapter" data-level="10.5" data-path="files-and-permissions.html"><a href="files-and-permissions.html#example-saving-pictures"><i class="fa fa-check"></i><b>10.5</b> Example: Saving Pictures</a></li>
+<li class="chapter" data-level="10.6" data-path="files-and-permissions.html"><a href="files-and-permissions.html#sharing-files"><i class="fa fa-check"></i><b>10.6</b> Sharing Files</a><ul>
+<li class="chapter" data-level="10.6.1" data-path="files-and-permissions.html"><a href="files-and-permissions.html#bonus-sharing-with-a-fileprovider"><i class="fa fa-check"></i><b>10.6.1</b> Bonus: Sharing with a <code>FileProvider</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Additional Topics (Labs)</b></span></li>
+<li class="chapter" data-level="11" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>11</b> Accessibility</a><ul>
+<li class="chapter" data-level="11.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>11.1</b> Universal Usability</a></li>
+<li class="chapter" data-level="11.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>11.2</b> Implementing Accessibility</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>11.2.1</b> Supporting Vision Impairment</a></li>
+<li class="chapter" data-level="11.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>11.2.2</b> Supporting Alternative Inputs</a></li>
+<li class="chapter" data-level="11.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>11.2.3</b> Supporting Internationalization</a></li>
+<li class="chapter" data-level="11.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>11.2.4</b> Further Testing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>12</b> Fragments: ViewPager</a><ul>
+<li class="chapter" data-level="12.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>12.1</b> Define a SearchFragment</a></li>
+<li class="chapter" data-level="12.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>12.2</b> Add the ViewPager and Adapter</a></li>
+<li class="chapter" data-level="12.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>12.3</b> Add User Interaction</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>13</b> Bluetooth</a></li>
+<li class="appendix"><span><b>Appendix: Java</b></span></li>
+<li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
+<li class="chapter" data-level="A.1" data-path="java-review.html"><a href="java-review.html#building-apps-with-gradle"><i class="fa fa-check"></i><b>A.1</b> Building Apps with Gradle</a></li>
+<li class="chapter" data-level="A.2" data-path="java-review.html"><a href="java-review.html#class-basics"><i class="fa fa-check"></i><b>A.2</b> Class Basics</a></li>
+<li class="chapter" data-level="A.3" data-path="java-review.html"><a href="java-review.html#inheritance"><i class="fa fa-check"></i><b>A.3</b> Inheritance</a></li>
+<li class="chapter" data-level="A.4" data-path="java-review.html"><a href="java-review.html#interfaces"><i class="fa fa-check"></i><b>A.4</b> Interfaces</a></li>
+<li class="chapter" data-level="A.5" data-path="java-review.html"><a href="java-review.html#polymorphism"><i class="fa fa-check"></i><b>A.5</b> Polymorphism</a></li>
+<li class="chapter" data-level="A.6" data-path="java-review.html"><a href="java-review.html#abstract-methods-and-classes"><i class="fa fa-check"></i><b>A.6</b> Abstract Methods and Classes</a></li>
+<li class="chapter" data-level="A.7" data-path="java-review.html"><a href="java-review.html#generics"><i class="fa fa-check"></i><b>A.7</b> Generics</a></li>
+<li class="chapter" data-level="A.8" data-path="java-review.html"><a href="java-review.html#nested-classes"><i class="fa fa-check"></i><b>A.8</b> Nested Classes</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="java-swing.html"><a href="java-swing.html"><i class="fa fa-check"></i><b>B</b> Swing Framework</a><ul>
+<li class="chapter" data-level="B.1" data-path="java-swing.html"><a href="java-swing.html#events"><i class="fa fa-check"></i><b>B.1</b> Events</a></li>
+<li class="chapter" data-level="B.2" data-path="java-swing.html"><a href="java-swing.html#layouts-and-composites"><i class="fa fa-check"></i><b>B.2</b> Layouts and Composites</a></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="java-threads-http.html"><a href="java-threads-http.html"><i class="fa fa-check"></i><b>C</b> Threads and HTTP Requests</a><ul>
+<li class="chapter" data-level="C.1" data-path="java-threads-http.html"><a href="java-threads-http.html#concurrency"><i class="fa fa-check"></i><b>C.1</b> Concurrency</a><ul>
+<li class="chapter" data-level="C.1.1" data-path="java-threads-http.html"><a href="java-threads-http.html#an-example-algorithm-races"><i class="fa fa-check"></i><b>C.1.1</b> An Example: Algorithm Races!</a></li>
+<li class="chapter" data-level="C.1.2" data-path="java-threads-http.html"><a href="java-threads-http.html#threading-the-race"><i class="fa fa-check"></i><b>C.1.2</b> Threading the Race</a></li>
+</ul></li>
+<li class="chapter" data-level="C.2" data-path="java-threads-http.html"><a href="java-threads-http.html#http-requests"><i class="fa fa-check"></i><b>C.2</b> HTTP Requests</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Android Development: Lecture Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="files-and-permissions" class="section level1">
+<h1><span class="header-section-number">Lecture 10</span> Files and Permissions</h1>
+<p>This lecture discusses how to <a href="https://developer.android.com/training/basics/data-storage/files.html">working with files</a> in Android. Using the file system allows us to have <a href="https://developer.android.com/guide/topics/data/data-storage.html">persistant data storage</a> in a more expansive and flexible manner than using the <code>SharedPreferences</code> discussed in the previous lecture (and as a supplement to <code>ContentProvider</code> databases).</p>
+<p class="alert alert-info">
+This lecture references code found at <a href="https://github.com/info448-s17/lecture10-files-permissions" class="uri">https://github.com/info448-s17/lecture10-files-permissions</a>. <!--Note that this code builds upon the example developed in Lecture 8.-->
+</p>
+<p class="alert alert-warning">
+In order to demonstrate all of the features discussed in this lecture, your device or emulator will need to be running <strong>API 23 (6.0 Marshmallow)</strong> or later.
+</p>
+<div id="file-storage-locations" class="section level2">
+<h2><span class="header-section-number">10.1</span> File Storage Locations</h2>
+<p>Android devices split file storage into two types: <strong>Internal storage</strong> and <strong>External storage</strong>. These names come from when devices had built-in memory as well as external SD cards, each of which may have had different interactions. However, with modern systems the “external storage” can refer to a section of a phone’s built-in memory as well; the distinctions are instead used for specifying <em>access</em> rather than physical data location.</p>
+<ul>
+<li><p><a href="https://developer.android.com/guide/topics/data/data-storage.html#filesInternal"><strong>Internal storage</strong></a> is always accessible, and by default files saved internally are <em>only</em> accessible to your app. Similarly, when the user uninstalls your app, the internal files are deleted. This is usually the best place for “private” file data, or files that will only be used by your application.</p></li>
+<li><p><a href="https://developer.android.com/guide/topics/data/data-storage.html#filesExternal"><strong>External storage</strong></a> is not always accessible (e.g., if the physical storage is removed), and is usually (but not always) <em>world-readable</em>. Normally files stored in External storage persist even if an app is uninstalled, unless certain options are used. This is usually used for “public” files that may be shared between applications.</p></li>
+</ul>
+<p><a href="https://developer.android.com/training/basics/data-storage/files.html#InternalVsExternalStorage">When do we use each?</a> Basically, you shuold use <em>Internal</em> storage for “private” files that you don’t want to be available outside of the app, and use <em>External</em> storage otherwise.</p>
+<ul>
+<li>Note however that there are publicly-<strong>hidden</strong> <em>External</em> files—the big distinction between the storage locations is less visibility and more about <em>access</em>.</li>
+</ul>
+<p>In addition, both of these storage systems also have a <strong>“cache”</strong> location (i.e., an <em>Internal Cache</em> and an <em>External Cache</em>). A <a href="https://en.wiktionary.org/wiki/cache">cache</a> is “(secret) storage for the future”, but in computing tends to refer to “temporary storage”. The Caches are different from other file storage, in that Android has the ability to automatically delete cached files if storage space is getting low… However, you can’t rely on the operating system to do that on its own in an efficient way, so you should still delete your own Cache files when you’re done with them! In short, use the Caches for temporary files, and try to keep them <em>small</em> (less than 1MB recommended).</p>
+<ul>
+<li>The user can easily clear an application’s cache as well.</li>
+</ul>
+<p>In code, using all of these storage locations involve working with the <a href="https://developer.android.com/reference/java/io/File.html"><code>File</code></a> class. This class represents a “file” (or a “directory”) object, and is the same class you may be familiar with from Java SE.</p>
+<ul>
+<li>We can instantiate a <code>File</code> by passing it a directory (which is another <code>File</code>) and a filename (a <code>String</code>). Instantiating the file will create the file on disk (but empty, size 0) if it doesn’t already exist.</li>
+<li>We can test if a <code>File</code> is a folder with the <code>.isDirectory()</code> method, and create new directories by taking a <code>File</code> and calling <code>.mkdir()</code> on it. We can get a list of <code>Files</code> inside the directory with the <code>listFiles()</code> method. See more API documentation for more details and options.</li>
+</ul>
+<p>The difference between saving files to Internal and External storage, <strong><em>in practice</em></strong>, simply involves which directory you put the file in! This lecture will focus on working with <strong>External storage</strong>, since that code ends up being a kind of “super-set” of implementation details needed for the file system in general. We will indicate what changes need to be made for interacting with Internal storage.</p>
+<ul>
+<li>This lecture will walk through implementing an application that will save whatever the user types into an text field to a file.</li>
+</ul>
+<p>Because a device’s External storage may be on removable media, in order to interact with it in any way we first need to check whether it is available (e.g., that the SD card is mounted). This can be done with the following <a href="https://developer.android.com/guide/topics/data/data-storage.html#MediaAvail">check</a> (written as a helper method so it can be reused):</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> <span class="dt">boolean</span> <span class="fu">isExternalStorageWritable</span>() {
+  <span class="bu">String</span> state = <span class="bu">Environment</span>.<span class="fu">getExternalStorageState</span>();
+  <span class="kw">if</span> (<span class="bu">Environment</span>.<span class="fu">MEDIA_MOUNTED</span>.<span class="fu">equals</span>(state)) {
+    <span class="kw">return</span> <span class="kw">true</span>;
+  }
+  <span class="kw">return</span> <span class="kw">false</span>;
+}</code></pre></div>
+</div>
+<div id="permissions" class="section level2">
+<h2><span class="header-section-number">10.2</span> Permissions</h2>
+<p>Directly accessing the file system of any computer can be a significant security risk, so there are substantial protections in place to make sure that a malicious app doesn’t run roughshod over a user’s data. So in order to work with the file system, we first need to discuss how Android handles <a href="https://developer.android.com/guide/topics/permissions/requesting.html">permissions</a> in more detail.</p>
+<p>One of the most import aspect of the Android operating system’s design is the idea of <a href="https://en.wikipedia.org/wiki/Sandbox_(computer_security)"><strong>sandboxing</strong></a>: each application gets its own “sandbox” to play in (where all its toys are kept), but isn’t able to go outside the box and play with someone else’s toys. The “toys” (components) parts that are outside of the sandbox are things that would be <em>impactful</em> to the user, such as network or file access. Apps are not 100% locked into their sandbox, but we need to do extra work to step outside.</p>
+<ul>
+<li><p>Sandboxing also occurs at a package level, where packages (applications) are isolated from packages <em>from other developers</em>; you can use certificate signing (which occurs as part of our build process automatically) to mark two packages as from the same developer if we want them to interact.</p></li>
+<li><p>Additionally, Android’s underlying OS is Linux-based, so it actually uses Linux’s permission system under the hood (with user and group ids that grant access to particular files or processes).</p></li>
+</ul>
+<p>In order for an app to go outside of its sandbox (and use different components), it needs to request permission to leave. We ask for this permission (“Mother may I?”) by declaring out-of-sandbox usages explicitly in the <code>Manifest</code>, as we’ve done before with getting permission to access the Internet or send SMS messages.</p>
+<p>Android permissions we can ask for are divided into two categories: <a href="https://developer.android.com/guide/topics/permissions/requesting.html#normal-dangerous">normal and dangerous</a>:</p>
+<ul>
+<li><p><strong>Normal permissions</strong> are those that may impact the user (so require permission), but don’t pose any serious risk. They are granted by the user at <em>install time</em>; if the user chooses to install the app, permission is granted to that app. See <a href="https://developer.android.com/guide/topics/permissions/normal-permissions.html">this list</a> for examples of normal permissions. <code>INTERNET</code> is a normal permission.</p></li>
+<li><p><strong>Dangerous permissions</strong>, on the other hand, have the risk of violating a user’s privacy, or otherwise messing with the user’s device or other apps. These permissions <em>also</em> need to be granted at install time. But <strong><em>IN ADDITION</em></strong>, starting from Android 6.0 Marshmallow (API 23), users <em>additionally</em> need to grant dangerous permission access <strong>at runtime</strong>, when the app tries to actually invoke the “permitted” dangerous action.</p>
+<ul>
+<li><p>The user grants permission via a system-generated pop-up dialog. Note that permissions are granted in “groups”, so if the user agrees to give you <code>RECEIVE_SMS</code> permission, you get <code>SEND_SMS</code> permission as well. See the <a href="https://developer.android.com/guide/topics/permissions/requesting.html#perm-groups">list of permission groups</a>.</p></li>
+<li><p>When the user grant permission at runtime, that permission stays granted as long as the app is installed. But the big caveat is that the user can choose to <strong>revoke</strong> or deny privileges at <strong><em>any</em></strong> time (they do this though System settings)! Thus you have to check <em>each time you want to access the feature</em> if the user has granted the privileges or not—you don’t know if the user has <em>currently</em> given you permission, even if they had i</p></li>
+</ul></li>
+</ul>
+<p>Writing to external storage is a <em>dangerous</em> permission, and thus we will need to do extra work to support the Marshmallow runtime permission system.</p>
+<ul>
+<li>In order to support runtime permissions, we need to specify our app’s <strong>target SDK</strong> to be <code>23</code> or higher AND execute the app on a device running Android 6.0 (Marshmallow) or higher. Runtime permissions are only considered if the OS supports <em>and</em> the app is targeted that high. For lower-API devices or apps, permission is only granted at install time.</li>
+</ul>
+<p>First we <em>still</em> need to request permission in the <code>Manifest</code>; if we haven’t announced that we might ask for permission, we won’t be allowed to ask in the future. In particular, saving files to External storage requires <code>android.permission.WRITE_EXTERNAL_STORAGE</code> permission (which will also grant us <code>READ_EXTERNAL_STORAGE</code> access).</p>
+<p>Before we perform a dangerous action, we can check that we currently have permission:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> permissionCheck = ContextCompat.<span class="fu">checkSelfPermission</span>(activity, <span class="bu">Manifest</span>.<span class="fu">permission</span>.<span class="fu">PERMISSION_NAME</span>);</code></pre></div>
+<ul>
+<li>This function basically “looks up” whether we’ve been granted a particular permission or not. It will return either <code>PackageManager.PERMISSION_GRANTED</code> or <code>PackageManager.PERMISSION_DENIED</code>.</li>
+</ul>
+<p>If permission has been granted, great! We can go about our business (e.g., saving a file to external storage). But if permission has NOT been explicitly granted (at runtime), then we have to ask for it. We do this by calling:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">ActivityCompat.<span class="fu">requestPermissions</span>(activity, <span class="kw">new</span> <span class="bu">String</span>[]{<span class="bu">Manifest</span>.<span class="fu">permission</span>.<span class="fu">PERMISSION_NAME</span>}, REQUEST_CODE);</code></pre></div>
+<ul>
+<li>This method takes a context and then an <em>array</em> of permissions that we need access to (in case we need more than one). We also provide a request code (an <code>int</code>), which we can use to identify that particular request for permission in a callback that will be executed when the user chooses whether to give us access or not. This is the same pattern as when we sent an Intent for a <em>result</em>; asking for permission is conceptually like sending an Intent to the permission system!</li>
+</ul>
+<p>We can then provide the callback that will be executed when the user decides whether to grant us permission or not:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">onRequestPermissionsResult</span>(<span class="dt">int</span> requestCode, <span class="bu">String</span> permissions[], <span class="dt">int</span>[] grantResults) {
+  <span class="kw">switch</span> (requestCode) {
+    <span class="kw">case</span> REQUEST_CODE:
+      <span class="kw">if</span> (grantResults.<span class="fu">length</span> &gt; <span class="dv">0</span> &amp;&amp; grantResults[<span class="dv">0</span>] == PackageManager.<span class="fu">PERMISSION_GRANTED</span>) {
+        <span class="co">//have permission! Do stuff!</span>
+      }
+    <span class="kw">default</span>:
+        <span class="kw">super</span>.<span class="fu">onRequestPermissionsResult</span>(requestCode, permissions, grantResults);
+  }
+}</code></pre></div>
+<p>We check which request we’re hearing the results for, what permissions were granted (if any—the user can piece-wise grant permissions), and then we can react if everything is good… like by finally saving our file!</p>
+<ul>
+<li>Note that if the user deny us permission once, we might want to try and explain <em>why</em> we’re asking permission (see <a href="https://developer.android.com/training/permissions/best-practices.html">best practices</a>) and ask again. Google offers a utility method (<code>ActivityCompat#shouldShowRequestPermissionRationale()</code>) which we can use to show a rationale dialog if they’ve denied us once. And if that’s true, we might show a Dialog or something to explain ourselves–and if they OK that dialog, then we can ask again.</li>
+</ul>
+</div>
+<div id="external-storage" class="section level2">
+<h2><span class="header-section-number">10.3</span> External Storage</h2>
+<p>Once we have permission to write to external file, we can actually do so! Since we’ve verified that the External storage is available, we now need to pick what directory in that storage to save the file in. With External storage, we have two options:</p>
+<ul>
+<li><p>We can save the file <a href="https://developer.android.com/guide/topics/data/data-storage.html#SavingSharedFiles"><strong>publicly</strong></a>. We use the <code>getExternalStoragePublicDirectory()</code> method to access a public directory, passing in what <a href="http://developer.android.com/reference/android/os/Environment.html#lfields">type</a> of directory we want (e.g., <code>DIRECTORY_MUSIC</code>, <code>DIRECTORY_PICTURES</code>, <code>DIRECTORY_DOWNLOADS</code> etc). This basically drops files into the same folders that every other app is using, and is great for shared data and common formats like pictures, music, etc.. Files in the public directories can be easily accessed by other apps (assuming the app has permission to read/write from External storage!)</p></li>
+<li><p>Alternatively starting from API 18, we save the file <a href="https://developer.android.com/guide/topics/data/data-storage.html#AccessingExtFiles"><strong>privately</strong></a>, but still on External storage (these files <em>are</em> world-readable, but are hidden from the user as media, so they don’t “look” like public files). We access this directory with the <code>getExternalFilesDir()</code> method, again passing it a <em>type</em> (since we’re basically making our own version of the public folders). We can also use <code>null</code> for the type, giving us the root directory.</p></li>
+</ul>
+<p>Since API 19 (4.4 KitKat), you don’t need permission to write to <em>private</em> External storage. So you can specify that you only need permission for versions lower than that:</p>
+<p><code>xml   &lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot; android:maxSdkVersion=&quot;18&quot; /&gt;</code></p>
+<p class="alert alert-info">
+We can actually look at the emulator’s file-system and see our files by created using <code>adb</code>. Connect to the emulator from the terminal using <code>adb -s emulator-5554 shell</code> (note: <code>adb</code> needs to be on your PATH). <strong>Public</strong> external files can usually be found in <code>/storage/sdcard/Folder</code>, while <strong>private</strong> external files can be found in <code>/storage/sdcard/Android/data/package.name/files</code> (these paths may vary on different devices).
+</p>
+<p>Once we’ve opened up the file, we can write content to it by using the same IO classes we’ve used in Java:</p>
+<ul>
+<li><p>The “low-level” way to do this is to create a a <code>FileOutputStream</code> object (or a <code>FileInputStream</code> for reading). We just pass this constructor the <code>File</code> to write to. We write <code>bytes</code> to this stream… but can write a String by calling <code>myString.getBytes()</code>. For reading, we’ll need to read in <em>all</em> the lines/characters, and probably build a String out of them to show. This is actually the same loop we used when reading data from an HTTP request!</p></li>
+<li><p>However, we can also use the same <em>decorators</em> as in Java (e.g., <code>BufferedReader</code>, <code>PrintWriter</code>, etc.) if we want those capabilities; it makes reading and writing to file a little easier</p></li>
+<li><p>In either case, <strong>remember to <code>.close()</code> the stream when done</strong> (to avoid memory leaks)!</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//writing</span>
+<span class="kw">try</span> {
+    <span class="co">//saving in public Documents directory</span>
+    <span class="bu">File</span> dir = <span class="fu">getExternalStoragePublicDirectory</span>(<span class="bu">Environment</span>.<span class="fu">DIRECTORY_DOCUMENTS</span>);
+    <span class="kw">if</span> (!dir.<span class="fu">exists</span>()) { dir.<span class="fu">mkdirs</span>(); } <span class="co">//make dir if doesn&#39;t otherwise exist</span>
+    <span class="bu">File</span> file = <span class="kw">new</span> <span class="bu">File</span>(dir, FILE_NAME);
+    Log.<span class="fu">v</span>(TAG, <span class="st">&quot;Saving to  &quot;</span> + file.<span class="fu">getAbsolutePath</span>());
+
+    <span class="bu">PrintWriter</span> out = <span class="kw">new</span> <span class="bu">PrintWriter</span>(<span class="kw">new</span> <span class="bu">FileWriter</span>(file, <span class="kw">true</span>));
+    out.<span class="fu">println</span>(textEntry.<span class="fu">getText</span>().<span class="fu">toString</span>());
+    out.<span class="fu">close</span>();
+} <span class="kw">catch</span> (<span class="bu">IOException</span> ioe) {
+    Log.<span class="fu">d</span>(TAG, Log.<span class="fu">getStackTraceString</span>(ioe));
+}
+
+<span class="co">//reading</span>
+<span class="kw">try</span> {
+    <span class="bu">File</span> dir = <span class="fu">getExternalStoragePublicDirectory</span>(<span class="bu">Environment</span>.<span class="fu">DIRECTORY_DOCUMENTS</span>);
+    <span class="bu">File</span> file = <span class="kw">new</span> <span class="bu">File</span>(dir, FILE_NAME);
+    <span class="bu">BufferedReader</span> reader = <span class="kw">new</span> <span class="bu">BufferedReader</span>(<span class="kw">new</span> <span class="bu">FileReader</span>(file));
+    <span class="bu">StringBuilder</span> text = <span class="kw">new</span> <span class="bu">StringBuilder</span>();
+
+    <span class="co">//read the file</span>
+    <span class="bu">String</span> line = reader.<span class="fu">readLine</span>();
+    <span class="kw">while</span> (line != <span class="kw">null</span>) {
+        text.<span class="fu">append</span>(line + <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);
+        line = reader.<span class="fu">readLine</span>();
+    }
+
+    textDisplay.<span class="fu">setText</span>(text.<span class="fu">toString</span>());
+    reader.<span class="fu">close</span>();
+} <span class="kw">catch</span> (<span class="bu">IOException</span> ioe) {
+    Log.<span class="fu">d</span>(TAG, Log.<span class="fu">getStackTraceString</span>(ioe));
+}</code></pre></div>
+<p>This will allow us to have our “save” button write the message to the file, and have our “read” button load the message from the file (and display it on the screen)!</p>
+</div>
+<div id="internal-storage-cache" class="section level2">
+<h2><span class="header-section-number">10.4</span> Internal Storage &amp; Cache</h2>
+<p><a href="https://developer.android.com/guide/topics/data/data-storage.html#filesInternal">Internal storage</a> works pretty much the same way as External storage. Remember that Internal storage is always <em>private</em> to the app. We also don’t need permission to access Internal storage!</p>
+<p>For Internal storage, we can use the <code>getFilesDir()</code> method to access to the files directory (just like we did with External storage). This method normally returns the folder at <code>/data/data/package.name/files</code>.</p>
+<p><em>Alternatively</em>, we can use <code>Context#openFileOutput()</code> (or <code>Context#openFileInput()</code>) and pass it the <em>name</em> of the file to open. This gives us back the <code>Stream</code> object for that file in the Internal storage file directory, without us needing to do any extra work (cutting out the middle-man!)</p>
+<ul>
+<li>These methods take a second parameter: <code>MODE_PRIVATE</code> will create the file (or <em>replace</em> a file of the same name). Other modes available are: <code>MODE_APPEND</code> (which adds to the end of the file if it exists instead of erasing). <s><code>MODE_WORLD_READABLE</code></s>, and <s><code>MODE_WORLD_WRITEABLE</code></s> are deprecated.</li>
+<li>Note that you can wrap a <code>FileInputStream</code> in a <code>InputStreamReader</code> in a <code>BufferedReader</code>.</li>
+</ul>
+<p>We can access the Internal Cache directory with <code>getCacheDir()</code> (and same read/write process), or the External Cache directory with <code>getExternalCacheDir()</code>. We almost always use the Internal Cache, because why would you want temporary files to be world-readable (other than maybe temporary images…)</p>
+<p>And again, once you have the file, you use the same process for reading and writing as External storage.</p>
+<p><strong>For practice</strong> make the provided toggle support reading and writing to an Internal file as well. This will of course be <em>different</em> file than that used with the External switch. Ideally this code could be refactored to avoid duplication, but it gets tricky with the need for checked exception handling.</p>
+</div>
+<div id="example-saving-pictures" class="section level2">
+<h2><span class="header-section-number">10.5</span> Example: Saving Pictures</h2>
+<p>As another example of how we might use the storage system, consider the “take a selfie” system from <a href="intents.html#intents">lecture 8</a>. The code for taking a piecture can be found in a separate <code>PhotoActivity</code> (which is accessible via the options menu).</p>
+<p>To review: we sent an <code>Intent</code> with the <code>MediaStore.ACTION_IMAGE_CAPTURE</code> action, and the <em>result</em> of that <code>Intent</code> included an <em>Extra</em> that was a <code>BitMap</code> of a low-quality thumbnail for the image. But if we want to save a higher resolution version of that picture, we’ll need to store that image in the file system!</p>
+<p>To do this, we’re actually going to modify the <code>Intent</code> we <em>send</em> so it includes an additional Extra: a file in which the picture data can be saved. Effectively, we’ll have <em>our Activity</em> allocate some memory for the picture, and then tell the Camera where it can put the picture data that it captures. (Intent envelops are too small to carry entire photos around!)</p>
+<p>Before we send the <code>Intent</code>, we’re going to go ahead and create an (empty) file:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">File</span> file = <span class="kw">null</span>;
+<span class="kw">try</span> {
+    <span class="bu">String</span> timestamp = <span class="kw">new</span> <span class="bu">SimpleDateFormat</span>(<span class="st">&quot;yyyyMMdd_HHmmss&quot;</span>)<span class="fu">.format</span>(<span class="kw">new</span> <span class="bu">Date</span>()); <span class="co">//include timestamp</span>
+
+    <span class="co">//ideally should check for permission here, skipping for time</span>
+    <span class="bu">File</span> dir = <span class="bu">Environment</span>.<span class="fu">getExternalStoragePublicDirectory</span>(<span class="bu">Environment</span>.<span class="fu">DIRECTORY_PICTURES</span>);
+    file = <span class="kw">new</span> <span class="bu">File</span>(dir, <span class="st">&quot;PIC_&quot;</span>+timestamp+<span class="st">&quot;.jpg&quot;</span>);
+    <span class="dt">boolean</span> created = file.<span class="fu">createNewFile</span>(); <span class="co">//actually make the file!</span>
+    Log.<span class="fu">v</span>(TAG, <span class="st">&quot;File created: &quot;</span>+created);
+
+} <span class="kw">catch</span> (<span class="bu">IOException</span> ioe) {
+    Log.<span class="fu">d</span>(TAG, Log.<span class="fu">getStackTraceString</span>(ioe));
+}</code></pre></div>
+<p>We will then specify an additional Extra to give that file’s location to the camera: if we use <code>MediaStore.EXTRA_OUTPUT</code> as our Extra’s <em>key</em>, the camera will know what to do with that! However, the extra won’t actually be the <code>File</code> but a <strong>Uri</strong> (recall: the “url” or location of a file). We’re not sending the file itself, but the <strong><em>location</em></strong> of that file (because it’s smaller data to fit in the Intent envelope).</p>
+<ul>
+<li><p>We can get this Uri with the <code>Uri.fromFile(File)</code> method:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//save as instance variable to access later when picture comes back</span>
+pictureFileUri = Uri.<span class="fu">fromFile</span>(file);</code></pre></div></li>
+<li><p>Then when we get the picture result back from the Camera (in our <code>onActivityResult</code> callback), we can access that file at the saved Uri and use it to display the image! The <code>ImageView.setImageUri()</code> is a fast way of showing an image file.</p></li>
+</ul>
+<p class="alert alert-info">
+Note that when working with images, we can very quickly run out of memory (because images can be huge). So we’ll often want to <a href="https://developer.android.com/topic/performance/graphics/index.html">“scale down”</a> the images as we load them into memory. Additionally, image processing can take a while so we’d like to do it off the main thread (e.g., in an <code>AsyncTask</code>). This can become complicated; the recommended solution is to use a third-party library such as <a href="https://github.com/bumptech/glide">Glide</a>, <a href="http://square.github.io/picasso/">Picasso</a>, or <a href="http://frescolib.org/">Fresco</a>.
+</p>
+</div>
+<div id="sharing-files" class="section level2">
+<h2><span class="header-section-number">10.6</span> Sharing Files</h2>
+<p>Once we have a file storing the image, we can also save that image with other apps!</p>
+<p>As always, in order to interact with other apps, we use an Intent. We can craft an <em>implicit intent</em> for <code>ACTION_SEND</code>, sending a message to any apps that are able to send (share) pictures. We’ll set the data type as <code>image/*</code> to mark this as an image. We will also attach the file as an extra (specifically an <code>EXTRA_STREAM</code>). Again note that we don’t actually put the <em>file</em> in the extra, but rather tha <strong>Uri</strong> for the file!</p>
+<p>Since multiple activities may support this action, we can wrap the intent in a “chooser” to force the user to pick which Activity to use:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Intent chooser = Intent.<span class="fu">createChooser</span>(shareIntent, <span class="st">&quot;Share Picture&quot;</span>);
+<span class="co">//check that there is at least one option</span>
+<span class="kw">if</span> (shareIntent.<span class="fu">resolveActivity</span>(<span class="fu">getPackageManager</span>()) != <span class="kw">null</span>) {
+  <span class="fu">startActivity</span>(chooser);
+}</code></pre></div>
+<p>There is one complication though: because we’re saving files in External storage, the app who is executing the <code>ACTION_SEND</code> will need to have permission to read the file (e.g., to access External storage). The Messenger app on the emulator appears to lack this permission by default, though we need to take a slightly different approach:</p>
+<p>Rather than putting the <code>file://</code> Uri in the Intent’s extra, we’ll need to create a <code>content://</code> Uri for a <em>ContentProvider</em> who is able to provide files to anyone who requests them regardless of permissions (the provider grants permission to access its content). Luckily, each image stored in the public directories is automatically tracked by a ContentProvider known as the <a href="https://developer.android.com/reference/android/provider/MediaStore.html"><code>MediaStore</code></a>. It easy to fetch a <code>content://</code> Uri for a particular image file from this provider:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">MediaScannerConnection.<span class="fu">scanFile</span>(<span class="kw">this</span>, <span class="kw">new</span> <span class="bu">String</span>[] {file.<span class="fu">toString</span>()}, <span class="kw">null</span>,
+        <span class="kw">new</span> MediaScannerConnection.<span class="fu">OnScanCompletedListener</span>() {
+            <span class="kw">public</span> <span class="dt">void</span> <span class="fu">onScanCompleted</span>(<span class="bu">String</span> path, Uri uri) {
+                mediaStoreUri = uri;  <span class="co">//save the content:// Uri for later</span>
+                Log.<span class="fu">v</span>(TAG, <span class="st">&quot;MediaStore Uri: &quot;</span>+uri);
+            }
+        });</code></pre></div>
+<p>This provides a Uri that can be given to the Intent, and that the Messenger app will be able to access! We can generate this Uri as soon as we have a file for the image to be saved in.</p>
+<div id="bonus-sharing-with-a-fileprovider" class="section level3">
+<h3><span class="header-section-number">10.6.1</span> Bonus: Sharing with a <code>FileProvider</code></h3>
+<p class="alert alert-warning">
+This section has not be edited for formatting or content.
+</p>
+<p>What happens if we try and share an Internal file? You’ll get an error (actually notified the use!), because the other (email) app doesn’t have permission to read that file!</p>
+<ul>
+<li><p>There is a way around this though, and it’s by using a <code>ContentProvider</code> (haha!) A <code>ContentProvider</code> explicit is about making content available outside of a package (that’s why we declared it in the <code>Manifest</code>). Specifically, a <code>ContentProvider</code> can convert a set of <code>Files</code> into a set of data contents (e.g., accessible with the <code>content://</code> protocol) that can be used and returned and understood by other apps!</p>
+<ul>
+<li>Kind of like a “File Server”</li>
+</ul></li>
+<li><p>Android includes a <a href="http://developer.android.com/reference/android/support/v4/content/FileProvider.html"><code>FileProvider</code></a> class in the support library that does exactly this work.</p></li>
+</ul>
+<p>Setting up a <code>FileProvider</code> is luckily not too complex, though it has a couple of steps. You will need to declare the <code>&lt;provider&gt;</code> inside you Manifest (see the <a href="http://developer.android.com/training/secure-file-sharing/setup-sharing.html">guide link</a> for an example).</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;provider</span>
+<span class="ot">    android:name=</span><span class="st">&quot;android.support.v4.content.FileProvider&quot;</span>
+<span class="ot">    android:authorities=</span><span class="st">&quot;edu.uw.mapdemo.fileprovider&quot;</span>
+<span class="ot">    android:exported=</span><span class="st">&quot;false&quot;</span>
+<span class="ot">    android:grantUriPermissions=</span><span class="st">&quot;true&quot;</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;meta-data</span>
+<span class="ot">        android:name=</span><span class="st">&quot;android.support.FILE_PROVIDER_PATHS&quot;</span>
+<span class="ot">        android:resource=</span><span class="st">&quot;@xml/fileprovider&quot;</span> <span class="kw">/&gt;</span>
+<span class="kw">&lt;/provider&gt;</span></code></pre></div>
+<p>The attributes you will need to specify are:</p>
+<ul>
+<li><p><code>android:authority</code> should be your package name followed by <code>.fileprovider</code> (e.g., <code>edu.uw.myapp.fileprovider</code>). This says what source/domain is granting permission for others to use the file.</p></li>
+<li><p>The child <code>&lt;meta-data&gt;</code> tag includes an <code>androd:resource</code> attribute that should point to an XML resource, of type <code>xml</code> (the same as used for your SharedPreferences). <em>You will need to create this file!</em> The contents of this file will be a list of what <em>subdirectories</em> you want the <code>FileProvider</code> to be able to provide. It will look something like:</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; encoding=&quot;utf-8&quot;<span class="kw">?&gt;</span>
+<span class="kw">&lt;paths</span><span class="ot"> xmlns:android=</span><span class="st">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;files-path</span><span class="ot"> name=</span><span class="st">&quot;my_maps&quot;</span><span class="ot"> path=</span><span class="st">&quot;maps/&quot;</span> <span class="kw">/&gt;</span>
+<span class="kw">&lt;/paths&gt;</span></code></pre></div>
+<p>The <code>&lt;files-path&gt;</code> entry refers to a subdirectory inside the Internal Storage files (the same place that <code>.getFilesDir()</code> points to), with the <code>path</code> specifying the name of the subdirectory (see why we made one called <code>maps/</code>?)</p>
+<p>Once you have the provider specified, you can use it to get a <code>Uri</code> to the “shared” version of the file using:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Uri fileUri = FileProvider.<span class="fu">getUriForFile</span>(context, <span class="st">&quot;edu.uw.myapp.fileprovider&quot;</span>, fileToShare);</code></pre></div>
+<p>(note that the second parameter is the “authority” you specified in your <code>&lt;provider&gt;</code> in the Manifest). You can then use this <code>Uri</code> as the <code>EXTRA_STREAM</code> extra in the Intent that you want to share!</p>
+
+</div>
+</div>
+</div>
+
+
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ui-components-ii.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="accessibility.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["github", "facebook", "twitter", "google"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/files-permissions.Rmd",
+"text": "Edit"
+},
+"download": ["android-dev-book.pdf", "android-dev-book.epub"],
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+</body>
+
+</html>
