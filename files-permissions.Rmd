@@ -43,7 +43,7 @@ public static boolean isExternalStorageWritable() {
 }
 ```
 
-## Permissions
+## Permissions {#permissions}
 Directly accessing the file system of any computer can be a significant security risk, so there are substantial protections in place to make sure that a malicious app doesn't run roughshod over a user's data. So in order to work with the file system, we first need to discuss how Android handles [permissions](https://developer.android.com/guide/topics/permissions/requesting.html) in more detail.
 
 One of the most import aspect of the Android operating system's design is the idea of <a href="https://en.wikipedia.org/wiki/Sandbox_(computer_security)">**sandboxing**</a>: each application gets its own "sandbox" to play in (where all its toys are kept), but isn't able to go outside the box and play with someone else's toys. The "toys" (components) parts that are outside of the sandbox are things that would be _impactful_ to the user, such as network or file access. Apps are not 100% locked into their sandbox, but we need to do extra work to step outside.

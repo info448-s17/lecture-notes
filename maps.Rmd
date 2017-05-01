@@ -1,4 +1,4 @@
-# Maps
+# Maps {#maps}
 This chapter will introduce you to the [Google Maps Android API](https://developers.google.com/maps/documentation/android-api/) which allows you to _very_ easily add an interactive map to your application.
 
 ## Create a Map Activity

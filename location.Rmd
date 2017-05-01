@@ -1,0 +1,191 @@
+# Location
+This lecture discusses **localization**: the process for determining _location_. This is particularly important for Android, which is primarily intended as an operating system for _mobile_ devices. What makes phones and tablets special, and different from desktops, is that they can and do move around. And this mobility makes means that a device's position and location can matter _significantly_ for how they are used; it's a major part of what separates the functionality of Android apps from any other computer application. Indeed: localization gives apps the ability to create new kinds of user experiences, and to adjust their functionality to fit the user's _context_, supporting [context-aware](https://en.wikipedia.org/wiki/Context_awareness) applications.
+
+- The classic example of context-awareness is having software determine if you are at home, in the office, or on a bus, and change its usage accordingly.
+
+    - In fact, one of the winners of the _first_ Android Developer Challenge (2008) was [Ecorio](http://web.archive.org/web/20100209012355/http://www.ecorio.org/), an app that figured out whether you were driving, walking, or busing and calculated your carbon footprint from that.
+
+- Note that the emphasis on context-awareness comes out of [Ubiquitous Computing](https://en.wikipedia.org/wiki/Ubiquitous_computing), a discipline that considers technology that is _ubiquitous_ or everywhere, to the point that it "blends into the surroundings." That's the author's take on why phone development is important; so that you can compute without thinking about it.
+
+    I highly recommend you read Mark Weiser's [original 1991 Scientific American article](http://dx.doi.org/10.1145/329124.329126). It's a neat vision and is foundational for a lot of modern research into mobile systems. It marks the "official" start of the field of Ubicomp.
+
+In short: localization can let us know about the user's situation (though mobile phone location is [not necessarily](http://dx.doi.org/10.1007/11853565_8) a proxy for user location).
+
+## Localization Techniques
+Ubicomp researchers have been developing localization systems for _years_. A classical reference is a [survey paper](http://dx.doi.org/10.1109/2.940014) by Jeff Hightower (who was getting his PhD in the CSE department at UW!)
+
+- As an early example: the _Active Badge_ (AT&amp;T) system had a name-badge emit an infrared message, that was picked up by sensors in a room to determine where the wearer was! This is room-level precision, bbut improvements and _triangulation_ (calculating angles to what you see) got it down to about _10cm_ precision. However, this system required a lot of infrastructure to be built into a particular room.
+
+With Android, we're usually interested in more general-purpose localization. Mobile devices use a couple of different kinds of localization (either independently or together).
+
+### GPS
+**GPS** is the most common, and what most people think of when they think of localization. [GPS](https://en.wikipedia.org/wiki/Global_Positioning_System) stands for "Global Position System"&mdash;and yes, it can work anywhere on the globe.
+
+GPS's functionality depends on satellites: 24 satellites in high orbit (not geo-synchronous) around the Earth. Satellites are distributed so that 4 to 12 are visible from any point on Earth at any time, and their locations are known with high precision. These satellites are each equipped with an atomic, synchronized clock that "ticks" every nanosecond. At every tick, the satellite broadcasts its current time and position. You can almost think of them as _really_ loud alarm clocks.
+
+The thing in your phone (or your car, or your watch) that you call a "GPS" or a "GPS device" is actually a _GPS_ ___receiver___. It is able to listen for the messages broadcast by these satellites, and determine its position based on that information.
+
+First, the receiver calculates the _time of arrival_ (TOA) based on its own clock and comparing time-codes from the satellites. It then uses the announced _time of transmission_ (TOT; what the satellite was shouting) to calculate the [time of flight](https://en.wikipedia.org/wiki/Time_of_flight), or how long it took for the satellite's message to reach the receiver. Because these messages are sent at (basically) the speed of light, the [time of flight] is equivalent to the distance from the satellite!
+
+- There is some other synchronization work that is done to make sure clocks are all the same, but we won't go into that here.
+
+And once it has distances from the satellites, the receiver can use [trilateration](https://en.wikipedia.org/wiki/Trilateration) to determine its position based on the satellites it "sees". (Trilateration is like Triangulation, but relies on measuring distances rather than measuring angles. Basically, you construct three spheres of given radii, and then look to see where they intersect).
+
+GPS precision is generally about 5 meters (15 feet); however, by repeatedly calculating the receiver's position (since the satellites tick every nanosecond), we can use _differential positioning_ to extrapolate position with even higher precision, increasing precision to less than 1 meter! This is in part how Google can determine where you're walking.
+
+While GPS is ubiquitous, scalable, and appropriate accurate, it does have some limitations. The biggest problem with GPS is that you need to be able to see the satellites! This means that GPS frequently doesn't work indoors, as many building walls block the signals. Similarly, in highly urban areas (think downtown Seattle), the buildings can bounce the signal around and throw off the TOF calculations, making it harder to pinpoint position accurately.
+
+- Additionally, receivers requires a lot of energy to constantly listen for the satellite messages. This means that utilizing the GPS can lead to a big hit on device battery life&mdash;which is of particular importance for mobile devices!
+
+### Cell Tower Localization
+But your phone can also give you a rough estimate of your location even _without_ GPS. It does this through a couple of techniques, such as relying on the cell phone towers that provide the phone network service. This is also known as [**GSM localization**](https://en.wikipedia.org/wiki/Mobile_phone_tracking#Network-based) (Global System for Mobile Communications; the standard for cell phone communication used by many service providers). The location of these towers are known, so we can determine location based off them in a couple of ways:
+
+- If you're connected to a tower, you must be within range of it. So that gives you some measure of localization right off the bat. This would not be a very accurate measure though (you might be _anywhere_ within that range).
+
+- If you can see multiple towers (which important for "handoff" purposes, so your call doesn't drop as you move), you can trilaterate the position between them (e.g., finding the possible overlapping area and picking a location in the middle of that). This can give accuracy within 50m in urban areas, with more towers producing better precision.
+
+### WiFi Localization
+But wait there's more! What other kinds of communication antennas do you have in your phone? **WiFi**! As WiFi has became more popular, efforts have been made to identify the _location_ of WiFi hotspots so that they too can be used for [trilateration and localization](https://en.wikipedia.org/wiki/Wi-Fi_positioning_system).
+
+This is often done through crowdsourced databases, with information gathered via [war driving](https://en.wikipedia.org/wiki/Wardriving). War driving involves driving around with a GPS receiver and a laptop, and simply recording what WiFi routers you see at what locations. This then all gets compiled into a database that can be queried&mdash;given that you see _these_ routers, where must you be?
+
+- Google got in [hot water](http://www.wired.com/2012/05/google-wifi-fcc-investigation/) for doing this as it was driving around to capture Street-View images.
+
+WiFi localization can then be combined with Cell Tower localization to produce a pretty good estimate of your location, even without GPS.
+
+And in fact, Google provides the ability to automatically use all of these different techniques, abstracted into a single method call!
+
+<p class="alert alert-info">I want to flag that just like the old _Active Badge_ systems, all of these localizations systems rely on some kind of existing infrastructure: GPS requires satellites; GSM requires cell towers, and WiFi needs the database of routers. All these systems require and react to the world around them, making localization influenced by the actual location as well, as well as both social and computational systems!</p>
+
+### Representing Location
+So once we have a location, how do we represent it?
+
+First, note that there is a philosophical difference between a "place" and a "space." A **space** is a location, but without any social connotations. For example, GPS coordinates, or Cartesian xy-coordinates will all indicate a "space." A **place** on the other hand is somewhere that has social meaning: Mary Gates Hall; the University of Washington; my kitchen. Space is a computational construct; place is a human construct. When we talk about localization with a mobile device, we'll be mostly talking about _space_. But often _place_ is what we're really interested in, and we may have to convert between the two (Google does provide a few ways to convert between the two, such as with its [Places API](https://developers.google.com/places/)).
+
+Our space locations will generally be reported as two coordinates: **Latitude** and **Longitude**. (**Altitude** or height can also be reported, but that isn't very relevant for us).
+
+- **Latitude** ("lat") is the ___angle___ between the equatorial plane and a line that passes through a point and the center of the Earth&mdash;the angle you have to go up the earth's surface from the equator. Effectively, it's a measure of "north/south". Latitude is usually measured in _degrees north_, so going south of the equator gives a negative latitude (though this can be expressed positively as "degrees south").
+
+- **Longitude** ("lng") is the ___angle___ between the prime meridian plane and a line that passes through a point and the center of the Earth&mdash;the angle you have to go across the earth's surface from the meridian. Effectively, it's a measure of "east/west". Latitude is measured in _degrees east_, so going east of the meridian. That mean that the western hemisphere has "negative longitude" (though this can be expressed as positive "degrees west").
+
+As an example: [UW's GPS Coordinates](https://www.google.com/search?q=uw+gps+coordinates)^[https://www.google.com/search?q=uw+gps+coordinates] are N/W, so this would be expressed as N (positive) and E (negative).
+
+The distance between degrees and miles depends on where you you are (particularly for longitude&mdash;the curvature of the earth means that each degree has less space between it as you get closer to their "joining" at the poles). However, for a very rough sense of scale, in the American Northwest, .01 degrees corresponds with a distance of _about_ a mile (again: this is not an accurate convertion, and is intended only for a sense of the "units").
+
+
+## Android Location
+The remainder of the lecture will discuss how to implement an app that is able to access the device's location. This location will simply be displayed for now; connecting the location to a visual display (e.g., a [map](#maps)) is left as an exercise to the reader.
+
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture11-location>.</p>
+
+### Google Play Services
+In order to effectively access location, we first need to make sure we include the [Google Play Services](https://developers.google.com/android/guides/setup). These are a special set of libraries (similar to the support libraries) that provide additional functionality to Android. That functionality will include the location and mapping tools we're interested in. (Much of this functionality was originally built into core Android, but Google has since been moving it into a separate app that can be more easily distributed and updated!)
+
+There are a few steps to including the Play Services library:
+
+1. Make sure you've downloaded the proper library. Go to `Tools > Android > SDK Manager` to open up the manager for the various versions of Android installed. Under `SDK Tools`, select `Google Play Service` and `Google Play Repository` to download those.
+
+2. Make sure the device supports these services (e.g., that it's a Google device and not an Amazon device). For the emulator, go to the `AVD Manager`, and confirm the _target_ platform includes the `Google APIs`.
+
+3. Modify your `build.gradle` file so that you can get access to the Location classes. In the ___module-level___ `build.gradle` file, under `dependencies` add
+
+    ```
+    compile 'com.google.android.gms:play-services-location:10.2.4'
+    ```
+
+    This will load in the location services (but not the other play services, which take up extra space and may require additinal API keys). Note that you can specify a different version of the services, as long as it is greater than `8.3.0`.
+
+Additionally, you'll need to request permission to access the device's location. There are two permission levels we can ask for: `ACCESS_COARSE_LOCATION` (for GSM/WiFi level precision), and `ACCESS_FINE_LOCATION` (for GPS level precision). We'll use the later because we want GPS-level precision.
+
+<p class="alert alert-warning">This is a **dangerous** permission, so in Marshmallow we need to make sure to ask for permission at run-time! See the [lecture on permissions](#permissions) for details.</p>
+
+We're going to use Google Play Services to access the device's location. The Google APIs provide a nice set of methods for [accessing location](https://developer.android.com/training/location/retrieve-current.html) (without us needing to specify the source of that localization, GPS or GSM), and is the recommended API to use.
+
+- There is a built-in `android.location` API (e.g., for non-Google based Android devices), but it's not recommended practice and is harder to use.
+
+The first thing we need to do is get access to the API; we do this with a [`GoogleApiClient`](https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient) object. We construct this object in the `onCreate()` callback, using a `GoogleApiClient.Builder`:
+
+```java
+if (mGoogleApiClient == null) {
+    mGoogleApiClient = new GoogleApiClient.Builder(this)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .addApi(LocationServices.API)
+            .build();
+}
+```
+
+This builder requires us to specify what are called the _Connection Callbacks_: callbacks that will occur when we connect to the Google Play Services (a _Service_ or separate application managing all of Google's API work). We do this by implementing the `GoogleApiClient.ConnectionCallbacks` and `GoogleApiClient.OnConnectionFailedListener` interfaces. Each require methods that we must fill in; in particular, the `onConnected()` method is where we can "start" our API usage (like asking for location!)
+
+- `onSuspended` and `onFailed` are for when the connection is stopped (similar to `onStop()`) or if we fail to connect. See [Accessing Google APIs](https://developers.google.com/android/guides/api-client) for details.
+
+Note we also specify that we want to access the `LocationServices` API in the builder.
+
+Finally, we need to actually connect to the client. We do this in the Activity's `onStart()` method (and disconnect in `onStop()`):
+
+```java
+protected void onStart() {
+    mGoogleApiClient.connect();
+    super.onStart();
+}
+```
+
+This of course, will lead to our `onConnected()` callback being executed once the connection to the service is established.
+
+### Accessing Location
+Once we have the the client connected to the service, we can start getting the location!
+
+To access the location, we're going to use a class called the [FusedLocationApi](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderApi)^[https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderApi]. This is a "unified" interface for accessing location. It fuses together all of the different ways of getting location, providing which-ever one best suits our specified needs. You can think of it as a "wrapper" around more detailed location services.
+
+- It will let us specify at a high level whether we want to trade accuracy for power consumption, rather than us needing to be explicit about that. And it will make decisions about what how best to fetch location given our stated needs and other contextual information.
+
+We're going to specify this "high level" requirement using a [`LocationRequest`](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest)^[https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest] object, which represents the details of our request (e.g., how we want to have our phone search for it's location).
+
+```java
+LocationRequest request = new LocationRequest();
+request.setInterval(10000);
+request.setFastestInterval(5000);
+request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+```
+
+- We create the object, then specify the "interval" that we want to check for updates. We can also specify the "fastest" interval, which is the maximum rate we want updates (assuming they are available). It's a bit like a minimum and maximum. 5 to 10 seconds is good for real-time navigation.
+
+- We also specify the [priority](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest#constant-summary), which is the indicator to the FusedLocationApi about what kind of precision we want. `HIGH_ACCURACY` basically means GPS (trade power for accuracy!)
+
+<p class="alert alert-warning">Before actually sending the request, check for run-time permissions! This will introduce _another_ layout of callbacks: first you wait for the GoogleApiClient to connect in one callback, then you wait for permission to be granted in another!</p>
+
+Once we have this request in place, we can send it off through the `FusedLocationApi`:
+
+```java
+LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, this);
+```
+
+- The first parameter is going to be the `GoogleApiClient` object, and the second will be the request we just made. The third parameter for the `requestLocationUpdates()` method is a `LocationListener`&mdash;an object with a callback that can be executed when the location is updated (i.e., when we move). To provide this listener, we'll make the _Activity_ into one by implementing the interface and filling in the `onLocationChanged()` method.
+
+    - Yes, this is a _third_ asynchronous callback after the GoogleApiClient connection has been established and permission has been granted _and_ a location has been received!
+
+    - This listener's callback will be handed a `Location` object, which contains the latitude/longitude of the location. We can then use that location (such as display it). We can access the latitude and longitude with getters:
+
+        ```java
+        textLat.setText("" + location.getLatitude());
+        textLng.setText("" + location.getLongitude());
+        ```
+
+It is possible to test this out (even when indoors) by using the emulator. Although the emulator doesn't actually have a GPS receiver, it is possible to give it a "fake" location using the emulator's options sidebar (where we previously sent SMS messages from). This allos us to "send" the phone a location, almost as if we as humans were the GPS receiver!
+
+- You can test by giving the emulator UW's coordinates (47.6550 N, -122.3080 E), and you can watch it update!
+
+    - Note that you may need to start up the `Maps` application to make sure the devices's location settings are enabled and correct. See [here](https://developer.android.com/training/location/change-location-settings.html) for how we can prompt for that ourselves (it's a lot of repetitous code, so leaving it as exercise to the reader).
+
+- The `FusedLocationApi` class also has a `setMockLocation()` method, which can allow you to programmatically define locations (e.g., you can make a button that changes your location). This can be useful for testing and debugging.
+
+
+To review the process:
+
+- We start by creating and connecting to a `GoogleApiClient`, which is going to let us talk to the Play Services application running in the background of our phone.
+- This may not be able to connect (or may take a moment), so we have a _asynchronous_ callback for when it does.
+- Once it connects (in that callback), we check to make sure we have permission to get location, asking for it if we don't. This requires the user to make a decision, which may take some time, so we have _another_ asynchronous callback for when we finally get permision.
+- Once we have permission, we start up a repeated request for location updates. These updates may take some time to arrive, so we have _yet another_ asynchronous callback for when they do!
+- And when we get a location update, we finally update our View.
+
+That's pretty much what is involved in working with location. Lots of pieces (because callbacks all over the place!), but this does the work of tracking location.

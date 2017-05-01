@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="bluetooth.html">
-<link rel="next" href="java-review.html">
+<link rel="prev" href="files-and-permissions.html">
+<link rel="next" href="accessibility.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -301,72 +301,167 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="maps" class="section level1">
-<h1><span class="header-section-number">Lecture 15</span> Maps</h1>
-<p>This chapter will introduce you to the <a href="https://developers.google.com/maps/documentation/android-api/">Google Maps Android API</a> which allows you to <em>very</em> easily add an interactive map to your application.</p>
-<div id="create-a-map-activity" class="section level2">
-<h2><span class="header-section-number">15.1</span> Create a Map Activity</h2>
-<p>There is no scaffolding code for this tutorial; instead, you should create a new project from scratch. Note that you can test your project either on the emulator or a physical device: just make sure the device has the <em>Google APIs</em> included.</p>
-<p>Start a new project in Android Studio (“Map Lab” is a fine project name). Target SDK 15 like usual.</p>
-<p><em>But here’s where things get different!</em> Instead of starting with an “Empty Activity”, start with a <strong>Google Maps Activity</strong>. This will create you a new <code>Activity</code> whose layout includes an XML-defined <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/SupportMapFragment"><code>SupportMapFragment</code></a>. (This is just another Fragment subclass, so you could include it in a layout however you wanted. You can stick with the default layout for now).</p>
-<div id="getting-an-api-key" class="section level3">
-<h3><span class="header-section-number">15.1.1</span> Getting an API Key</h3>
-<p>In order to access and show a Google Map, you need to <a href="https://developers.google.com/maps/documentation/android-api/signup#key">register and get an API key</a> (this is like a special password that lets your app access Google’s map data). When you create the Maps Activity, Android Studio should open up the <code>google_maps_api.xml</code> resource file. This file contains instructions on how to get an API key (i.e., paste the giant pre-generated link into your browser, and then copy the generated key into the XML resource).</p>
-<div class="figure">
-<img src="img/maps/api-key-instructions.png" alt="The instructions found in the google_maps_api.xml file." />
-<p class="caption">The instructions found in the <code>google_maps_api.xml</code> file.</p>
-</div>
-<p>(If you already have a Google Maps API Key, you can add this package &amp; device to that key in the <a href="https://console.developers.google.com/apis/credentials">Google Developer Console</a>).</p>
-<p>After you’ve entered the key, you should be able to build and run your app, and see a displayed map!</p>
-</div>
-<div id="the-supportmapfragment" class="section level3">
-<h3><span class="header-section-number">15.1.2</span> The <code>SupportMapFragment</code></h3>
-<p>Take a moment to open up the generated <code>MapsActivity</code> and its associated layout (by default <code>layouts/activity_maps.xml</code>) and <strong>read over the initial code</strong>.</p>
-<p>The layout resource contains a single <code>&lt;fragment&gt;</code> element (like we’ve defined before), in this case referring to an instance of the <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/SupportMapFragment"><code>SupportMapFragment</code></a> class. This fragment represents the interactive map. It’s just a subclass of <code>Fragment</code> (with a few extra methods), so everything we’ve learned about Fragments applies.</p>
+<div id="location" class="section level1">
+<h1><span class="header-section-number">Lecture 11</span> Location</h1>
+<p>This lecture discusses <strong>localization</strong>: the process for determining <em>location</em>. This is particularly important for Android, which is primarily intended as an operating system for <em>mobile</em> devices. What makes phones and tablets special, and different from desktops, is that they can and do move around. And this mobility makes means that a device’s position and location can matter <em>significantly</em> for how they are used; it’s a major part of what separates the functionality of Android apps from any other computer application. Indeed: localization gives apps the ability to create new kinds of user experiences, and to adjust their functionality to fit the user’s <em>context</em>, supporting <a href="https://en.wikipedia.org/wiki/Context_awareness">context-aware</a> applications.</p>
 <ul>
-<li>The Fragment is defined in the XML, so we don’t need to use a <code>FragmentTransaction</code> to add it in the Java code.</li>
-</ul>
-<p>But we do use the FragmentManager to get access to that fragment so that we can call a single method on it: <code>getMapAsync()</code>. This gets access to a <a href="https://developers.google.com/maps/documentation/android-api/map#the_map_object"><code>GoogleMap</code></a> object, which does all the work of downloading <a href="https://www.mapbox.com/help/how-web-maps-work/">map tiles</a>, handling pans and zooms, and drawing markers and shapes.</p>
+<li><p>The classic example of context-awareness is having software determine if you are at home, in the office, or on a bus, and change its usage accordingly.</p>
 <ul>
-<li>The <code>getMapAsync()</code> method loads this object <em>asynchronously</em> (like we’ve with the <code>GoogleApiClient</code>), and will notify a listener when the object is available. Because the <code>MapsActivity</code> implements the <code>OnMapReadyCallback</code> interface, it <em>is</em> a listener and so its <code>onMapReady()</code> callback will be called and passed the object for us to handle.</li>
+<li>In fact, one of the winners of the <em>first</em> Android Developer Challenge (2008) was <a href="http://web.archive.org/web/20100209012355/http://www.ecorio.org/">Ecorio</a>, an app that figured out whether you were driving, walking, or busing and calculated your carbon footprint from that.</li>
+</ul></li>
+<li><p>Note that the emphasis on context-awareness comes out of <a href="https://en.wikipedia.org/wiki/Ubiquitous_computing">Ubiquitous Computing</a>, a discipline that considers technology that is <em>ubiquitous</em> or everywhere, to the point that it “blends into the surroundings.” That’s the author’s take on why phone development is important; so that you can compute without thinking about it.</p>
+<p>I highly recommend you read Mark Weiser’s <a href="http://dx.doi.org/10.1145/329124.329126">original 1991 Scientific American article</a>. It’s a neat vision and is foundational for a lot of modern research into mobile systems. It marks the “official” start of the field of Ubicomp.</p></li>
 </ul>
-<p>Once the the object is available via the callback, we can start calling methods on it: e.g., to show a marker at a particular latitude/longitude (<code>LatLng</code>), and to position the map’s <a href="https://developers.google.com/maps/documentation/android-api/views#the_camera_position">“camera”</a> to focus on that spot.</p>
+<p>In short: localization can let us know about the user’s situation (though mobile phone location is <a href="http://dx.doi.org/10.1007/11853565_8">not necessarily</a> a proxy for user location).</p>
+<div id="localization-techniques" class="section level2">
+<h2><span class="header-section-number">11.1</span> Localization Techniques</h2>
+<p>Ubicomp researchers have been developing localization systems for <em>years</em>. A classical reference is a <a href="http://dx.doi.org/10.1109/2.940014">survey paper</a> by Jeff Hightower (who was getting his PhD in the CSE department at UW!)</p>
+<ul>
+<li>As an early example: the <em>Active Badge</em> (AT&amp;T) system had a name-badge emit an infrared message, that was picked up by sensors in a room to determine where the wearer was! This is room-level precision, bbut improvements and <em>triangulation</em> (calculating angles to what you see) got it down to about <em>10cm</em> precision. However, this system required a lot of infrastructure to be built into a particular room.</li>
+</ul>
+<p>With Android, we’re usually interested in more general-purpose localization. Mobile devices use a couple of different kinds of localization (either independently or together).</p>
+<div id="gps" class="section level3">
+<h3><span class="header-section-number">11.1.1</span> GPS</h3>
+<p><strong>GPS</strong> is the most common, and what most people think of when they think of localization. <a href="https://en.wikipedia.org/wiki/Global_Positioning_System">GPS</a> stands for “Global Position System”—and yes, it can work anywhere on the globe.</p>
+<p>GPS’s functionality depends on satellites: 24 satellites in high orbit (not geo-synchronous) around the Earth. Satellites are distributed so that 4 to 12 are visible from any point on Earth at any time, and their locations are known with high precision. These satellites are each equipped with an atomic, synchronized clock that “ticks” every nanosecond. At every tick, the satellite broadcasts its current time and position. You can almost think of them as <em>really</em> loud alarm clocks.</p>
+<p>The thing in your phone (or your car, or your watch) that you call a “GPS” or a “GPS device” is actually a <em>GPS</em> <strong><em>receiver</em></strong>. It is able to listen for the messages broadcast by these satellites, and determine its position based on that information.</p>
+<p>First, the receiver calculates the <em>time of arrival</em> (TOA) based on its own clock and comparing time-codes from the satellites. It then uses the announced <em>time of transmission</em> (TOT; what the satellite was shouting) to calculate the <a href="https://en.wikipedia.org/wiki/Time_of_flight">time of flight</a>, or how long it took for the satellite’s message to reach the receiver. Because these messages are sent at (basically) the speed of light, the [time of flight] is equivalent to the distance from the satellite!</p>
+<ul>
+<li>There is some other synchronization work that is done to make sure clocks are all the same, but we won’t go into that here.</li>
+</ul>
+<p>And once it has distances from the satellites, the receiver can use <a href="https://en.wikipedia.org/wiki/Trilateration">trilateration</a> to determine its position based on the satellites it “sees”. (Trilateration is like Triangulation, but relies on measuring distances rather than measuring angles. Basically, you construct three spheres of given radii, and then look to see where they intersect).</p>
+<p>GPS precision is generally about 5 meters (15 feet); however, by repeatedly calculating the receiver’s position (since the satellites tick every nanosecond), we can use <em>differential positioning</em> to extrapolate position with even higher precision, increasing precision to less than 1 meter! This is in part how Google can determine where you’re walking.</p>
+<p>While GPS is ubiquitous, scalable, and appropriate accurate, it does have some limitations. The biggest problem with GPS is that you need to be able to see the satellites! This means that GPS frequently doesn’t work indoors, as many building walls block the signals. Similarly, in highly urban areas (think downtown Seattle), the buildings can bounce the signal around and throw off the TOF calculations, making it harder to pinpoint position accurately.</p>
+<ul>
+<li>Additionally, receivers requires a lot of energy to constantly listen for the satellite messages. This means that utilizing the GPS can lead to a big hit on device battery life—which is of particular importance for mobile devices!</li>
+</ul>
+</div>
+<div id="cell-tower-localization" class="section level3">
+<h3><span class="header-section-number">11.1.2</span> Cell Tower Localization</h3>
+<p>But your phone can also give you a rough estimate of your location even <em>without</em> GPS. It does this through a couple of techniques, such as relying on the cell phone towers that provide the phone network service. This is also known as <a href="https://en.wikipedia.org/wiki/Mobile_phone_tracking#Network-based"><strong>GSM localization</strong></a> (Global System for Mobile Communications; the standard for cell phone communication used by many service providers). The location of these towers are known, so we can determine location based off them in a couple of ways:</p>
+<ul>
+<li><p>If you’re connected to a tower, you must be within range of it. So that gives you some measure of localization right off the bat. This would not be a very accurate measure though (you might be <em>anywhere</em> within that range).</p></li>
+<li><p>If you can see multiple towers (which important for “handoff” purposes, so your call doesn’t drop as you move), you can trilaterate the position between them (e.g., finding the possible overlapping area and picking a location in the middle of that). This can give accuracy within 50m in urban areas, with more towers producing better precision.</p></li>
+</ul>
+</div>
+<div id="wifi-localization" class="section level3">
+<h3><span class="header-section-number">11.1.3</span> WiFi Localization</h3>
+<p>But wait there’s more! What other kinds of communication antennas do you have in your phone? <strong>WiFi</strong>! As WiFi has became more popular, efforts have been made to identify the <em>location</em> of WiFi hotspots so that they too can be used for <a href="https://en.wikipedia.org/wiki/Wi-Fi_positioning_system">trilateration and localization</a>.</p>
+<p>This is often done through crowdsourced databases, with information gathered via <a href="https://en.wikipedia.org/wiki/Wardriving">war driving</a>. War driving involves driving around with a GPS receiver and a laptop, and simply recording what WiFi routers you see at what locations. This then all gets compiled into a database that can be queried—given that you see <em>these</em> routers, where must you be?</p>
+<ul>
+<li>Google got in <a href="http://www.wired.com/2012/05/google-wifi-fcc-investigation/">hot water</a> for doing this as it was driving around to capture Street-View images.</li>
+</ul>
+<p>WiFi localization can then be combined with Cell Tower localization to produce a pretty good estimate of your location, even without GPS.</p>
+<p>And in fact, Google provides the ability to automatically use all of these different techniques, abstracted into a single method call!</p>
+<p class="alert alert-info">
+I want to flag that just like the old <em>Active Badge</em> systems, all of these localizations systems rely on some kind of existing infrastructure: GPS requires satellites; GSM requires cell towers, and WiFi needs the database of routers. All these systems require and react to the world around them, making localization influenced by the actual location as well, as well as both social and computational systems!
+</p>
+</div>
+<div id="representing-location" class="section level3">
+<h3><span class="header-section-number">11.1.4</span> Representing Location</h3>
+<p>So once we have a location, how do we represent it?</p>
+<p>First, note that there is a philosophical difference between a “place” and a “space.” A <strong>space</strong> is a location, but without any social connotations. For example, GPS coordinates, or Cartesian xy-coordinates will all indicate a “space.” A <strong>place</strong> on the other hand is somewhere that has social meaning: Mary Gates Hall; the University of Washington; my kitchen. Space is a computational construct; place is a human construct. When we talk about localization with a mobile device, we’ll be mostly talking about <em>space</em>. But often <em>place</em> is what we’re really interested in, and we may have to convert between the two (Google does provide a few ways to convert between the two, such as with its <a href="https://developers.google.com/places/">Places API</a>).</p>
+<p>Our space locations will generally be reported as two coordinates: <strong>Latitude</strong> and <strong>Longitude</strong>. (<strong>Altitude</strong> or height can also be reported, but that isn’t very relevant for us).</p>
+<ul>
+<li><p><strong>Latitude</strong> (“lat”) is the <strong><em>angle</em></strong> between the equatorial plane and a line that passes through a point and the center of the Earth—the angle you have to go up the earth’s surface from the equator. Effectively, it’s a measure of “north/south”. Latitude is usually measured in <em>degrees north</em>, so going south of the equator gives a negative latitude (though this can be expressed positively as “degrees south”).</p></li>
+<li><p><strong>Longitude</strong> (“lng”) is the <strong><em>angle</em></strong> between the prime meridian plane and a line that passes through a point and the center of the Earth—the angle you have to go across the earth’s surface from the meridian. Effectively, it’s a measure of “east/west”. Latitude is measured in <em>degrees east</em>, so going east of the meridian. That mean that the western hemisphere has “negative longitude” (though this can be expressed as positive “degrees west”).</p></li>
+</ul>
+<p>As an example: <a href="https://www.google.com/search?q=uw+gps+coordinates">UW’s GPS Coordinates</a><a href="#fn34" class="footnoteRef" id="fnref34"><sup>34</sup></a> are N/W, so this would be expressed as N (positive) and E (negative).</p>
+<p>The distance between degrees and miles depends on where you you are (particularly for longitude—the curvature of the earth means that each degree has less space between it as you get closer to their “joining” at the poles). However, for a very rough sense of scale, in the American Northwest, .01 degrees corresponds with a distance of <em>about</em> a mile (again: this is not an accurate convertion, and is intended only for a sense of the “units”).</p>
 </div>
 </div>
-<div id="specifying-the-user-interface" class="section level2">
-<h2><span class="header-section-number">15.2</span> Specifying the User Interface</h2>
-<p>The Java code is able to position the map, but if we want to specify a <a href="https://developers.google.com/maps/documentation/android-api/map#configure_initial_state">“default” position</a>, you should instead do that work in the Fragment’s definition in the XML resource file.</p>
-<p><strong>Check out the list of <a href="https://developers.google.com/maps/documentation/android-api/map#using_xml_attributes">available XML attributes</a></strong> for defining the user interface of your map. Customize the map so that:</p>
+<div id="android-location" class="section level2">
+<h2><span class="header-section-number">11.2</span> Android Location</h2>
+<p>The remainder of the lecture will discuss how to implement an app that is able to access the device’s location. This location will simply be displayed for now; connecting the location to a visual display (e.g., a <a href="maps.html#maps">map</a>) is left as an exercise to the reader.</p>
+<p class="alert alert-info">
+This lecture references code found at <a href="https://github.com/info448-s17/lecture11-location" class="uri">https://github.com/info448-s17/lecture11-location</a>.
+</p>
+<div id="google-play-services" class="section level3">
+<h3><span class="header-section-number">11.2.1</span> Google Play Services</h3>
+<p>In order to effectively access location, we first need to make sure we include the <a href="https://developers.google.com/android/guides/setup">Google Play Services</a>. These are a special set of libraries (similar to the support libraries) that provide additional functionality to Android. That functionality will include the location and mapping tools we’re interested in. (Much of this functionality was originally built into core Android, but Google has since been moving it into a separate app that can be more easily distributed and updated!)</p>
+<p>There are a few steps to including the Play Services library:</p>
 <ol style="list-style-type: decimal">
-<li><p>It is by default centered on <a href="http://www.lat-long.com/Latitude-Longitude-2461252-Washington-Mary_Gates_Hall.html">Mary Gates Hall</a>. (You will need to delete the positioning Java code so that doesn’t override your XML).</p></li>
-<li><p>It is <a href="https://developers.google.com/maps/documentation/android-api/views#zoom">zoomed in</a> so that we can see the see the whole fountain on the map</p></li>
-<li><p>Make the map shows the “zoom control buttons” (so that you can zoom in using the emulator!)</p></li>
-<li><p>Make the map show <em>both</em> satellite imagery and roads/buildings.</p></li>
+<li><p>Make sure you’ve downloaded the proper library. Go to <code>Tools &gt; Android &gt; SDK Manager</code> to open up the manager for the various versions of Android installed. Under <code>SDK Tools</code>, select <code>Google Play Service</code> and <code>Google Play Repository</code> to download those.</p></li>
+<li><p>Make sure the device supports these services (e.g., that it’s a Google device and not an Amazon device). For the emulator, go to the <code>AVD Manager</code>, and confirm the <em>target</em> platform includes the <code>Google APIs</code>.</p></li>
+<li><p>Modify your <code>build.gradle</code> file so that you can get access to the Location classes. In the <strong><em>module-level</em></strong> <code>build.gradle</code> file, under <code>dependencies</code> add</p>
+<pre><code>compile &#39;com.google.android.gms:play-services-location:10.2.4&#39;</code></pre>
+<p>This will load in the location services (but not the other play services, which take up extra space and may require additinal API keys). Note that you can specify a different version of the services, as long as it is greater than <code>8.3.0</code>.</p></li>
 </ol>
+<p>Additionally, you’ll need to request permission to access the device’s location. There are two permission levels we can ask for: <code>ACCESS_COARSE_LOCATION</code> (for GSM/WiFi level precision), and <code>ACCESS_FINE_LOCATION</code> (for GPS level precision). We’ll use the later because we want GPS-level precision.</p>
+<p class="alert alert-warning">
+This is a <strong>dangerous</strong> permission, so in Marshmallow we need to make sure to ask for permission at run-time! See the <a href="files-and-permissions.html#permissions">lecture on permissions</a> for details.
+</p>
+<p>We’re going to use Google Play Services to access the device’s location. The Google APIs provide a nice set of methods for <a href="https://developer.android.com/training/location/retrieve-current.html">accessing location</a> (without us needing to specify the source of that localization, GPS or GSM), and is the recommended API to use.</p>
+<ul>
+<li>There is a built-in <code>android.location</code> API (e.g., for non-Google based Android devices), but it’s not recommended practice and is harder to use.</li>
+</ul>
+<p>The first thing we need to do is get access to the API; we do this with a <a href="https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient"><code>GoogleApiClient</code></a> object. We construct this object in the <code>onCreate()</code> callback, using a <code>GoogleApiClient.Builder</code>:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">if</span> (mGoogleApiClient == <span class="kw">null</span>) {
+    mGoogleApiClient = <span class="kw">new</span> GoogleApiClient.<span class="fu">Builder</span>(<span class="kw">this</span>)
+            .<span class="fu">addConnectionCallbacks</span>(<span class="kw">this</span>)
+            .<span class="fu">addOnConnectionFailedListener</span>(<span class="kw">this</span>)
+            .<span class="fu">addApi</span>(LocationServices.<span class="fu">API</span>)
+            .<span class="fu">build</span>();
+}</code></pre></div>
+<p>This builder requires us to specify what are called the <em>Connection Callbacks</em>: callbacks that will occur when we connect to the Google Play Services (a <em>Service</em> or separate application managing all of Google’s API work). We do this by implementing the <code>GoogleApiClient.ConnectionCallbacks</code> and <code>GoogleApiClient.OnConnectionFailedListener</code> interfaces. Each require methods that we must fill in; in particular, the <code>onConnected()</code> method is where we can “start” our API usage (like asking for location!)</p>
+<ul>
+<li><code>onSuspended</code> and <code>onFailed</code> are for when the connection is stopped (similar to <code>onStop()</code>) or if we fail to connect. See <a href="https://developers.google.com/android/guides/api-client">Accessing Google APIs</a> for details.</li>
+</ul>
+<p>Note we also specify that we want to access the <code>LocationServices</code> API in the builder.</p>
+<p>Finally, we need to actually connect to the client. We do this in the Activity’s <code>onStart()</code> method (and disconnect in <code>onStop()</code>):</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">protected</span> <span class="dt">void</span> <span class="fu">onStart</span>() {
+    mGoogleApiClient.<span class="fu">connect</span>();
+    <span class="kw">super</span>.<span class="fu">onStart</span>();
+}</code></pre></div>
+<p>This of course, will lead to our <code>onConnected()</code> callback being executed once the connection to the service is established.</p>
 </div>
-<div id="markers-and-drawings" class="section level2">
-<h2><span class="header-section-number">15.3</span> Markers and Drawings</h2>
-<p>Showing a map is great, but what we really want to do is customize what it shows: that is, we want to draw on it! There are a couple of things we can draw, one of the most common of which is <a href="https://developers.google.com/maps/documentation/android-api/marker">Markers</a> that indicate a single location on the map.</p>
-<p>You can create a Marker by instantiating a new <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/model/MarkerOptions"><code>MarkerOptions</code></a> object and passing it into the <code>GoogleMap</code> object’s <code>addMarker()</code> method.</p>
+<div id="accessing-location" class="section level3">
+<h3><span class="header-section-number">11.2.2</span> Accessing Location</h3>
+<p>Once we have the the client connected to the service, we can start getting the location!</p>
+<p>To access the location, we’re going to use a class called the <a href="https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderApi">FusedLocationApi</a><a href="#fn35" class="footnoteRef" id="fnref35"><sup>35</sup></a>. This is a “unified” interface for accessing location. It fuses together all of the different ways of getting location, providing which-ever one best suits our specified needs. You can think of it as a “wrapper” around more detailed location services.</p>
 <ul>
-<li>See <a href="https://developers.google.com/maps/documentation/android-api/marker#customize_a_marker">the documentation</a> for ways to customize these markers. The most common options are setting the <code>position</code> (required), the <code>title</code> (text that appears when the user clicks the marker), and <code>snippet</code> (additional text).</li>
+<li>It will let us specify at a high level whether we want to trade accuracy for power consumption, rather than us needing to be explicit about that. And it will make decisions about what how best to fetch location given our stated needs and other contextual information.</li>
 </ul>
-<p><strong>Create a marker</strong> centered in the center of the fountain. The marker should be <a href="http://www.washington.edu/brand/graphic-elements/primary-color-palette/">purple or gold</a> in <a href="https://developers.google.com/maps/documentation/android-api/marker#customize_the_marker_color">color</a>, and clicking on it should tell the user something about the ducks who dwell there!</p>
+<p>We’re going to specify this “high level” requirement using a <a href="https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest"><code>LocationRequest</code></a><a href="#fn36" class="footnoteRef" id="fnref36"><sup>36</sup></a> object, which represents the details of our request (e.g., how we want to have our phone search for it’s location).</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">LocationRequest request = <span class="kw">new</span> <span class="fu">LocationRequest</span>();
+request.<span class="fu">setInterval</span>(<span class="dv">10000</span>);
+request.<span class="fu">setFastestInterval</span>(<span class="dv">5000</span>);
+request.<span class="fu">setPriority</span>(LocationRequest.<span class="fu">PRIORITY_HIGH_ACCURACY</span>);</code></pre></div>
 <ul>
-<li>You can show customized information (including pictures, etc) when markers are clicked using <a href="https://developers.google.com/maps/documentation/android-api/infowindows">Info Windows</a>.</li>
+<li><p>We create the object, then specify the “interval” that we want to check for updates. We can also specify the “fastest” interval, which is the maximum rate we want updates (assuming they are available). It’s a bit like a minimum and maximum. 5 to 10 seconds is good for real-time navigation.</p></li>
+<li><p>We also specify the <a href="https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest#constant-summary">priority</a>, which is the indicator to the FusedLocationApi about what kind of precision we want. <code>HIGH_ACCURACY</code> basically means GPS (trade power for accuracy!)</p></li>
 </ul>
-<div id="drawing-shapes" class="section level3">
-<h3><span class="header-section-number">15.3.1</span> Drawing Shapes</h3>
-<p>You can also draw free-form <a href="https://developers.google.com/maps/documentation/android-api/shapes">shapes</a> on the map, anchored to particular locations. These include lines, circles, and generic polygons.</p>
-<p>One of the best options for drawing is the <a href="https://developers.google.com/maps/documentation/android-api/shapes#polylines">Polyline</a>, which is a series of connected line segments (like a “path” in <a href="https://www.w3.org/TR/SVG/paths.html">SVG</a>).</p>
+<p class="alert alert-warning">
+Before actually sending the request, check for run-time permissions! This will introduce <em>another</em> layout of callbacks: first you wait for the GoogleApiClient to connect in one callback, then you wait for permission to be granted in another!
+</p>
+<p>Once we have this request in place, we can send it off through the <code>FusedLocationApi</code>:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">LocationServices.<span class="fu">FusedLocationApi</span>.<span class="fu">requestLocationUpdates</span>(mGoogleApiClient, request, <span class="kw">this</span>);</code></pre></div>
 <ul>
-<li><p>In order to create a Polyline, you <em>actually</em> instantiate a <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/model/PolylineOptions"><code>PolylineOptions</code></a> object. You can <code>add()</code> points (<code>LatLng</code> objects) to this object, extending the line from one point to the next. This <code>PolylineOptions</code> object is then passed to the <code>GoogleMap</code> object’s <code>addPolyline()</code> method.</p></li>
-<li><p>You can also specify <a href="https://developers.google.com/maps/documentation/android-api/shapes#customizing_appearances">other visual properties</a> such as the <code>color</code> and the <code>width</code> of the Polyline. Note that the width is measure in <em>screen pixels</em>—it will be the same no matter what zoom level you are at! (If you wanted it to change dynamically, you’d need to do that work on your own).</p></li>
-</ul>
-<p><strong>Using a Polyline</strong>, draw a giant “W” in either purple or gold centered on the fountain. Bonus if want to make it look like the UW logo!</p>
+<li><p>The first parameter is going to be the <code>GoogleApiClient</code> object, and the second will be the request we just made. The third parameter for the <code>requestLocationUpdates()</code> method is a <code>LocationListener</code>—an object with a callback that can be executed when the location is updated (i.e., when we move). To provide this listener, we’ll make the <em>Activity</em> into one by implementing the interface and filling in the <code>onLocationChanged()</code> method.</p>
 <ul>
-<li>Or better yet: can you use a combination of Polylines, Circles, and Polygons to draw an approximation of the iSchool logo?</li>
+<li><p>Yes, this is a <em>third</em> asynchronous callback after the GoogleApiClient connection has been established and permission has been granted <em>and</em> a location has been received!</p></li>
+<li><p>This listener’s callback will be handed a <code>Location</code> object, which contains the latitude/longitude of the location. We can then use that location (such as display it). We can access the latitude and longitude with getters:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">textLat.<span class="fu">setText</span>(<span class="st">&quot;&quot;</span> + location.<span class="fu">getLatitude</span>());
+textLng.<span class="fu">setText</span>(<span class="st">&quot;&quot;</span> + location.<span class="fu">getLongitude</span>());</code></pre></div></li>
+</ul></li>
 </ul>
+<p>It is possible to test this out (even when indoors) by using the emulator. Although the emulator doesn’t actually have a GPS receiver, it is possible to give it a “fake” location using the emulator’s options sidebar (where we previously sent SMS messages from). This allos us to “send” the phone a location, almost as if we as humans were the GPS receiver!</p>
+<ul>
+<li><p>You can test by giving the emulator UW’s coordinates (47.6550 N, -122.3080 E), and you can watch it update!</p>
+<ul>
+<li>Note that you may need to start up the <code>Maps</code> application to make sure the devices’s location settings are enabled and correct. See <a href="https://developer.android.com/training/location/change-location-settings.html">here</a> for how we can prompt for that ourselves (it’s a lot of repetitous code, so leaving it as exercise to the reader).</li>
+</ul></li>
+<li><p>The <code>FusedLocationApi</code> class also has a <code>setMockLocation()</code> method, which can allow you to programmatically define locations (e.g., you can make a button that changes your location). This can be useful for testing and debugging.</p></li>
+</ul>
+<p>To review the process:</p>
+<ul>
+<li>We start by creating and connecting to a <code>GoogleApiClient</code>, which is going to let us talk to the Play Services application running in the background of our phone.</li>
+<li>This may not be able to connect (or may take a moment), so we have a <em>asynchronous</em> callback for when it does.</li>
+<li>Once it connects (in that callback), we check to make sure we have permission to get location, asking for it if we don’t. This requires the user to make a decision, which may take some time, so we have <em>another</em> asynchronous callback for when we finally get permision.</li>
+<li>Once we have permission, we start up a repeated request for location updates. These updates may take some time to arrive, so we have <em>yet another</em> asynchronous callback for when they do!</li>
+<li>And when we get a location update, we finally update our View.</li>
+</ul>
+<p>That’s pretty much what is involved in working with location. Lots of pieces (because callbacks all over the place!), but this does the work of tracking location.</p>
 
 </div>
 </div>
@@ -374,14 +469,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
+</div>
+<div class="footnotes">
+<hr />
+<ol start="34">
+<li id="fn34"><p><a href="https://www.google.com/search?q=uw+gps+coordinates" class="uri">https://www.google.com/search?q=uw+gps+coordinates</a><a href="location.html#fnref34">↩</a></p></li>
+<li id="fn35"><p><a href="https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderApi" class="uri">https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderApi</a><a href="location.html#fnref35">↩</a></p></li>
+<li id="fn36"><p><a href="https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest" class="uri">https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest</a><a href="location.html#fnref36">↩</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="bluetooth.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="java-review.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="files-and-permissions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="accessibility.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -409,7 +512,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/maps.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/location.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],
