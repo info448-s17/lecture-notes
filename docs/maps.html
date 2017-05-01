@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="fragments-viewpager.html">
-<link rel="next" href="maps.html">
+<link rel="prev" href="bluetooth.html">
+<link rel="next" href="java-review.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -289,60 +289,78 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="bluetooth" class="section level1">
-<h1><span class="header-section-number">Lecture 13</span> Bluetooth</h1>
-<p>In this chapter you will learn about some of the pieces for creating a connection between two co-located devices using <a href="https://en.wikipedia.org/wiki/Bluetooth">Bluetooth</a>. This will let you gain some familiarity with the <a href="https://developer.android.com/guide/topics/connectivity/bluetooth.html">Bluetooth API</a>, as well as further practice working with <em>Intents</em>.</p>
-<p class="alert alert-info">
-The code for this tutorial can be found at <a href="https://github.com/info448-s17/lab-bluetooth" class="uri">https://github.com/info448-s17/lab-bluetooth</a>.
-</p>
-<p>This tutorial involves filling in the remaining pieces from a Sample Project provided by Google. Google includes <a href="http://developer.android.com/samples/index.html">lots of samples</a> demonstrating how to use particular pieces of functionality; reading and adapting the provided projects is a great way to learn new skills. There are <em>a lot</em> of comments, though that sometimes makes it hard to follow all the pieces. Read carefully!</p>
+<div id="maps" class="section level1">
+<h1><span class="header-section-number">Lecture 14</span> Maps</h1>
+<p>This chapter will introduce you to the <a href="https://developers.google.com/maps/documentation/android-api/">Google Maps Android API</a> which allows you to <em>very</em> easily add an interactive map to your application.</p>
+<div id="create-a-map-activity" class="section level2">
+<h2><span class="header-section-number">14.1</span> Create a Map Activity</h2>
+<p>There is no scaffolding code for this tutorial; instead, you should create a new project from scratch. Note that you can test your project either on the emulator or a physical device: just make sure the device has the <em>Google APIs</em> included.</p>
+<p>Start a new project in Android Studio (“Map Lab” is a fine project name). Target SDK 15 like usual.</p>
+<p><em>But here’s where things get different!</em> Instead of starting with an “Empty Activity”, start with a <strong>Google Maps Activity</strong>. This will create you a new <code>Activity</code> whose layout includes an XML-defined <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/SupportMapFragment"><code>SupportMapFragment</code></a>. (This is just another Fragment subclass, so you could include it in a layout however you wanted. You can stick with the default layout for now).</p>
+<div id="getting-an-api-key" class="section level3">
+<h3><span class="header-section-number">14.1.1</span> Getting an API Key</h3>
+<p>In order to access and show a Google Map, you need to <a href="https://developers.google.com/maps/documentation/android-api/signup#key">register and get an API key</a> (this is like a special password that lets your app access Google’s map data). When you create the Maps Activity, Android Studio should open up the <code>google_maps_api.xml</code> resource file. This file contains instructions on how to get an API key (i.e., paste the giant pre-generated link into your browser, and then copy the generated key into the XML resource).</p>
+<div class="figure">
+<img src="img/maps/api-key-instructions.png" alt="The instructions found in the google_maps_api.xml file." />
+<p class="caption">The instructions found in the <code>google_maps_api.xml</code> file.</p>
+</div>
+<p>(If you already have a Google Maps API Key, you can add this package &amp; device to that key in the <a href="https://console.developers.google.com/apis/credentials">Google Developer Console</a>).</p>
+<p>After you’ve entered the key, you should be able to build and run your app, and see a displayed map!</p>
+</div>
+<div id="the-supportmapfragment" class="section level3">
+<h3><span class="header-section-number">14.1.2</span> The <code>SupportMapFragment</code></h3>
+<p>Take a moment to open up the generated <code>MapsActivity</code> and its associated layout (by default <code>layouts/activity_maps.xml</code>) and <strong>read over the initial code</strong>.</p>
+<p>The layout resource contains a single <code>&lt;fragment&gt;</code> element (like we’ve defined before), in this case referring to an instance of the <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/SupportMapFragment"><code>SupportMapFragment</code></a> class. This fragment represents the interactive map. It’s just a subclass of <code>Fragment</code> (with a few extra methods), so everything we’ve learned about Fragments applies.</p>
 <ul>
-<li>Also be sure to open the <a href="https://developer.android.com/guide/topics/connectivity/bluetooth.html">API documentation</a> for reference!</li>
+<li>The Fragment is defined in the XML, so we don’t need to use a <code>FragmentTransaction</code> to add it in the Java code.</li>
 </ul>
-<p class="alert alert-warning">
-The emulator doesn’t support Bluetooth, so you will need to run this project on a physical device.
-</p>
-<p>Your task is to fill in the missing pieces of code, following the instructions below. I’ve marked each location with a <code>TODO</code> comment, which should show up in blue in Android Studio.</p>
+<p>But we do use the FragmentManager to get access to that fragment so that we can call a single method on it: <code>getMapAsync()</code>. This gets access to a <a href="https://developers.google.com/maps/documentation/android-api/map#the_map_object"><code>GoogleMap</code></a> object, which does all the work of downloading <a href="https://www.mapbox.com/help/how-web-maps-work/">map tiles</a>, handling pans and zooms, and drawing markers and shapes.</p>
+<ul>
+<li>The <code>getMapAsync()</code> method loads this object <em>asynchronously</em> (like we’ve with the <code>GoogleApiClient</code>), and will notify a listener when the object is available. Because the <code>MapsActivity</code> implements the <code>OnMapReadyCallback</code> interface, it <em>is</em> a listener and so its <code>onMapReady()</code> callback will be called and passed the object for us to handle.</li>
+</ul>
+<p>Once the the object is available via the callback, we can start calling methods on it: e.g., to show a marker at a particular latitude/longitude (<code>LatLng</code>), and to position the map’s <a href="https://developers.google.com/maps/documentation/android-api/views#the_camera_position">“camera”</a> to focus on that spot.</p>
+</div>
+</div>
+<div id="specifying-the-user-interface" class="section level2">
+<h2><span class="header-section-number">14.2</span> Specifying the User Interface</h2>
+<p>The Java code is able to position the map, but if we want to specify a <a href="https://developers.google.com/maps/documentation/android-api/map#configure_initial_state">“default” position</a>, you should instead do that work in the Fragment’s definition in the XML resource file.</p>
+<p><strong>Check out the list of <a href="https://developers.google.com/maps/documentation/android-api/map#using_xml_attributes">available XML attributes</a></strong> for defining the user interface of your map. Customize the map so that:</p>
 <ol style="list-style-type: decimal">
-<li><p>Start by reading through <a href="http://developer.android.com/guide/topics/connectivity/bluetooth.html#TheBasics">The Basics</a> to get a sense for what classes will be used and what their roles are. You only need to focus on the first 4: <code>BluetoothAdapter</code>, <code>BluetoothDevice</code>, <code>BluetoothSocket</code>, and <code>BluetoothServerSocket</code> (the rest are for other kinds of Bluetooth connections, like audio transfer and stuff). You don’t need to know all the methods or details of these classes, but should be familiar with their general, one-sentence purposes!</p></li>
-<li><p>You’ll need to request <a href="http://developer.android.com/guide/topics/connectivity/bluetooth.html#Permissions">permission</a> to use Bluetooth. Add the appropriate <code>&lt;uses-permission&gt;</code> attributes: one for <code>BLUETOOTH</code> (for communication; included) and one for <code>BLUETOOTH_ADMIN</code> (to “discover” devices and make connections).</p></li>
-<li><p>The main UI is defined in the <code>BluetoothChatFragment</code> class, which is a Fragment that holds the chat system. Start by filling in the <code>onCreate()</code> callback by <a href="http://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getDefaultAdapter()">fetching the default Bluetooth adapter</a> and saving it to an instance variable (<code>mBluetoothAdapter</code>). If the adapter doesn’t exist (is <code>null</code>), you should <code>Toast</code> a message that Bluetooth isn’t available (using the <code>Activity's</code> <a href="http://developer.android.com/reference/android/content/ContextWrapper.html#getApplicationContext()"><code>Application Context</code></a> so that the Toast lasts), and then call <code>finish()</code> on the Fragment’s <em>Activity</em> (to close the application).</p></li>
-<li><p>You’ll want your app to make sure that the user has Bluetooth turned on. In the Fragment’s <code>onCreate()</code>, check whether the the <code>BluetoothAdapter</code> is <code>enabled</code>. If <strong>not</strong>, you’ll want to prompt the user to enable it, such as by launching the “Settings” app. Create an <strong>Implicit Intent</strong> for the action <code>BluetoothAdapter.ACTION_REQUEST_ENABLE</code>, and send this Intent <strong><em>for a result</em></strong> (with the result code of <code>REQUEST_ENABLE_BT</code>). Look in the Fragment’s <code>onActivityResult()</code> method to see what happens when we get a response back!</p>
-<ul>
-<li>The <code>BluetoothChatService</code> (stored in the instance variable <code>mChatService</code>) is an object representing a “background service”—think an AsyncTask but with a much longer lifespan. This particular service handles sending bytes of data back and forth over Bluetooth. We’ll talk about <code>Services</code> more later in the course.</li>
-</ul></li>
-<li><p>In order for a device to connect to yours over Bluetooth, your device will need to be <strong>discoverable</strong>: effectively, it has to respond to public queries about its existence (sort of like having your instant messaging status as “Online/Available”). In the Fragment’s <code>ensureDiscoverable()</code> helper method, check if the device is currently discoverable by calling <code>getScanMode()</code> on the <code>BluetoothAdapter</code>; it should return a value of <code>BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE</code>.</p>
-<ul>
-<li>If this <strong>IS NOT</strong> the case, then you should send another <em>Implicit Intent</em> to handle the <code>BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE</code> action.</li>
-</ul>
-<p>This intent should include (put) an <strong>extra</strong> that has the key <code>BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION</code> and a value of <code>300</code>, so that we are in “discoverable” mode for 300 seconds.</p>
-<p>Note that this intent does <strong>NOT</strong> need to be started for a result!</p></li>
-<li><p>The discovery of devices is controlled by the <code>DeviceListActivity</code> Activity. This is a separate Activity that will actually appear as a popup dialog (though it doesn’t use <code>DialogFragment</code>; it just “themes” the Activity as a dialog in the <code>Manifest</code>). The Activity’s <code>onCreate()</code> does a lot of UI work (including setting up an Adapter!), but it also needs to set up a <code>BroadcastReceiver</code> to listen for events like when devices are found. (This is the equivalent of declaring a <code>&lt;receiver&gt;</code> and <code>&lt;intent-filter&gt;</code> in the <code>Manifest</code>, but we need to do it in Java since the Receiver isn’t a separate class and since we want to do it dynamically).</p>
-<ul>
-<li><p>First instantiate a new <a href="http://developer.android.com/reference/android/content/IntentFilter.html#IntentFilter(java.lang.String)"><code>IntentFilter</code></a> object (giving it the <code>BluetoothDevice.ACTION_FOUND</code> action).</p></li>
-<li><p>Then use the <a href="http://developer.android.com/reference/android/content/Context.html#registerReceiver(android.content.BroadcastReceiver, android.content.IntentFilter)"><code>registerReceiver(receiver, intentFilter)</code></a> method, passing it the already-existing receiver (<code>mReceiver</code>) and the <code>IntentFilter</code> you just created!</p></li>
-<li><p>Then repeat the above two steps, but this time for the <code>Bluetooth.ACTION_DISCOVERY_FINISHED</code> action. This will register an additional <code>IntentFilter</code> on the same receiver.</p></li>
-</ul></li>
-<li><p>We can actually begin searching for devices by filling in the Activity’s <code>doDiscovery()</code> helper method (which is called when the Scan button is pressed).</p>
-<ul>
-<li><p>Add a check to see if the <code>BluetoothAdapter</code> currently <code>isDiscovering()</code>. If so, then you should tell the adapter to <code>cancelDiscovery()</code>.</p></li>
-<li><p>Whether or not the check was <code>true</code> (so even if we canceled the discovery), tell the adapter to <code>startDiscovery()</code> to begin searching for devices!</p></li>
-</ul></li>
-<li><p>Once the user has selected a device to connect to, we handle that connection back in the <code>BluetoothChatFragment</code>. Fill in that class’s <code>connectDevice()</code> helper method to connect to the device!</p>
-<ul>
-<li><p>First you’ll want to get the device’s “address” (a <a href="https://en.wikipedia.org/wiki/MAC_address">MAC address</a> that acts as a unique identifier) <strong><em>from</em></strong> the Intent’s extras: get the <code>Bundle</code> of extras from the Intent, then get the String with the key <code>DeviceListActivity.EXTRA_DEVICE_ADDRESS</code>.</p></li>
-<li><p>You can then find the device (a <code>BluetoothDevice</code> object) by calling the <code>.getRemoteDevice()</code> method on the <code>BluetoothAdapter</code> and passing this address.</p></li>
-<li><p>Finally, you can use the <code>mChatService</code>’s <code>.connect()</code> method to connect to this device (passing down the <code>secure</code> option as a second parameter). The <code>BluetoothChatService#connect()</code> method creates a new <code>Thread</code> to do the communication work, and opens up network sockets so that messages can be passed between the devices. (This is actually part of the hard part or working with Bluetooth; luckily we have a class to abstract that for us!)</p></li>
-</ul></li>
-<li><p>The last part is to actually send a message! In the <code>sendMessage()</code> helper in <code>BluetoothChatFragment</code>, fill in the details so that the String can be sent to the socket in the chat service.</p>
-<ul>
-<li><p>First you need to convert the message String into a <code>byte[]</code> (for communication over the socket). Use the String’s <code>getBytes()</code> method to convert.</p></li>
-<li><p>Then you can tell <code>mChatService</code> to <code>.write()</code> those bytes!</p></li>
-<li><p>We then need to reset the <code>mOutStringBuffer</code> instance variable (which keeps track of the message that has been typed so far). Use <code>.setLength()</code> to give it a length of <strong>0</strong>, which will effectively make it empty.</p></li>
-<li><p>And finally, because we’ve changed the outgoing message, set the text of the <code>mOutEditText</code> TextView to be the (now empty) <code>mOutStringBuffer</code>.</p></li>
-</ul></li>
+<li><p>It is by default centered on <a href="http://www.lat-long.com/Latitude-Longitude-2461252-Washington-Mary_Gates_Hall.html">Mary Gates Hall</a>. (You will need to delete the positioning Java code so that doesn’t override your XML).</p></li>
+<li><p>It is <a href="https://developers.google.com/maps/documentation/android-api/views#zoom">zoomed in</a> so that we can see the see the whole fountain on the map</p></li>
+<li><p>Make the map shows the “zoom control buttons” (so that you can zoom in using the emulator!)</p></li>
+<li><p>Make the map show <em>both</em> satellite imagery and roads/buildings.</p></li>
 </ol>
-<p>And that’s it! You should now have a working chat system! Search for and connect to someone else’s device and try saying “hello”!</p>
+</div>
+<div id="markers-and-drawings" class="section level2">
+<h2><span class="header-section-number">14.3</span> Markers and Drawings</h2>
+<p>Showing a map is great, but what we really want to do is customize what it shows: that is, we want to draw on it! There are a couple of things we can draw, one of the most common of which is <a href="https://developers.google.com/maps/documentation/android-api/marker">Markers</a> that indicate a single location on the map.</p>
+<p>You can create a Marker by instantiating a new <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/model/MarkerOptions"><code>MarkerOptions</code></a> object and passing it into the <code>GoogleMap</code> object’s <code>addMarker()</code> method.</p>
+<ul>
+<li>See <a href="https://developers.google.com/maps/documentation/android-api/marker#customize_a_marker">the documentation</a> for ways to customize these markers. The most common options are setting the <code>position</code> (required), the <code>title</code> (text that appears when the user clicks the marker), and <code>snippet</code> (additional text).</li>
+</ul>
+<p><strong>Create a marker</strong> centered in the center of the fountain. The marker should be <a href="http://www.washington.edu/brand/graphic-elements/primary-color-palette/">purple or gold</a> in <a href="https://developers.google.com/maps/documentation/android-api/marker#customize_the_marker_color">color</a>, and clicking on it should tell the user something about the ducks who dwell there!</p>
+<ul>
+<li>You can show customized information (including pictures, etc) when markers are clicked using <a href="https://developers.google.com/maps/documentation/android-api/infowindows">Info Windows</a>.</li>
+</ul>
+<div id="drawing-shapes" class="section level3">
+<h3><span class="header-section-number">14.3.1</span> Drawing Shapes</h3>
+<p>You can also draw free-form <a href="https://developers.google.com/maps/documentation/android-api/shapes">shapes</a> on the map, anchored to particular locations. These include lines, circles, and generic polygons.</p>
+<p>One of the best options for drawing is the <a href="https://developers.google.com/maps/documentation/android-api/shapes#polylines">Polyline</a>, which is a series of connected line segments (like a “path” in <a href="https://www.w3.org/TR/SVG/paths.html">SVG</a>).</p>
+<ul>
+<li><p>In order to create a Polyline, you <em>actually</em> instantiate a <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/model/PolylineOptions"><code>PolylineOptions</code></a> object. You can <code>add()</code> points (<code>LatLng</code> objects) to this object, extending the line from one point to the next. This <code>PolylineOptions</code> object is then passed to the <code>GoogleMap</code> object’s <code>addPolyline()</code> method.</p></li>
+<li><p>You can also specify <a href="https://developers.google.com/maps/documentation/android-api/shapes#customizing_appearances">other visual properties</a> such as the <code>color</code> and the <code>width</code> of the Polyline. Note that the width is measure in <em>screen pixels</em>—it will be the same no matter what zoom level you are at! (If you wanted it to change dynamically, you’d need to do that work on your own).</p></li>
+</ul>
+<p><strong>Using a Polyline</strong>, draw a giant “W” in either purple or gold centered on the fountain. Bonus if want to make it look like the UW logo!</p>
+<ul>
+<li>Or better yet: can you use a combination of Polylines, Circles, and Polygons to draw an approximation of the iSchool logo?</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
 
 </div>
             </section>
@@ -350,8 +368,8 @@ The emulator doesn’t support Bluetooth, so you will need to run this project o
           </div>
         </div>
       </div>
-<a href="fragments-viewpager.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="maps.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="bluetooth.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="java-review.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -379,7 +397,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/bluetooth.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/maps.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

@@ -23,6 +23,7 @@ rmd_files:
   - accessibility.Rmd
   - viewpager.Rmd
   - bluetooth.Rmd
+  - maps.Rmd
 
   - appendix-java.Rmd
   - java-review.Rmd
