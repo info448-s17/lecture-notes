@@ -1,0 +1,77 @@
+# Material Design
+This lecture discusses [Material design](https://material.io/guidelines/material-design/introduction.html): the _design language_ ??introduced by Google as a unified style for their applications.?? The design language focuses on mobile designs (e.g., for Android), but can also be used across platforms (e.g., on the web through [css frameworks]()).
+
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture12-material>.</p>
+
+## The Material Design Language [20-30min]
+**principles**
+https://material.io/guidelines/material-design/introduction.html#introduction-principles
+- based on "materials": in particular, idea of surfaces (pieces of paper) floating in space
+    - paper is "light card stock" (35lb weight)
+- aesthetic choices (color, fonts, etc)
+- motion within a single environment: content moves and reorganizes in response to user input
+
+**Material Properties** (e.g., the "materials")
+https://material.io/guidelines/material-design/material-properties.html#
+- uniform thickness (1dp), but at different elevations (depths)
+  - shadows to indicate elevation
+  - don't occupy same space!
+- can change shape, size, position (along plane); but doesn't fold; can split and rejoin
+- motion/interaction: inputs stay within material, material doesn't pass through materials
+  - can move on any axis, but z-axis (up and down) is for user interaction!
+
+>> do I include/link show these animations? maybe in class, not in the reading
+>> could show 10-minute video in class? Probably faster actually
+
+
+**Elevation**
+https://material.io/guidelines/material-design/elevation-shadows.html#
+- default resting elevation; change depth in response to user inputs
+- table of default elevations!! (w/ images)
+- shadows are used to indicate the elevation
+- Helps to indicate _perspective_ (perspective image from graphics??)
+
+**Object Hierarchy**; group visual components into hierarchy (parent-child), with some rules:
+- children move with parent (e.g., scrolling); includes transformations (scales, elevation changes, etc)
+- children have minimal elevation diff from parents, and other objects don't get inserted inbetween
+> this may not correspond to an actual View hierarchy (??)
+
+...
+
+??specific widgets??
+
+
+## Implementing Material [30-40min]
+//only available in Android 5.0 (API 21) or higher! Can get some pieces in lower APIs with backwards compatibility, but need to do some work https://developer.android.com/training/material/compatibility.html
+
+**Material Theme** //cover in lab previously
+- how to specify theme (what gets covered in lab next week??)
+- customizing colors in lab?
+>> will need app with some widgets to look at (maybe the input demo??)
+
+**Lists and Cards** [20min?]
+- implementing RecyclerView??
+- Providing a card view
+>> should include this as well...
+
+**Assigning Elevation** [5-10min]
+- e.g., demo for buttons! (elevation + translation)
+- how to change shape??
+  - can move from rectangle to circle automatically? Check the `Outline` class...
+
+**Animations** [30min? or skip?? (come back to later)]
+- include some defaults (demo??)
+- Do these need to be specified?
+  - reveal
+- transitions (e.g., between Fragments) are neat!
+-
+does Property Animation go here?... I think so (at least interpolation as a piece)... or do that set of transitions later (lab?)
+
+**Drawables** ??
+- meh
+
+
+## Design Support Library [30-40mins]
+- Floating Action Button [5min] << could be something to modify/demo with!
+- Navigation Drawer (via support library; vs. v4 library? _what's the difference?_)
+  - Not too bad: filling in XML (20min?)

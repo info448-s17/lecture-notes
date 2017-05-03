@@ -1,0 +1,46 @@
+# Publishing
+This short chapter discusses how to publish your Android application, producing a version of the app that can be shared with others. In particular, it explains how to [cryptographically sign your app](https://developer.android.com/studio/publish/app-signing.html) and build it so it can be installed by people who are not using Android Studio.
+
+Before you actually distribute your application, you should make sure it is fully ready to be published. Google provides an [excellent list](https://developer.android.com/studio/publish/preparing.html) of things to do before releasing your application, as well as a more detailed [checklist](https://developer.android.com/distribute/best-practices/launch/launch-checklist.html) for releasing an app on the Play Store.
+
+- For example: remove extranous Logging commands, check for accessibility and localization, etc.
+
+Once you have completed these steps, you are ready to build and sign your app.
+
+## Signing an App
+As described in [lecture 1](#building-apps), building an Android application involves compiling Java and XML code into DVM bytecode, and then packing this code (along with assets and graphics) into a `.apk` file.
+
+But in order to install this `.apk` file onto a device, it needs to be **cryptographically signed** by including a [**public-key certificate**](https://en.wikipedia.org/wiki/Public-key_cryptography). This [certificate](https://en.wikipedia.org/wiki/Digital_signature) acts somewhat like a "password", in that it corresponds with a _private key_ (a secret code) held by you as the developer. Because each public-key cert is associated with a code only you as the developer know (like a password), it is able to act as an identifying _signature_ for your app: only you know the secret password, so only you are able to provide this particular certificate. Thus by _signing_ the `.apk` with your signature, you are marking the package as being developed by you and not someone else (just like a signature on a check). Android uses these signatures as a security feature to ensure that any future updates come from the same person (no malicious app updates!), as well as to help verify the source of an installed package.
+
+- The secret _private keys_ are stored on your computer in `.keystore` files (think: a database of private keys). You may have multiple different keystores on your machine.
+
+By default, when you build and run an app in Android Studio, the IDE automatically generates a **debug certificate** for you to sign your application with. This certificate is not secure (it's an automatically generated password!) so isn't trustworthy for app stores (like the Play Store)... but it is sufficient for being able to install and run your application through Android Studio.
+
+- By default keys are stored in the `~/.android` folder on Mac and Linux, and the `C:\Users\USER_NAME\.android\` folder on Windows. You can view the debug key (e.g., on Mac) using the command:
+
+    ```
+    keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+    ```
+
+    - The `-alias` is a name of the particular certificate, and the `-storepass` and `keypass` arguments are literal passwords associated with the store (database) and certificate (in the database) respectively. The fact that this store is password protected is what makes it accessible only to the developer.
+
+    - Scroll down to see the "Certificate fingerprints"; for example, the `SHA1` certificate is used whe getting a [Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).
+
+- Importantly, each computer running Android Studio will produce it's own _debug certificate_. That means that the "signature" identifying your app will different for every different computer: even if it has the same package and the same source code, Android will consider it a "different" program because it was built (in debug mode) on a different machine. This is particularly important when things like API keys (e.g., for Google Maps) are linked to a particular digital signature; it means that _each_ development machine would need to have its unique signature associated with the API!
+
+In addition to the automatically generated _debug certificates_, you can sign apps with your own generated **release certificate**. This is a certificate not automatically created by Android Studio, but is still associated with a secret "password" that only you know. These certificates are also stored in a `.keystore` file, which is created and password-protected by the developer. Because this keystore is kept secret and locked, only the developer is able to sign the built `.apk` with a verifiable signature, thereby ensuring that any updates to the application must have come from that develper.
+
+<p class="alert">I like to think of _debug certificates_ as like cheap, easily-reproducable Bic pens, and _release certificates_ like fancy golden quills. When multiple developers are working on an app, each will be signing their testing versions with their own cheap Bics, but when it comes to releasing the project, you need to get out the expensive golden quill to do the signing. In this metaphor, the `.keystore` file is a pen case.</p>
+
+### A Release `.apk`
+In order to generate a shareable **release `.apk`**, you will need to produce a _release certificate_ to sign the app with, then build and sign the `.apk` with that certificate.
+
+Android studio makes it easy to [sign a release build](https://developer.android.com/studio/publish/app-signing.html#release-mode) (follow the link for more details and examples). In short, select `Build > Generate Signed APK` from the menu, and follow the wizard's instructions!
+
+- You will be prompted for a location for the `.keystore` file to use (e.g., where to store your release pens). I recommend making a file somewhere in your user's home directory (e.g., `~/android-release.jks`). Note that you can use the same private key (found in the keystore) for multiple apps.
+
+- It is also possible to configure Android Stduio to [automatically](https://developer.android.com/studio/publish/app-signing.html#sign-auto) sign your application when building for release. Be sure you [remove signing information](https://developer.android.com/studio/publish/app-signing.html#secure-shared-keystore) from your build files so your passwords don't get uploaded to GitHub!
+
+The built and signed `.apk` will be created in the destination folder you selected. This file can then be [shared](https://developer.android.com/studio/publish/index.html#publishing-release): uploaded to the Google Play Store, hosted on a web page, or emailed directly to someone to install.
+
+- Note that installing `.apk` files from outside the Play Store&mdash;even when signed&mdash;requires the user to [opt-in for apps from unknown sources](https://developer.android.com/studio/publish/index.html#unknown-sources).
