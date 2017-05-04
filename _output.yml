@@ -15,6 +15,8 @@ bookdown::gitbook:
       twitter: false
       google: false
       all: ['github','facebook','twitter','google']
+  includes:
+    in_header: includes/analytics.html
 bookdown::pdf_book:
   includes:
     in_header: latex/preamble.tex

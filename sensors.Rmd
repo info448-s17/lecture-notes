@@ -1,8 +1,130 @@
 # Sensors
+This lecture discusses how to access and utilize hardware [**sensors**](https://developer.android.com/guide/topics/sensors/sensors_overview.html) built into Android devices. These sensors can be used to detect changes to the device (such as it's _motion_ via the **accelerometer**) or its surrounding environment (such as the weather via a **thermometer** or **barameter**). Additionally, the system is structured so you can develop and connect your own sensor hardware if needed&mdash;such as connecting to a medical device or some other kind of [tricorder](https://arstechnica.com/science/2017/04/underdog-team-wins-millions-in-competition-to-make-real-life-tricorder/).
+
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture12-sensors>.</p>
 
 
+## Motion Sensors
+To continue to emphasize to _mobility_ of Android devices (they can be picked up and moved, shook around, tossed in the air, etc.), this lecture will demonstrate how to use **motion sensors** to detect how an Android device is able to measure its movement. Nevetheless, Android does provide a general _framework_ for interacting with any arbitrary sensor (whether built into the device or external to it); motion sensors are just one example.
+
+- There are [many differents sensor types](https://source.android.com/devices/sensors/sensor-types)^[https://source.android.com/devices/sensors/sensor-types.html] defined by the Android framework. The interfaces for these sensors are defined by the Android Alliance rather than Google, since the interface needs to exist between hardware and software (so multiple stakeholders are involved).
+
+In particular, we'll focus on using the [**accelerometer**](https://developer.android.com/guide/topics/sensors/sensors_motion.html#sensors-motion-accel), which is used to detect _acceleration force_ (e.g., how fast the device is moving in some direction). This sensor is found on most devices, and has the added benefit of being a relatively "low-powered" sensor&mdash;its ubiquity and low cost of usage makes it ideal for detecting motions!
+
+The accelerometer is an example of a [_motion sensor_](http://developer.android.com/guide/topics/sensors/sensors_motion.html), which are used to detect how the device _moves_ in space: tilting, shaking, rotating, or swinging. Motion sensors are related to but different from [_position sensors_](http://developer.android.com/guide/topics/sensors/sensors_position.html) which determine where the device _is_ in space: for example, the device's current rotation, facing, or proximity to another object (e.g., someone's face). Position sensors different from location sensors (like GPS), in that they measure position relative to the device rather than relative to the world.
+
+- It is also possible to detect motion using a _gravity sensor_ (which measures the direction of gravity relative to the device), a _gyroscope_ (measures the rate of spin of the device), or a number of other sensors. However, the accelerometer is the most common and can be used in combination with other sensors as needed.
+
+We do not need any special permissions to access the accelerometer. But because our app will rely on a certain piece of hardware that&mdash;while common&mdash;may not be present on very device, we will want to make sure that anyone installing our app (e.g., from the Play Store) has that hardware. We can specify this requirement in the `Manifest` with a `<uses-feature>` element:
+
+```xml
+<uses-feature android:name="android.hardware.sensor.accelerometer"
+              android:required="true" />
+```
+
+- This declaration doesn't actually prevent the user from installing the app, though it will cause the Play Store to list it as "incompatible". Effectively, it's just an extra note.
+
+### Accessing Sensors
+In Android, we start working with sensors by using the [`SensorManager`](https://developer.android.com/reference/android/hardware/SensorManager.html)^[https://developer.android.com/reference/android/hardware/SensorManager.html] class, which will tell us information about what sensors are available, as well as let us register listeners to record sensor readings. The class is actually a _service_ (an application that runs in the background) which manages all of the external sensors&mdash;very similar to the `NotificationManager` used to track all of the system notifications. We can get a reference to the SensorManager object using:
+
+```java
+mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+```
+
+- Just like how we accessed the Notification Service, we ask the Android System to "get" us a reference to the Sensor Service, which _is_ a `SensorManager`.
+
+The `SensorManager` class provides a number of useful methods. For example, the `SensorManager#getSensorList(type)` method will return a list of sensors available to the device (the argument is the "type" of sensor to list; use `Sensor.TYPE_ALL` to see all sensors). The sensors are returned as a `List<Sensor>`&mdash;each [`Sensor`](https://developer.android.com/reference/android/hardware/Sensor.html)^[http://developer.android.com/reference/android/hardware/Sensor.html] object represents a particular sensor. The `Sensor` class includes information like the sensor type (which is _not_ represented via subclassing, because otherwise we couldn't easily add our own types! Composition over inheritance).
+
+Devices may have multiple sensors of the same type; in order to access the "main" sensor, we use the `SensorManager#getDefaultSensor(type)` method. This method will return `null` if there is no sensor of that type (allowing us to check if the sensor even exists), or the "default" `Sensor` object of that type (as determined by the OS and manufacturer).
+
+- If no valid sensor is available, we can have the Activity close on its own by calling `finish()` on it.
 
 
+In order to get readings from the sensor, we need to _register a listener_ for the event that occurs when a sensor sample is available. We can do this using the SensorManager:
+
+```java
+mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+```
+
+- The first parameter is a `SensorEventListener`, which will handle the callbacks when a `SensorEvent` (a reading) is produced. It is common to make the containing Activity the listener, and thus have it implement the interface and its two callbacks (described below).
+
+- The second parameter is the sensor to listen to, and the third parameter is a flag indicating how often to sample the environment. `SENSOR_DELAY_NORMAL` corresponds to a 200,000 microsecond (200ms) delay between samples; use `SENSOR_DELAY_GAME` for a faster 20ms delay (e.g., if making a motion-based game).
+
+- **Important** be sure to _unregister_ the listener in the Activity's `onPause()` callback in order to "turn off" the sensor when it is not directly being used. Sensors can cause significant battery drain (even though the accelerometer is on the low end of that), so it is best to minimize that. Equivalently, you can register the sensor in the `onResume()` function to have it start back up.
+
+We can utilize the sampled sensor information by filling in the `onSensorChanged(event)` callback. This callback is exected _whenever_ a new sensor reading occurs (so possibly 50 times a second)! The `onAccuracyChanged()` method is used to handle when the sensor switches modes in some way; we will leave that blank for now.
+
+In the `onSensorChanged()` method, sensor readings are stored in the `event.values` variable. This variable is an array of `floats`, but the size of the array and the meaning/range of the values in that array are entirely depending on the sensor type that produced the event (which can be determined via the `event.sensor.getType()` method).
+
+When working with the **accelerometer**, each element in the `float[]` is the acceleration force (in $m/s^2$) along each of the three Cartesian ___axes___ (`x`, `y`, and `z` in order):
+
+![Coordinate system (relative to a mobile device). Image from source.android.com^[https://developer.android.com/images/axis_device.png].](img/sensors/axis_device.png)
+
+### Composite Sensors
+If you Log out these coordinates while the phone sitting flat on a table (not moving), you will notice that the numbers are not all `0.0`. This is because _gravity_ is always exerting an accelerating force, even when the device is at rest! Thus in order to determine the actual acceleration, we would need to "factor out" the force due to gravity. This requires a little bit of linear algebra; [the Android documentation](https://developer.android.com/guide/topics/sensors/sensors_motion.html#sensors-motion-accel) has an example of the math (and an additional version can be found in [the sample app](https://github.com/android/platform_development/blob/master/samples/AccelerometerPlay/src/com/example/android/accelerometerplay/AccelerometerPlayActivity.java)).
+
+However, an easier solution is to utilize a _second_ sensor. For example, we can read the current force due to gravity from a _magnetometer_ or a _gyroscope_, and then do some math to subtract that reading from the accelerometer.
+
+We can effectively combine these two sets of readings by listening not to the _accelerometer_, but to the [___Linear acceleration___](https://source.android.com/devices/sensors/sensor-types.html#linear_acceleration) sensor instead. This is an example of a **composite sensor**, a "virtual" sensor that combines readings from multiple pieces of hardware to produce useful results. Composite sensors allow us to query a single sensor for a set of data, even if that data is being synthesized from multiple other sensor components (similar to how the FusedLocationApi allows us to get location from multiple receivers). For example, the _linear acceleration_ sensor uses the _accelerometer_ in combination with the _gyroscope_, or the _magnetometer_ if there is no gyroscope. This sensor is thus able to sample the acceleration independent of the gravity automatically.
+
+- It is theoretically possible for a device to provide dedicated hardware for a composite sensor, but no distinction is made by the Android software.
+
+- Note that not all devices will have a _linear acceleration_ sensor!
+
+Android provides many such compound sensors, and they are incredibly useful for simplying sensor interactions.
 
 
-.
+## Rotation
+Acceleration is all good and well, but it only detects motion when the phone is _moving_. If we tilt the phone to one side, it will measure that movement... but then the acceleration goes back to 0 since the phone has stopped moving. What if we want to detect something like the **tilt** of the device?
+
+The _gravity sensor_ (`TYPE_GRAVITY`) can give this information indirectly, but it is a bit hard to parse out. So a better option is to use a [**Rotation Vector Sensor**](https://source.android.com/devices/sensors/sensor-types.html#rotation_vector). This is another **composite** (virtual) sensor that is used to determine the current rotation (angle) of the device by combining readings from the _accelerometer_, _magnetometer_, and _gyroscope_.
+
+After registering a listener for this sensor, we can see that the `onSensorChanged(event)` callback once again provides three `float` values from the sensed event. These values represent the phone's rotation in [quaternions](https://en.wikipedia.org/wiki/Quaternion). This is a lovely but complex coordinate system (literally complex: it uses imaginary numbers to measure angles). Instead, we'd like to convert this into rotation values that we understand, such as the degrees of device [roll, pitch, and yaw](https://en.wikipedia.org/wiki/Aircraft_principal_axes).
+
+- Our approach will be somewhat round-about, but it is useful for understanding how the device measures and understands its motion.
+
+In computer systems, rotations are almost always stored as <a href="https://en.wikipedia.org/wiki/Matrix_(mathematics)">**matrices**</a> (a mathematical structure that looks like a table of numbers). Matrices can be used to multiply <a href="https://en.wikipedia.org/wiki/Vector_(mathematics_and_physics)">**vectors**</a> to produce a _new_, transformed vector&mdash;the matrix represents a (linear) mapping. Because a "direction" (e.g., the phone's facing) is represented by a vector, that direction can be multiplied by a matrix to represent a "change" in the direction. A matrix that happens to correspond with a transformation that rotates a vector by some angle is called a [**rotation matrix**](https://en.wikipedia.org/wiki/Rotation_matrix).
+
+![Derivation of a 2D rotation matrix.](img/sensors/rotation.png)
+
+- You can actually use matrices to represent _any_ affine transformation (including movement, skewing, scaling, etc)... and these transformations can be specified for things like animation. 30% of doing 3D Computer Graphics is simply understanding and working with these transformations.
+
+Luckily, we don't actually need to know any of the math for deriving rotation matrices, as Android has a built-in method that will automatically produce a rotation matrix from a the rotation quaternion produces by the _rotation vector_ sensor: `SensorManager.getRotationMatrixFromVector(targetMatrix, vector)`
+
+- This method takes in a `float[16]`, representing a 4x4 matrix (one dimensions for each axis `x`, `y`, and `z`, plus one dimension to represent the "origin" in the coordinate system. These are known as [homogenous coordinates](https://en.wikipedia.org/wiki/Homogeneous_coordinates). This array will be filled with the resulting values of the rotation matrix. The method doesn't produce a `new` array because allocating memory is time-intensive&mdash;so you need to provide your own (ideally reused) array.
+
+A 4x4 rotation matrix may not _seem_ like much of an improvement towards getting human-readable orientation angles. So as a second step we can use the `SensorManager.getOrientation(matrix, targetArray)` method to convert that that rotation matrix into a set of _radian_ values that are the angles the phone is rotated around each axis&mdash;thereby telling us the orientation. Note this method also takes a (reusable) `float[3]` as a parameter to contain the resulting angles.
+
+- The resulting angles can be converted to degrees and outputted using some basic `Math` and `String` functions:
+
+    ```java
+    String.format("%.3f",Math.toDegrees(orientation[0]))+"\u00B0" //include the degree symbol!
+    ```
+
+The _rotation vector_ sensor works well enough, but another potential option in API 18+ is the [**Game rotation vector**](https://source.android.com/devices/sensors/sensor-types.html#game_rotation_vector) sensor. This **compound** sensor is almost exactly the same as the `ROTATION_VECTOR` sensor, but it does _not_ use the magnetometer so is not influenced by magnetic fields. This means that rather than having "0" rotation be based on compass directions North and East, "0" rotation can be based on some other starting angle (determined by the gyroscope). This can be useful in certain situations where magnetic fields may introduce errors, but can also involve gyroscope-based sampling drift over time.
+
+- We can easily swap this in, without changing most of our code. We can use even check the API version dynamically in Java using:
+
+    ```java
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        //... API 18+
+    }
+    ```
+
+    This strategy is useful for any API dependent options, including external storage access and SMS support!
+
+### Coordinates
+As illustrated above, motion sensors use a standard 3D Cartesian [coordinate system](http://developer.android.com/guide/topics/sensors/sensors_overview.html#sensors-coords), with the `x` and `y` axes matching what you expect on the screen (with the "origin" at the center of the phone), and the `z` coming _out_ of the front of the device (following the [right-hand rule](https://en.wikipedia.org/wiki/Right-hand_rule) as a proper coordinate system should). However, there are a few "gotchyas" to consider.
+
+For example, note that the values returned by the `getOrientation()` method are _not_ in `x,y,z` order (but instead in `z`, `x`, `y` order)&mdash;and in fact rotates around the `-x` and `-z` axes. This is detailed in the <a href="https://developer.android.com/reference/android/hardware/SensorManager.html#getOrientation(float[], float[])">documentation</a>, and can be confirmed through testing. Thus you need to be careful about exactly what units you're working with when accessing a particular sensor!
+
+Moreover, the coordinate system used by the sensors is based on the _device's_ **frame of reference**, not on the Activity or the software configuration! The `x` axis always goes across the "natural" orientation of the device (portrait mode for most devices, though landscape mode for some tablets), and rotating the device (e.g., into landscape mode) won't actually change the coordinate system. This is because the sensors are responding to the _hardware's_ orientation, and not considering the software-based configuration.
+
+- One solution to dealing with multiple configurations is to use the `SensorManager#remapCoordinateSystem()` method to "remap" the rotation matrix. With this method, you specify _which_ axes should be transformed into which other axes (e.g., which axes will become the new `x` and `y`), and then pass in a rotation matrix to adjust. You can then fetch the orientation from this rotation matrix as before. You can determine the the device's current orientation with `Display#getRotation()` method:
+
+    ```java
+    Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+    display.getRotation();
+    ```
+
+- It is also common for some motion-based applications (such as games or other graphical systems) to be restricted to a single configuration, so that you wouldn't need to dynamically handle coordinate systems within a single device.
