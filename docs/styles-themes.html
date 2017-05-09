@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="bluetooth.html">
-<link rel="next" href="styles-themes.html">
+<link rel="prev" href="maps.html">
+<link rel="next" href="java-review.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -346,83 +346,133 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="maps" class="section level1">
-<h1><span class="header-section-number">Lecture 18</span> Maps</h1>
-<p>This chapter will introduce you to the <a href="https://developers.google.com/maps/documentation/android-api/">Google Maps Android API</a> which allows you to <em>very</em> easily add an interactive map to your application.</p>
-<div id="create-a-map-activity" class="section level2">
-<h2><span class="header-section-number">18.1</span> Create a Map Activity</h2>
-<p>There is no scaffolding code for this tutorial; instead, you should create a new project from scratch. Note that you can test your project either on the emulator or a physical device: just make sure the device has the <em>Google APIs</em> included.</p>
-<p>Start a new project in Android Studio (“Map Lab” is a fine project name). Target SDK 15 like usual.</p>
-<p><em>But here’s where things get different!</em> Instead of starting with an “Empty Activity”, start with a <strong>Google Maps Activity</strong>. This will create you a new <code>Activity</code> whose layout includes an XML-defined <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/SupportMapFragment"><code>SupportMapFragment</code></a>. (This is just another Fragment subclass, so you could include it in a layout however you wanted. You can stick with the default layout for now).</p>
-<div id="getting-an-api-key" class="section level3">
-<h3><span class="header-section-number">18.1.1</span> Getting an API Key</h3>
-<p>In order to access and show a Google Map, you need to <a href="https://developers.google.com/maps/documentation/android-api/signup#key">register and get an API key</a> (this is like a special password that lets your app access Google’s map data). When you create the Maps Activity, Android Studio should open up the <code>google_maps_api.xml</code> resource file. This file contains instructions on how to get an API key (i.e., paste the giant pre-generated link into your browser, and then copy the generated key into the XML resource).</p>
-<div class="figure">
-<img src="img/maps/api-key-instructions.png" alt="The instructions found in the google_maps_api.xml file." />
-<p class="caption">The instructions found in the <code>google_maps_api.xml</code> file.</p>
+<div id="styles-themes" class="section level1">
+<h1><span class="header-section-number">Lecture 19</span> Styles &amp; Themes</h1>
+<p>In this chapter you will learn to use Android <a href="https://developer.android.com/guide/topics/ui/themes.html"><strong>Styles &amp; Themes</strong></a> to easily modify and <em>abstract</em> the appearance of an app’s user interfaces—that is, the XML resource attributes that define what your <code>Views</code> look like.</p>
+<p>This tutorial will walk you through creating and using styles to modify views, though you should also reference the <a href="https://developer.android.com/guide/topics/ui/themes.html">official documentation</a> for more details and examples.</p>
+<p class="alert alert-info">
+The code for this tutorial can be found at <a href="https://github.com/info448-s17/lab-styles" class="uri">https://github.com/info448-s17/lab-styles</a>.
+</p>
+<p>You will be working almost exclusively with the <strong>XML resources</strong> (e.g., <code>res/layout/activity_main.xml</code>) in the provided code, so make sure to look those over before you begin. The main layout describes a very simple screen showing a pile of <code>TextViews</code> organized in a <code>RelativeLayout</code>.</p>
+<div id="defining-styles" class="section level2">
+<h2><span class="header-section-number">19.1</span> Defining Styles</h2>
+<p>If you look at the <code>TextViews</code>, you’ll see that they share a lot of the same attributes: text sizing, width and height, boldness, etc. If you decided that all of the text should be bigger (e.g., for readability), then you’d need to change 6 different attributes—which is a lot of redundant work.</p>
+<p>Enter <a href="http://developer.android.com/guide/topics/ui/themes.html#DefiningStyles"><strong>Styles</strong></a>. Styles <strong><em>encapsulate a collection of XML properties</em></strong>, allowing you to define a set of properties once and then use a single attribute to apply all of those properties to a view. This provides <em>almost</em> the same functionality as a <a href="https://en.wikipedia.org/wiki/Cascading_Style_Sheets">CSS</a> rule describing a class decalaration, but without the “cascading” part.</p>
+<p>Styles are themselves defined as an <a href="https://developer.android.com/guide/topics/resources/style-resource.html">XML resource</a>&amp;mdsah;specifically a <code>&lt;style&gt;</code> element inside the <strong><code>res/values/styles.xml</code></strong> file.</p>
+<ul>
+<li><p>This XML file was created for us when Android Studio created the project. Open the file, and you can see that it even has some initial content in it!</p></li>
+<li><p>Style resource files, like String resource files, use <code>&lt;resource&gt;</code> as a top-level element, declaring that this XML file contains (generic-ish) resources to use.</p></li>
+</ul>
+<p>Styles are declared with a <code>&lt;style&gt;</code> tag, which represents a <strong>single</strong> style. You can <em>almost</em> think of this as a “class” in CSS (though again, without the cascading behavior).</p>
+<ul>
+<li><p>The <code>&lt;style&gt;</code> element is given a <code>name</code> attribute, similar to how we’d define a CSS class name. Names are normally written using <a href="http://c2.com/cgi/wiki?PascalCase">PascalCase</a>: they need to be legal Java identifiers since they will be compiled into <code>R</code>, and since they are “classes” we capitalize them!</p></li>
+<li><p>We’ll discuss the <code>parent</code> attribute in the starter code in the next section.</p></li>
+</ul>
+<p>We define <code>&lt;item&gt;</code> elements as <em>nested children</em> of the <code>&lt;style&gt;</code> element. Each <code>&lt;item&gt;</code> represents a <em>single</em> attribute we want our style to include, similar to a single <em>property</em> of a CSS rule.</p>
+<ul>
+<li><code>&lt;item&gt;</code> elements get a <code>name</code> attribute which is the the name of the property you want to include. For example: <code>name=&quot;android:layout_width&quot;</code> to specify that this item refers to the <code>layout_width</code> attribute. The <em>content</em> of the <code>&lt;item&gt;</code> tag is the value we want to assign to that attribute, e.g., <code>wrap_content</code> (not in quotes, because the content of an XML tag is already a String!)</li>
+</ul>
+<p>Finally, you can specify that you want a particular <code>View</code> (e.g., in your <code>layout</code>) to have a style by giving that View a <code>style</code> attribute, with a value that references the style that you’ve defined (using <code>@style/...</code>, since this resource has type “style”).</p>
+<ul>
+<li>Note that the <code>style</code> attribute does <strong>not</strong> use the <code>android</code> namespace!</li>
+</ul>
+<p><strong><em>Practice: Define a new style</em></strong> (e.g., <code>TextStyle</code>) that specifies the attributes <em>shared</em> by the 6 <code>TextViews</code>: the text size, the with, and the height. Additionally, have the style define the text color as <a href="http://www.washington.edu/brand/graphic-elements/primary-color-palette/">UW purple</a>. Then, refactor these TextViews so that they use the style you just defined <em>instead of</em> duplicating attributes. See how much code you’ve saved?</p>
+<ul>
+<li>After you’ve done that, go ahead and change the size of <em>all</em> the <code>TextViews</code> to be <code>22sp</code>. You should be able to make this change in exactly one place!</li>
+</ul>
+<div id="style-inheritance" class="section level3">
+<h3><span class="header-section-number">19.1.1</span> Style Inheritance</h3>
+<p>This is a good start, but we still have some duplicated attributes—in particular, the “labels” share a couple of attributes (e.g., they are all bold). Since each View can only have a single style and there is no cascading, if we wanted to create a separate <code>LabelStyle</code> style, it would end up duplicating some attributes of the <code>TextStyle</code> (size and color). Ideally we would like to not have to redefine a style if it only changes a little bit.</p>
+<p>Luckily, while styles don’t cascade, they can <a href="https://developer.android.com/guide/topics/ui/themes.html#Inheritance"><strong>inherit</strong></a> items from one another (a la Java inheritance, e.g., <code>extends</code>). We can establish this inheritance relationship by specifying the <code>parent</code> attribute for the <code>&lt;style&gt;</code>, and having it reference (with <code>@</code>) the “parent” style:</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;style</span><span class="ot"> name=</span><span class="st">&quot;ChildStyle&quot;</span><span class="ot"> parent=</span><span class="st">&quot;@style/ParentStyle&quot;</span><span class="kw">&gt;</span> ... <span class="kw">&lt;/style&gt;</span></code></pre></div>
+<p>This will cause the <code>ChildStyle</code> to include all of the <code>&lt;item&gt;</code> elements defined in the <code>parent</code> style.</p>
+<ul>
+<li>We can then “override” the inherited properties by redefining the <code>&lt;item&gt;</code> you want to change, just like when inheriting and overriding Java methods.</li>
+</ul>
+<p>When inheriting from our own <em>custom styles</em> (e.g., ones that we’ve defined within the same package), it’s also possible to use <strong>Dot Notation</strong> <em>instead of</em> the <code>parent</code> attribute. For example, naming a style <code>ParentStyle.ChildStyle</code> will define a style (<code>ChildStyle</code>) that inherits from <code>ParentStyle</code>. This would be referenced in the layout as <code>@style/ParentStyle.ChildStyle</code>. The dot notation is used to “namespace” the inherited class as if it were a “nested” class we wanted to reference.</p>
+<ul>
+<li><p>We can chain these together as much as we want: <code>MyStyle.Red.Big</code> is a style that inherits from <code>Red</code> and <code>MyStyle</code>. However, this style cannot also be referenced as <code>MyStyle.Big.Red</code> style—it’s not using a CSS class selector, but Java class inheritance!</p></li>
+<li><p>Note that often name style classes based on this namespaced inheritance, so the “child class” is named after an adjective (e.g., <code>Big</code>) that is used to describe the appearance change of the parent element. <code>Text.Big</code> would be an appropriate style naming convention.</p></li>
+</ul>
+<p><strong><em>Pratice: Define another style</em></strong> (e.g., <code>Label</code>) that <strong>inherits</strong> from your first style to encapsulate attributes shared by the labels (e.g., boldness). Refactor your <code>layout</code> so that the labels use this new style.</p>
+<p>Define <em>another</em> style (e.g., <code>Gold</code>) that <strong>inherits</strong> from your <code>Label</code>’s style and has a <a href="https://developer.android.com/reference/android/view/View.html#attr_android:background">background color</a> that is <a href="http://www.washington.edu/brand/graphic-elements/primary-color-palette/">UW Gold</a> and a text color of black. Apply this style to <em>one</em> of your labels.</p>
+<p class="alert alert-warning">
+It is best to utilize styles for elements that share <strong>semantic meaning</strong>, not just specific attributes! For example, buttons and labels that will be duplicated, headers shared across screens, etc. This will help you avoid needing to frequently change or overwrite styles in the future just because you want to make one button look different; changes to the style should reflect changes to the appearance of semantic elements. This is the same guideline that is used for determining whether you should define a CSS class or not! <a href="http://blog.danlew.net/2014/11/19/styles-on-android/">This blog post</a> has a good summary.
+</p>
 </div>
-<p>(If you already have a Google Maps API Key, you can add this package &amp; device to that key in the <a href="https://console.developers.google.com/apis/credentials">Google Developer Console</a>).</p>
-<p>After you’ve entered the key, you should be able to build and run your app, and see a displayed map!</p>
-</div>
-<div id="the-supportmapfragment" class="section level3">
-<h3><span class="header-section-number">18.1.2</span> The <code>SupportMapFragment</code></h3>
-<p>Take a moment to open up the generated <code>MapsActivity</code> and its associated layout (by default <code>layouts/activity_maps.xml</code>) and <strong>read over the initial code</strong>.</p>
-<p>The layout resource contains a single <code>&lt;fragment&gt;</code> element (like we’ve defined before), in this case referring to an instance of the <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/SupportMapFragment"><code>SupportMapFragment</code></a> class. This fragment represents the interactive map. It’s just a subclass of <code>Fragment</code> (with a few extra methods), so everything we’ve learned about Fragments applies.</p>
+<div id="built-in-styles" class="section level3">
+<h3><span class="header-section-number">19.1.2</span> Built-in Styles</h3>
+<p>Android also includes a large number of built-in platform styles that we can apply and/or inherit from. These <strong>must</strong> be inherited via the <code>parent</code> attribute (you can’t use dot notation for them). They are referenced with the format:</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;style</span><span class="ot"> name=</span><span class="st">&quot;MyStyle&quot;</span><span class="ot"> parent=</span><span class="st">&quot;@android:style/StyleName&quot;</span><span class="kw">&gt;</span>...<span class="kw">&lt;/style&gt;</span></code></pre></div>
+<p>There are a bunch of these, all of which are defined in the <a href="https://developer.android.com/reference/android/R.style.html">R.style</a>. This makes discoverability difficult, as not all of the styles are documented. To understand exactly what style effects you’re inheriting, Android recommends you browse the <a href="https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/styles.xml">source code</a> and seeing how they are defined.</p>
 <ul>
-<li>The Fragment is defined in the XML, so we don’t need to use a <code>FragmentTransaction</code> to add it in the Java code.</li>
+<li><p>Yes, this is like trying to learn Bootsrap by reading the CSS file.</p></li>
+<li><p>Author’s opinion: most of the styles are not very effective bases for inheritance; you’re often better using your own.</p></li>
 </ul>
-<p>But we do use the FragmentManager to get access to that fragment so that we can call a single method on it: <code>getMapAsync()</code>. This gets access to a <a href="https://developers.google.com/maps/documentation/android-api/map#the_map_object"><code>GoogleMap</code></a> object, which does all the work of downloading <a href="https://www.mapbox.com/help/how-web-maps-work/">map tiles</a>, handling pans and zooms, and drawing markers and shapes.</p>
-<ul>
-<li>The <code>getMapAsync()</code> method loads this object <em>asynchronously</em> (like we’ve with the <code>GoogleApiClient</code>), and will notify a listener when the object is available. Because the <code>MapsActivity</code> implements the <code>OnMapReadyCallback</code> interface, it <em>is</em> a listener and so its <code>onMapReady()</code> callback will be called and passed the object for us to handle.</li>
-</ul>
-<p>Once the the object is available via the callback, we can start calling methods on it: e.g., to show a marker at a particular latitude/longitude (<code>LatLng</code>), and to position the map’s <a href="https://developers.google.com/maps/documentation/android-api/views#the_camera_position">“camera”</a> to focus on that spot.</p>
+<p><strong><em>Practice: Define a new style</em></strong> for the <code>Button</code> at the bottom of the screen that inherits from the built-in <code>MediaButton</code> style (but give it a text size of <code>22sp</code>). What does the inheritance do to the appearance?</p>
 </div>
 </div>
-<div id="specifying-the-user-interface" class="section level2">
-<h2><span class="header-section-number">18.2</span> Specifying the User Interface</h2>
-<p>The Java code is able to position the map, but if we want to specify a <a href="https://developers.google.com/maps/documentation/android-api/map#configure_initial_state">“default” position</a>, you should instead do that work in the Fragment’s definition in the XML resource file.</p>
-<p><strong>Check out the list of <a href="https://developers.google.com/maps/documentation/android-api/map#using_xml_attributes">available XML attributes</a></strong> for defining the user interface of your map. Customize the map so that:</p>
-<ol style="list-style-type: decimal">
-<li><p>It is by default centered on <a href="http://www.lat-long.com/Latitude-Longitude-2461252-Washington-Mary_Gates_Hall.html">Mary Gates Hall</a>. (You will need to delete the positioning Java code so that doesn’t override your XML).</p></li>
-<li><p>It is <a href="https://developers.google.com/maps/documentation/android-api/views#zoom">zoomed in</a> so that we can see the see the whole fountain on the map</p></li>
-<li><p>Make the map shows the “zoom control buttons” (so that you can zoom in using the emulator!)</p></li>
-<li><p>Make the map show <em>both</em> satellite imagery and roads/buildings.</p></li>
-</ol>
+<div id="themes" class="section level2">
+<h2><span class="header-section-number">19.2</span> Themes</h2>
+<p>Unlike CSS, Android styling is <em>NOT</em> inherited by child elements: that is, if you apply a style to a <code>ViewGroup</code> (a layout), that style will not be applied to all the child components of that <code>ViewGroup</code>. Thus you can’t “style” a layout and have the styling rule apply throughout the layout.</p>
+<p>The option that is available is to apply a that style as a <a href="https://developer.android.com/guide/topics/ui/themes.html#ApplyATheme"><strong>Theme</strong></a>. Themes are styles that are applied to <strong><em>every</em></strong> <code>View</code> in a <code>Context</code> (an <em>Activity</em> or the whole <em>Application</em>). You can’t get any finer granularity of style sharing (without moving to per-View <em>Styles</em>). Theme styles will apply to <em>every</em> View in the context, though we can overwrite the styling for a particular View as normal.</p>
+<p>Themes <em>are</em> styles, and so are defined the exact same way (as <code>&lt;style&gt;</code> elements inside a resource XML file). You can define them in either <code>styles.xml</code>, <code>theme.xml</code>, or any other <code>values</code> file—resource filenames are arbitrary, and their content will still be compiled into <code>R</code> no matter which file the elements are defined in.</p>
+<p>Themes are applied to an Activity or Application by specifying an <code>android:theme</code> attribute in the <code>Manifest</code> (where the Activity/Application is defined). If you look at the starter project’s <code>Manifest</code> created by Android Studio, you’ll see that it already has a theme (<code>AppTheme</code>). In fact, this is the <code>&lt;style&gt;</code> that was provided inside <code>styles.xml</code>!</p>
+<p><strong><em>Practice: Experiment with removing the theme attribute from the application.</em></strong> How does your app’s appearance change? <em>NOTE</em>: you will need to change <code>MainActivity</code> to subclass <code>Activity</code>, not <code>AppCompatActivity</code>, in order to fully adjust the theme.</p>
+<ul>
+<li>You might also try commenting out the stylings you applied to the individual <code>TextViews</code> to <em>really</em> see what happens.</li>
+</ul>
+<div id="material-themes" class="section level3">
+<h3><span class="header-section-number">19.2.1</span> Material Themes</h3>
+<p>Along with built-in styles, Android provides a number of platform-specific themes. And again, the somewhat unhelpful recommendation is to understand these by browsing the <a href="https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/themes.xml">source code</a>, or the list in <a href="http://developer.android.com/reference/android/R.style.html">R.style</a> (scroll down to constants that start with <code>Theme</code>).</p>
+<p>One of the most useful set of Android-provided themes are the <a href="https://developer.android.com/training/material/theme.html"><strong>Material Themes</strong></a>. These are themes that support Google’s <a href="https://material.io/guidelines/material-design/introduction.html">Material Design</a>, a visual design language Google uses (or aims to use) across its products, including Android. Material themes were introduced in Lollipop (API 21) and so are only available on devices running API 21+ (though there are <a href="https://developer.android.com/training/material/compatibility.html#Theme">compatibility options</a>).</p>
+<p>There are two main Material themes:</p>
+<ul>
+<li><code>@android:style/Theme.Material</code>: a Dark version of the theme</li>
+<li><code>@android:style/Theme.Material.Light</code>: a Light version of the theme</li>
+</ul>
+<p>And many variants:</p>
+<ul>
+<li><code>@android:style/Theme.Material.Light.DarkActionBar</code>: a Light version with a Dark action bar (Dark backgroud, Light contents)</li>
+<li><code>@android:style/Theme.Material.Light.LightStatusBar</code>: a Light version with a Light action bar (Light background, Dark contents)</li>
+<li><code>@android:style/Theme.Material.Light.NoActionBar</code>: a Light version with no action bar.</li>
+<li>… etc. See <a href="http://developer.android.com/reference/android/R.style.html">R.style</a> for more options (do a ctrl-f “find” for <code>Material</code>)</li>
+</ul>
+<p><strong><em>Practice: Experiment with applying different material themes to your application</em></strong> How does your app’s appearance change? Give your application a Dark Material theme!</p>
 </div>
-<div id="markers-and-drawings" class="section level2">
-<h2><span class="header-section-number">18.3</span> Markers and Drawings</h2>
-<p>Showing a map is great, but what we really want to do is customize what it shows: that is, we want to draw on it! There are a couple of things we can draw, one of the most common of which is <a href="https://developers.google.com/maps/documentation/android-api/marker">Markers</a> that indicate a single location on the map.</p>
-<p>You can create a Marker by instantiating a new <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/model/MarkerOptions"><code>MarkerOptions</code></a> object and passing it into the <code>GoogleMap</code> object’s <code>addMarker()</code> method.</p>
+<div id="theme-attributes" class="section level3">
+<h3><span class="header-section-number">19.2.2</span> Theme Attributes</h3>
+<p>One of the big advantages of Themes is that they can be used to define <strong>theme attributes</strong> that can be <a href="https://developer.android.com/guide/topics/resources/accessing-resources.html#ReferencesToThemeAttributes">referenced</a> from inside individual, per-View Styles. This allows the Theme to effective “skin” the View. For example, a Theme could define a “color scheme” as a set of attributes; these attributes can then be referenced by the Style as e.g., “the primary color <em>of the current theme</em>”.</p>
+<p>Theme-level attributes are referenced in the XML using the <strong><code>?</code></strong> symbol (in place of the <code>@</code> symbol). For example: <code>?android:textColorPrimary</code> will refer to the value of the <code>&lt;item name=&quot;textColorPrimary&quot;&gt;</code> element inside the Theme.</p>
+<p>Indeed, one of the advantages of the Material Themes is that they are implemented to utilize a small set of color theme attributes, making it incredibly easy to specify a color scheme for your app. See <a href="https://developer.android.com/training/material/theme.html#ColorPalette">Customize the Color Palette</a> for a diagram of what theme attributes color what parts of the screen.</p>
 <ul>
-<li>See <a href="https://developers.google.com/maps/documentation/android-api/marker#customize_a_marker">the documentation</a> for ways to customize these markers. The most common options are setting the <code>position</code> (required), the <code>title</code> (text that appears when the user clicks the marker), and <code>snippet</code> (additional text).</li>
+<li>Note it is possible to apply a Theme to an individual <code>View</code> or <code>ViewGroup</code>, causing the theme attributes (and <em>ONLY</em> the theme attributes!) to be “inherited” by any child elements. This allows you to specify color palettes for specific parts of your layout.</li>
 </ul>
-<p><strong>Create a marker</strong> centered in the center of the fountain. The marker should be <a href="http://www.washington.edu/brand/graphic-elements/primary-color-palette/">purple or gold</a> in <a href="https://developers.google.com/maps/documentation/android-api/marker#customize_the_marker_color">color</a>, and clicking on it should tell the user something about the ducks who dwell there!</p>
+<p><strong><em>Practice: Redefine the colors in your custom Styles</em></strong> (from the first practice steps) so that they reference the theme attribute colors instead of purple and gold. What happens now when you change the application’s Material Theme between light and dark?</p>
 <ul>
-<li>You can show customized information (including pictures, etc) when markers are clicked using <a href="https://developers.google.com/maps/documentation/android-api/infowindows">Info Windows</a>.</li>
+<li>Can you have the logo image reference those color theme attributes as well? Hint: use the <code>tint</code> attribute.</li>
 </ul>
-<div id="drawing-shapes" class="section level3">
-<h3><span class="header-section-number">18.3.1</span> Drawing Shapes</h3>
-<p>You can also draw free-form <a href="https://developers.google.com/maps/documentation/android-api/shapes">shapes</a> on the map, anchored to particular locations. These include lines, circles, and generic polygons.</p>
-<p>One of the best options for drawing is the <a href="https://developers.google.com/maps/documentation/android-api/shapes#polylines">Polyline</a>, which is a series of connected line segments (like a “path” in <a href="https://www.w3.org/TR/SVG/paths.html">SVG</a>).</p>
+<p><strong><em>Practice: Modify the provided <code>AppTheme</code> style (in <code>styles.xml</code>) with the following changes:</em></strong></p>
 <ul>
-<li><p>In order to create a Polyline, you <em>actually</em> instantiate a <a href="https://developers.google.com/android/reference/com/google/android/gms/maps/model/PolylineOptions"><code>PolylineOptions</code></a> object. You can <code>add()</code> points (<code>LatLng</code> objects) to this object, extending the line from one point to the next. This <code>PolylineOptions</code> object is then passed to the <code>GoogleMap</code> object’s <code>addPolyline()</code> method.</p></li>
-<li><p>You can also specify <a href="https://developers.google.com/maps/documentation/android-api/shapes#customizing_appearances">other visual properties</a> such as the <code>color</code> and the <code>width</code> of the Polyline. Note that the width is measure in <em>screen pixels</em>—it will be the same no matter what zoom level you are at! (If you wanted it to change dynamically, you’d need to do that work on your own).</p></li>
+<li>Have it <strong>inherit</strong> from a Material Theme (your choice of which)</li>
+<li>Have it define theme attribute colors using the <a href="http://www.washington.edu/brand/graphic-elements/primary-color-palette/">UW colors</a> (purple and gold). Use these theme attribute colors to “Huskify” your app (including the colors in your custom Styles)</li>
 </ul>
-<p><strong>Using a Polyline</strong>, draw a giant “W” in either purple or gold centered on the fountain. Bonus if want to make it look like the UW logo!</p>
-<ul>
-<li>Or better yet: can you use a combination of Polylines, Circles, and Polygons to draw an approximation of the iSchool logo?</li>
-</ul>
+<p>Finally, set the theme of your app back to <code>AppTheme</code>—and you should now have a UW flavored app!</p>
 
 </div>
 </div>
+</div>
+
+
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="bluetooth.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="styles-themes.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="maps.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="java-review.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -450,7 +500,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/maps.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/styles.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

@@ -1,0 +1,133 @@
+# Styles & Themes
+In this chapter you will learn to use Android [**Styles & Themes**](https://developer.android.com/guide/topics/ui/themes.html) to easily modify and _abstract_ the appearance of an app's user interfaces&mdash;that is, the XML resource attributes that define what your `Views` look like.
+
+This tutorial will walk you through creating and using styles to modify views, though you should also reference the [official documentation](https://developer.android.com/guide/topics/ui/themes.html) for more details and examples.
+
+<p class="alert alert-info">The code for this tutorial can be found at <https://github.com/info448-s17/lab-styles>.</p>
+
+You will be working almost exclusively with the **XML resources** (e.g., `res/layout/activity_main.xml`) in the provided code, so make sure to look those over before you begin. The main layout describes a very simple screen showing a pile of `TextViews` organized in a `RelativeLayout`.
+
+## Defining Styles
+If you look at the `TextViews`, you'll see that they share a lot of the same attributes: text sizing, width and height, boldness, etc. If you decided that all of the text should be bigger (e.g., for readability), then you'd need to change 6 different attributes&mdash;which is a lot of redundant work.
+
+Enter [**Styles**](http://developer.android.com/guide/topics/ui/themes.html#DefiningStyles). Styles ___encapsulate a collection of XML properties___, allowing you to define a set of properties once and then use a single attribute to apply all of those properties to a view. This provides _almost_ the same functionality as a [CSS](https://en.wikipedia.org/wiki/Cascading_Style_Sheets) rule describing a class decalaration, but without the "cascading" part.
+
+Styles are themselves defined as an [XML resource](https://developer.android.com/guide/topics/resources/style-resource.html)&mdsah;specifically a `<style>` element inside the **`res/values/styles.xml`** file.
+
+- This XML file was created for us when Android Studio created the project. Open the file, and you can see that it even has some initial content in it!
+
+- Style resource files, like String resource files, use `<resource>` as a top-level element, declaring that this XML file contains (generic-ish) resources to use.
+
+Styles are declared with a `<style>` tag, which represents a **single** style. You can _almost_ think of this as a "class" in CSS (though again, without the cascading behavior).
+
+- The `<style>` element is given a `name` attribute, similar to how we'd define a CSS class name. Names are normally written using [PascalCase](http://c2.com/cgi/wiki?PascalCase): they need to be legal Java identifiers since they will be compiled into `R`, and since they are "classes" we capitalize them!
+
+- We'll discuss the `parent` attribute in the starter code in the next section.
+
+We define `<item>` elements as _nested children_ of the `<style>` element. Each `<item>` represents a _single_ attribute we want our style to include, similar to a single _property_ of a CSS rule.
+
+- `<item>` elements get a `name` attribute which is the the name of the property you want to include. For example: `name="android:layout_width"` to specify that this item refers to the `layout_width` attribute. The _content_ of the `<item>` tag is the value we want to assign to that attribute, e.g., `wrap_content` (not in quotes, because the content of an XML tag is already a String!)
+
+Finally, you can specify that you want a particular `View` (e.g., in your `layout`) to have a style by giving that View a `style` attribute, with a value that references the style that you've defined (using `@style/...`, since this resource has type "style").
+
+- Note that the `style` attribute does **not** use the `android` namespace!
+
+___Practice: Define a new style___ (e.g., `TextStyle`) that specifies the attributes _shared_ by the 6 `TextViews`: the text size, the with, and the height. Additionally, have the style define the text color as [UW purple](http://www.washington.edu/brand/graphic-elements/primary-color-palette/). Then, refactor these TextViews so that they use the style you just defined _instead of_ duplicating attributes. See how much code you've saved?
+
+- After you've done that, go ahead and change the size of _all_ the `TextViews` to be `22sp`. You should be able to make this change in exactly one place!
+
+
+### Style Inheritance
+This is a good start, but we still have some duplicated attributes&mdash;in particular, the "labels" share a couple of attributes (e.g., they are all bold). Since each View can only have a single style and there is no cascading, if we wanted to create a separate `LabelStyle` style, it would end up duplicating some attributes of the `TextStyle` (size and color). Ideally we would like to not have to redefine a style if it only changes a little bit.
+
+Luckily, while styles don't cascade, they can [**inherit**](https://developer.android.com/guide/topics/ui/themes.html#Inheritance) items from one another (a la Java inheritance, e.g., `extends`). We can establish this inheritance relationship by specifying the `parent` attribute for the `<style>`, and having it reference (with `@`) the "parent" style:
+
+```xml
+<style name="ChildStyle" parent="@style/ParentStyle"> ... </style>
+```
+
+This will cause the `ChildStyle` to include all of the `<item>` elements defined in the `parent` style.
+
+- We can then "override" the inherited properties by redefining the `<item>` you want to change, just like when inheriting and overriding Java methods.
+
+When inheriting from our own _custom styles_ (e.g., ones that we've defined within the same package), it's also possible to use **Dot Notation** _instead of_ the `parent` attribute. For example, naming a style `ParentStyle.ChildStyle` will define a style (`ChildStyle`) that inherits from `ParentStyle`. This would be referenced in the layout as `@style/ParentStyle.ChildStyle`. The dot notation is used to "namespace" the inherited class as if it were a "nested" class we wanted to reference.
+
+- We can chain these together as much as we want: `MyStyle.Red.Big` is a style that inherits from `Red` and `MyStyle`. However, this style cannot also be referenced as `MyStyle.Big.Red` style&mdash;it's not using a CSS class selector, but Java class inheritance!
+
+- Note that often name style classes based on this namespaced inheritance, so the "child class" is named after an adjective (e.g., `Big`) that is used to describe the appearance change of the parent element. `Text.Big` would be an appropriate style naming convention.
+
+___Pratice: Define another style___ (e.g., `Label`) that **inherits** from your first style to encapsulate attributes shared by the labels (e.g., boldness). Refactor your `layout` so that the labels use this new style.
+
+Define _another_ style (e.g., `Gold`) that **inherits** from your `Label`'s style and has a [background color](https://developer.android.com/reference/android/view/View.html#attr_android:background) that is [UW Gold](http://www.washington.edu/brand/graphic-elements/primary-color-palette/) and a text color of black. Apply this style to _one_ of your labels.
+
+<p class="alert alert-warning">It is best to utilize styles for elements that share **semantic meaning**, not just specific attributes! For example, buttons and labels that will be duplicated, headers shared across screens, etc. This will help you avoid needing to frequently change or overwrite styles in the future just because you want to make one button look different; changes to the style should reflect changes to the appearance of semantic elements. This is the same guideline that is used for determining whether you should define a CSS class or not! [This blog post](http://blog.danlew.net/2014/11/19/styles-on-android/) has a good summary.</p>
+
+
+### Built-in Styles
+Android also includes a large number of built-in platform styles that we can apply and/or inherit from. These **must** be inherited via the `parent` attribute (you can't use dot notation for them). They are referenced with the format:
+
+```xml
+<style name="MyStyle" parent="@android:style/StyleName">...</style>
+```
+
+There are a bunch of these, all of which are defined in the [R.style](https://developer.android.com/reference/android/R.style.html). This makes discoverability difficult, as not all of the styles are documented. To understand exactly what style effects you're inheriting, Android recommends you browse the [source code](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/styles.xml) and seeing how they are defined.
+
+- Yes, this is like trying to learn Bootsrap by reading the CSS file.
+
+- Author's opinion: most of the styles are not very effective bases for inheritance; you're often better using your own.
+
+___Practice: Define a new style___ for the `Button` at the bottom of the screen that inherits from the built-in `MediaButton` style (but give it a text size of `22sp`). What does the inheritance do to the appearance?
+
+
+## Themes
+Unlike CSS, Android styling is _NOT_ inherited by child elements: that is, if you apply a style to a `ViewGroup` (a layout), that style will not be applied to all the child components of that `ViewGroup`. Thus you can't "style" a layout and have the styling rule apply throughout the layout.
+
+The option that is available is to apply a that style as a [**Theme**](https://developer.android.com/guide/topics/ui/themes.html#ApplyATheme). Themes are styles that are applied to ___every___ `View` in a `Context` (an _Activity_ or the whole _Application_). You can't get any finer granularity of style sharing (without moving to per-View _Styles_). Theme styles will apply to _every_ View in the context, though we can overwrite the styling for a particular View as normal.
+
+Themes _are_ styles, and so are defined the exact same way (as `<style>` elements inside a resource XML file). You can define them in either `styles.xml`, `theme.xml`, or any other `values` file&mdash;resource filenames are arbitrary, and their content will still be compiled into `R` no matter which file the elements are defined in.
+
+Themes are applied to an Activity or Application by specifying an `android:theme` attribute in the `Manifest` (where the Activity/Application is defined). If you look at the starter project's `Manifest` created by Android Studio, you'll see that it already has a theme (`AppTheme`). In fact, this is the `<style>` that was provided inside `styles.xml`!
+
+___Practice: Experiment with removing the theme attribute from the application.___ How does your app's appearance change? _NOTE_: you will need to change `MainActivity` to subclass `Activity`, not `AppCompatActivity`, in order to fully adjust the theme.
+
+- You might also try commenting out the stylings you applied to the individual `TextViews` to _really_ see what happens.
+
+
+### Material Themes
+Along with built-in styles, Android provides a number of platform-specific themes. And again, the somewhat unhelpful recommendation is to understand these by browsing the [source code](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/themes.xml), or the list in [R.style](http://developer.android.com/reference/android/R.style.html) (scroll down to constants that start with `Theme`).
+
+One of the most useful set of Android-provided themes are the [**Material Themes**](https://developer.android.com/training/material/theme.html). These are themes that support Google's [Material Design](https://material.io/guidelines/material-design/introduction.html), a visual design language Google uses (or aims to use) across its products, including Android. Material themes were introduced in Lollipop (API 21) and so are only available on devices running API 21+ (though there are [compatibility options](https://developer.android.com/training/material/compatibility.html#Theme)).
+
+There are two main Material themes:
+
+- `@android:style/Theme.Material`: a Dark version of the theme
+- `@android:style/Theme.Material.Light`: a Light version of the theme
+
+And many variants:
+
+- `@android:style/Theme.Material.Light.DarkActionBar`: a Light version with a Dark action bar (Dark backgroud, Light contents)
+- `@android:style/Theme.Material.Light.LightStatusBar`: a Light version with a Light action bar (Light background, Dark contents)
+- `@android:style/Theme.Material.Light.NoActionBar`: a Light version with no action bar.
+- ... etc. See [R.style](http://developer.android.com/reference/android/R.style.html) for more options (do a ctrl-f "find" for `Material`)
+
+___Practice: Experiment with applying different material themes to your application___ How does your app's appearance change? Give your application a Dark Material theme!
+
+### Theme Attributes
+One of the big advantages of Themes is that they can be used to define **theme attributes** that can be [referenced](https://developer.android.com/guide/topics/resources/accessing-resources.html#ReferencesToThemeAttributes) from inside individual, per-View Styles. This allows the Theme to effective "skin" the View. For example, a Theme could define a "color scheme" as a set of attributes; these attributes can then be referenced by the Style as e.g., "the primary color _of the current theme_".
+
+Theme-level attributes are referenced in the XML using the **`?`** symbol (in place of the `@` symbol). For example: `?android:textColorPrimary` will refer to the value of the `<item name="textColorPrimary">` element inside the Theme.
+
+Indeed, one of the advantages of the Material Themes is that they are implemented to utilize a small set of color theme attributes, making it incredibly easy to specify a color scheme for your app. See [Customize the Color Palette](https://developer.android.com/training/material/theme.html#ColorPalette) for a diagram of what theme attributes color what parts of the screen.
+
+- Note it is possible to apply a Theme to an individual `View` or `ViewGroup`, causing the theme attributes (and _ONLY_ the theme attributes!) to be "inherited" by any child elements. This allows you to specify color palettes for specific parts of your layout.
+
+___Practice: Redefine the colors in your custom Styles___ (from the first practice steps) so that they reference the theme attribute colors instead of purple and gold. What happens now when you change the application's Material Theme between light and dark?
+
+- Can you have the logo image reference those color theme attributes as well? Hint: use the `tint` attribute.
+
+___Practice: Modify the provided `AppTheme` style (in `styles.xml`) with the following changes:___
+
+- Have it **inherit** from a Material Theme (your choice of which)
+- Have it define theme attribute colors using the [UW colors](http://www.washington.edu/brand/graphic-elements/primary-color-palette/) (purple and gold). Use these theme attribute colors to "Huskify" your app (including the colors in your custom Styles)
+
+Finally, set the theme of your app back to `AppTheme`&mdash;and you should now have a UW flavored app!
