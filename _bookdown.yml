@@ -19,9 +19,9 @@ rmd_files:
   - notifications-settings.Rmd
   - files-permissions.Rmd
   - location.Rmd
-  #- material.Rmd
   - sensors.Rmd
   - services.Rmd
+  #- material.Rmd
 
   - publishing.Rmd
 
