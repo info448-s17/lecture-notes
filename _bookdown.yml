@@ -21,7 +21,8 @@ rmd_files:
   - location.Rmd
   - sensors.Rmd
   - services.Rmd
-  #- material.Rmd
+  - material.Rmd
+  - animation.Rmd
 
   - publishing.Rmd
 
@@ -31,6 +32,7 @@ rmd_files:
   - bluetooth.Rmd
   - maps.Rmd
   - styles.Rmd
+  - multitouch.Rmd
 
   - appendix-java.Rmd
   - java-review.Rmd

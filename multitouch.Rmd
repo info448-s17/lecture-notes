@@ -1,0 +1,86 @@
+# Multi-Touch
+In this short chapter, you will practice working with touch interaction by implementing support for [**multi-touch gestures**](https://developer.android.com/training/gestures/multi.html), or the ability to detect two or more different "contacts" (fingers) independently. Multi-touch is actually a pretty awesome interaction mode; it's very ["sci-fi"](https://www.youtube.com/watch?v=NwVBzx0LMNQ).
+
+Specifically, you will be adding support to the drawn animation demo so that the drawn graphics tracks the location of all 5 of your fingers. This chapter will thus build on the lecture code found at **<https://github.com/info448-s17/lecture15-animation>**.
+
+If you haven't already, you should **Fork and Clone** this repo in order to complete the tutorial. Note that you should complete this tutorial on a separate **`multitouch`** branch. You can create this branch either off of the `completed` branch (containing the completed lecture code), or from the `master` branch of code if you were able to complete the work described [in lecture 15](#animation):
+
+```bash
+git checkout completed
+git checkout -b multitouch-work
+```
+
+<!-- You will need to `commit` and `push` your completed work back to your forked repo by the deadline, and submit a link to your forked repo to this Canvas assignment. Note that you are **not** required to create a separate pull request, though you should work on the separate `lab-work` branch! -->
+
+<p class="alert alert-warning">The emulator doesn't support multi-touch, so you will need to run this project on a physical device.</p>
+
+
+## Identifying Fingers
+Android lets you react to multiple touches by responding to `ACTION_POINTER_DOWN` events, which occur when a second "pointer" (finger) joins the gesture (_after_ `ACTION_DOWN`).
+
+- The first finger starts the gesture with an `ACTION_DOWN` event. then subsequent fingers produce `ACTION_POINTER_DOWN` events.
+
+- Similarly, there are `ACTION_POINTER_UP` events for removing fingers, until the last finger which causes the `ACTION_UP` event.
+
+___Practice: add further cases to the `onTouchEvent()` callback and log out when subsequent fingers are placed and lifted.___
+
+Here the tricky part: each finger that is currently "down" can cause events _independently_. That is, if we move **a** finger, then an `ACTION_MOVE` event will occur. Similarly, if we remove **a** finger, then an `ACTION_POINTER_UP` event will occur.
+So the question is, how do we know which finger caused the event?
+
+Underneath the hood, pointers are stored in a _list_ (think: an `ArrayList`), so each has a **pointer index** (a number representing their index in that list). But these indices can change as you interact with the device. For example, lifting up a finger will could cause that pointer to be removed from the list, thus moving all of the other pointers up an index. IN fact, the index is allowed to change _between each event_&mdash;while they often stay in order, there is no assurance that they will. The exact behavior of these indices is not specified or enforced by the framework, so we need to treat those values as unstable and cannot use them to "track" particular fingers.
+
+However, each pointer that comes down ___is___ assigned a consistent **pointer id** number that we can refer to it by. This id will be associated with that finger for the length of time that contact is being made. In general the first finger down will be id `0`, and no matter what happens to the list order that pointer's id will stay the same.
+
+___Practice: track pointer ids using the following procedure:___
+
+1. When a Touch event occurs, determine the **pointer index** which caused the event. Do this by calling the `MotionEventCompat.getActionIndex(event)` method. Note that this only actually applies to `POINTER_DOWN` or `POINTER_UP` events, otherwise it will just return `0` (for the "main finger" of the event).
+
+2. Get the unique **pointer id** for whatever finger caused the event. Do this by calling the `MotionEventCompat.getPointerId(event, pointerIndex)` method. This will give you the unique id associated with the event's finger.
+
+<p class="alert alert-info">The `MotionEventCompat` class is just a wrapper around `MotionEvent` methods, so that the correct version of `MotionEvent` is used. We could alternatively just call `event.getActionIndex()`.</p>
+
+
+## Drawing Touches
+Once you know _which_ pointer has gone up and down, you can respond to it by modifying the drawing displayed by the App. Add the falling functionality to the custom drawing View. Modify either the `DrawingView` or `DrawingSurfaceView` (your choice of which to use):
+
+- Add an instance variable `touches` that is a `HashMap` mapping _pointer ids_ (`Integers`) to `Ball` objects. This will track a single "ball" for each touch.
+
+- Add a method `addTouch()` that takes in a _pointer id_ as well as the `x,y` coordinates of the touch point. This method should add a new `Ball` (at the given coordinates) to the `touches` map (with the given _pointer id_).
+
+	- Because this method will need to work across threads in the `DrawingSurfaceView`, you should make sure the method is [`synchronized`](https://docs.oracle.com/javase/tutorial/essential/concurrency/syncmeth.html) (specifying that keyword in the method signature).
+
+	- ___Call this method on the drawing View from `MainActivity` when a new finger is put down&mdash;including the first finger!___ This may be from two different types of events.
+
+		- Pass the **pointer index** as a parameter to the `getX()` and `getY()` methods to determine the coordinates of that particular pointer!
+
+- Add a method `removeTouch()` that takes in a _pointer id_, and removes the `Ball` that corresponds to that touch.
+
+	- This method should also be `synchronized`.
+
+	- ___Call this method on the drawing View from `MainActivity` when a finger is lifted&mdash;including the last finger!___
+
+- Modify the `render()` method (or the `onDraw()` method) so that the View draws _each_ of the `Ball` objects in the `HashMap` at their stored location. You can use gold paint for this. Recall that you can get an iterable sequence of the values for a `HashMap` using the `.values()` method.
+
+This should cause your app to show a small ball underneath each finger that goes down, with the balls disappearing when a finger is lifted. _Make sure each ball is big enough to see!_
+
+## Moving Fingers
+Now we just need to handle finger movements. With a `MOVE` action, the event doesn't track _which_ finger has moved&mdash;instead, the **pointer index** of that action is always going to be `0` (the main pointer), even if a different finger moved!
+
+However, the event does include informaion about _how many_ pointers are involved in it (that is: how many pointers are currently down): we can get that number with the `MotionEvent.getPointerCount()` method (or an equivalent `MotionEventCompat` method). We don't know which _pointer index_ each finger has, but we do know that they will be **consecutive** indices (because they are stored in a list). Moreover, as above _each_ pointer will have its own `x` and `y` coordinates, representing the current position of that pointer&mdash;this may or may not have "moved" from the previous event.
+
+Thus we can just **loop** through all of the _pointer indices_ and get the **pointer id** for each one. We can then specify that we want the _corresponding Ball_ to update its position to match the "current" pointer position. Again, most of the Balls will not have moved, but we know at least one of them did and so we will just update everything to make sure it works!
+
+- Add a method `moveTouch()` to the drawing View that takes in a _pointer id_ (e.g., Ball id), and the "latest" `x,y` coordinates for that Ball. Update the appropriate Ball's position to reflect these latest coordinates (use `.get()` to access a `HashMap` value by its key).
+
+	- This method should again be `synchronized`.
+
+- In `MainActivity`, when a `MOVE` event occurs, loop through all of the _pointer indices_ in the event. Get the _pointer id_ and `x,y` coordinates of each, and use those to call the `moveTouch()` method on the drawing View. You will be "moving" all of the balls, even if most are just moving to the same place they were.
+
+And with that, you should have multi-touch tracking! Try adding and removing fingers in unique orders, moving them around, and make sure that the Balls follow the contacts.
+
+- Note that tracking individual ids in this way is more commonly used to make sure you're _ignoring_ extra multiple touches. See [the docs](https://developer.android.com/training/gestures/multi.html) or [this developer blog post](https://android-developers.blogspot.com/2010/06/making-sense-of-multitouch.html) for details.
+
+## Other Multi-Touch Gestures
+We can respond to common multi-touch gestures (like "pinch to scale") by using _another_ kind of GestureDetector called a [`ScaleGestureDetector`](https://developer.android.com/training/gestures/scale.html#scale). As before, we subclass the simple version (`ScaleGestureDetector.SimpleOnScaleGestureListener`), and fill in the `onScale()` method. You can get the "scale factor" from the gesture with the `.getScaleFactor()` method. As a further bonus exercise, you might try to use the gesture to scale the size of a single ball.
+
+<!-- Remember to `commit` and `push` your changes to GitHub and submit this lab once completed. -->

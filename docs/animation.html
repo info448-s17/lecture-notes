@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="multi-touch.html">
-<link rel="next" href="java-swing.html">
+<link rel="prev" href="material-design.html">
+<link rel="next" href="publishing.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -365,212 +365,255 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="java-review" class="section level1">
-<h1><span class="header-section-number">A</span> Java Review</h1>
-<p>Android applications are written primarily in the Java Language. This appendix contains a review of some Java fundamentals needed when developing for Android, presented as a set of practice exercises.</p>
+<div id="animation" class="section level1">
+<h1><span class="header-section-number">Lecture 15</span> Animation and Graphics</h1>
+<p>This lecture discusses some different ways to add “visual motion” (graphical animation) to Android applications. It covers <a href="https://developer.android.com/guide/topics/graphics/2d-graphics.html">2D drawing</a> with custom Views, <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html">Property Animations</a> (also used in Material effects), and how to handle <a href="https://developer.android.com/training/gestures/index.html">touch-based gestures</a>.</p>
 <p class="alert alert-info">
-The code for these exercises can be found at <a href="https://github.com/info448-s17/lab-java-review" class="uri">https://github.com/info448-s17/lab-java-review</a>.
+This lecture references code found at <a href="https://github.com/info448-s17/lecture15-animation" class="uri">https://github.com/info448-s17/lecture15-animation</a>.
 </p>
-<div id="building-apps-with-gradle" class="section level2">
-<h2><span class="header-section-number">A.1</span> Building Apps with Gradle</h2>
-<p>Consider the included <code>Dog</code> class found in the <code>src/main/java/edu/info448/review/</code> folder. This is a very basic class representing a Dog. You can instantiate and call methods on this class by building and running the <code>Tester</code> class found in the same folder. - You can just use any text editor, like <em>VS Code</em>, <em>Atom</em>, or <em>Sublime Text</em> to view and edit these files.</p>
-<p>You’ve probably run Java programs using an IDE, but let’s consider what is involved in building this app “by hand”, or just using the JDK tools. There are two main steps to running a Java program:</p>
+<div id="drawing-graphics" class="section level2">
+<h2><span class="header-section-number">15.1</span> Drawing Graphics</h2>
+<!-- //graphics, mostly looking at what is provided, maybe a _minor_ demo -->
+<p>Android provides a <a href="https://developer.android.com/guide/topics/graphics/2d-graphics.html">2D Graphics API</a> similar in both spirit and usage to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">HTML5 Canvas API</a>: it provides an <em>interface</em> by which the developer can <em>programmatically</em> generate 2D, raster-based images. This API can be used for drawing graphs, showing manipulated images, and even performing animations!</p>
+<p>As in HTML5, in Android this API is available via the <a href="https://developer.android.com/reference/android/graphics/Canvas.html"><code>Canvas</code></a><a href="#fn44" class="footnoteRef" id="fnref44"><sup>44</sup></a> class. Similar to the HTML5 <code>&lt;canvas&gt;</code> element or the Java SE <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/Graphics2D.html"><code>Graphics2D</code></a> class, the Android <code>Canvas</code> provides a graphical “context” upon which the developer can “draw” rectangles, circles, and even images (<code>Bitmaps</code>) to be shown on the screen.</p>
+<div id="custom-views" class="section level3">
+<h3><span class="header-section-number">15.1.1</span> Custom Views</h3>
+<p>In order to draw pictures, we need to have a View to draw on (which will provide the <code>Canvas</code> context). The easiest way to get this View is to create it ourselves: define a <strong>custom View</strong> which we can specify as having a “drawn” appearance. We can make our own special <code>View</code> by subclassing it (remember: <code>Buttons</code> and <code>EditTexts</code> are just subclasses of <code>View</code>!), and then filling in a callback function (<code>onDraw()</code>) that specifies how that <code>View</code> is rendered on the screen.</p>
+<p class="alert alert-info">
+The word <em>render</em> in this case means to “bring into being”, meaning to generate a graphical image and putting it on the screen.
+</p>
+<p>Customizing a <code>View</code> isn’t too hard, but to save time a complete example is provided in the lecture code in the form of the <code>DrawingView</code> class. Notes about this classes implementation are below:</p>
+<ul>
+<li><p>The class <code>extends View</code> to subclass the base <code>View</code> class.</p></li>
+<li><p><code>View</code> has a number of different of constructors. We override them all, since each one is used by a different piece of the Android system (and thus we need to provide custom implementations for each). However, we’ll have each call the “last” one in order to actually do any setup.</p>
+<ul>
+<li>In the constructor we set up a <a href="http://developer.android.com/reference/android/graphics/Paint.html"><code>Paint</code></a>, which represents <em>how</em> we want to draw: color, stroke width, font-size, anti-aliasing options, etc. We’ll mostly use <code>Paint</code> objects for color.</li>
+</ul></li>
+<li><p>We override the <strong><code>onSizeChanged()</code></strong> callback, will get executed when the <code>View</code> changes size. This occurs on inflation (which happens as part of an Activity’s <code>onCreate</code>, meaning the callback will be called on rotation). This callback can act a little bit like a Fragment’s <code>onCreateView()</code>, in that we can do work that is based on the created View at this point.</p></li>
+<li><p>We should also override the <strong><code>onMeasure()</code></strong> callback, as <a href="https://developer.android.com/guide/topics/ui/custom-components.html#custom">recommend</a> by the Android guides. This callback is used to specify how the View should be sized in response to its width or height being set as <code>wrap_content</code>. This is particularly important for making things like custom Buttons. However, our example will skip this for time and space, since the <code>DrawingView</code> is intended to always take up the entire screen.</p></li>
+<li><p>Finally, we override <strong><code>onDraw()</code></strong>, which is where the magic happens. This method gets called whenever the <code>View</code> needs to be displayed (like <code>paintComponent()</code> in the Swing framework). This callback is passed a <code>Canvas</code> object as a parameter, providing the context we can draw on!</p>
+<ul>
+<li>Like all other lifecycle callbacks: <strong>we never call <code>onDraw()</code>!!</strong> The Android UI system calls it for us!</li>
+</ul></li>
+</ul>
+<p>The provided <code>Canvas</code> can be drawn on in a couple of ways:</p>
+<ul>
+<li><p>We can call methods like <code>drawColor()</code> (to fill the background), <code>drawCircle()</code>, or <code>drawText()</code> to draw specific shapes or entities on it. These methods are similar in usage to the HTML5 Canvas.</p></li>
+<li><p>We can also draw a <a href="https://developer.android.com/reference/android/graphics/Bitmap.html"><code>Bitmap</code></a>, which represents a graphics raster (e.g., a 2D array of pixels). If we have a <code>Bitmap</code>, we can set the colors of individual pixels (using <code>setPixel(x,y,color)</code>), and then draw the <code>Bitmap</code> onto the Canvas (thereby double-buffering!). This is useful for pixel-level drawing, or when you want to make more complex graphics or artwork.</p>
+<ul>
+<li>If you’ve used MS Paint, it’s the difference between the shape drawing options and the “zoomed in” pixel coloring.</li>
+</ul></li>
+</ul>
+<p>Note that we cause the <code>Canvas</code> to be “redrawn” (so our <code>onDraw()</code> method to be called) by calling <code>invalidate()</code> on the <code>View</code>: this causes Android to need to recreate it, thereby redrawing it. By repeatedly calling <code>invalidate()</code> we can do something approximating animation!</p>
+<ul>
+<li><p>We can do this via a recursive loop by calling <code>invalidate()</code> at the end of <code>onDraw()</code>. This lets us “request” that Android cause <code>onDraw()</code> to be called again once it is finished, but <strong>we don’t call it</strong>.</p></li>
+<li><p>As a demo, we can make the <code>Ball</code> slide off the screen by changing it’s position slightly:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">ball.<span class="fu">cx</span> += ball.<span class="fu">dx</span>;
+ball.<span class="fu">cy</span> += ball.<span class="fu">dy</span>;</code></pre></div>
+<p>We can also add in wall collisions:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">if</span>(ball.<span class="fu">cx</span> + ball.<span class="fu">radius</span> &gt; viewWidth) { <span class="co">//left bound</span>
+    ball.<span class="fu">cx</span> = viewWidth - ball.<span class="fu">radius</span>;
+    ball.<span class="fu">dx</span> *= -<span class="dv">1</span>;
+}
+<span class="kw">else</span> <span class="kw">if</span>(ball.<span class="fu">cx</span> - ball.<span class="fu">radius</span> &lt; <span class="dv">0</span>) { <span class="co">//right bound</span>
+    ball.<span class="fu">cx</span> = ball.<span class="fu">radius</span>;
+    ball.<span class="fu">dx</span> *= -<span class="dv">1</span>;
+}
+<span class="kw">else</span> <span class="kw">if</span>(ball.<span class="fu">cy</span> + ball.<span class="fu">radius</span> &gt; viewHeight) { <span class="co">//bottom bound</span>
+    ball.<span class="fu">cy</span> = viewHeight - ball.<span class="fu">radius</span>;
+    ball.<span class="fu">dy</span> *= -<span class="dv">1</span>;
+}
+<span class="kw">else</span> <span class="kw">if</span>(ball.<span class="fu">cy</span> - ball.<span class="fu">radius</span> &lt; <span class="dv">0</span>) { <span class="co">//top bound</span>
+    ball.<span class="fu">cy</span> = ball.<span class="fu">radius</span>;
+    ball.<span class="fu">dy</span> *= -<span class="dv">1</span>;
+}</code></pre></div></li>
+</ul>
+<div class="alert alert-info">
+<p>
+<em>Animation</em> is the process of “imparting life” (from the Latin <strong><em>“anima”</em></strong>). We tend to mean giving something <strong>motion</strong>—making an object appear to move over time. Consider what that means for how people understand “life”.
+</p>
+<p>
+Video animation involves showing a sequences of images over time. If the images go fast enough, then the human brain interprets them as being part of the same successive motion, and any objects in those images will be considered to be “moving”. Each image in this sequence is called a “frame”. Film tends to be 24 frames per second (<strong>fps</strong>), video is 29.97fps, and video games aim at 60fps. Any video running at at least 16fps will be perceived as mostly smooth motion.
+</p>
+<p>
+Hitting that 16fps can actually be pretty difficult, since determining <em>what</em> to draw is computationally expensive! If we’re calculating every pixel on a 600x800 display, that’s half a million pixels we have to calculate! At 60fps, that’s 28 million pixels per second. For scale, a 1Ghz processor can do 1 billion operations per second—so if each pixel requires 5 operations, we’re at 15% of our processor. This is part of why most graphical systems utilize a dedicated GPU (graphical processing unit)—it provides massive parallelization to speed up this process.
+</p>
+</div>
+</div>
+<div id="surfaceviews" class="section level3">
+<h3><span class="header-section-number">15.1.2</span> SurfaceViews</h3>
+<p>Since all this calculation (at pixel-level detail) can take some time, we want to be careful it doesn’t block the UI thread! We’d like to instead do the drawing in the background. The rendering itself needs to occur on the UI Thread, but we want all of the <em>drawing logic</em> to occur on the background thread, so that the UI work is as fast as possible (think: hanging up a pre-printed poster rather than needing to print it entirely).</p>
+<ul>
+<li>However, an <code>AsyncTask</code> isn’t appropriate, because we want to do this repeatedly. Similarly, an <code>IntentService</code> may not be able to respond fast enough if we need to wait for the system to deliver Intents.</li>
+</ul>
+<p>Android provides a class that is specially designed for being “drawn” on a background thread: the <a href="https://developer.android.com/reference/android/view/SurfaceView.html"><strong><code>SurfaceView</code></strong></a>. Unlike basic <code>Views</code> that are somewhat ephemeral, a <code>SurfaceView</code> includes a dedicated drawing surface that we can interact with in a separate thread. It is designed to support this threading work without requiring <em>too</em> much synchronizatoin code.</p>
+<p>These take even more work to setup, so a complete example (<code>DrawingSurfaceView</code>) is again provided in the lecture code:</p>
+<ul>
+<li><p>This class <code>extends SurfaceView</code> and <em>implements</em> <code>SurfaceHolder.Callback</code>. A <code>SurfaceHolder</code> is an object that “holds” (contains) the underlying drawable surface; somewhat similar to the <code>ViewHolder</code> pattern utilized with an Adapter. We interact with the <code>SurfaceView</code> through the holder to make sure that we’re <em>thread-safe</em>: that only one thread is interacting with the surface at a time.</p>
+<ul>
+<li>In general there will be two threads trading off use of the holder: our background thread that is drawing on the surface (“printing the poster”), and then UI thread that is showing the surface to the user (“hanging the printed poster”). You can think of the holder <em>as</em> the poster in this metaphor!</li>
+</ul></li>
+<li><p>We register the holder in the constructor with the provided <code>getHolder()</code> method, and register ourselves for callbacks when the holder changes. We also instantiate a new <code>Runnable</code>, which will represent the callback executed in a separate (background) thread to do the drawing.</p></li>
+<li><p>The <code>SurfaceHolder.Callback</code> interface requires methods about when the surface changes, and so we fill those in:</p>
+<ul>
+<li><code>onSurfaceCreated()</code> starts our background thread (because the surface has now been created)</li>
+<li><code>onSurfaceChanged()</code> ends up acting a lot like <code>onSizeChanged()</code> from the basic <code>DrawingView</code></li>
+<li><code>onSurfaceDestroyed()</code> stops the background thread in a “safe” way (code adapted from Google)</li>
+</ul></li>
+<li><p>If we look at the <code>Runnable</code>, it’s basically an infinite loop:</p>
 <ol style="list-style-type: decimal">
-<li><p><strong>Compiling</strong> This converts the Java source code (in <code>.java</code> files) into JVM bytecode that can be understood by the virtual machine (in <code>.class</code>) files.</p></li>
-<li><p><strong>Running</strong> This actually loads the bytecode into the virtual machine and executes the <code>main()</code> method.</p></li>
+<li>Grab the Surface’s <code>Canvas</code>, “locking” it so only used in this (background) thread.</li>
+<li>Draw on it.</li>
+<li>Then “push” the Canvas back out to the rest of the world, basically saying “we’re done drawing, you can show it to the user now”.</li>
+</ol></li>
+</ul>
+<p>Overall, this process will cause the Surface to “redraw” as fast as possible, all without blocking the UI thread! This is great for animation, which can be controlled and timed (e.g., in the <code>update()</code> helper method by only updating variables at a particular rate). Moreover, it provides a drawable surface that can be interacted with!</p>
+<p>And that gives us a drawable surface that we can interact with in the same way, using the same kind of movement/interaction logic.</p>
+<ul>
+<li>This demonstrates one way to create low-level game and animation logic using basic Java work; no specific game engines are required (though those exist as well).</li>
+</ul>
+</div>
+</div>
+<div id="touch-and-gestures" class="section level2">
+<h2><span class="header-section-number">15.2</span> Touch and Gestures</h2>
+<p>As this point we have some simple animation and movement, but we would like to make it more interactive. Our <code>View</code> takes up the entire screen so we don’t want to add buttons, but there are other options available.</p>
+<p>In particular, we can add <a href="http://developer.android.com/training/gestures/index.html">Touch Gestures</a>. Touch screens are a huge part of Android devices (and mobile devices in general, especially since the first iPhone) that are incredibly familiar to most users. We’ve already indirectly used the touch interface, with how we’ve had users click on buttons (theoretically using the touch screen). But here we’re interested in more than just button clicks, which really could come from anywhere: instead, how we can react to <em>where</em> the user might touch the screen and even the different ways the user might <em>caress</em> the screen: flings, drags, multi-touch, etc.</p>
+<p>Android devices automatically detect various touching interactions (that’s how buttons work); we can respond to these <strong>touch events</strong> by overriding the <code>onTouchEvent()</code> callback, which is executed whenever there something happens that involves the touch screen</p>
+<ul>
+<li>For example, we can log out the event to see the kind of details it includes.</li>
+</ul>
+<p>There are <em>lots</em> of things that can cause <code>TouchEvents</code>, so much of our work involves trying to determine what <em>semantic</em> “gesture” the user made. Luckily, Android provides a number of utility methods and classes to help with this.</p>
+<p>The most basic is <code>MotionEventCompat.getActionMasked(event)</code>, which extracts the “action type” of the event from the motion that was recorded:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> action = MotionEventCompat.<span class="fu">getActionMasked</span>(event); <span class="co">//get action constant</span>
+<span class="dt">float</span> x = event.<span class="fu">getX</span>(); <span class="co">//get location of event</span>
+<span class="dt">float</span> y = event.<span class="fu">getY</span>() - <span class="fu">getSupportActionBar</span>().<span class="fu">getHeight</span>(); <span class="co">//closer to center...</span>
+
+<span class="kw">switch</span>(action) {
+  <span class="kw">case</span> (MotionEvent.<span class="fu">ACTION_DOWN</span>) : <span class="co">//put finger down</span>
+    <span class="co">//e.g., move ball</span>
+    view.<span class="fu">ball</span>.<span class="fu">cx</span> = x;
+    view.<span class="fu">ball</span>.<span class="fu">cy</span> = y;
+    <span class="kw">return</span> <span class="kw">true</span>;
+  <span class="kw">case</span> (MotionEvent.<span class="fu">ACTION_MOVE</span>) : <span class="co">//move finger</span>
+    <span class="co">//e.g., move ball</span>
+    view.<span class="fu">ball</span>.<span class="fu">cx</span> = x;
+    view.<span class="fu">ball</span>.<span class="fu">cy</span> = y;
+    <span class="kw">return</span> <span class="kw">true</span>;
+  <span class="kw">case</span> (MotionEvent.<span class="fu">ACTION_UP</span>) : <span class="co">//lift finger up</span>
+  <span class="kw">case</span> (MotionEvent.<span class="fu">ACTION_CANCEL</span>) : <span class="co">//aborted gesture</span>
+  <span class="kw">case</span> (MotionEvent.<span class="fu">ACTION_OUTSIDE</span>) : <span class="co">//outside bounds</span>
+  <span class="kw">default</span> :
+    <span class="kw">return</span> <span class="kw">super</span>.<span class="fu">onTouchEvent</span>(event);
+}</code></pre></div>
+<p>This lets us react to basic touching. For example, we can make it so that taps (<code>ACTION_DOWN</code>) will “teleport” the ball to where we click! We can also use the <code>ACTION_MOVE</code> events to let us drag the ball around.</p>
+<div id="advanced-gestures" class="section level3">
+<h3><span class="header-section-number">15.2.1</span> Advanced Gestures</h3>
+<p>We can also detect and react to more complex gestures: long presses, double-taps, or “flings” (a flick or swipe on the screen). As these gestures, the Material Design specification details some <a href="https://www.google.com/design/spec/patterns/gestures.html#gestures-drag-swipe-or-fling-details">specific patterns</a> that you should consider when utilizing these interactions</p>
+<p>Android provides a <a href="https://developer.android.com/training/gestures/detector.html#detect"><code>GestureDetector</code></a> class that can be used to identify these actions. The easiest way to use this class—particularly when we’re interested in a particular gesture (like fling)—is to <em>extend</em> <code>GestureDetector.SimpleOnGestureListener</code> to make our own “listener” for gestures. We can then override the callbacks for the gestures we’re interested in responding to: e.g., <code>onFling()</code>.</p>
+<ul>
+<li>Note that the official documentation says we should also override the <code>onDown()</code> method and have it return <code>true</code> to indicate that we’ve “consumed” (handled) the event—similar to what we’ve done with OptionsMenus. If we return false from this method, then <em>“the system assumes that you want to ignore the rest of the gesture, and the other methods of GestureDetector.OnGestureListener never get called.”</em> However, in my testing the gesture detection works either way, but we’ll follow the spec for now.</li>
+</ul>
+<p>We can instantiate a <code>GestureDetector</code> by passing in our listener into a <code>GestureDetectorCompat</code> constructor:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">mDetector = <span class="kw">new</span> <span class="fu">GestureDetectorCompat</span>(<span class="kw">this</span>, <span class="kw">new</span> <span class="fu">MyGestureListener</span>());</code></pre></div>
+<p>Then in the Activity’s <code>onTouchEvent()</code> callback, we can pass the event into the Gesture Detector to process:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">boolean</span> gesture = <span class="kw">this</span>.<span class="fu">mDetector</span>.<span class="fu">onTouchEvent</span>(event); <span class="co">//check gestures first!</span>
+<span class="kw">if</span>(gesture){
+  <span class="kw">return</span> <span class="kw">true</span>;
+}</code></pre></div>
+<ul>
+<li>Since the detector’s <code>onTouchEvent()</code> returns a <code>boolean</code> for whether or not a gesture was detected, we can check for whether we should otherwise handle the gesture ourselves.</li>
+</ul>
+<p>This gives us the abilty to “fling” the Ball by taking the detecting fling <em>velocity</em> and assigning that as the Ball’s velocity. Note that we need to negate the velocities since they are registered as “backwards” from the coordinates our drawing system is utilizing expect (though this doesn’t match the documented examples). Scaling down the velocity to 3% produce a reasonable Ball movement speed. work okay for me. We can also have the Ball slow down by 1% on each update so it drifts to a stop!</p>
+<!-- **** -->
+</div>
+</div>
+<div id="property-animation" class="section level2">
+<h2><span class="header-section-number">15.3</span> Property Animation</h2>
+<p>We’ve seen how we can create animations simply by adjusting the drawing we do on each frame. This is great for games or other complex animations if we want to have <em>a lot</em> of control over our graphical layout… but sometimes we want to have some simpler, platform-specific effects (that run smoother!) Android actually involves a number of different animation systems that can be used within and <em>across</em> Views:</p>
+<ul>
+<li><p>We’ve previously talked about some <a href="https://developer.android.com/training/material/animations.html">Material Animations</a> built into the Material Design support library; in particular we discussed creating Activity transition. Android also includes a robust framework for <a href="https://developer.android.com/training/transitions/index.html">Scene Transitions</a> even outside of Material; see <a href="https://developer.android.com/training/animation/index.html">Adding Animations</a> for more details.</p></li>
+<li><p>Android also supports <a href="https://developer.android.com/guide/topics/graphics/opengl.html">OpenGL Animations</a> for doing 3D animated systems. This requires knowing the OpenGL API.</p></li>
+</ul>
+<p>In this section, we will discuss how to use <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html"><strong>Property Animation</strong></a>. This is a general animation framework in which you specify a start state for an Object <em>property</em> (attribute), an end state for that property, and a duration for the animation; the Android systems then changes the property from the start state to the end over that length of time—thereby producing animation!</p>
+<ul>
+<li><p>The change in property state over time (that is, at any given “frame”) is calculated using <a href="https://en.wikipedia.org/wiki/Interpolation"><strong>interpolation</strong></a>. This is basically a “weighted average” between the the start and end states, where the weight is determined by how close you are to the “start” or “end”. While we often use <em>linear interpolation</em> (so that being 70% across means the end gets 70% of the weight), it is also posible to use <em>non-linear interpolation</em>) (e.g., you need to get 70% across in for the end to have 50% of the weight).</p>
+<div class="figure">
+<img src="img/animation/interpolation.png" alt="Linearly interpolating colors" />
+<p class="caption">Linearly interpolating colors</p>
+</div></li>
+</ul>
+<p>The main engine for doing this kind of interpolated animation in Android is the <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html#value-animator"><code>ValueAnimator</code></a><a href="#fn45" class="footnoteRef" id="fnref45"><sup>45</sup></a> class. This class lets you specify the start state, end state, and animation duration. It will then be able to run through and calculate all of the “intermediate” values throughout the interpolated animation. The <code>ValueAnimator</code> class provides a number of static methods (e.g., <code>.ofInt()</code>, <code>.ofFloat()</code>, <code>.ofArgb()</code>) which creates “animators” for interpolating different <em>value types</em>. For example:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">ValueAnimator animation = ValueAnimator.<span class="fu">ofFloat</span>(0f, 1f); <span class="co">//interpolate between 0 and 1</span>
+animation.<span class="fu">setDuration</span>(<span class="dv">1000</span>); <span class="co">//over 1000ms (1 second)</span>
+animation.<span class="fu">start</span>(); <span class="co">//run the animation</span></code></pre></div>
+<p>Of course, just performing this interpolation over time doesn’t produce any visable result—it’s changing the numbers, but those numbers don’t correspond to anything.</p>
+<p>We can access the interpolated values by registering a <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html#listeners">listener</a> and overriding the callback we’re interested in observing (e.g., <code>onAnimationUpdate()</code> from <code>ValueAnimator.AnimatorUpdateListener</code>). But more commonly, we want to have our interpolated animation change the <em>property</em> of some object—for example, the color of a View, the position of an Button, or the instance variables of an object such as a <code>Ball</code>.</p>
+<p>We can do this easily using the <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html#object-animator"><code>ObjectAnimator</code></a><a href="#fn46" class="footnoteRef" id="fnref46"><sup>46</sup></a> subclass. This subclass runs an animation just like the <code>ValueAnimator</code>, but has the built-in functionality to change a property of an object on each interpolated step. It does this by calling a <strong>setter</strong> for that property—thus the object needs to have a <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gjbbp.html">setter method</a> for the property we want to animate:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//change the &quot;alpha&quot; property of foo: will call `foo.setAlpha(float)`</span>
+ObjectAnimator anim = ObjectAnimator.<span class="fu">ofFloat</span>(foo, <span class="st">&quot;alpha&quot;</span>, 0f, 1f);
+anim.<span class="fu">setDuration</span>(<span class="dv">1000</span>);
+anim.<span class="fu">start</span>();</code></pre></div>
+<ul>
+<li><p>This example will mutate the object by calling te <code>setAlpha()</code> method (the name of the method is generated from the property name following normal CamelCasing style).</p></li>
+<li><p>If the object lacks such a setter, such as because we are using a class provided by someone else, we can either make a “wrapper” which will call the appropriate mutating function, or just utilize a <code>ValueAnimator</code> with an appropriate listener.</p></li>
+</ul>
+<p>For example, we can use this approach to change the Ball’s radius or position using an interpolated animation (make it “pulse”).</p>
+<ul>
+<li>Note that we’re just changing the object property; the only reason we see the changed display is because the <code>SurfaceView</code> is refreshing continuously.</li>
+</ul>
+<p>The <code>ObjectAnimator</code> interpolator methods support a number of variations as well: - As long as the object has an appropriate <strong>getter</strong>, it is possible to only pass the Animator an ending value (indicating that the animation should interpolate “from current state to specified end state”) - We can use <code>.setRepeatCount(ObjectAnimator.INFINITE)</code> and <code>.setRepeatMode(ObjectAnimator.REVERSE)</code> to cause it to repeat back and forth.</p>
+<p>If we want to include multiple animations in sequence, we can use an <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html#choreography"><code>AnimatorSet</code></a>, which gives us methods used to specify the ordering:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//example from docs</span>
+ObjectAnimator animX = ObjectAnimator.<span class="fu">ofFloat</span>(obj, <span class="st">&quot;x&quot;</span>, 50f);
+ObjectAnimator animY = ObjectAnimator.<span class="fu">ofFloat</span>(obj, <span class="st">&quot;y&quot;</span>, 100f);
+AnimatorSet animSetXY = <span class="kw">new</span> <span class="fu">AnimatorSet</span>();
+animSetXY.<span class="fu">playTogether</span>(animX, animY);
+animSetXY.<span class="fu">start</span>();</code></pre></div>
+<p>AnimatorSet animatoins can get complicated, and we may want to reuse them. Thus best practice is to instead define them in XML as <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html#declaring-xml">resources</a>. Animation resources are put inside the <code>/res/animator</code> directory (<strong>not</strong> the <code>/res/anim/</code> folder, which is for <a href="https://developer.android.com/guide/topics/graphics/view-animation.html">View Animations</a>).</p>
+<div class="sourceCode"><pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;set</span><span class="ot"> android:ordering=</span><span class="st">&quot;together&quot;</span><span class="kw">&gt;</span> <span class="co">&lt;!-- together is default --&gt;</span>
+  <span class="kw">&lt;objectAnimator</span>
+<span class="ot">           android:propertyName=</span><span class="st">&quot;x&quot;</span>
+<span class="ot">           android:duration=</span><span class="st">&quot;500&quot;</span>
+<span class="ot">           android:valueTo=</span><span class="st">&quot;400&quot;</span>
+<span class="ot">           android:valueType=</span><span class="st">&quot;intType&quot;</span><span class="kw">/&gt;</span>
+  <span class="co">&lt;!-- ... --&gt;</span>
+<span class="kw">&lt;/set&gt;</span></code></pre></div>
+<ul>
+<li><p>See <a href="https://developer.android.com/guide/topics/resources/animation-resource.html#Property">Property Animation Resources</a><a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a> for the full XML schema.</p></li>
+<li><p>Note that by defining animations as resources, it also mens that we can easily have different device configurations use different animations (e.g., perhaps objects move faster on larger displays).</p></li>
+</ul>
+<p>In order to utilize the XML, we will need to <strong>inflate</strong> the Animator resource, just as we have done with Layouts:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">ObjectAnimator anim = (ObjectAnimator)AnimatorInflater.<span class="fu">loadAnimator</span>(context, R.<span class="fu">anim</span>.<span class="fu">my_animation</span>);
+anim.<span class="fu">setTarget</span>(myObject);
+anim.<span class="fu">start</span>();</code></pre></div>
+<p>Note that we can also use this same framework to animate changes to <code>Views</code>: Buttons, Images, etc. Views are objects and have properties (along with appropriate <em>getter</em> and <em>setter</em> methods), so we can use just an <code>ObjectAnimator</code>! See <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html#views">Animating Views</a> for a list of properties we can change (a list that includes <code>x, y, rotation, alpha, scaleX, scaleY</code>, and others)</p>
+<p>To make this process even simpler, Android also provides a <code>ViewPropertyAnimator</code> class. This Animator is able to easily animate multiple properties together (at the same time), and does so in a much more efficient way. We can access this Animator via the <code>View#animate()</code> method. We then call relevant shortcut methods on this Animator to “add in” addition property animations to the animation set:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//animate x (to 100) and y (to 300) together!</span>
+myView.<span class="fu">animate</span>().<span class="fu">x</span>(<span class="dv">100</span>).<span class="fu">y</span>(<span class="dv">300</span>);</code></pre></div>
+<p>This allows you to easily specify moderately complex property animations for <code>View</code> objects.</p>
+<ul>
+<li>But really, if you want to animate layout changes on a modern device, you should use <a href="http://developer.android.com/training/transitions/index.html">transitions</a>, such as the ones we used with Material design.</li>
+</ul>
+<p>There are <a href="https://developer.android.com/guide/topics/graphics/prop-animation.html">many more ways</a> to customize exactly what you want your animation to be.You can also look at <a href="https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/animation">official demos</a> for more examples of different styles of animation.</p>
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="44">
+<li id="fn44"><p><a href="https://developer.android.com/reference/android/graphics/Canvas.html" class="uri">https://developer.android.com/reference/android/graphics/Canvas.html</a><a href="animation.html#fnref44">↩</a></p></li>
+<li id="fn45"><p><a href="http://developer.android.com/guide/topics/graphics/prop-animation.html#value-animator" class="uri">http://developer.android.com/guide/topics/graphics/prop-animation.html#value-animator</a><a href="animation.html#fnref45">↩</a></p></li>
+<li id="fn46"><p><a href="http://developer.android.com/guide/topics/graphics/prop-animation.html#object-animator" class="uri">http://developer.android.com/guide/topics/graphics/prop-animation.html#object-animator</a><a href="animation.html#fnref46">↩</a></p></li>
+<li id="fn47"><p><a href="http://developer.android.com/guide/topics/resources/animation-resource.html#Property" class="uri">http://developer.android.com/guide/topics/resources/animation-resource.html#Property</a><a href="animation.html#fnref47">↩</a></p></li>
 </ol>
-<p>Compiling is done with the <code>javac</code> (“java compile”) command. For example, from inside the code repo’s directory, you can compile both the <code>.java</code> files with:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Compile all .java files</span>
-<span class="ex">javac</span> src/main/java/edu/info448/review/*.java</code></pre></div>
-<p>Running is then done with the <code>java</code> command: you specify the full package name of the class you wish to run, as well as the <a href="https://docs.oracle.com/javase/tutorial/essential/environment/paths.html">classpath</a> so that Java knows where to go find classes it depends on:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Runs the Tester#main() method with the `src/main/java` folder as the classpath</span>
-<span class="ex">java</span> -classpath ./src/main/java edu.info448.review.Tester</code></pre></div>
-<p><strong><em>Practice: Compile and run this application now.</em></strong></p>
-<p><strong><em>Practice: Modify the <code>Dog</code> class so that it’s <code>.bark()</code> method barks twice (<code>&quot;Bark Bark!&quot;</code>). What do you have to do to test that your change worked?</em></strong></p>
-<p>You may notice that this development cycle can get pretty tedious: there are two commands we need to execute to run our code, and both are complex enough that they are a pain to retype.</p>
-<p>Enter <a href="https://gradle.org/"><strong>Gradle</strong></a>. Gradle is a build automation system: a “script” that you can run that will automatically perform the multiple steps required to build and run an application. This script is defined by the <code>build.gradle</code> configuration file. <strong><em>Practice: open that file and look through its contents</em></strong>. The <code>task run()</code> is where the “run” task is defined: do you see how it defines the same arguments we otherwise passed to the <code>java</code> command?</p>
-<p>You can run the version of Gradle included in the repo with the <code>gradlew &lt;task&gt;</code> command, specifying what task you want to the build system to perform. For example:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># on Mac/Linux</span>
-<span class="ex">./gradlew</span> tasks
-
-<span class="co"># on Windows</span>
-<span class="ex">gradlew</span> tasks</code></pre></div>
-<p>Will give you a list of available tasks. Use <code>gradlew classes</code> to compile the code, and <code>gradlew run</code> to compile <em>and</em> run the code.</p>
-<ul>
-<li><strong>Helpful hint</strong>: you can specify the “quite” flag with <code>gradlew -q &lt;task&gt;</code> to not have Gradle output its build status (handy for the <code>run</code> task)</li>
-</ul>
-<p><strong><em>Practice: Use gradle to build and run your Dog program. See how much easier that is?</em></strong></p>
-<p>We will be using Gradle to build our Android applications (which are much more complex than this simple Java demo)!</p>
-</div>
-<div id="class-basics" class="section level2">
-<h2><span class="header-section-number">A.2</span> Class Basics</h2>
-<p>Now consider the <code>Dog</code> class in more detail. Like all classes, it has two parts:</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Attributes</strong> (a.k.a., instance variables, fields, or member variables). For example, <code>String name</code>.</p>
-<ul>
-<li>Notice that all of these attributes are <code>private</code>, meaning they are not accessible to members of another class! This is important for <strong>encapsulation</strong>: it means we can change how the <code>Dog</code> class is implemented without changing any other class that depends on it (for example, if we want to store <code>breed</code> as a number instead of a <code>String</code>).</li>
-</ul></li>
-<li><p><strong>Methods</strong> (a.k.a., functions). For example <code>bark()</code></p>
-<ul>
-<li><p>Note the <em>method declaration</em> <code>public void wagTail(int)</code>. This combination of access modifier (<code>public</code>), return type (<code>void</code>), method name (<code>wagTail</code>) and parameters (<code>int</code>) is called the <strong>method signature</strong>: it is the “autograph” of that particular method. When we call a method (e.g., <code>myDog.wagTail(3)</code>), Java will look for a method definition that <em>matches</em> that signature.</p></li>
-<li><p>Method signatures are very important! They tell us what the inputs and outputs of a method will be. We should be able to understand how the method works <em>just</em> from its signature.</p></li>
-</ul></li>
-</ol>
-<p>Notice that one of the methods, <code>.createPuppies()</code> is a <code>static</code> method. This means that the method belongs to the <strong><em>class</em></strong>, not to individual object instances of the class! <strong><em>Practice: try running the following code (by placing it in the <code>main()</code> method of the <code>Tester</code> class)</em></strong>:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Dog[] pups = Dog.<span class="fu">createPuppies</span>(<span class="dv">3</span>);
-<span class="bu">System</span>.<span class="fu">out</span>.<span class="fu">println</span>(<span class="bu">Arrays</span>.<span class="fu">toString</span>(pups));</code></pre></div>
-<p>Notice that to call the <code>createPuppies()</code> method you didn’t need to have a <code>Dog</code> object (you didn’t need to use the <code>new</code> keyword): instead you went to the “template” for a <code>Dog</code> and told that template to do some work. <em>Non-static</em> methods (ones without the <code>static</code> keyword, also called “instance methods”) need to be called on an object.</p>
-<p><strong><em>Practice: Try to run the code <code>Dog.bark()</code>. What happens?</em></strong> This is because you can’t tell the “template” for a <code>Dog</code> to bark, only an actual <code>Dog</code> object!</p>
-<p>In general, in 98% of cases, your methods should <strong>not</strong> be <code>static</code>, because you want to call them on a specific object rather than on a general “template” for objects. Variables should <strong>never</strong> be static, unless they are <strong>also</strong> <code>final</code> constants (like the <code>BEST_BREED</code> variable).</p>
-<ul>
-<li>In Android, <code>static</code> variables cause significant memory leaks, as well as just being generally poor design.</li>
-</ul>
-</div>
-<div id="inheritance" class="section level2">
-<h2><span class="header-section-number">A.3</span> Inheritance</h2>
-<p><strong><em>Practice: Create a new file <code>Husky.java</code> that declares a new <code>Husky</code> class:</em></strong></p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">package</span><span class="im"> edu.info448.review;</span> <span class="co">//package declaration (needed)</span>
-
-<span class="kw">public</span> <span class="kw">class</span> Husky <span class="kw">extends</span> Dog {
-  <span class="co">/* class body goes here */</span>
-}</code></pre></div>
-<p>The <code>extends</code> keyword means that <code>Husky</code> is a <a href="https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html"><strong>subclass</strong></a> of <code>Dog</code>, inheriting all of its methods and attributes. It also means that that a <code>Husky</code> instance <strong>is a</strong> <code>Dog</code> instance.</p>
-<p><strong><em>Practice: In the Tester, instantiate a new <code>Husky</code> and call <code>bark()</code> on it. What happens?</em></strong></p>
-<ul>
-<li><p>Because we’ve inherited from <code>Dog</code>, the <code>Husky</code> class gets all of the methods defined in <code>Dog</code> for free!</p></li>
-<li><p>Try adding a constructor that takes in a single parameter (<code>name</code>) and calls the appropriate <code>super()</code> constructor so that the breed is <code>&quot;Husky&quot;</code>, which makes this a little more sensible.</p></li>
-</ul>
-<p>We can also add more methods to the <strong>subclass</strong> that the <strong>parent class</strong> doesn’t have. <strong><em>Practice: add a method called <code>.pullSled()</code> to the <code>Husky</code> class.</em></strong></p>
-<ul>
-<li>Try calling <code>.pullSled()</code> on your <code>Husky</code> <em>object</em>. What happens? Then try calling <code>.pullSled()</code> on a <code>Dog</code> <em>object</em>. What happens?</li>
-</ul>
-<p>Finally, we can <strong>override</strong> methods from the parent class. <strong><em>Practice: add a <code>bark()</code> method to <code>Husky</code> (with the same signature), but that has the <code>Husky</code> “woof” instead of “bark”.</em></strong> Test out your code by calling the method in the <code>Tester</code>.</p>
-</div>
-<div id="interfaces" class="section level2">
-<h2><span class="header-section-number">A.4</span> Interfaces</h2>
-<p><strong><em>Practice: Create a new file <code>Huggable.java</code> with the following code:</em></strong></p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">package</span><span class="im"> edu.info448.review;</span>
-
-<span class="kw">public</span> <span class="kw">interface</span> Huggable {
-  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">hug</span>();
-}</code></pre></div>
-<p>This is an example of an <a href="https://docs.oracle.com/javase/tutorial/java/concepts/interface.html"><strong>interface</strong></a>. An <strong>interface</strong> is a list of methods that a class <em>promises</em> to provide. By <em>implementing</em> the interface (with the <code>interface</code> keyword in the class declaration), the class promises to include any methods listed in the interface.</p>
-<ul>
-<li><p>This is a lot like hanging a sign outside your business that says <em>“Accepts Visa”</em>. It means that if someone comes to you and tries to pay with a Visa card, you’ll be able to do that!</p></li>
-<li><p>Implementing an interface makes no promise about <em>what</em> those methods do, just that the class will include methods with those signatures. <strong><em>Practice: change the <code>Husky</code> class declaration</em></strong>:</p></li>
-</ul>
-<p><code>java   public class Husky extends Dog implements Huggable {...}</code></p>
-<p>Now the the <code>Husky</code> class needs to have a <code>public void hug()</code> method, but what that method <em>does</em> is up to you!</p>
-<ul>
-<li><p>A class can still have a <code>.hug()</code> method even without implementing the <code>Huggable</code> interface (see <code>TeddyBear</code>), but we gain more benefits by announcing that we support that method.</p>
-<ul>
-<li>Just like how hanging an “Accepts Visa” sign will bring in more people who would be willing to pay with a credit card, rather than just having that option available if someone asks about it.</li>
-</ul></li>
-</ul>
-<p>Why not just make <code>Huggable</code> a superclass, and have the <code>Husky</code> extend that?</p>
-<ul>
-<li><p>Because <code>Husky</code> extends <code>Dog</code>, and you can only have one parent in Java!</p></li>
-<li><p>And because not all dogs are <code>Huggable</code>, and not all <code>Huggable</code> things are <code>Dogs</code>, there isn’t a clear hierarchy for where to include the interface.</p></li>
-<li><p>In addition, we can implement multiple interfaces (<code>Husky implements Huggable, Pettable</code>), but we can’t inherit from multiple classes</p>
-<ul>
-<li><p>This is great for when we have other classes of different types but similar behavior: e.g., a <code>TeddyBear</code> can be <code>Huggable</code> but can’t <code>bark()</code> like a <code>Dog</code>!</p></li>
-<li><p><strong><em>Practice: Make the class <code>TeddyBear</code> implement <code>Huggable</code>. Do you need to add any new methods?</em></strong></p></li>
-</ul></li>
-</ul>
-<p><strong><em>What’s the difference between inheritance and interfaces?</em></strong> The main rule of thumb: use <em>inheritance</em> (<code>extends</code>) when you want classes to share <strong>code</strong> (implementation). Use <em>interfaces</em> (<code>implements</code>) when you want classes to share <strong>behaviors</strong> (method signatures). In the end, <em>interfaces</em> are more important for doing good Object-Oriented design. Favor interfaces over inheritance!</p>
-</div>
-<div id="polymorphism" class="section level2">
-<h2><span class="header-section-number">A.5</span> Polymorphism</h2>
-<p>Implementing an interface also establishes an <strong>is a</strong> relationship: so a <code>Husky</code> object <strong>is a</strong> <code>Huggable</code> object. This allows the greatest benefit of interfaces and inheritance: <a href="https://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html"><strong>polymorphism</strong></a>, or the ability to treat one object as the type of another!</p>
-<p>Consider the standard variable declaration:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Dog myDog; <span class="co">//= new Dog();</span></code></pre></div>
-<p>The variable type of <code>myDog</code> is <code>Dog</code>, which means that variable can refer to any value (object) that <strong>is a</strong> <code>Dog</code>.</p>
-<p><strong><em>Practice: Try the following declarations (note that some will not compile!)</em></strong></p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Dog v1 = <span class="kw">new</span> <span class="fu">Husky</span>();
-Husky v2 = <span class="kw">new</span> <span class="fu">Dog</span>();
-Huggable v2 = <span class="kw">new</span> <span class="fu">Husky</span>();
-Huggable v3 = <span class="kw">new</span> <span class="fu">TeddyBear</span>();
-Husky v4 = <span class="kw">new</span> <span class="fu">TeddyBear</span>();</code></pre></div>
-<p>If the <strong>value</strong> (the thing on the right side) <em>is an</em> instance of the <strong>variable type</strong> (the type on the left side), then you have a valid declaration.</p>
-<p>Even if you declare a variable <code>Dog v1 = new Husky()</code>, the <strong>value</strong> in that object <em>is</em> a <code>Husky</code>. If you call <code>.bark()</code> on it, you’ll get the <code>Husky</code> version of the method (<strong><em>Practice: try overriding the method to print out <code>&quot;barks like a Husky&quot;</code> to see</em></strong>).</p>
-<p>You can <strong>cast</strong> between types if you need to convert from one to another. As long as the <strong>value</strong> <em>is a</em> instance of the type you’re casting to, the operation will work fine.</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Dog v1 = <span class="kw">new</span> <span class="fu">Husky</span>();
-Husky v2 = (Husky)v1; <span class="co">//legal casting</span></code></pre></div>
-<p>The biggest benefit from polymorphism is abstraction. Consider:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">ArrayList</span>&lt;Huggable&gt; hugList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;Huggable&gt;(); <span class="co">//a list of huggable things</span>
-hugList.<span class="fu">add</span>(<span class="kw">new</span> <span class="fu">Husky</span>()); <span class="co">//a Husky is Huggable</span>
-hugList.<span class="fu">add</span>(<span class="kw">new</span> <span class="fu">TeddyBear</span>()); <span class="co">//so are Teddybears!</span>
-
-<span class="co">//enhanced for loop (&quot;foreach&quot; loop)</span>
-<span class="co">//read: &quot;for each Huggable in the hugList&quot;</span>
-<span class="kw">for</span>(Huggable thing : hugList) {
-    thing.<span class="fu">hug</span>();
-}</code></pre></div>
-<p><strong><em>Practice: What happens if you run the above code?</em></strong> Because Huskies and Teddy Bears share the same behavior (<code>interface</code>), we can treat them as a single “type”, and so put them both in a list. And because everything in the list supports the <code>Huggable</code> interface, we can call <code>.hug()</code> on each item in the list and we know they’ll have that method—they promised by <code>implementing</code> the interface after all!</p>
-</div>
-<div id="abstract-methods-and-classes" class="section level2">
-<h2><span class="header-section-number">A.6</span> Abstract Methods and Classes</h2>
-<p>Take another look at the <code>Huggable</code> interface you created. It contains a single method declaration… followed by a semicolon instead of a method body. This is an <a href="https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html"><strong>abstract method</strong></a>: in fact, you can add the <code>abstract</code> keyword to this method declaration without changing anything (all methods are interfaces are implicitly <code>abstract</code>, so it isn’t required):</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">abstract</span> <span class="dt">void</span> <span class="fu">hug</span>();</code></pre></div>
-<p>An <strong>abstract method</strong> is one that does not (yet) have a method body: it’s just the signature, but no actual implementation. It is “unfinished.” In order to instantiate a class (using the <code>new</code> keyword), that class needs to be “finished” and provide implementations for <em>all</em> abstract methods—e.g., all the ones you’ve inherited from an interface. This is exactly how you’ve used <code>interfaces</code> so far: it’s just another way of thinking about why you need to provide those methods.</p>
-<p>If the <code>abstract</code> keyword is implied for interfaces, what’s the point? Consider the <code>Animal</code> class (which is a parent class for <code>Dog</code>). The <code>.speak()</code> method is “empty”; in order for it to do anything, the subclass needs to override it. And currently there is nothing to stop someone who is subclassing <code>Animal</code> from forgetting to implement that method!</p>
-<p>We can <em>force</em> the subclass to override this method by making the method <code>abstract</code>: effectively, leaving it unfinished so that if the subclass (e.g., <code>Dog</code>) wants to do anything, it must finish up the method. <strong><em>Practice: Make the <code>Animal#speak()</code> method <code>abstract</code>. What happens when you try and build the code?</em></strong></p>
-<p>If the <code>Animal</code> class contains an unfinished (<code>abstract</code>) method… then that class itself is unfinished, and Java requires us to mark it as such. We do this by declaring the <em>class</em> as <code>abstract</code> in the class declaration :</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> MyAbstractClass {...}</code></pre></div>
-<p><strong><em>Practice: Make the <code>Animal</code> class <code>abstract</code>.</em></strong> You will need to provide an implementation of the <code>.speak()</code> method in the <code>Dog</code> class: try just having it call the <code>.bark()</code> method (method composition for-the-win!).</p>
-<p>Only abstract classes and <code>interfaces</code> can contain <code>abstract</code> methods. In addition, an <code>abstract</code> class is unfinished, meaning it can’t be instantiated. <strong><em>Practice: Try to instantiate a <code>new Animal()</code>. What happens?</em></strong> Abstract classes are great for containing “most” of a class, but making sure that it isn’t used without all the details provided. And if you think about it, we’d never want to ever instantiate a generic <code>Animal</code> anyway—we’d instead make a <code>Dog</code> or a <code>Cat</code> or a <code>Turtle</code> or something. All that the <code>Animal</code> class is doing is acting as an <strong>abstraction</strong> for these other classes to allow them to share implementations (e.g., of a <code>walk()</code> method).</p>
-<ul>
-<li>Abstract classes are a bit like “templates” for classes… which are themselves “templates” for objects.</li>
-</ul>
-</div>
-<div id="generics" class="section level2">
-<h2><span class="header-section-number">A.7</span> Generics</h2>
-<p>Speaking of templates: think back to the <code>ArrayList</code> class you’ve used in the past, and how you specified the “type” inside that List by using angle brackets (e.g., <code>ArrayList&lt;Dog&gt;</code>). Those angle brackets indicate that <code>ArrayList</code> is a <a href="https://docs.oracle.com/javase/tutorial/java/generics/">generic</a> class: a template for a class where a <em>data type</em> for that class is itself a variable.</p>
-<p>Consider the <code>GiftBox</code> class, representing a box containing a <code>TeddyBear</code>. <strong><em>What changes would you need to make to this class so that it contains a <code>Husky</code> instead of a <code>TeddyBear</code>? What about if it contained a <code>String</code> instead?</em></strong></p>
-<p>You should notice that the only difference between <code>TeddyGiftBox</code> and <code>HuskyGiftBox</code> and <code>StringGiftBox</code> would be the <strong>variable type</strong> of the contents. So rather than needing to duplicate work and write the same code for every different type of gift we might want to give… we can use <strong>generics</strong>.</p>
-<p>Generics let us specify a data type (e.g., what is currently <code>TeddyBear</code> or <code>String</code>) as a <em>variable</em>, which is set when we instantiate the class using the angle brackets (e.g., <code>new GiftBox&lt;TeddyBear&gt;()</code> would create an object of the class with that type variable set to be <code>TeddyBear</code>).</p>
-<p>We specify generics by declaring the data type variable in the class declaration:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> GiftBox&lt;T&gt; {...}</code></pre></div>
-<p>(<code>T</code> is a common variable name, short for “Type”. Other options include <code>E</code> for Elements in lists, <code>K</code> for Keys and <code>V</code> for Values in maps).</p>
-<p>And then everywhere you would have put a datatype (e.g., <code>TeddyBear</code>), you can just put the <code>T</code> variable instead. This will be replace by an <em>actual</em> type <strong>at compile time</strong>.</p>
-<ul>
-<li>Warning: <em>always</em> use single-letter variable names for generic types! If you try to name it something like <code>String</code> (e.g., <code>public class GiftBox&lt;String&gt;</code>), then Java will interpret the word <code>String</code> to be that variable type, rather than refering to the <code>java.lang.String</code> class. This a lot like declaring a variable <code>int Dog = 448</code>, and then calling <code>Dog.createPuppies()</code>.</li>
-</ul>
-<p><strong><em>Practice: Try to make the <code>GiftBox</code> class generic and instantiate a new <code>GiftBox&lt;Husky&gt;</code></em></strong></p>
-</div>
-<div id="nested-classes" class="section level2">
-<h2><span class="header-section-number">A.8</span> Nested Classes</h2>
-<p>One last piece: we’ve been putting <em>attributes</em> and <em>methods</em> into classes… but we can also define additional <em>classes</em> inside a class! These are called <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html"><strong>nested</strong> or <strong>inner classes</strong></a>.</p>
-<p>We’ll often nest “helper classes” inside a bigger class: for example, you may have put a <code>Node</code> class inside a <code>LinkedList</code> class:</p>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> <span class="bu">LinkedList</span> {
-  <span class="co">//nested class</span>
-  <span class="kw">public</span> <span class="kw">class</span> <span class="bu">Node</span> {
-    <span class="kw">private</span> <span class="dt">int</span> data;
-
-    <span class="kw">public</span> <span class="bu">Node</span>(<span class="dt">int</span> data) {
-      <span class="kw">this</span>.<span class="fu">data</span> = data;
-    }
-  }
-
-  <span class="kw">private</span> <span class="bu">Node</span> start;
-
-  <span class="kw">public</span> <span class="bu">LinkedList</span>() {
-    <span class="kw">this</span>.<span class="fu">start</span> = <span class="kw">new</span> <span class="bu">Node</span>(<span class="dv">448</span>);
-  }
-}</code></pre></div>
-<p>Or maybe we want to define a <code>Smell</code> class inside the <code>Dog</code> class to represent different smells, allowing us to talk about different <code>Dog.Smell</code> objects. (And of course, the <code>Dog.Smell</code> class would implement the <code>Sniffable</code> interface…)</p>
-<p>Nested classes we define are usually <code>static</code>: meaning they belong to the <em>class</em> not to object instances of that class. This means that there is only one copy of that nested blueprint class in memory; it’s the equivalent to putting the class in a separate file, but nesting lets us keep them in the same place and provides a “namespacing” function (e.g., <code>Dog.Smell</code> rather than just <code>Smell</code>).</p>
-<p>Non-static nested classes (or <strong>inner classes</strong>) on the other hand are defined for each object. This is important only if the behavior of that class is going to depend on the object in which it lives. This is a subtle point that we’ll see as we provide inner classes required by the Android framework.</p>
-
-</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="multi-touch.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="java-swing.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="material-design.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="publishing.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -598,7 +641,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/java-review.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/animation.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],
