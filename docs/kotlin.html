@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="introduction.html">
+<link rel="prev" href="animation.html">
+<link rel="next" href="publishing.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -383,32 +383,294 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Android Development: Lecture Notes</h1>
-<h4 class="author"><em>Joel Ross</em></h4>
-<h4 class="date"><em>2017-05-23</em></h4>
-</div>
-<div id="about-this-book" class="section level1 unnumbered">
-<h1>About this Book</h1>
-<p>This book compiles lecture notes and tutorials for the <strong>INFO 448 Mobile Development: Android</strong> course taught at the <a href="https://ischool.uw.edu/">University of Washington Information School</a> (most recently in <a href="https://canvas.uw.edu/courses/1139926">Spring 2017</a>). The goal of these notes is to provide learning materials for students in the course or anyone else who wishes to learn the basics of developing Android applications.</p>
-<p>These notes are primarily adapted from the <a href="https://developer.android.com/develop/index.html">official Android developer documentation</a>, compiling and synthesizing those guidelines for pedagogical purposes (and the author’s own interpretation/biases). Please refer to that documentation for the latest information and official guidance.</p>
-<p class="alert alert-warning">
-This book is currently in <strong>alpha</strong> status, as pure lecture notes are converted into more generic formats.
+<div id="kotlin" class="section level1">
+<h1><span class="header-section-number">Lecture 16</span> Special Topics: Kotlin</h1>
+<p>This lecture introduces <a href="https://kotlinlang.org/">Kotlin</a>, an open source programming language that runs on the Java Virtual Machine and is fully interoperable with Java Code. It is designed to be a more concise, more flexible, and faster alternative to Java while offering language-level support to features such as <code>null</code>-checking and functional programming techniques. As of May 2017, Google offers first-class support for using Kotlin when developing Android applications.</p>
+<ul>
+<li>Kotlin was developed by <a href="https://en.wikipedia.org/wiki/JetBrains">JetBrains</a>, the creators of the IntelliJ IDE which forms the basis for Android Studio.</li>
+</ul>
+<p class="alert alert-info">
+This lecture references code found at <a href="https://github.com/info448-s17/lecture16-kotlin" class="uri">https://github.com/info448-s17/lecture16-kotlin</a>. Kotlin demo code can be found in the <code>kotlin</code> folder; build and run this code through gradle with the command <code>gradle -q</code>.
 </p>
-<p><img src="img/index/by-nc-sa.png" alt="Creative Commons License" /> This book is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<ul>
+<li>Note that the provided <a href="https://kotlinlang.org/docs/reference/using-gradle.html">gradle build script</a> includes the Kotlin standard library for Java 8, making (simplied) versions of Java classes available.</li>
+</ul>
+<div id="kotlin-syntax" class="section level2">
+<h2><span class="header-section-number">16.1</span> Kotlin Syntax</h2>
+<p>The Kotlin language draws many syntactical structures from popular modern languages, including JavaScript and <a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/">Swift</a> (used for iOS development); I find it has a lot in common with <a href="https://www.typescriptlang.org/">TypeScript</a>.</p>
+<p>The full documentation for the Kotlin language can be found at <a href="https://kotlinlang.org/docs/reference/" class="uri">https://kotlinlang.org/docs/reference/</a>; practice and examples are available in the form of <a href="https://kotlinlang.org/docs/tutorials/koans.html">Kotlin Koans</a>. This lecture does not aim to be a complete reference but rather to highlight some of the most noticable or interesting aspects of the langauge.</p>
+<div id="variables" class="section level3">
+<h3><span class="header-section-number">16.1.1</span> Variables</h3>
+<p>Kotlin variables are <em>declared</em> by using the keyword <strong><code>var</code></strong> (for mutable variables) or <strong><code>val</code></strong> (for read-only variables); this is similar to <code>let</code> and <code>const</code> in JavaScript ES5. Like Java, Kotlin is a statically-typed language—the variable type is written <em>after</em> the variablen name, separated by a colon (<strong><code>:</code></strong>). For example:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">x</span>:<span class="kw">Int</span> = <span class="dv">448</span>  <span class="co">//read-only</span>
+<span class="kw">var</span> <span class="va">stepCount</span>:<span class="kw">Int</span> = <span class="dv">9000</span>  <span class="co">//mutable</span>
+stepCount++  <span class="co">//can change the variable</span>
+<span class="kw">val</span> <span class="va">message</span>:<span class="kw">String</span> = <span class="st">&quot;Hello&quot;</span> + <span class="st">&quot; &quot;</span> + <span class="st">&quot;world&quot;</span>  <span class="co">//supports normal operators</span></code></pre></div>
+<p>Notice that each of these statements <a href="https://kotlinlang.org/docs/reference/grammar.html#semicolons"><strong>lacks semicolons</strong></a>! Similar to many scripting languages, statements can separated either by a colon or by a newline.</p>
+<p>In Kotlin, <a href="https://kotlinlang.org/docs/reference/basic-types.html">primitive types</a> (e.g., <code>int</code>, <code>double</code>, <code>boolean</code>) and implemented using classes, allowing for all values to support instance methods and variables (called <em>properties</em>). These classes are named after their Java equivalents (though of course start with a capital letter, since they are classes!)</p>
+<ul>
+<li>The compiler optimizes the types to avoid extraneous overhead.</li>
+</ul>
+<p>Additionally, variable type can often be <strong>inferred</strong> from the assigned value, so may be omitted:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">var</span> <span class="va">x</span> = <span class="dv">448</span>  <span class="co">//`Int` type is inferred</span>
+x-<span class="dv">40</span>  <span class="co">//valid mathematical operation</span></code></pre></div>
+<ul>
+<li>Note even without the explicit type declaration, the variable <em>is strongly typed</em>—it’s just that the variable type is determined by the compiler. I encourage you to include the explicit type declaration, particularly when it helps clarify the semantic meaning of the variable.</li>
+</ul>
+<p>One of Kotlin’s major features is <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>, or the ability to catch null-pointer errors <em>at compile time</em>. In Kotlin, we need to explicitly declare that a variable can be assigned <code>null</code> as a value. We do this by including a question mark <strong><code>?</code></strong> immediately after the type declaration:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">var</span> <span class="va">message</span>:<span class="kw">String</span> = <span class="st">&quot;Hello&quot;</span>
+message = <span class="kw">null</span>  <span class="co">//compilation error!</span>
+
+<span class="kw">var</span> <span class="va">possiblyNull</span>:<span class="kw">String</span>? = <span class="st">&quot;Hello&quot;</span>
+possiblyNull = <span class="kw">null</span>  <span class="co">//no problems!</span></code></pre></div>
+<ul>
+<li>Kotlin provides a number of other structures using the <code>?</code> to check for and handle <code>null</code> values; see <a href="https://kotlinlang.org/docs/reference/null-safety.html">Null Safety</a> for details.</li>
+</ul>
+<p>Basic Kotlin types work pretty much the same as basic Java types. A few notable differences and features:</p>
+<ul>
+<li><p><em>Warning</em>: Because of the classes Kotlin uses for numeric types, it is unable to automatically convert to a “larger” type (e.g., from <code>Int</code> to <code>Double</code>). This casting needs to occur explicitly:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">integer</span>:<span class="kw">Int</span> = <span class="dv">5</span>
+<span class="kw">var</span> <span class="va">root</span>:<span class="kw">Double</span> = Math.sqrt(integer)  <span class="co">//compile type error!</span>
+                                      <span class="co">//sqrt() takes in a double</span>
+root = Math.sqrt(integer.toDouble())  <span class="co">//no problems!</span></code></pre></div></li>
+<li><p><em>Fun feature</em>: in Kotlin, numeric literals can be written with underscores (<strong><code>_</code></strong>) as readability separators; the underscores are removed during compile time.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">oneMillion</span>:<span class="kw">Int</span> = 1_000_<span class="dv">000</span></code></pre></div></li>
+<li><p><em>Fun feature</em>: Kotlin also supports <a href="https://kotlinlang.org/docs/reference/basic-types.html#string-templates">string templating</a>, in which variables used within the String are automatically evaluated (avoiding the need for complex String concatenation). Variables to evaluate are prepended with a dollar sign <strong><code>$</code></strong>, while more complex expressions can be evaluated from inside <strong><code>${}</code></strong></p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">quantity</span> = <span class="dv">5</span>
+<span class="kw">val</span> <span class="va">price</span> = <span class="fl">2.95</span>
+<span class="kw">val</span> <span class="va">cost</span>:<span class="kw">String</span> = <span class="st">&quot;$quantity items at $price costs ${quantity*price}&quot;</span></code></pre></div></li>
+<li><p><em>Note</em>: <a href="https://kotlinlang.org/docs/reference/basic-types.html#arrays">Arrays</a> in Kotlin are represented by the <code>Array&lt;T&gt;</code> class. The <code>Array&lt;T&gt;</code> class has a private constructor though; in order to create an array, use the <code>arrayOf()</code> factory method (to create an array out of the given parameters), or <code>arrayOfNulls()</code> to create an array of <em>n</em> <code>null</code> elements. Note that arrays still support using <em>bracket notation</em> (<code>[]</code>) for accessing values.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">var</span> <span class="va">numbers</span>:Array&lt;<span class="kw">Int</span>&gt; = arrayOf(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)  <span class="co">//create an array</span>
+println(numbers[<span class="dv">3</span>])  <span class="co">//4</span>
+numbers[<span class="dv">4</span>] = <span class="dv">10</span>  <span class="co">//assign value as normal</span></code></pre></div>
+<ul>
+<li>Kotlin also provides specialized classes for arrays of basic types, e.g., <code>IntArray</code></li>
+</ul></li>
+</ul>
+</div>
+<div id="functions" class="section level3">
+<h3><span class="header-section-number">16.1.2</span> Functions</h3>
+<p>Kotlin functions are in some ways closer to JavaScript functions that to Java methods. For one, Kotlin supports package-level functions that do not exist as members of a particular class, as an alternative to <code>static</code> functions in Java. Thus we can talk about Kotlin functions independent of classes (which are discussed below).</p>
+<p><a href="https://kotlinlang.org/docs/reference/functions.html">Functions</a> in Kotlin are declared with the <strong><code>fun</code></strong> keyword (not because they are fun, though they can be). This is folowed by the name of the function and the parameter list (where the parameters are given explicit types). The return type is declared <em>after</em> the parameter list, following a colon (<strong><code>:</code></strong>). For example:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">fun</span> <span class="fu">makeFullName</span>(<span class="va">first</span>:<span class="dt">String</span>, <span class="va">last</span>:<span class="dt">String</span>): <span class="dt">String</span> {
+    <span class="kw">val</span> <span class="va">full</span> = first + <span class="st">&quot; &quot;</span> + last
+    reurn full
+}
+
+<span class="kw">val</span> <span class="va">fullName</span> = makeFullName(<span class="st">&quot;Ada&quot;</span>, <span class="st">&quot;Jones&quot;</span>)</code></pre></div>
+<p>Java’s <code>void</code> return type is in Kotlin represented by the singular value <code>Unit</code>. If a function returns <code>Unit</code>, it can and should be omitted:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">fun</span> <span class="fu">sayHello</span>() { <span class="co">//returns Unit, but type omitted</span>
+    println(<span class="st">&quot;Hello world&quot;</span>);
+}</code></pre></div>
+<p>Kotlin functions also support <a href="https://kotlinlang.org/docs/reference/functions.html#default-arguments">named default argments</a>: you can provide a default value for an argument in the function declaration. If that (positional) argument is omitted, then the default value is used instead. Additionally, arguments can be specified by name when <em>calling</em> the function, allowing you to include them out of order.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">fun</span> <span class="fu">greet</span>(<span class="va">personTo</span>:<span class="dt">String</span> = <span class="st">&quot;world&quot;</span>, <span class="va">personFrom</span>:<span class="dt">String</span> = <span class="st">&quot;Me&quot;</span>) {
+  println(<span class="st">&quot;Hello $personTo, from $personFrom&quot;</span>)
+}
+
+greet()  <span class="co">//use defaults for arguments</span>
+greet(<span class="st">&quot;y&#39;all&quot;</span>)  <span class="co">//use default for second argument</span>
+greet(personFrom=<span class="st">&quot;Myself&quot;</span>, personTo=<span class="st">&quot;You&quot;</span>)  <span class="co">//named arguments (out of order)</span></code></pre></div>
+<p>Similar to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">JavaScript arrow functions</a>, Kotlin functions whose body is just a single expression can leave off the <em>block</em> entirely, instead writing the expression to return after an equals sign (<strong><code>=</code></strong>)—as though that expression were assigned to the function:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="co">//a function square() that takes in an Int and returns that number squared</span>
+<span class="kw">fun</span> <span class="fu">square</span>(<span class="va">n</span>:<span class="dt">Int</span>):<span class="dt">Int</span> = n*n</code></pre></div>
+<ul>
+<li>Note that you can omit the return type from single expression functions, as it can be inferred.</li>
+</ul>
+<p>This provides a very concise way of writing simple functions!</p>
+<p>Similar to JavaScript (and drawing from Java 8), Kotlin supports higher order <a href="https://kotlinlang.org/docs/reference/lambdas.html#anonymous-functions">anonymous functions</a> and <a href="https://kotlinlang.org/docs/reference/lambdas.html">lambda functions</a>. These are functions that can be <em>assigned to variables</em> (including function parameter), just like any other object! These are highly effective when using function programming paradigms (e.g., <code>map()</code> and <code>reudce()</code>), or when specifying event callback functions.</p>
+<p><em>Anonymous</em> functions are normal functions (whether with a block body or just a single expression), but written without a name. These functions can be assigned to variables, or passed directly to functions that take in appropriate callbacks:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">square</span> = <span class="kw">fun</span>(<span class="va">n</span>:<span class="dt">Int</span>):<span class="dt">Int</span> {
+    <span class="kw">return</span> n*n
+}
+
+<span class="kw">val</span> <span class="va">numbers</span>:IntArray = intArrayOf(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)
+println(numbers.contentToString())  <span class="co">//[1, 2, 3, 4, 5]</span>
+
+<span class="kw">val</span> <span class="va">squares</span>:List&lt;<span class="kw">Int</span>&gt; = numbers.map(square)  <span class="co">//transform each element with square()</span>
+println(squares.joinToString())  <span class="co">//1, 4, 9, 16, 25</span></code></pre></div>
+<ul>
+<li><p>Note that the <code>square</code> variable here has an <em>inferred</em> type that is a function which takes in an <code>Int</code> and returns an <code>Int</code>. We can explicitly declare this type using the following syntax:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">square</span>:(<span class="kw">Int</span>) -&gt; <span class="kw">Int</span></code></pre></div>
+<p>The argument types are listed in parentheses, followed by an arrow <strong><code>-&gt;</code></strong>, followed by the return type.</p></li>
+</ul>
+<p>Anonymous functions that are a single expression can also be written as <em>lambda</em> expressions. Lambda expressions are placed inside curly braces <code>{}</code>, with the parameter list coming first (not in parentheses). This is followed by a arrow <strong><code>-&gt;</code></strong>, followed by the expression that should be evaluated.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">add</span> = { x:<span class="kw">Int</span>, y:<span class="kw">Int</span> -&gt; x+y }
+
+<span class="co">//with an explicit typed (so inferred in the expression)</span>
+<span class="kw">val</span> <span class="va">add</span>:(<span class="kw">Int</span>, <span class="kw">Int</span>) -&gt; <span class="kw">Int</span>
+add = { x,y -&gt; x+y }</code></pre></div>
+<p>In fact, is Kotlin is able to figure out the signature for a lambda function with only a single parameter (e.g., because the lambda is being anonymous passed in as a defined callback function, so must meet the required interface), it will allow us to <em>omit</em> the signature entirely. In this case, the single parameter is automatically assigned to the variable <strong><code>it</code></strong>:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">numbers</span>:IntArray = intArrayOf(<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>)
+
+<span class="co">//filter() takes a callback with a single parameter that returns boolean,</span>
+<span class="co">//so the signature can be inferred</span>
+<span class="kw">val</span> <span class="va">filtered</span>:List&lt;<span class="kw">Int</span>&gt; = numbers.filter( {it &gt; <span class="dv">2</span>} )
+
+println(filtered.joinToString())  <span class="co">//3, 4, 5</span></code></pre></div>
+<p>This allows us to write somewhat readable code using functional programming approaches. As an example from the documentation:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin">fruits
+  .filter { it.startsWith(<span class="st">&quot;a&quot;</span>) }
+  .sortedBy { it }
+  .map { it.toUpperCase() }
+  .forEach { println(it) }</code></pre></div>
+<!-- ### Control Statements
+//if statements are expressions!
+//note that `if` can also be an [expression](https://kotlinlang.org/docs/reference/control-flow.html#if-expression)!
+//last value of the "block" is returned
+//for loop works like "enhanced for loop" https://kotlinlang.org/docs/reference/control-flow.html#for-loops
+```
+for ((index, value) in array.withIndex()) {
+    println("the element at $index is $value")
+}
+```
+//ranges
+```
+for (x in 1..5) {
+    print(x)
+}
+```
+//https://kotlinlang.org/docs/reference/ranges.html omg -->
+</div>
+<div id="classes" class="section level3">
+<h3><span class="header-section-number">16.1.3</span> Classes</h3>
+<p>Kotlin is an object-oriented language, just like Java. Thus despite being able to support package-level functions, Kotlin is primarily written using <strong>classes</strong> with <strong>attributes</strong> and <strong>methods</strong>.</p>
+<p>As in Java, Kotlin <a href="https://kotlinlang.org/docs/reference/classes.html">classes</a> are declared using the <code>class</code> keyword. Additionally, most Kotlin classes have a <em>primary constructor</em>, the parameters of which can be included as part of the class declaration.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="co">//declares a class `Dog` whose constructor takes two parameters</span>
+<span class="kw">class</span> Dog(<span class="va">name</span>:<span class="dt">String</span>, <span class="va">breed</span>:<span class="dt">String</span>) {
+    <span class="kw">var</span> <span class="va">name</span> = name   <span class="co">//assign to properties</span>
+    <span class="kw">val</span> <span class="va">breed</span> = breed
+}</code></pre></div>
+<ul>
+<li>Of course constructor parameters can support default named arguments as well!</li>
+<li>Kotlin <strong>properties</strong> (instance variables) default to being <code>public</code>, but can be declared <code>private</code> if desired. See <a href="https://kotlinlang.org/docs/reference/visibility-modifiers.html">Visibility Modifiers</a>.</li>
+<li>Note that <strong>methods</strong> in Kotlin are simply functions (written as above) declared inside the class body.</li>
+</ul>
+<p>The primary constructor parameters can directly declare the variables by including either <code>var</code> or <code>val</code> as appropriate. Thus a shortcut for the above constructor and initialization is:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="co">//declares instance variables</span>
+<span class="kw">class</span> Dog(<span class="kw">var</span> <span class="va">name</span>:<span class="dt">String</span>, <span class="kw">val</span> <span class="va">breed</span>:<span class="dt">String</span>) {
+
+}</code></pre></div>
+<ul>
+<li>Additional constructors are specified using the <code>constructor</code> keyword as the method name. See <a href="https://kotlinlang.org/docs/reference/classes.html#constructors">the documentation</a> for details.</li>
+</ul>
+<p>Objects in Kotlin are instantiated by simply calling the constructor as a normal function, <em>without</em> the <code>new</code> keyword.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">myDog</span> = Dog(<span class="st">&quot;Fido&quot;</span>,<span class="st">&quot;mutt&quot;</span>)  <span class="co">//no new keyword!</span>
+myDog.name  <span class="co">//&quot;Fido&quot;</span>
+myDog.breed  <span class="co">//&quot;mutt&quot;</span></code></pre></div>
+<p>As with any other object-oriented language, Kotlin also supports <a href="https://kotlinlang.org/docs/reference/classes.html#inheritance"><strong>inheritance</strong></a>, with all classes existing within an <em>inheritance hierarchy</em>. Note that in Kotlin, all classes by default inherit from the class <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/"><code>Any</code></a>, rather than from <code>java.lang.Object</code>.</p>
+<p>We can specify a classes inheritance by putting the parent type after a colon (<strong><code>:</code></strong>) in the declaration. If the child class has a <em>primary constructor</em>, then we also include the parameters which should be passed to the parent’s constructor.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">class</span> Dog(<span class="kw">var</span> <span class="va">name</span>:<span class="dt">String</span>, <span class="kw">val</span> <span class="va">breed</span>:<span class="dt">String</span>) : <span class="dt">Animal</span>() {
+
+}</code></pre></div>
+<ul>
+<li><a href="https://kotlinlang.org/docs/reference/interfaces.html">Interfaces</a> are implemented the same way, as part of a comma-separated list of inherited classes. That is, there is no distinction between <em>extending</em> a class and <em>implementing</em> an interface.</li>
+</ul>
+<p><strong>Importantly</strong>, Kotlin requires us to explicitly mark classes as “subclassable” (they are otherwise compiled to <code>final</code> classes). We do this by using the <strong><code>open</code></strong> keyword as an annotation in the class declaration:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="co">//declare class as open</span>
+<span class="kw">open</span> <span class="kw">class</span> Animal(<span class="kw">var</span> <span class="va">name</span>:<span class="dt">String</span>) { }
+
+<span class="co">//constructor parameters can be passed to parent constructor</span>
+<span class="kw">class</span> Dog(<span class="kw">var</span> <span class="va">name</span>:<span class="dt">String</span>) : <span class="dt">Animal</span>(<span class="va">name</span>) { }</code></pre></div>
+<p>The <code>open</code> keyword is also needed if we want to allow a <em>method</em> to be overridden. Additionally, any methods that override a parent version need to be annotated as such with the <strong><code>override</code></strong> keyword.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">open</span> <span class="kw">class</span> Animal() {
+    <span class="co">//function can be overridden</span>
+    <span class="kw">open</span> <span class="kw">fun</span> <span class="fu">speak</span>() {
+      println(<span class="st">&quot;The animal speaks&quot;</span>)
+    }
+}
+
+<span class="kw">class</span> Dog() : <span class="dt">Animal</span>() {
+    <span class="co">//overrides parent function</span>
+    <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">speak</span>() {
+      println(<span class="st">&quot;The dog barks&quot;</span>)
+    }
+
+    <span class="co">//overriding toString() using an expression function</span>
+    <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">toString</span>() = <span class="st">&quot;A dog&quot;</span>
+}</code></pre></div>
+<p class="alert alert-info">
+Note that Kotlin does not have <code>static</code> class methods; instead, just use package-elevel functions!
+</p>
+<p>Kotlin also supports a few other special kinds of classes:</p>
+<ul>
+<li><p><a href="https://kotlinlang.org/docs/reference/data-classes.html">Data Classes</a> are declared using the <strong><code>data</code></strong> keyword as an annotation in the class declaration. These are classes that do nothing but hold data: they have only attributes, no methods (similar to a <code>struct</code> in C). The compiler will automatically provide implementations of <code>toString()</code> and <code>equals()</code> for these classes.</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">data</span> <span class="kw">class</span> Ball(<span class="kw">var</span> <span class="va">x</span>:<span class="dt">Int</span>, <span class="kw">var</span> <span class="va">y</span>:<span class="dt">Int</span>, <span class="kw">val</span> <span class="va">color</span>:<span class="dt">String</span>)
+
+<span class="kw">val</span> myBall = Ball(<span class="va">30</span>,<span class="va">30</span>,&quot;<span class="va">red</span>&quot;)
+print(<span class="va">myBall</span>)  //Ball(<span class="va">x</span>=30, <span class="va">y</span>=30, <span class="va">color</span>=red)</code></pre></div></li>
+<li><p><a href="https://kotlinlang.org/docs/reference/nested-classes.html">Nested classes</a> can be made into <strong>inner classes</strong> (e.g., “non-static” classes with access to the containing class’s instance variables) using the <strong><code>inner</code></strong> annotation in the class declaration.</p></li>
+<li><p><em>Anonymous classes</em> (called <a href="https://kotlinlang.org/docs/reference/object-declarations.html">Object expressions</a>) can be created with the <strong><code>object</code></strong> keyword in place of a <code>class</code> and the class name:</p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin">button.addActionListener(<span class="kw">object</span> : <span class="dt">ActionListener</span>() {
+    <span class="co">//class definition (including methods to override) goes in here!</span>
+      <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">actionPerformed</span>(<span class="va">ActionEvent</span> <span class="va">event</span>) {
+            <span class="co">//...</span>
+      }
+});</code></pre></div></li>
+</ul>
+<p>This is pretty similar to Java, but using <code>object</code> instead of <code>new</code> to instantiate the anonymous class.</p>
+</div>
+</div>
+<div id="kotlin-for-android" class="section level2">
+<h2><span class="header-section-number">16.2</span> Kotlin for Android</h2>
+<p>Kotlin is built into Android Studio 3.0 by default, but is also available via a <a href="https://kotlinlang.org/docs/tutorials/kotlin-android.html#installing-the-kotlin-plugin">plugin</a> for earlier versions. You can install this plugins through the <strong><code>Preferences &gt; Plugins</code></strong> menu: click the <code>Install JetBrains plugin...</code> button at the bottom and select <code>Kotlin</code>. Note that you will need to <em>restart</em> Android Studio.</p>
+<p>After you’ve installed the plugin, you can use Android Studio to <a href="https://kotlinlang.org/docs/tutorials/kotlin-android.html#converting-java-code-to-kotlin">convert</a> an existing Java file to a Kotlin source code file (<strong><code>.kt</code></strong>) by selecting <code>Code &gt; Convert Java File to Kotlin File</code> from the menu. Once you start editing the file, you will be prompted to <a href="https://kotlinlang.org/docs/tutorials/kotlin-android.html#configuring-kotlin-in-the-project">configure</a> the project to use Kotlin. This will modify the Gradle build scripts to include Kotlin support, allowing you to build and run your app as usual.</p>
+<p>For example, we can convert the provided <code>MainActivity</code>, and consider the changes that have been made:</p>
+<ul>
+<li>The <code>adapter</code> instance variable can be null, so its type includes a <code>?</code>.</li>
+<li>Notice how Intents are addressed, particularly the <code>::class.java</code> syntax.</li>
+<li><a href="https://kotlinlang.org/docs/reference/control-flow.html">For loops</a> use <code>for ... in</code> syntax, and Kotlin supports <a href="https://kotlinlang.org/docs/reference/ranges.html">ranges</a>.</li>
+<li>You can fix the syntax error with the adapter by explicitly casting the ListView <code>as</code> a <code>ListView</code> (this is an example of the converting misunderstanding the code; it happens!)</li>
+<li>Static variables are wrapped in a <a href="https://kotlinlang.org/docs/reference/object-declarations.html#companion-objects">companion object</a>.</li>
+</ul>
+<p class="alert alert-warning">
+This section of the lecture is incomplete.
+</p>
+<div id="the-android-extension" class="section level3">
+<h3><span class="header-section-number">16.2.1</span> The Android Extension</h3>
+<p><a href="https://kotlinlang.org/docs/tutorials/android-plugin.html" class="uri">https://kotlinlang.org/docs/tutorials/android-plugin.html</a></p>
+<p>To include:</p>
+<pre class="gradle"><code>apply plugin: &#39;kotlin-android-extensions&#39;</code></pre>
+<p>To avoid <code>findViewById()</code></p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">import</span> <span class="im">kotlinx.android.synthetic.main</span>.&lt;<span class="im">layout</span>&gt;.*</code></pre></div>
+</div>
+<div id="anko" class="section level3">
+<h3><span class="header-section-number">16.2.2</span> Anko</h3>
+<p><a href="https://github.com/Kotlin/anko" class="uri">https://github.com/Kotlin/anko</a></p>
+<pre class="gradle"><code>dependencies {
+    compile &quot;org.jetbrains.anko:anko-commons:$anko_version&quot;
+}</code></pre>
+<p>Logging: <a href="https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Logging">https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Logging</a></p>
+<ul>
+<li>Avoids the explicit call to <code>Log</code>, and uses the class name as the TAG. There are other Java libraries that support easier logging as well.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin">info(<span class="st">&quot;London is the capital of Great Britain&quot;</span>)
+debug(<span class="dv">5</span>) <span class="co">// .toString() method will be executed</span>
+warn(<span class="kw">null</span>) <span class="co">// &quot;null&quot; will be printed</span></code></pre></div>
+<p>Intents: <a href="https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Intents">https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Intents</a></p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin">startActivity(intentFor&lt;SomeOtherActivity&gt;(<span class="st">&quot;id&quot;</span> to <span class="dv">5</span>).singleTop())
+<span class="co">//or</span>
+startActivity&lt;SomeOtherActivity&gt;(<span class="st">&quot;id&quot;</span> to <span class="dv">5</span>)</code></pre></div>
+<p>Toast and Alerts: <a href="https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Dialogs">https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Dialogs</a></p>
+<div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="co">//toasts</span>
+toast(<span class="st">&quot;Hi there!&quot;</span>)
+longToast(<span class="st">&quot;Wow, such a duration&quot;</span>)
+
+<span class="co">//alert</span>
+alert(<span class="st">&quot;Hi, I&#39;m Roy&quot;</span>, <span class="st">&quot;Have you tried turning it off and on again?&quot;</span>) {
+    yesButton { toast(<span class="st">&quot;Oh…&quot;</span>) }
+    noButton {}
+}.show()</code></pre></div>
 
 </div>
-
-
-
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="animation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="publishing.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -436,7 +698,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/index.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/kotlin.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

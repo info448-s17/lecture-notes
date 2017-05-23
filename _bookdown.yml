@@ -23,6 +23,7 @@ rmd_files:
   - services.Rmd
   - material.Rmd
   - animation.Rmd
+  - kotlin.Rmd
 
   - publishing.Rmd
 
@@ -33,6 +34,7 @@ rmd_files:
   - maps.Rmd
   - styles.Rmd
   - multitouch.Rmd
+  - memory.Rmd
 
   - appendix-java.Rmd
   - java-review.Rmd

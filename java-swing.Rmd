@@ -52,9 +52,10 @@ But look carefully: `ActionListener` is not a concrete class, but an abstract **
 
 	```java
 	button.addActionListener(new ActionListener() {
-	  //class declaration goes in here!
-
-	public void actionPerformed(ActionEvent event) { /*...*/}
+	    //class definition (including methods to override) goes in here!
+		  public void actionPerformed(ActionEvent event) {
+			    //...
+		  }
 	});
 	```
 

@@ -1,0 +1,385 @@
+# Special Topics: Kotlin {#kotlin}
+This lecture introduces [Kotlin](https://kotlinlang.org/), an open source programming language that runs on the Java Virtual Machine and is fully interoperable with Java Code. It is designed to be a more concise, more flexible, and faster alternative to Java while offering language-level support to features such as `null`-checking and functional programming techniques. As of May 2017, Google offers first-class support for using Kotlin when developing Android applications.
+
+- Kotlin was developed by [JetBrains](https://en.wikipedia.org/wiki/JetBrains), the creators of the IntelliJ IDE which forms the basis for Android Studio.
+
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture16-kotlin>. Kotlin demo code can be found in the `kotlin` folder; build and run this code through gradle with the command `gradle -q`.</p>
+
+- Note that the provided [gradle build script](https://kotlinlang.org/docs/reference/using-gradle.html) includes the Kotlin standard library for Java 8, making (simplied) versions of Java classes available.
+
+## Kotlin Syntax
+The Kotlin language draws many syntactical structures from popular modern languages, including JavaScript and [Swift](https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/) (used for iOS development); I find it has a lot in common with [TypeScript](https://www.typescriptlang.org/).
+
+The full documentation for the Kotlin language can be found at <https://kotlinlang.org/docs/reference/>; practice and examples are available in the form of [Kotlin Koans](https://kotlinlang.org/docs/tutorials/koans.html). This lecture does not aim to be a complete reference but rather to highlight some of the most noticable or interesting aspects of the langauge.
+
+### Variables
+Kotlin variables are _declared_ by using the keyword **`var`** (for mutable variables) or **`val`** (for read-only variables); this is similar to `let` and `const` in JavaScript ES5. Like Java, Kotlin is a statically-typed language&mdash;the variable type is written _after_ the variablen name, separated by a colon (**`:`**). For example:
+
+```kotlin
+val x:Int = 448  //read-only
+var stepCount:Int = 9000  //mutable
+stepCount++  //can change the variable
+val message:String = "Hello" + " " + "world"  //supports normal operators
+```
+
+Notice that each of these statements [**lacks semicolons**](https://kotlinlang.org/docs/reference/grammar.html#semicolons)! Similar to many scripting languages, statements can separated either by a colon or by a newline.
+
+In Kotlin, [primitive types](https://kotlinlang.org/docs/reference/basic-types.html) (e.g., `int`, `double`, `boolean`) and implemented using classes, allowing for all values to support instance methods and variables (called _properties_). These classes are named after their Java equivalents (though of course start with a capital letter, since they are classes!)
+
+- The compiler optimizes the types to avoid extraneous overhead.
+
+Additionally, variable type can often be  **inferred** from the assigned value, so may be omitted:
+
+```kotlin
+var x = 448  //`Int` type is inferred
+x-40  //valid mathematical operation
+```
+
+- Note even without the explicit type declaration, the variable _is strongly typed_&mdash;it's just that the variable type is determined by the compiler. I encourage you to include the explicit type declaration, particularly when it helps clarify the semantic meaning of the variable.
+
+One of Kotlin's major features is [null safety](https://kotlinlang.org/docs/reference/null-safety.html), or the ability to catch null-pointer errors _at compile time_. In Kotlin, we need to explicitly declare that a variable can be assigned `null` as a value. We do this by including a question mark **`?`** immediately after the type declaration:
+
+```kotlin
+var message:String = "Hello"
+message = null  //compilation error!
+
+var possiblyNull:String? = "Hello"
+possiblyNull = null  //no problems!
+```
+
+- Kotlin provides a number of other structures using the `?` to check for and handle `null` values; see [Null Safety](https://kotlinlang.org/docs/reference/null-safety.html) for details.
+
+
+Basic Kotlin types work pretty much the same as basic Java types. A few notable differences and features:
+
+- _Warning_: Because of the classes Kotlin uses for numeric types, it is unable to automatically convert to a "larger" type (e.g., from `Int` to `Double`). This casting needs to occur explicitly:
+
+    ```kotlin
+    val integer:Int = 5
+    var root:Double = Math.sqrt(integer)  //compile type error!
+                                          //sqrt() takes in a double
+    root = Math.sqrt(integer.toDouble())  //no problems!
+    ```
+
+- _Fun feature_: in Kotlin, numeric literals can be written with underscores (**`_`**) as readability separators; the underscores are removed during compile time.
+
+    ```kotlin
+    val oneMillion:Int = 1_000_000
+    ```
+
+- _Fun feature_: Kotlin also supports [string templating](https://kotlinlang.org/docs/reference/basic-types.html#string-templates), in which variables used within the String are automatically evaluated (avoiding the need for complex String concatenation). Variables to evaluate are prepended with a dollar sign **`$`**, while more complex expressions can be evaluated from inside **`${}`**
+
+    ```kotlin
+    val quantity = 5
+    val price = 2.95
+    val cost:String = "$quantity items at $price costs ${quantity*price}"
+    ```
+
+- _Note_: [Arrays](https://kotlinlang.org/docs/reference/basic-types.html#arrays) in Kotlin are represented by the `Array<T>` class. The `Array<T>` class has a private constructor though; in order to create an array, use the `arrayOf()` factory method (to create an array out of the given parameters), or `arrayOfNulls()` to create an array of _n_ `null` elements. Note that arrays still support using _bracket notation_ (`[]`) for accessing values.
+
+    ```kotlin
+    var numbers:Array<Int> = arrayOf(1,2,3,4,5)  //create an array
+    println(numbers[3])  //4
+    numbers[4] = 10  //assign value as normal
+    ```
+
+    - Kotlin also provides specialized classes for arrays of basic types, e.g., `IntArray`
+
+
+### Functions
+Kotlin functions are in some ways closer to JavaScript functions that to Java methods. For one, Kotlin supports package-level functions that do not exist as members of a particular class, as an alternative to `static` functions in Java. Thus we can talk about Kotlin functions independent of classes (which are discussed below).
+
+[Functions](https://kotlinlang.org/docs/reference/functions.html) in Kotlin are declared with the **`fun`** keyword (not because they are fun, though they can be). This is folowed by the name of the function and the parameter list (where the parameters are given explicit types). The return type is declared _after_ the parameter list, following a colon (**`:`**). For example:
+
+```kotlin
+fun makeFullName(first:String, last:String): String {
+    val full = first + " " + last
+    reurn full
+}
+
+val fullName = makeFullName("Ada", "Jones")
+```
+
+Java's `void` return type is in Kotlin represented by the singular value `Unit`. If a function returns `Unit`, it can and should be omitted:
+
+```kotlin
+fun sayHello() { //returns Unit, but type omitted
+    println("Hello world");
+}
+```
+
+Kotlin functions also support [named default argments](https://kotlinlang.org/docs/reference/functions.html#default-arguments): you can provide a default value for an argument in the function declaration. If that (positional) argument is omitted, then the default value is used instead. Additionally, arguments can be specified by name when _calling_ the function, allowing you to include them out of order.
+
+```kotlin
+fun greet(personTo:String = "world", personFrom:String = "Me") {
+  println("Hello $personTo, from $personFrom")
+}
+
+greet()  //use defaults for arguments
+greet("y'all")  //use default for second argument
+greet(personFrom="Myself", personTo="You")  //named arguments (out of order)
+```
+
+Similar to [JavaScript arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), Kotlin functions whose body is just a single expression can leave off the _block_ entirely, instead writing the expression to return after an equals sign (**`=`**)&mdash;as though that expression were assigned to the function:
+
+```kotlin
+//a function square() that takes in an Int and returns that number squared
+fun square(n:Int):Int = n*n
+```
+
+- Note that you can omit the return type from single expression functions, as it can be inferred.
+
+This provides a very concise way of writing simple functions!
+
+Similar to JavaScript (and drawing from Java 8), Kotlin supports higher order [anonymous functions](https://kotlinlang.org/docs/reference/lambdas.html#anonymous-functions) and [lambda functions](https://kotlinlang.org/docs/reference/lambdas.html). These are functions that can be _assigned to variables_ (including function parameter), just like any other object! These are highly effective when using function programming paradigms (e.g., `map()` and `reudce()`), or when specifying event callback functions.
+
+_Anonymous_ functions are normal functions (whether with a block body or just a single expression), but written without a name. These functions can be assigned to variables, or passed directly to functions that take in appropriate callbacks:
+
+```kotlin
+val square = fun(n:Int):Int {
+    return n*n
+}
+
+val numbers:IntArray = intArrayOf(1,2,3,4,5)
+println(numbers.contentToString())  //[1, 2, 3, 4, 5]
+
+val squares:List<Int> = numbers.map(square)  //transform each element with square()
+println(squares.joinToString())  //1, 4, 9, 16, 25
+```
+
+- Note that the `square` variable here has an _inferred_ type that is a function which takes in an `Int` and returns an `Int`. We can explicitly declare this type using the following syntax:
+
+    ```kotlin
+    val square:(Int) -> Int
+    ```
+
+    The argument types are listed in parentheses, followed by an arrow **`->`**, followed by the return type.
+
+Anonymous functions that are a single expression can also be written as _lambda_ expressions. Lambda expressions are placed inside curly braces `{}`, with the parameter list coming first (not in parentheses). This is followed by a arrow **`->`**, followed by the expression that should be evaluated.
+
+```kotlin
+val add = { x:Int, y:Int -> x+y }
+
+//with an explicit typed (so inferred in the expression)
+val add:(Int, Int) -> Int
+add = { x,y -> x+y }
+```
+
+In fact, is Kotlin is able to figure out the signature for a lambda function with only a single parameter (e.g., because the lambda is being anonymous passed in as a defined callback function, so must meet the required interface), it will allow us to _omit_ the signature entirely. In this case, the single parameter is automatically assigned to the variable **`it`**:
+
+```kotlin
+val numbers:IntArray = intArrayOf(3,1,4,2,5)
+
+//filter() takes a callback with a single parameter that returns boolean,
+//so the signature can be inferred
+val filtered:List<Int> = numbers.filter( {it > 2} )
+
+println(filtered.joinToString())  //3, 4, 5
+```
+
+This allows us to write somewhat readable code using functional programming approaches. As an example from the documentation:
+
+```kotlin
+fruits
+  .filter { it.startsWith("a") }
+  .sortedBy { it }
+  .map { it.toUpperCase() }
+  .forEach { println(it) }
+```
+
+<!-- ### Control Statements
+//if statements are expressions!
+//note that `if` can also be an [expression](https://kotlinlang.org/docs/reference/control-flow.html#if-expression)!
+//last value of the "block" is returned
+//for loop works like "enhanced for loop" https://kotlinlang.org/docs/reference/control-flow.html#for-loops
+```
+for ((index, value) in array.withIndex()) {
+    println("the element at $index is $value")
+}
+```
+//ranges
+```
+for (x in 1..5) {
+    print(x)
+}
+```
+//https://kotlinlang.org/docs/reference/ranges.html omg -->
+
+### Classes
+Kotlin is an object-oriented language, just like Java. Thus despite being able to support package-level functions, Kotlin is primarily written using **classes** with **attributes** and **methods**.
+
+As in Java, Kotlin [classes](https://kotlinlang.org/docs/reference/classes.html) are declared using the `class` keyword. Additionally, most Kotlin classes have a _primary constructor_, the parameters of which can be included as part of the class declaration.
+
+```kotlin
+//declares a class `Dog` whose constructor takes two parameters
+class Dog(name:String, breed:String) {
+    var name = name   //assign to properties
+    val breed = breed
+}
+```
+
+- Of course constructor parameters can support default named arguments as well!
+- Kotlin **properties** (instance variables) default to being `public`, but can be declared `private` if desired. See [Visibility Modifiers](https://kotlinlang.org/docs/reference/visibility-modifiers.html).
+- Note that **methods** in Kotlin are simply functions (written as above) declared inside the class body.
+
+The primary constructor parameters can directly declare the variables by including either `var` or `val` as appropriate. Thus a shortcut for the above constructor and initialization is:
+
+```kotlin
+//declares instance variables
+class Dog(var name:String, val breed:String) {
+
+}
+```
+
+- Additional constructors are specified using the `constructor` keyword as the method name. See [the documentation](https://kotlinlang.org/docs/reference/classes.html#constructors) for details.
+
+Objects in Kotlin are instantiated by simply calling the constructor as a normal function, _without_ the `new` keyword.
+
+```kotlin
+val myDog = Dog("Fido","mutt")  //no new keyword!
+myDog.name  //"Fido"
+myDog.breed  //"mutt"
+```
+
+As with any other object-oriented language, Kotlin also supports [**inheritance**](https://kotlinlang.org/docs/reference/classes.html#inheritance), with all classes existing within an _inheritance hierarchy_. Note that in Kotlin, all classes by default inherit from the class [`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/), rather than from `java.lang.Object`.
+
+We can specify a classes inheritance by putting the parent type after a colon (**`:`**) in the declaration. If the child class has a _primary constructor_, then we also include the parameters which should be passed to the parent's constructor.
+
+```kotlin
+class Dog(var name:String, val breed:String) : Animal() {
+
+}
+```
+
+- [Interfaces](https://kotlinlang.org/docs/reference/interfaces.html) are implemented the same way, as part of a comma-separated list of inherited classes. That is, there is no distinction between _extending_ a class and _implementing_ an interface.
+
+**Importantly**, Kotlin requires us to explicitly mark classes as "subclassable" (they are otherwise compiled to `final` classes). We do this by using the **`open`** keyword as an annotation in the class declaration:
+
+```kotlin
+//declare class as open
+open class Animal(var name:String) { }
+
+//constructor parameters can be passed to parent constructor
+class Dog(var name:String) : Animal(name) { }
+```
+
+The `open` keyword is also needed if we want to allow a _method_ to be overridden. Additionally, any methods that override a parent version need to be annotated as such with the **`override`** keyword.
+
+```kotlin
+open class Animal() {
+    //function can be overridden
+    open fun speak() {
+      println("The animal speaks")
+    }
+}
+
+class Dog() : Animal() {
+    //overrides parent function
+    override fun speak() {
+      println("The dog barks")
+    }
+
+    //overriding toString() using an expression function
+    override fun toString() = "A dog"
+}
+```
+
+<p class="alert alert-info">Note that Kotlin does not have `static` class methods; instead, just use package-elevel functions!</p>
+
+Kotlin also supports a few other special kinds of classes:
+
+- [Data Classes](https://kotlinlang.org/docs/reference/data-classes.html) are declared using the **`data`** keyword as an annotation in the class declaration. These are classes that do nothing but hold data: they have only attributes, no methods (similar to a `struct` in C). The compiler will automatically provide implementations of `toString()` and `equals()` for these classes.
+
+    ```kotlin
+    data class Ball(var x:Int, var y:Int, val color:String)
+
+    val myBall = Ball(30,30,"red")
+    print(myBall)  //Ball(x=30, y=30, color=red)
+    ```
+
+- [Nested classes](https://kotlinlang.org/docs/reference/nested-classes.html) can be made into **inner classes** (e.g., "non-static" classes with access to the containing class's instance variables) using the **`inner`** annotation in the class declaration.
+
+- _Anonymous classes_ (called [Object expressions](https://kotlinlang.org/docs/reference/object-declarations.html)) can be created with the **`object`** keyword in place of a `class` and the class name:
+
+    ```kotlin
+    button.addActionListener(object : ActionListener() {
+  	    //class definition (including methods to override) goes in here!
+  		  override fun actionPerformed(ActionEvent event) {
+  			    //...
+  		  }
+  	});
+    ```
+
+This is pretty similar to Java, but using `object` instead of `new` to instantiate the anonymous class.
+
+
+## Kotlin for Android
+Kotlin is built into Android Studio 3.0 by default, but is also available via a [plugin](https://kotlinlang.org/docs/tutorials/kotlin-android.html#installing-the-kotlin-plugin) for earlier versions. You can install this plugins through the **`Preferences > Plugins`** menu: click the `Install JetBrains plugin...` button at the bottom and select `Kotlin`. Note that you will need to _restart_ Android Studio.
+
+After you've installed the plugin, you can use Android Studio to [convert](https://kotlinlang.org/docs/tutorials/kotlin-android.html#converting-java-code-to-kotlin) an existing Java file to a Kotlin source code file (**`.kt`**) by selecting `Code > Convert Java File to Kotlin File` from the menu. Once you start editing the file, you will be prompted to [configure](https://kotlinlang.org/docs/tutorials/kotlin-android.html#configuring-kotlin-in-the-project) the project to use Kotlin. This will modify the Gradle build scripts to include Kotlin support, allowing you to build and run your app as usual.
+
+For example, we can convert the provided `MainActivity`, and consider the changes that have been made:
+
+- The `adapter` instance variable can be null, so its type includes a `?`.
+- Notice how Intents are addressed, particularly the `::class.java` syntax.
+- [For loops](https://kotlinlang.org/docs/reference/control-flow.html) use `for ... in` syntax, and Kotlin supports [ranges](https://kotlinlang.org/docs/reference/ranges.html).
+- You can fix the syntax error with the adapter by explicitly casting the ListView `as` a `ListView` (this is an example of the converting misunderstanding the code; it happens!)
+- Static variables are wrapped in a [companion object](https://kotlinlang.org/docs/reference/object-declarations.html#companion-objects).
+
+<p class="alert alert-warning">This section of the lecture is incomplete.</p>
+
+### The Android Extension
+<https://kotlinlang.org/docs/tutorials/android-plugin.html>
+
+To include:
+
+```gradle
+apply plugin: 'kotlin-android-extensions'
+```
+
+To avoid `findViewById()`
+
+```kotlin
+import kotlinx.android.synthetic.main.<layout>.*
+```
+
+### Anko
+<https://github.com/Kotlin/anko>
+
+```gradle
+dependencies {
+    compile "org.jetbrains.anko:anko-commons:$anko_version"
+}
+```
+
+Logging: https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Logging
+
+- Avoids the explicit call to `Log`, and uses the class name as the TAG. There are other Java libraries that support easier logging as well.
+
+```kotlin
+info("London is the capital of Great Britain")
+debug(5) // .toString() method will be executed
+warn(null) // "null" will be printed
+```
+
+Intents: https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Intents
+
+```kotlin
+startActivity(intentFor<SomeOtherActivity>("id" to 5).singleTop())
+//or
+startActivity<SomeOtherActivity>("id" to 5)
+```
+
+Toast and Alerts: https://github.com/Kotlin/anko/wiki/Anko-Commons-%E2%80%93-Dialogs
+
+```kotlin
+//toasts
+toast("Hi there!")
+longToast("Wow, such a duration")
+
+//alert
+alert("Hi, I'm Roy", "Have you tried turning it off and on again?") {
+    yesButton { toast("Oh…") }
+    noButton {}
+}.show()
+```
