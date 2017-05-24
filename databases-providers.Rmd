@@ -5,6 +5,8 @@ Databases are appropriate when you want to store data _locally_ on the device (e
 
 <p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture17-databases>.</p>
 
+<p class="alert alert-warning">Note that the intial version of this program accesses the device's User Dictionary, which is only available to on API 22 (Lollipop) _or earlier_. The tutorial does support all versions of Android.</p>
+
 ## Review: Providers and Loaders
 As discussed previously, a **Content Provider** is an abstraction for a source of structured data (like a database, but also possibly files, internet resources, etc). It acts as an interface for interacting with that data, supporting the developing in reading, adding to, updating, or deleting data from the source (e.g., the basic [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations).
 
@@ -30,7 +32,7 @@ Content Providers can abstract all kinds of data stores (files, urls, etc.). The
 
 <p class="alert alert-info">If you have worked with `SQL` or another relational database system (e.g., in the iSchool's INFO 340 course), this interaction will seem familiar. If you've never worked with a database, the simplest explanation is to think of them as a spreadsheet (like in an Excel file) where you manipulate _rows_ of data given a set of pre-defined _columns_. [SQL](https://en.wikipedia.org/wiki/SQL) (Structured Query Language) is its own command language for working with these spreadsheets; we'll see some samples of those queries in this lecture. SQLite is a "flavor" (version) of SQL; the full SQLite spec can be found [here](http://sqlite.org/lang.html). A short tutorial (borrowed from Google) is also available in the code repository.</p>
 
-In this lecture, we will build our own database of words (separate from the User Dictionary) that we can access through a Content Provider. We will simply change _which_ "data store" is being accessed; the rest of the application's interface will remain the same. This will let us demonstrate how to put together a Content Provider from scratch. We will start by setting up the database, and then implementing the `ContentProvider` that abstracts it.
+In this lecture, we will build our own database of words (separate from the User Dictionary&mdash;and so which will work on API 23+) that we can access through a Content Provider. We will simply change _which_ "data store" is being accessed; the rest of the application's interface will remain the same. This will let us demonstrate how to put together a Content Provider from scratch. We will start by setting up the database, and then implementing the `ContentProvider` that abstracts it.
 
 - Setting up a database is somewhat wordy and round-about, though it does not involve many new concepts.
 
