@@ -79,6 +79,7 @@ Basic Kotlin types work pretty much the same as basic Java types. A few notable 
 
     ```kotlin
     var numbers:Array<Int> = arrayOf(1,2,3,4,5)  //create an array
+    println(numbers.size)  //kotline uses `size` property for array length
     println(numbers[3])  //4
     numbers[4] = 10  //assign value as normal
     ```

@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="databases.html">
-<link rel="next" href="kotlin.html">
+<link rel="prev" href="animation.html">
+<link rel="next" href="publishing.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -391,47 +391,245 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="publishing" class="section level1">
-<h1><span class="header-section-number">Lecture 17</span> Publishing</h1>
-<p>This short chapter discusses how to publish your Android application, producing a version of the app that can be shared with others. In particular, it explains how to <a href="https://developer.android.com/studio/publish/app-signing.html">cryptographically sign your app</a> and build it so it can be installed by people who are not using Android Studio.</p>
-<p>Before you actually distribute your application, you should make sure it is fully ready to be published. Google provides an <a href="https://developer.android.com/studio/publish/preparing.html">excellent list</a> of things to do before releasing your application, as well as a more detailed <a href="https://developer.android.com/distribute/best-practices/launch/launch-checklist.html">checklist</a> for releasing an app on the Play Store.</p>
-<ul>
-<li>For example: remove extranous Logging commands, check for accessibility and localization, etc.</li>
-</ul>
-<p>Once you have completed these steps, you are ready to build and sign your app.</p>
-<div id="signing-an-app" class="section level2">
-<h2><span class="header-section-number">17.1</span> Signing an App</h2>
-<p>As described in <a href="introduction.html#building-apps">lecture 1</a>, building an Android application involves compiling Java and XML code into DVM bytecode, and then packing this code (along with assets and graphics) into a <code>.apk</code> file.</p>
-<p>But in order to install this <code>.apk</code> file onto a device, it needs to be <strong>cryptographically signed</strong> by including a <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"><strong>public-key certificate</strong></a>. This <a href="https://en.wikipedia.org/wiki/Digital_signature">certificate</a> acts somewhat like a “password”, in that it corresponds with a <em>private key</em> (a secret code) held by you as the developer. Because each public-key cert is associated with a code only you as the developer know (like a password), it is able to act as an identifying <em>signature</em> for your app: only you know the secret password, so only you are able to provide this particular certificate. Thus by <em>signing</em> the <code>.apk</code> with your signature, you are marking the package as being developed by you and not someone else (just like a signature on a check). Android uses these signatures as a security feature to ensure that any future updates come from the same person (no malicious app updates!), as well as to help verify the source of an installed package.</p>
-<ul>
-<li>The secret <em>private keys</em> are stored on your computer in <code>.keystore</code> files (think: a database of private keys). You may have multiple different keystores on your machine.</li>
-</ul>
-<p>By default, when you build and run an app in Android Studio, the IDE automatically generates a <strong>debug certificate</strong> for you to sign your application with. This certificate is not secure (it’s an automatically generated password!) so isn’t trustworthy for app stores (like the Play Store)… but it is sufficient for being able to install and run your application through Android Studio.</p>
-<ul>
-<li><p>By default keys are stored in the <code>~/.android</code> folder on Mac and Linux, and the <code>C:\Users\USER_NAME\.android\</code> folder on Windows. You can view the debug key (e.g., on Mac) using the command:</p>
-<pre><code>keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android</code></pre>
-<ul>
-<li><p>The <code>-alias</code> is a name of the particular certificate, and the <code>-storepass</code> and <code>keypass</code> arguments are literal passwords associated with the store (database) and certificate (in the database) respectively. The fact that this store is password protected is what makes it accessible only to the developer.</p></li>
-<li><p>Scroll down to see the “Certificate fingerprints”; for example, the <code>SHA1</code> certificate is used whe getting a <a href="https://developers.google.com/maps/documentation/android-api/signup">Google Maps API key</a>.</p></li>
-</ul></li>
-<li><p>Importantly, each computer running Android Studio will produce it’s own <em>debug certificate</em>. That means that the “signature” identifying your app will different for every different computer: even if it has the same package and the same source code, Android will consider it a “different” program because it was built (in debug mode) on a different machine. This is particularly important when things like API keys (e.g., for Google Maps) are linked to a particular digital signature; it means that <em>each</em> development machine would need to have its unique signature associated with the API!</p></li>
-</ul>
-<p>In addition to the automatically generated <em>debug certificates</em>, you can sign apps with your own generated <strong>release certificate</strong>. This is a certificate not automatically created by Android Studio, but is still associated with a secret “password” that only you know. These certificates are also stored in a <code>.keystore</code> file, which is created and password-protected by the developer. Because this keystore is kept secret and locked, only the developer is able to sign the built <code>.apk</code> with a verifiable signature, thereby ensuring that any updates to the application must have come from that develper.</p>
-<p class="alert">
-I like to think of <em>debug certificates</em> as like cheap, easily-reproducable Bic pens, and <em>release certificates</em> like fancy golden quills. When multiple developers are working on an app, each will be signing their testing versions with their own cheap Bics, but when it comes to releasing the project, you need to get out the expensive golden quill to do the signing. In this metaphor, the <code>.keystore</code> file is a pen case.
+<div id="databases" class="section level1">
+<h1><span class="header-section-number">Lecture 16</span> Databases and Providers</h1>
+<p>This lecture provides an in-depth discussion of working with <a href="https://developer.android.com/training/basics/data-storage/databases.html"><strong>Databases</strong></a> and <a href="https://developer.android.com/guide/topics/providers/content-providers.html"><strong>Content Providers</strong></a> in Android. <em>Accessing</em> Content Providers (via a Loader) was discussed in a <a href="providers-and-loaders.html#content-providers-intro">previous lecture</a>. This lecture will instead talk about how to make your own database and a provider for it.</p>
+<p>Databases are appropriate when you want to store data <em>locally</em> on the device (e.g., not on the cloud, which may require expensive network transactions as well as user accounts), but that data has greater scale or complexity than is appropriate for a SharedPreferences XML file—that is, you need to store more than just key-value pairs.</p>
+<p class="alert alert-info">
+This lecture references code found at <a href="https://github.com/info448-s17/lecture17-databases" class="uri">https://github.com/info448-s17/lecture17-databases</a>.
 </p>
-<div id="a-release-.apk" class="section level3">
-<h3><span class="header-section-number">17.1.1</span> A Release <code>.apk</code></h3>
-<p>In order to generate a shareable <strong>release <code>.apk</code></strong>, you will need to produce a <em>release certificate</em> to sign the app with, then build and sign the <code>.apk</code> with that certificate.</p>
-<p>Android studio makes it easy to <a href="https://developer.android.com/studio/publish/app-signing.html#release-mode">sign a release build</a> (follow the link for more details and examples). In short, select <code>Build &gt; Generate Signed APK</code> from the menu, and follow the wizard’s instructions!</p>
+<div id="review-providers-and-loaders" class="section level2">
+<h2><span class="header-section-number">16.1</span> Review: Providers and Loaders</h2>
+<p>As discussed previously, a <strong>Content Provider</strong> is an abstraction for a source of structured data (like a database, but also possibly files, internet resources, etc). It acts as an interface for interacting with that data, supporting the developing in reading, adding to, updating, or deleting data from the source (e.g., the basic <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a> operations).</p>
+<p>The lecture reference code demonstrates again how to access and modify structured data—specifically the User Dictionary—via a Content Provider using a <a href="https://developer.android.com/guide/components/loaders.html">Loader</a>. You can read this example to review how to utilize an existing Provider:</p>
 <ul>
-<li><p>You will be prompted for a location for the <code>.keystore</code> file to use (e.g., where to store your release pens). I recommend making a file somewhere in your user’s home directory (e.g., <code>~/android-release.jks</code>). Note that you can use the same private key (found in the keystore) for multiple apps.</p></li>
-<li><p>It is also possible to configure Android Stduio to <a href="https://developer.android.com/studio/publish/app-signing.html#sign-auto">automatically</a> sign your application when building for release. Be sure you <a href="https://developer.android.com/studio/publish/app-signing.html#secure-shared-keystore">remove signing information</a> from your build files so your passwords don’t get uploaded to GitHub!</p></li>
-</ul>
-<p>The built and signed <code>.apk</code> will be created in the destination folder you selected. This file can then be <a href="https://developer.android.com/studio/publish/index.html#publishing-release">shared</a>: uploaded to the Google Play Store, hosted on a web page, or emailed directly to someone to install.</p>
+<li><p>The application displays a <code>ListView</code>, which is backed by a <code>SimpleCursorAdapter</code>. This adapter takes a “cursor” (think: a “pointer” or an Iterator—also a list of data that has been loaded <em>into memory</em>) and connects each item to a View on the screen. This View shows the word (<code>WORD</code>) and the “frequency”/prominence (<code>FREQUENCY</code>) of that word.</p></li>
+<li><p>In order to get this list of items into memory from data store itself (to perform the <strong>read</strong> operation), we set up a <code>Loader</code>. The Loader fetches 3 “columns” (attributes) from the data store: <code>_ID</code>, <code>WORD</code>, and <code>FREQUENCY</code>; the <code>_ID</code> field is <em>not</em> shown on the View, but the Loader needs that to keep track of the displayed items). We do not utilize any selection or sorting criteria, though we could add them in if we wanted.</p>
+<p>The loader fetches (<strong><em>queries</em></strong>) data from the data store to load it into memory. It then tells the Adapter to take that loaded data and display it in the View. By using a Loader for this process, we gain two benefits: (1) the data is loaded into memory <em>on a background thread</em> (not the UI Thread), and (2) the data is <em>automatically reloaded</em> when the data store’s content changes.</p></li>
+<li><p>The example also supports the <strong>create</strong> operation: by clicking the “Add Word” button, we can <strong><em>insert</em></strong> a new entry into the data store represented by the Content Provider. We construct a <code>ContentValues</code> object (similar to a <code>Bundle</code>, but for Content Providers) that contains the attribute values for the new provider entry. We then use the <code>ContentResolver</code> to <code>insert()</code> this item into the Provider (indicated by its URI).</p></li>
+<li><p>Finally, the example supports the <strong>update</strong> operation: by clicking the on an item in the list, we can <strong><em>update</em></strong> that entry in the data store (increasing the word’s frequency). We get the Cursor containing the items from the AdapterView, with the “pointer” of that iterator set to the item that was clicked on. We then again use the <code>ContentResolver</code> to <code>update()</code> the item with the a ContentValues bundle of the fields we wish to change.</p>
 <ul>
-<li>Note that installing <code>.apk</code> files from outside the Play Store—even when signed—requires the user to <a href="https://developer.android.com/studio/publish/index.html#unknown-sources">opt-in for apps from unknown sources</a>.</li>
+<li>Note that we make sure to update only that particular item by specifying the <em>URI of that item</em>. We do this by constructing a new URI representing/identifying that item, effectively by appending <code>&quot;/:id&quot;</code> to the URI. This means that we don’t need to use the selection criteria (though we could do that as well).</li>
+</ul></li>
 </ul>
+<p>To review: the Content Provider acts as the data store, abstracting information at some location (e.g., in a database). The Loader grabs a bunch of rows and columns from that database, and hands it to the Adapter. The Adapter takes a subset of those rows and columns and puts them in the ListView so that they display to the user. User interaction allows us to add or modify the data in that database.</p>
+</div>
+<div id="sqlite-databases" class="section level2">
+<h2><span class="header-section-number">16.2</span> SQLite Databases</h2>
+<p>Content Providers can abstract all kinds of data stores (files, urls, etc.). They abstract these as a <em>structured information</em> similar to a database… and in fact the most common kind of store they represent is a <a href="https://en.wikipedia.org/wiki/Relational_database_management_system">relational database</a> (specifically, an <a href="https://en.wikipedia.org/wiki/SQLite">SQLite database</a>). Android <a href="https://developer.android.com/guide/topics/data/data-storage.html#db">comes with an API</a> for creating an querying a database; these databases are stored on <a href="https://developer.android.com/guide/topics/data/data-storage.html#filesInternal"><em>internal storage</em></a> meaning that each application can have its own private database (or multiple databases, in fact)!</p>
+<p class="alert alert-info">
+If you have worked with <code>SQL</code> or another relational database system (e.g., in the iSchool’s INFO 340 course), this interaction will seem familiar. If you’ve never worked with a database, the simplest explanation is to think of them as a spreadsheet (like in an Excel file) where you manipulate <em>rows</em> of data given a set of pre-defined <em>columns</em>. <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> (Structured Query Language) is its own command language for working with these spreadsheets; we’ll see some samples of those queries in this lecture. SQLite is a “flavor” (version) of SQL; the full SQLite spec can be found <a href="http://sqlite.org/lang.html">here</a>. A short tutorial (borrowed from Google) is also available in the code repository.
+</p>
+<p>In this lecture, we will build our own database of words (separate from the User Dictionary) that we can access through a Content Provider. We will simply change <em>which</em> “data store” is being accessed; the rest of the application’s interface will remain the same. This will let us demonstrate how to put together a Content Provider from scratch. We will start by setting up the database, and then implementing the <code>ContentProvider</code> that abstracts it.</p>
+<ul>
+<li>Setting up a database is somewhat wordy and round-about, though it does not involve many new concepts.</li>
+</ul>
+<p>The step to effectively utilizing a database in Android is to create a class (e.g., <code>WordDatabase</code>) to act as a “namespace” for the various pieces of our database. This class will not be instantiated (and so could even have a <code>private</code> default constructor).</p>
+<p>The <code>WordDatabase</code> class will contain a number of <em>constants</em>:</p>
+<ul>
+<li><code>DATABASE_NAME</code> to refer to the name of the database file stored on the device (e.g., <code>words.db</code>)</li>
+<li><code>DATABASE_VERSION</code> to refer to the current version number of our database’s schema. This is used more for supporting <a href="https://en.wikipedia.org/wiki/Schema_migration">migrations</a> like if we want to update our database later.</li>
+</ul>
+<p>We’re then going to specify constants that define the database’s <strong>schema</strong> or <strong>contract</strong>. This is so that other classes (e.g., the <code>ContentProvider</code> and the <code>MainActivity</code>) can refer to column names consistently without having to remember or even know the specific text we utilize in the database. This is similar to how we used the variable <code>UserDictionary.Words.WORD</code> rather than the String value <code>&quot;word&quot;</code>. By convention, we define this schema as a separate <em><code>static</code> nested class</em> (e.g., <code>WordEntry</code>), to keep things organized. This class contains the constants to hold the column names:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">static</span> <span class="kw">class</span> WordEntry <span class="kw">implements</span> BaseColumns {
+     <span class="co">//class cannot be instantiated</span>
+     <span class="kw">private</span> <span class="fu">WordEntry</span>(){}
+
+     <span class="kw">public</span> <span class="dt">static</span> <span class="dt">final</span> <span class="bu">String</span> TABLE_NAME = <span class="st">&quot;words&quot;</span>;
+     <span class="kw">public</span> <span class="dt">static</span> <span class="dt">final</span> <span class="bu">String</span> COL_WORD = <span class="st">&quot;word&quot;</span>;
+     <span class="kw">public</span> <span class="dt">static</span> <span class="dt">final</span> <span class="bu">String</span> COL_COUNT = <span class="st">&quot;count&quot;</span>;
+}</code></pre></div>
+<ul>
+<li><p>The class implements <a href="https://developer.android.com/reference/android/provider/BaseColumns.html"><code>BaseColumns</code></a>, which lets it inherit a few framework specific constants for free—in particular, the <code>_ID</code> variable which Content Providers rely on the database to have.</p></li>
+<li><p>We create a different nested class for each table in the database (sheet in a spreadsheet). This allows us to use Java-style namespacing (dot notation) to refer to different tables in a single database.</p></li>
+</ul>
+<p>Once we have defined the schema, we are ready to create and work with the database. In order to help us do this, we’re going to use a class called <a href="https://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper.html"><code>SQLiteOpenHelper</code></a>. This class offers a set of methods to help manage the database being created and upgraded (e.g., for migrations). Specifically, we will will <em>subclass</em> <code>SQLiteOpenHelper</code>, creating another nested class that represents the specific helper for our database.</p>
+<p>The subclass has a constructor that takes in a <code>Context</code>, and then “passes up” the database name and version to the parent class.</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="fu">DatabaseHelper</span>(<span class="bu">Context</span> context){
+    <span class="kw">super</span>(context, DATABASE_NAME, <span class="kw">null</span>, DATABASE_VERSION);
+}</code></pre></div>
+<p><code>SQLiteOpenHelper</code> also has two <code>abstract</code> methods (event callbacks) that we need to implemet: what happens when the database is <em>created</em>, and what happens when the database is <em>upgraded</em>.</p>
+<p>When the database is first created, we’ll need to actually create the table to hold our words. This involves sending it an <code>SQL</code> command to create the table! We’ll write this out as yet another constant for readability.</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="bu">String</span> CREATE_TASKS_TABLE =
+    <span class="st">&quot;CREATE TABLE &quot;</span> + WordEntry.<span class="fu">TABLE_NAME</span> + <span class="st">&quot;(&quot;</span> +
+        WordEntry._ID + <span class="st">&quot; INTEGER PRIMARY KEY AUTOINCREMENT&quot;</span> + <span class="st">&quot;, &quot;</span>+
+        WordEntry.<span class="fu">COL_WORD</span> + <span class="st">&quot; TEXT&quot;</span> + <span class="st">&quot;,&quot;</span>+
+        WordEntry.<span class="fu">COL_COUNT</span> + <span class="st">&quot; INTEGER&quot;</span> +
+      <span class="st">&quot;)&quot;</span>;
+
+<span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="bu">String</span> DROP_TASKS_TABLE =
+    <span class="st">&quot;DROP TABLE IF EXISTS &quot;</span>+ WordEntry.<span class="fu">TABLE_NAME</span>;</code></pre></div>
+<ul>
+<li>We can do the same for dropping (deleting) the table as well.</li>
+<li>This is the only <code>SQL</code> we will write in this tutorial.</li>
+</ul>
+<p>We can run these <code>SQL</code> statements by using the <code>execSQL()</code> method, called on the <a href="http://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.html"><code>SQLiteDatabase</code></a> object that is passed to these callbacks. Note that this runs a “raw” SQL query (that doesn’t return anything, so not <code>SELECT</code>), without any kind of checks against SQL injection attacks. But since we’re hard-coding the information to run, it’s not a problem. Aside from this situation, you should <strong><em>never</em></strong> use this method.</p>
+<ul>
+<li><p>We can also use the <code>insert()</code> method to add some sample words to the database (similar to how we used the Content Provider), for clarity when testing:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">ContentValues sample1 = <span class="kw">new</span> <span class="fu">ContentValues</span>();
+sample1.<span class="fu">put</span>(WordEntry.<span class="fu">COL_WORD</span>, <span class="st">&quot;Embiggen&quot;</span>);
+sample1.<span class="fu">put</span>(WordEntry.<span class="fu">COL_COUNT</span>, <span class="dv">0</span>);
+db.<span class="fu">insert</span>(WordEntry.<span class="fu">TABLE_NAME</span>, <span class="kw">null</span>, sample1);</code></pre></div></li>
+<li><p>In the <code>onUpdate()</code> callback, we’ll just “drop” the table and recreate it (by calling <code>onCreate()</code>).</p></li>
+</ul>
+<p>If we want to interact with this database in <code>MainActivity</code>, we can initialize the <code>DatabaseHelper</code> object (which will create the database <em>if needed</em>) and then use that helper to fetch the database we want to query (using <code>getReadableDatabase()</code>).</p>
+<ul>
+<li>Note that querying a database could take a long time, and so we should <em>not</em> be doing it on the UI Thread… this example is simply for testing.</li>
+</ul>
+<p>We can check that our database is set up correctly in one of two ways:</p>
+<ul>
+<li><p>We can directly explore the SQLite database that is on your device by using <code>adb</code> and the <code>sqlite3</code> tool. See <a href="http://developer.android.com/tools/help/sqlite3.html">this link</a> for more details.</p>
+<pre><code>$ adb -s emulator-5554 shell
+# sqlite3 /data/data/edu.uw.package.name/databases/words.db
+# sqlite&gt; select * from words;
+# sqlite&gt; .exit</code></pre></li>
+<li><p>We can call a <code>query()</code> method on our <code>SQLiteDatabase</code>, and log out the results. A <code>SQLiteQueryBuilder</code> can offer some help if our query was going to be complex (e.g,. with <code>JOIN</code>):</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">SQLiteQueryBuilder builder = <span class="kw">new</span> <span class="fu">SQLiteQueryBuilder</span>();
+builder.<span class="fu">setTables</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">TABLE_NAME</span>); <span class="co">//set the table to use</span>
+
+<span class="bu">Cursor</span> results = builder.<span class="fu">query</span>(
+        db,
+        <span class="kw">new</span> <span class="bu">String</span>[] {WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">COL_WORD</span>, WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">COL_COUNT</span>},
+        <span class="kw">null</span>, <span class="kw">null</span>, <span class="kw">null</span>, <span class="kw">null</span>, <span class="kw">null</span>); <span class="co">//5 nulls!</span>
+
+<span class="kw">while</span>(results.<span class="fu">moveToNext</span>()) {
+    <span class="bu">String</span> word = results.<span class="fu">getString</span>(results.<span class="fu">getColumnIndexOrThrow</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">COL_WORD</span>));
+    <span class="dt">int</span> freq = results.<span class="fu">getInt</span>(results.<span class="fu">getColumnIndexOrThrow</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">COL_COUNT</span>));
+    Log.<span class="fu">v</span>(TAG, <span class="st">&quot;&#39;&quot;</span>+word+<span class="st">&quot;&#39; (&quot;</span>+freq+<span class="st">&quot;)&quot;</span>);
+}</code></pre></div>
+<ul>
+<li>This is the exact same Cursor processing work used when logging out the clicked item, but using our column names instead!</li>
+<li>We could even remove the Loader call and just pass in this query directly to the Adapter, if we wanted to display our database in the list.</li>
+</ul></li>
+</ul>
+<p>Voila, we have a database that we can call methods on to access!</p>
+</div>
+<div id="implementing-contentprovider" class="section level2">
+<h2><span class="header-section-number">16.3</span> Implementing <code>ContentProvider</code></h2>
+<p>We don’t want to do this database creation and querying on the main thread (because it may take a while). And since we also want to easily let our <code>ListView</code> update when the database changes, we we like to be able to use a Loader to access this database. In order to use a Loader, we need to wrap the database in a <code>ContentProvider</code>.</p>
+<p class="alert alert-info">
+There are a lot of steps and a lot of code involved inmaking a <code>ContentProvider</code>, and most of them are “boilerplate” for most databases. So much so that there is <a href="https://developer.android.com/guide/topics/providers/content-provider-creating.html#ContentProvider">thorough example code</a> in the Google documentation, which you can copy-and-paste from as needed.
+</p>
+<p>We’ll start by creating another class that extends <code>ContentProvider</code> (<em>can you understand why?</em>). Since this will have a lot of abstract methods we’ll need to fill in, so we can actually use one of Android Studio’s generators via <code>New &gt; Other &gt; Content Provider</code> to help us along (I normally say not to use these, but with the <code>ContentProvider</code> it’s not too messy).</p>
+<p>We will have to specify an <a href="https://developer.android.com/guide/topics/providers/content-provider-creating.html#ContentURI"><strong>authority</strong></a> for the Provider. This acts as a unique, Android-internal “name” for the database (to indicate which it is, or who “owns” it). This is the “name” by which others will be able to refer to our particular Provider. This is thus sort of like a package name—and in fact, we usually use the package name with an extra <code>.provider</code> attached as the authority name.</p>
+<p>Also notice that an entry for this <code>&lt;provider&gt;</code> has been added to the <code>Manifest</code>, including the authority name. <code>android:enabled</code> means the Provider can be instantiated, and <code>android:exported</code> means it is available to other applications.</p>
+<div id="uris-and-types" class="section level3">
+<h3><span class="header-section-number">16.3.1</span> URIs and Types</h3>
+<p>The most important piece of a <code>ContentProvider</code> (that makes it more than just helper methods for a database) is how it can be accessed at a particular <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier"><strong>URI</strong></a>. So the first thing we need to do is specify this URI for our provider.</p>
+<ul>
+<li>We’ll actually want to specify <em>multiple</em> URIs. This is because each piece of content we provide (each record in the database!) is itself a distinct <em>resource</em>, and thus should have its own URI. Thus we need to design a <strong>schema</strong> for the URIs so that we know how to refer to each kind of content offered by our provider.</li>
+</ul>
+<p>Designing a URI schema is like designing a URL structure for a website; this will feel familiar to specifying <em>routes</em> for a web application.</p>
+<p>The most common URI approach for Content Providers is to give each resource we provide a URI of the format:</p>
+<pre><code>content://authority/resource/id</code></pre>
+<ul>
+<li>This URI indicates that it is a identifier for a particular provider (the <code>authority</code>), which has a particular <code>resource</code> type (think: which database table of information), which may have a particular resource <code>id</code> (think: the ID of the record in the table)</li>
+<li>Leaving off the <code>id</code> would refer to the entire table, or rather the “list” of resources. So really we have two different “categories” of URIs: the whole list, and an individual resource within that list. Both have the same “base”, but will need to be handled slightly differently.</li>
+<li>See <a href="https://developer.android.com/guide/topics/providers/content-provider-creating.html#ContentURI">designing content URIs</a> for more discussion on how to structure these.</li>
+</ul>
+<p>We will define these URIs piece-wise using constants (of course). One for the <em>authority</em>, one for the <em>resource type</em> (which happens to be the name of the database table, but doesn’t need to be), and finally the overall Content URI (parsed into a <code>Uri</code> object):</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> <span class="dt">final</span> Uri CONTENT_URI =
+    Uri.<span class="fu">parse</span>(<span class="st">&quot;content://&quot;</span> + AUTHORITY + <span class="st">&quot;/&quot;</span>+WORD_RESOURCE);</code></pre></div>
+<p>But we also need to handle both types of resources: the “list” of words, and the individual words themselves. To enable this, we’re going to use a class called a <a href="https://developer.android.com/reference/android/content/UriMatcher.html"><code>UriMatcher</code></a>. This class provides a <em>mapping</em> between URIs and the actual “type” of data we’re interested in (either lists or word objects). This will help us do “routing” work, without needing to parse the path of the URI ourselves.</p>
+<ul>
+<li><p>We’ll represent the “type” or “kind” with <code>int</code> constants, allwoing us to easily refer to “which” kind of resource we’re talking about.</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//integer values representing each supported resource Uri</span>
+<span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> WORD_LIST_URI = <span class="dv">1</span>; <span class="co">// /words</span>
+<span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> WORD_SINGLE_URI = <span class="dv">2</span>;<span class="co">// /words/:id</span></code></pre></div>
+<ul>
+<li>So if you give me a <code>/words</code> URI, I can tell you that you’re interested in “resource kind #1”</li>
+</ul></li>
+</ul>
+<p>We want to make a a <code>static UriMatcher</code> object (like a constant) that we can use to do the mapping… but because it takes more than one line to set this up (we add an entry for each mapping), we need to put it inside a <code>static</code> block so that all this code is run together:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> UriMatcher sUriMatcher; <span class="co">//for handling Uri requests</span>
+<span class="dt">static</span> {
+    <span class="co">//setup mapping between URIs and IDs</span>
+    sUriMatcher = <span class="kw">new</span> <span class="fu">UriMatcher</span>(UriMatcher.<span class="fu">NO_MATCH</span>);
+    sUriMatcher.<span class="fu">addURI</span>(AUTHORITY, WORD_RESOURCE, WORD_LIST_URI);
+    sUriMatcher.<span class="fu">addURI</span>(AUTHORITY, WORD_RESOURCE + <span class="st">&quot;/#&quot;</span>, WORD_SINGLE_URI);
+}</code></pre></div>
+<ul>
+<li>Note the wildcard <code>#</code>, meaning “any number” (after the slash) will “match” this URI.</li>
+</ul>
+<p>We can then figure out which “kind” of task by using the <code>UriMatcher#match(uri)</code> method, which will return the “kind” <code>int</code> that matches the given Uri.</p>
+<p>As an example of this, let’s fill in the <code>getType()</code> method. The purpose of this method is to allow the ContentProvider to let whoever queries it know the <a href="https://en.wikipedia.org/wiki/Media_type">MIME Type</a> (media type) of the resource a URI is accessing. This lets the program specify whether the content provided by the Content Provider is an image, text, music, or some other type.</p>
+<ul>
+<li><p>The type we’re going to give back is a <code>Cursor</code> (list of rows in a table), so we’ll specify <a href="http://developer.android.com/guide/topics/providers/content-provider-creating.html#TableMIMETypes">MIME Types for that</a>:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">String</span> <span class="fu">getType</span>(Uri uri) {
+    <span class="kw">switch</span>(sUriMatcher.<span class="fu">match</span>(uri)){
+        <span class="kw">case</span> WORD_LIST_URI:
+            <span class="kw">return</span> <span class="st">&quot;vnd.android.cursor.dir/&quot;</span>+AUTHORITY+<span class="st">&quot;.&quot;</span>+WORD_RESOURCE;
+        <span class="kw">case</span> WORD_SINGLE_URI:
+            <span class="kw">return</span> <span class="st">&quot;vnd.android.cursor.item/&quot;</span>+AUTHORITY+<span class="st">&quot;.&quot;</span>+WORD_RESOURCE;
+        <span class="kw">default</span>:
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalArgumentException</span>(<span class="st">&quot;Unknown URI &quot;</span>+uri);
+    }
+}</code></pre></div>
+<ul>
+<li><code>vnd</code> stands for “vendor specific”—in this case, a format specific to Android.</li>
+</ul></li>
+</ul>
+</div>
+<div id="query-methods" class="section level3">
+<h3><span class="header-section-number">16.3.2</span> Query Methods</h3>
+<p>Once all of the URIs are specified, we can start responding to requests for content at those URIs. Specifically, when a request for content at a URI comes in, we’re going to fetch data from the <em>database</em> we made earlier and then return that data. We handle these “requests” through 4 different methods: <code>query()</code>, <code>insert()</code>, <code>update()</code>, and <code>delete()</code> (mirroring the CRUD operations, drawing on standard SQL query names). We will fill in those methods to have them fetch and return the database data.</p>
+<p>First, we need to get access to the database (through a helper), just as we did in the <code>MainActivity</code>. We’ll instantiate the <code>DatabaseHelper</code> in the <code>ContentProvider#onCreate()</code> callback, saving that helper as an instance variable to reference later. Then in the CRUD methods (which will be executed <em>in a background thread</em>), we can call <code>getWriteableDatabase()</code> to get access to that database.</p>
+<p>We will start with implementing the <strong>query()</strong> method. Basically, we need to do the same query we used in <code>MainActivity</code>—though can pass in the extra query parameters (e.g., <code>projection</code>, <code>selection</code>, <code>sortOrder</code>) instead of always having them be <code>null</code> or defined manually.</p>
+<p>However, we also need to be able to handle both types of resources that our Provider serves (lists or single words). We can use the <code>UriMatcher</code> to determine how to adjust our query: for example, by using the <code>UriBuilder#appendWhere()</code> method to add a “selection” argument:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">switch</span>(sUriMatcher.<span class="fu">match</span>(uri)){
+    <span class="kw">case</span> WORD_LIST_URI: <span class="co">//all words</span>
+      <span class="kw">break</span>; <span class="co">//no change</span>
+    <span class="kw">case</span> WORD_SINGLE_URI: <span class="co">//single word</span>
+      builder.<span class="fu">appendWhere</span>(WordDatabase.<span class="fu">WordEntry</span>._ID + <span class="st">&quot;=&quot;</span> + uri.<span class="fu">getLastPathSegment</span>()); <span class="co">//restrict to that item</span>
+    <span class="kw">default</span>:
+      <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalArgumentException</span>(<span class="st">&quot;Unknown URI &quot;</span>+uri);
+}</code></pre></div>
+<p>We’ll then just return the <code>Cursor</code> that we get as a result of the query.</p>
+<p>But there is also one more piece. We want to make sure that the Loader that is reading from our Content Provider (that loaded this <code>Cursor</code> object) is notified of any changes to the results of its query. This will allow the Loader to “automatically” query for new content if any of the data <em>at that URI</em> changes.</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">cursor.<span class="fu">setNotificationUri</span>(<span class="fu">getContext</span>().<span class="fu">getContentResolver</span>(), uri);</code></pre></div>
+<p>With this step in place, we can go back to our <code>MainActivity</code> and swap all the column names and URIs for our own custom <code>WordProvider</code>! Rerun the app… and voila, we see our own list of words!</p>
+<p>We can do basically the same thing to support <strong><code>insert()</code></strong> and <strong><code>update()</code></strong> to enable all of our use cases.</p>
+<ul>
+<li><p>Use the <code>UriMatcher</code> to make to only respond to proper Uris—you can’t insert into a single record, and you can’t update the entire list.</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">if</span>(sUriMatcher.<span class="fu">match</span>(uri) != WORD_LIST_URI) {
+  <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalArgumentException</span>(<span class="st">&quot;Unknown URI &quot;</span>+uri);
+}</code></pre></div></li>
+<li><p>For <code>insert()</code>, it is also possible to make sure that no “empty” entries are added to the database, and to return the result if the insertion is successful:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">if</span>(!values.<span class="fu">containsKey</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">COL_WORD</span>)){
+  values.<span class="fu">put</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">COL_WORD</span>, <span class="st">&quot;&quot;</span>);
+}
+<span class="kw">if</span>(!values.<span class="fu">containsKey</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">COL_COUNT</span>)){
+    values.<span class="fu">put</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">COL_COUNT</span>, <span class="dv">0</span>);
+}
+
+<span class="dt">long</span> rowId = db.<span class="fu">insert</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">TABLE_NAME</span>, <span class="kw">null</span>, values);
+<span class="kw">if</span> (rowId &gt; <span class="dv">0</span>) { <span class="co">//if successful</span>
+    Uri wordUri = ContentUris.<span class="fu">withAppendedId</span>(CONTENT_URI, rowId);
+    <span class="fu">getContext</span>().<span class="fu">getContentResolver</span>().<span class="fu">notifyChange</span>(wordUri, <span class="kw">null</span>);
+    <span class="kw">return</span> wordUri; <span class="co">//return the URI for the entry</span>
+}
+<span class="kw">throw</span> <span class="kw">new</span> <span class="bu">SQLException</span>(<span class="st">&quot;Failed to insert row into &quot;</span> + uri);</code></pre></div></li>
+<li><p>The <code>update()</code> method can be somewhat awkward because we need to basically add our <code>id</code> restriction to the user-given selection args:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> count;
+<span class="kw">switch</span> (sUriMatcher.<span class="fu">match</span>(uri)) {
+  <span class="kw">case</span> WORD_LIST_URI:
+    count = db.<span class="fu">update</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">TABLE_NAME</span>, values, selection, selectionArgs); <span class="co">//just pass in params</span>
+    <span class="kw">break</span>;
+  <span class="kw">case</span> WORD_SINGLE_URI:
+    <span class="bu">String</span> wordId = uri.<span class="fu">getLastPathSegment</span>();
+    count = db.<span class="fu">update</span>(WordDatabase.<span class="fu">WordEntry</span>.<span class="fu">TABLE_NAME</span>, values, WordDatabase.<span class="fu">WordEntry</span>._ID + <span class="st">&quot;=&quot;</span> + wordId <span class="co">//select by id</span>
+          + (!TextUtils.<span class="fu">isEmpty</span>(selection) ? <span class="st">&quot; AND (&quot;</span> + selection + <span class="ch">&#39;)&#39;</span> : <span class="st">&quot;&quot;</span>), selectionArgs); <span class="co">//apply params</span>
+    <span class="kw">break</span>;
+  <span class="kw">default</span>:
+    <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalArgumentException</span>(<span class="st">&quot;Unknown URI &quot;</span> + uri);
+}
+<span class="kw">if</span> (count &gt; <span class="dv">0</span>) {
+  <span class="fu">getContext</span>().<span class="fu">getContentResolver</span>().<span class="fu">notifyChange</span>(uri, <span class="kw">null</span>);
+  <span class="kw">return</span> count;
+}
+<span class="kw">throw</span> <span class="kw">new</span> <span class="bu">SQLException</span>(<span class="st">&quot;Failed to update row &quot;</span> + uri);</code></pre></div></li>
+</ul>
+<p>But in the end, we have a working ContentProvider that supports the same behaviors as the built in User Dictionary (well, except for <code>delete()</code>). We can now store data in our own database and easily access it off the UI Thread for use in things like ListViews. This is great for if you want to track and store any kind of structured information in your apps.</p>
 
 </div>
 </div>
@@ -441,8 +639,8 @@ I like to think of <em>debug certificates</em> as like cheap, easily-reproducabl
           </div>
         </div>
       </div>
-<a href="databases.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="kotlin.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="animation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="publishing.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -470,7 +668,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/info448-s17/lecture-notes/edit/master/publishing.Rmd",
+"link": "https://github.com/info448-s17/lecture-notes/edit/master/databases-providers.Rmd",
 "text": "Edit"
 },
 "download": ["android-dev-book.pdf", "android-dev-book.epub"],

@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-05-23">
+<meta name="date" content="2017-05-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -196,7 +196,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.4" data-path="ui-components.html"><a href="ui-components.html#toasts"><i class="fa fa-check"></i><b>6.4</b> Toasts</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html"><i class="fa fa-check"></i><b>7</b> Providers and Loaders</a><ul>
-<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
+<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers-intro"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
 <li class="chapter" data-level="7.2" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#cursors"><i class="fa fa-check"></i><b>7.2</b> Cursors</a></li>
 <li class="chapter" data-level="7.3" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#loaders"><i class="fa fa-check"></i><b>7.3</b> Loaders</a></li>
 <li class="chapter" data-level="7.4" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#other-provider-actions"><i class="fa fa-check"></i><b>7.4</b> Other Provider Actions</a><ul>
@@ -276,15 +276,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="15.3" data-path="animation.html"><a href="animation.html#property-animation"><i class="fa fa-check"></i><b>15.3</b> Property Animation</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="kotlin.html"><a href="kotlin.html"><i class="fa fa-check"></i><b>16</b> Special Topics: Kotlin</a><ul>
-<li class="chapter" data-level="16.1" data-path="kotlin.html"><a href="kotlin.html#kotlin-syntax"><i class="fa fa-check"></i><b>16.1</b> Kotlin Syntax</a><ul>
-<li class="chapter" data-level="16.1.1" data-path="kotlin.html"><a href="kotlin.html#variables"><i class="fa fa-check"></i><b>16.1.1</b> Variables</a></li>
-<li class="chapter" data-level="16.1.2" data-path="kotlin.html"><a href="kotlin.html#functions"><i class="fa fa-check"></i><b>16.1.2</b> Functions</a></li>
-<li class="chapter" data-level="16.1.3" data-path="kotlin.html"><a href="kotlin.html#classes"><i class="fa fa-check"></i><b>16.1.3</b> Classes</a></li>
-</ul></li>
-<li class="chapter" data-level="16.2" data-path="kotlin.html"><a href="kotlin.html#kotlin-for-android"><i class="fa fa-check"></i><b>16.2</b> Kotlin for Android</a><ul>
-<li class="chapter" data-level="16.2.1" data-path="kotlin.html"><a href="kotlin.html#the-android-extension"><i class="fa fa-check"></i><b>16.2.1</b> The Android Extension</a></li>
-<li class="chapter" data-level="16.2.2" data-path="kotlin.html"><a href="kotlin.html#anko"><i class="fa fa-check"></i><b>16.2.2</b> Anko</a></li>
+<li class="chapter" data-level="16" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>16</b> Databases and Providers</a><ul>
+<li class="chapter" data-level="16.1" data-path="databases.html"><a href="databases.html#review-providers-and-loaders"><i class="fa fa-check"></i><b>16.1</b> Review: Providers and Loaders</a></li>
+<li class="chapter" data-level="16.2" data-path="databases.html"><a href="databases.html#sqlite-databases"><i class="fa fa-check"></i><b>16.2</b> SQLite Databases</a></li>
+<li class="chapter" data-level="16.3" data-path="databases.html"><a href="databases.html#implementing-contentprovider"><i class="fa fa-check"></i><b>16.3</b> Implementing <code>ContentProvider</code></a><ul>
+<li class="chapter" data-level="16.3.1" data-path="databases.html"><a href="databases.html#uris-and-types"><i class="fa fa-check"></i><b>16.3.1</b> URIs and Types</a></li>
+<li class="chapter" data-level="16.3.2" data-path="databases.html"><a href="databases.html#query-methods"><i class="fa fa-check"></i><b>16.3.2</b> Query Methods</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="publishing.html"><a href="publishing.html"><i class="fa fa-check"></i><b>17</b> Publishing</a><ul>
@@ -292,54 +289,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="17.1.1" data-path="publishing.html"><a href="publishing.html#a-release-.apk"><i class="fa fa-check"></i><b>17.1.1</b> A Release <code>.apk</code></a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="18" data-path="kotlin.html"><a href="kotlin.html"><i class="fa fa-check"></i><b>18</b> Special Topics: Kotlin</a><ul>
+<li class="chapter" data-level="18.1" data-path="kotlin.html"><a href="kotlin.html#kotlin-syntax"><i class="fa fa-check"></i><b>18.1</b> Kotlin Syntax</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="kotlin.html"><a href="kotlin.html#variables"><i class="fa fa-check"></i><b>18.1.1</b> Variables</a></li>
+<li class="chapter" data-level="18.1.2" data-path="kotlin.html"><a href="kotlin.html#functions"><i class="fa fa-check"></i><b>18.1.2</b> Functions</a></li>
+<li class="chapter" data-level="18.1.3" data-path="kotlin.html"><a href="kotlin.html#classes"><i class="fa fa-check"></i><b>18.1.3</b> Classes</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="kotlin.html"><a href="kotlin.html#kotlin-for-android"><i class="fa fa-check"></i><b>18.2</b> Kotlin for Android</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="kotlin.html"><a href="kotlin.html#the-android-extension"><i class="fa fa-check"></i><b>18.2.1</b> The Android Extension</a></li>
+<li class="chapter" data-level="18.2.2" data-path="kotlin.html"><a href="kotlin.html#anko"><i class="fa fa-check"></i><b>18.2.2</b> Anko</a></li>
+</ul></li>
+</ul></li>
 <li class="part"><span><b>II Additional Topics (Labs)</b></span></li>
-<li class="chapter" data-level="18" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>18</b> Accessibility</a><ul>
-<li class="chapter" data-level="18.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>18.1</b> Universal Usability</a></li>
-<li class="chapter" data-level="18.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>18.2</b> Implementing Accessibility</a><ul>
-<li class="chapter" data-level="18.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>18.2.1</b> Supporting Vision Impairment</a></li>
-<li class="chapter" data-level="18.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>18.2.2</b> Supporting Alternative Inputs</a></li>
-<li class="chapter" data-level="18.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>18.2.3</b> Supporting Internationalization</a></li>
-<li class="chapter" data-level="18.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>18.2.4</b> Further Testing</a></li>
+<li class="chapter" data-level="19" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>19</b> Accessibility</a><ul>
+<li class="chapter" data-level="19.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>19.1</b> Universal Usability</a></li>
+<li class="chapter" data-level="19.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>19.2</b> Implementing Accessibility</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>19.2.1</b> Supporting Vision Impairment</a></li>
+<li class="chapter" data-level="19.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>19.2.2</b> Supporting Alternative Inputs</a></li>
+<li class="chapter" data-level="19.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>19.2.3</b> Supporting Internationalization</a></li>
+<li class="chapter" data-level="19.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>19.2.4</b> Further Testing</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>19</b> Fragments: ViewPager</a><ul>
-<li class="chapter" data-level="19.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>19.1</b> Define a SearchFragment</a></li>
-<li class="chapter" data-level="19.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>19.2</b> Add the ViewPager and Adapter</a></li>
-<li class="chapter" data-level="19.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>19.3</b> Add User Interaction</a></li>
+<li class="chapter" data-level="20" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>20</b> Fragments: ViewPager</a><ul>
+<li class="chapter" data-level="20.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>20.1</b> Define a SearchFragment</a></li>
+<li class="chapter" data-level="20.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>20.2</b> Add the ViewPager and Adapter</a></li>
+<li class="chapter" data-level="20.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>20.3</b> Add User Interaction</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>20</b> Bluetooth</a></li>
-<li class="chapter" data-level="21" data-path="maps.html"><a href="maps.html"><i class="fa fa-check"></i><b>21</b> Maps</a><ul>
-<li class="chapter" data-level="21.1" data-path="maps.html"><a href="maps.html#create-a-map-activity"><i class="fa fa-check"></i><b>21.1</b> Create a Map Activity</a><ul>
-<li class="chapter" data-level="21.1.1" data-path="maps.html"><a href="maps.html#getting-an-api-key"><i class="fa fa-check"></i><b>21.1.1</b> Getting an API Key</a></li>
-<li class="chapter" data-level="21.1.2" data-path="maps.html"><a href="maps.html#the-supportmapfragment"><i class="fa fa-check"></i><b>21.1.2</b> The <code>SupportMapFragment</code></a></li>
+<li class="chapter" data-level="21" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>21</b> Bluetooth</a></li>
+<li class="chapter" data-level="22" data-path="maps.html"><a href="maps.html"><i class="fa fa-check"></i><b>22</b> Maps</a><ul>
+<li class="chapter" data-level="22.1" data-path="maps.html"><a href="maps.html#create-a-map-activity"><i class="fa fa-check"></i><b>22.1</b> Create a Map Activity</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="maps.html"><a href="maps.html#getting-an-api-key"><i class="fa fa-check"></i><b>22.1.1</b> Getting an API Key</a></li>
+<li class="chapter" data-level="22.1.2" data-path="maps.html"><a href="maps.html#the-supportmapfragment"><i class="fa fa-check"></i><b>22.1.2</b> The <code>SupportMapFragment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="21.2" data-path="maps.html"><a href="maps.html#specifying-the-user-interface"><i class="fa fa-check"></i><b>21.2</b> Specifying the User Interface</a></li>
-<li class="chapter" data-level="21.3" data-path="maps.html"><a href="maps.html#markers-and-drawings"><i class="fa fa-check"></i><b>21.3</b> Markers and Drawings</a><ul>
-<li class="chapter" data-level="21.3.1" data-path="maps.html"><a href="maps.html#drawing-shapes"><i class="fa fa-check"></i><b>21.3.1</b> Drawing Shapes</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="22" data-path="styles-themes.html"><a href="styles-themes.html"><i class="fa fa-check"></i><b>22</b> Styles &amp; Themes</a><ul>
-<li class="chapter" data-level="22.1" data-path="styles-themes.html"><a href="styles-themes.html#defining-styles"><i class="fa fa-check"></i><b>22.1</b> Defining Styles</a><ul>
-<li class="chapter" data-level="22.1.1" data-path="styles-themes.html"><a href="styles-themes.html#style-inheritance"><i class="fa fa-check"></i><b>22.1.1</b> Style Inheritance</a></li>
-<li class="chapter" data-level="22.1.2" data-path="styles-themes.html"><a href="styles-themes.html#built-in-styles"><i class="fa fa-check"></i><b>22.1.2</b> Built-in Styles</a></li>
-</ul></li>
-<li class="chapter" data-level="22.2" data-path="styles-themes.html"><a href="styles-themes.html#themes"><i class="fa fa-check"></i><b>22.2</b> Themes</a><ul>
-<li class="chapter" data-level="22.2.1" data-path="styles-themes.html"><a href="styles-themes.html#material-themes"><i class="fa fa-check"></i><b>22.2.1</b> Material Themes</a></li>
-<li class="chapter" data-level="22.2.2" data-path="styles-themes.html"><a href="styles-themes.html#theme-attributes"><i class="fa fa-check"></i><b>22.2.2</b> Theme Attributes</a></li>
+<li class="chapter" data-level="22.2" data-path="maps.html"><a href="maps.html#specifying-the-user-interface"><i class="fa fa-check"></i><b>22.2</b> Specifying the User Interface</a></li>
+<li class="chapter" data-level="22.3" data-path="maps.html"><a href="maps.html#markers-and-drawings"><i class="fa fa-check"></i><b>22.3</b> Markers and Drawings</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="maps.html"><a href="maps.html#drawing-shapes"><i class="fa fa-check"></i><b>22.3.1</b> Drawing Shapes</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="multi-touch.html"><a href="multi-touch.html"><i class="fa fa-check"></i><b>23</b> Multi-Touch</a><ul>
-<li class="chapter" data-level="23.1" data-path="multi-touch.html"><a href="multi-touch.html#identifying-fingers"><i class="fa fa-check"></i><b>23.1</b> Identifying Fingers</a></li>
-<li class="chapter" data-level="23.2" data-path="multi-touch.html"><a href="multi-touch.html#drawing-touches"><i class="fa fa-check"></i><b>23.2</b> Drawing Touches</a></li>
-<li class="chapter" data-level="23.3" data-path="multi-touch.html"><a href="multi-touch.html#moving-fingers"><i class="fa fa-check"></i><b>23.3</b> Moving Fingers</a></li>
-<li class="chapter" data-level="23.4" data-path="multi-touch.html"><a href="multi-touch.html#other-multi-touch-gestures"><i class="fa fa-check"></i><b>23.4</b> Other Multi-Touch Gestures</a></li>
+<li class="chapter" data-level="23" data-path="styles-themes.html"><a href="styles-themes.html"><i class="fa fa-check"></i><b>23</b> Styles &amp; Themes</a><ul>
+<li class="chapter" data-level="23.1" data-path="styles-themes.html"><a href="styles-themes.html#defining-styles"><i class="fa fa-check"></i><b>23.1</b> Defining Styles</a><ul>
+<li class="chapter" data-level="23.1.1" data-path="styles-themes.html"><a href="styles-themes.html#style-inheritance"><i class="fa fa-check"></i><b>23.1.1</b> Style Inheritance</a></li>
+<li class="chapter" data-level="23.1.2" data-path="styles-themes.html"><a href="styles-themes.html#built-in-styles"><i class="fa fa-check"></i><b>23.1.2</b> Built-in Styles</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="memory.html"><a href="memory.html"><i class="fa fa-check"></i><b>24</b> Memory Management</a><ul>
-<li class="chapter" data-level="24.1" data-path="memory.html"><a href="memory.html#memory-allocation"><i class="fa fa-check"></i><b>24.1</b> Memory Allocation</a></li>
-<li class="chapter" data-level="24.2" data-path="memory.html"><a href="memory.html#the-memory-monitor"><i class="fa fa-check"></i><b>24.2</b> The Memory Monitor</a><ul>
-<li class="chapter" data-level="24.2.1" data-path="memory.html"><a href="memory.html#garbage-collection"><i class="fa fa-check"></i><b>24.2.1</b> Garbage Collection</a></li>
+<li class="chapter" data-level="23.2" data-path="styles-themes.html"><a href="styles-themes.html#themes"><i class="fa fa-check"></i><b>23.2</b> Themes</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="styles-themes.html"><a href="styles-themes.html#material-themes"><i class="fa fa-check"></i><b>23.2.1</b> Material Themes</a></li>
+<li class="chapter" data-level="23.2.2" data-path="styles-themes.html"><a href="styles-themes.html#theme-attributes"><i class="fa fa-check"></i><b>23.2.2</b> Theme Attributes</a></li>
 </ul></li>
-<li class="chapter" data-level="24.3" data-path="memory.html"><a href="memory.html#memory-leaks"><i class="fa fa-check"></i><b>24.3</b> Memory Leaks</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="multi-touch.html"><a href="multi-touch.html"><i class="fa fa-check"></i><b>24</b> Multi-Touch</a><ul>
+<li class="chapter" data-level="24.1" data-path="multi-touch.html"><a href="multi-touch.html#identifying-fingers"><i class="fa fa-check"></i><b>24.1</b> Identifying Fingers</a></li>
+<li class="chapter" data-level="24.2" data-path="multi-touch.html"><a href="multi-touch.html#drawing-touches"><i class="fa fa-check"></i><b>24.2</b> Drawing Touches</a></li>
+<li class="chapter" data-level="24.3" data-path="multi-touch.html"><a href="multi-touch.html#moving-fingers"><i class="fa fa-check"></i><b>24.3</b> Moving Fingers</a></li>
+<li class="chapter" data-level="24.4" data-path="multi-touch.html"><a href="multi-touch.html#other-multi-touch-gestures"><i class="fa fa-check"></i><b>24.4</b> Other Multi-Touch Gestures</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="memory.html"><a href="memory.html"><i class="fa fa-check"></i><b>25</b> Memory Management</a><ul>
+<li class="chapter" data-level="25.1" data-path="memory.html"><a href="memory.html#memory-allocation"><i class="fa fa-check"></i><b>25.1</b> Memory Allocation</a></li>
+<li class="chapter" data-level="25.2" data-path="memory.html"><a href="memory.html#the-memory-monitor"><i class="fa fa-check"></i><b>25.2</b> The Memory Monitor</a><ul>
+<li class="chapter" data-level="25.2.1" data-path="memory.html"><a href="memory.html#garbage-collection"><i class="fa fa-check"></i><b>25.2.1</b> Garbage Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="25.3" data-path="memory.html"><a href="memory.html#memory-leaks"><i class="fa fa-check"></i><b>25.3</b> Memory Leaks</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -384,7 +392,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="multi-touch" class="section level1">
-<h1><span class="header-section-number">Lecture 23</span> Multi-Touch</h1>
+<h1><span class="header-section-number">Lecture 24</span> Multi-Touch</h1>
 <p>In this short chapter, you will practice working with touch interaction by implementing support for <a href="https://developer.android.com/training/gestures/multi.html"><strong>multi-touch gestures</strong></a>, or the ability to detect two or more different “contacts” (fingers) independently. Multi-touch is actually a pretty awesome interaction mode; it’s very <a href="https://www.youtube.com/watch?v=NwVBzx0LMNQ">“sci-fi”</a>.</p>
 <p>Specifically, you will be adding support to the drawn animation demo so that the drawn graphics tracks the location of all 5 of your fingers. This chapter will thus build on the lecture code found at <strong><a href="https://github.com/info448-s17/lecture15-animation" class="uri">https://github.com/info448-s17/lecture15-animation</a></strong>.</p>
 <p>If you haven’t already, you should <strong>Fork and Clone</strong> this repo in order to complete the tutorial. Note that you should complete this tutorial on a separate <strong><code>multitouch</code></strong> branch. You can create this branch either off of the <code>completed</code> branch (containing the completed lecture code), or from the <code>master</code> branch of code if you were able to complete the work described <a href="animation.html#animation">in lecture 15</a>:</p>
@@ -395,7 +403,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 The emulator doesn’t support multi-touch, so you will need to run this project on a physical device.
 </p>
 <div id="identifying-fingers" class="section level2">
-<h2><span class="header-section-number">23.1</span> Identifying Fingers</h2>
+<h2><span class="header-section-number">24.1</span> Identifying Fingers</h2>
 <p>Android lets you react to multiple touches by responding to <code>ACTION_POINTER_DOWN</code> events, which occur when a second “pointer” (finger) joins the gesture (<em>after</em> <code>ACTION_DOWN</code>).</p>
 <ul>
 <li><p>The first finger starts the gesture with an <code>ACTION_DOWN</code> event. then subsequent fingers produce <code>ACTION_POINTER_DOWN</code> events.</p></li>
@@ -415,7 +423,7 @@ The <code>MotionEventCompat</code> class is just a wrapper around <code>MotionEv
 </p>
 </div>
 <div id="drawing-touches" class="section level2">
-<h2><span class="header-section-number">23.2</span> Drawing Touches</h2>
+<h2><span class="header-section-number">24.2</span> Drawing Touches</h2>
 <p>Once you know <em>which</em> pointer has gone up and down, you can respond to it by modifying the drawing displayed by the App. Add the falling functionality to the custom drawing View. Modify either the <code>DrawingView</code> or <code>DrawingSurfaceView</code> (your choice of which to use):</p>
 <ul>
 <li><p>Add an instance variable <code>touches</code> that is a <code>HashMap</code> mapping <em>pointer ids</em> (<code>Integers</code>) to <code>Ball</code> objects. This will track a single “ball” for each touch.</p></li>
@@ -437,7 +445,7 @@ The <code>MotionEventCompat</code> class is just a wrapper around <code>MotionEv
 <p>This should cause your app to show a small ball underneath each finger that goes down, with the balls disappearing when a finger is lifted. <em>Make sure each ball is big enough to see!</em></p>
 </div>
 <div id="moving-fingers" class="section level2">
-<h2><span class="header-section-number">23.3</span> Moving Fingers</h2>
+<h2><span class="header-section-number">24.3</span> Moving Fingers</h2>
 <p>Now we just need to handle finger movements. With a <code>MOVE</code> action, the event doesn’t track <em>which</em> finger has moved—instead, the <strong>pointer index</strong> of that action is always going to be <code>0</code> (the main pointer), even if a different finger moved!</p>
 <p>However, the event does include informaion about <em>how many</em> pointers are involved in it (that is: how many pointers are currently down): we can get that number with the <code>MotionEvent.getPointerCount()</code> method (or an equivalent <code>MotionEventCompat</code> method). We don’t know which <em>pointer index</em> each finger has, but we do know that they will be <strong>consecutive</strong> indices (because they are stored in a list). Moreover, as above <em>each</em> pointer will have its own <code>x</code> and <code>y</code> coordinates, representing the current position of that pointer—this may or may not have “moved” from the previous event.</p>
 <p>Thus we can just <strong>loop</strong> through all of the <em>pointer indices</em> and get the <strong>pointer id</strong> for each one. We can then specify that we want the <em>corresponding Ball</em> to update its position to match the “current” pointer position. Again, most of the Balls will not have moved, but we know at least one of them did and so we will just update everything to make sure it works!</p>
@@ -454,7 +462,7 @@ The <code>MotionEventCompat</code> class is just a wrapper around <code>MotionEv
 </ul>
 </div>
 <div id="other-multi-touch-gestures" class="section level2">
-<h2><span class="header-section-number">23.4</span> Other Multi-Touch Gestures</h2>
+<h2><span class="header-section-number">24.4</span> Other Multi-Touch Gestures</h2>
 <p>We can respond to common multi-touch gestures (like “pinch to scale”) by using <em>another</em> kind of GestureDetector called a <a href="https://developer.android.com/training/gestures/scale.html#scale"><code>ScaleGestureDetector</code></a>. As before, we subclass the simple version (<code>ScaleGestureDetector.SimpleOnScaleGestureListener</code>), and fill in the <code>onScale()</code> method. You can get the “scale factor” from the gesture with the <code>.getScaleFactor()</code> method. As a further bonus exercise, you might try to use the gesture to scale the size of a single ball.</p>
 <!-- Remember to `commit` and `push` your changes to GitHub and submit this lab once completed. -->
 

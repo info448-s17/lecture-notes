@@ -3,7 +3,7 @@ This lecture discusses how to access data from a **Content Provider** using a [*
 
 <p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture07-loaders>.</p>
 
-## Content Providers
+## Content Providers {#content-providers-intro}
 Consider the `WordListFragment` utilized by the example code (though these concepts apply to any Fragment or Activity). This Fragment includes a `ListView` that shows a list of words. Recall that a `ListView` utilizes the **model-view-controller** architecture... and in this case, the "model" (data) is a hard-coded list of array of words. But there are other lists of words as well! Entire databases of words! Previous lectures have discussed how to use _network requests_ to access online data APIs, but there are also databases (of words no less) built into your Android phone.
 
 For example, Android keeps track of the list of the spellings of "non-standard" words in what is called the **User Dictionary**. You can view this list on the device at `Settings > Language & Input > Personal Dictionary`. You can even use this Settings interface to add new words to the dictionary (e.g., "embiggen", "cromulent", "fleek").
@@ -28,7 +28,7 @@ In order to avoid relying on the specific format of how some data is stored, And
 
 - It is possible to create your own Content Providers (described in a later lecture), but this lecture focuses purely on _utilizing_ existing Providrs.
 
-All Content Providers (data sources) have a **URI** ([Universal Resource Indicator](), a generalization of a URL used for resources not necessarily on the Internet). It is possible to _query_ this URI, similar in concept to how web APIs are accessed via queries to their URI endpoints. In particular, Content Provider URIs utilize the **`content://`** protocol (instead of `https://`), since the their data is accessed as via "content requests" rather than "HTTP requests".
+All Content Providers (data sources) have a **URI** ([Universal Resource Identifier](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), a generalization of a URL used for resources not necessarily on the Internet). It is possible to _query_ this URI, similar in concept to how web APIs are accessed via queries to their URI endpoints. In particular, Content Provider URIs utilize the **`content://`** protocol (instead of `https://`), since the their data is accessed as via "content requests" rather than "HTTP requests".
 
 The `URI` for the Dictionary's content is defined by the constant `UserDictionary.Words.CONTENT_URI`. We utilize constants to refer to URIs and paths to make it easier to refer to them and to generalize across devices that may have different directory structures.
 

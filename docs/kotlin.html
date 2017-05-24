@@ -26,15 +26,15 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-05-23">
+<meta name="date" content="2017-05-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="animation.html">
-<link rel="next" href="publishing.html">
+<link rel="prev" href="publishing.html">
+<link rel="next" href="accessibility.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -196,7 +196,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.4" data-path="ui-components.html"><a href="ui-components.html#toasts"><i class="fa fa-check"></i><b>6.4</b> Toasts</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html"><i class="fa fa-check"></i><b>7</b> Providers and Loaders</a><ul>
-<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
+<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers-intro"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
 <li class="chapter" data-level="7.2" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#cursors"><i class="fa fa-check"></i><b>7.2</b> Cursors</a></li>
 <li class="chapter" data-level="7.3" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#loaders"><i class="fa fa-check"></i><b>7.3</b> Loaders</a></li>
 <li class="chapter" data-level="7.4" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#other-provider-actions"><i class="fa fa-check"></i><b>7.4</b> Other Provider Actions</a><ul>
@@ -276,15 +276,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="15.3" data-path="animation.html"><a href="animation.html#property-animation"><i class="fa fa-check"></i><b>15.3</b> Property Animation</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="kotlin.html"><a href="kotlin.html"><i class="fa fa-check"></i><b>16</b> Special Topics: Kotlin</a><ul>
-<li class="chapter" data-level="16.1" data-path="kotlin.html"><a href="kotlin.html#kotlin-syntax"><i class="fa fa-check"></i><b>16.1</b> Kotlin Syntax</a><ul>
-<li class="chapter" data-level="16.1.1" data-path="kotlin.html"><a href="kotlin.html#variables"><i class="fa fa-check"></i><b>16.1.1</b> Variables</a></li>
-<li class="chapter" data-level="16.1.2" data-path="kotlin.html"><a href="kotlin.html#functions"><i class="fa fa-check"></i><b>16.1.2</b> Functions</a></li>
-<li class="chapter" data-level="16.1.3" data-path="kotlin.html"><a href="kotlin.html#classes"><i class="fa fa-check"></i><b>16.1.3</b> Classes</a></li>
-</ul></li>
-<li class="chapter" data-level="16.2" data-path="kotlin.html"><a href="kotlin.html#kotlin-for-android"><i class="fa fa-check"></i><b>16.2</b> Kotlin for Android</a><ul>
-<li class="chapter" data-level="16.2.1" data-path="kotlin.html"><a href="kotlin.html#the-android-extension"><i class="fa fa-check"></i><b>16.2.1</b> The Android Extension</a></li>
-<li class="chapter" data-level="16.2.2" data-path="kotlin.html"><a href="kotlin.html#anko"><i class="fa fa-check"></i><b>16.2.2</b> Anko</a></li>
+<li class="chapter" data-level="16" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>16</b> Databases and Providers</a><ul>
+<li class="chapter" data-level="16.1" data-path="databases.html"><a href="databases.html#review-providers-and-loaders"><i class="fa fa-check"></i><b>16.1</b> Review: Providers and Loaders</a></li>
+<li class="chapter" data-level="16.2" data-path="databases.html"><a href="databases.html#sqlite-databases"><i class="fa fa-check"></i><b>16.2</b> SQLite Databases</a></li>
+<li class="chapter" data-level="16.3" data-path="databases.html"><a href="databases.html#implementing-contentprovider"><i class="fa fa-check"></i><b>16.3</b> Implementing <code>ContentProvider</code></a><ul>
+<li class="chapter" data-level="16.3.1" data-path="databases.html"><a href="databases.html#uris-and-types"><i class="fa fa-check"></i><b>16.3.1</b> URIs and Types</a></li>
+<li class="chapter" data-level="16.3.2" data-path="databases.html"><a href="databases.html#query-methods"><i class="fa fa-check"></i><b>16.3.2</b> Query Methods</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="publishing.html"><a href="publishing.html"><i class="fa fa-check"></i><b>17</b> Publishing</a><ul>
@@ -292,54 +289,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="17.1.1" data-path="publishing.html"><a href="publishing.html#a-release-.apk"><i class="fa fa-check"></i><b>17.1.1</b> A Release <code>.apk</code></a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="18" data-path="kotlin.html"><a href="kotlin.html"><i class="fa fa-check"></i><b>18</b> Special Topics: Kotlin</a><ul>
+<li class="chapter" data-level="18.1" data-path="kotlin.html"><a href="kotlin.html#kotlin-syntax"><i class="fa fa-check"></i><b>18.1</b> Kotlin Syntax</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="kotlin.html"><a href="kotlin.html#variables"><i class="fa fa-check"></i><b>18.1.1</b> Variables</a></li>
+<li class="chapter" data-level="18.1.2" data-path="kotlin.html"><a href="kotlin.html#functions"><i class="fa fa-check"></i><b>18.1.2</b> Functions</a></li>
+<li class="chapter" data-level="18.1.3" data-path="kotlin.html"><a href="kotlin.html#classes"><i class="fa fa-check"></i><b>18.1.3</b> Classes</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="kotlin.html"><a href="kotlin.html#kotlin-for-android"><i class="fa fa-check"></i><b>18.2</b> Kotlin for Android</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="kotlin.html"><a href="kotlin.html#the-android-extension"><i class="fa fa-check"></i><b>18.2.1</b> The Android Extension</a></li>
+<li class="chapter" data-level="18.2.2" data-path="kotlin.html"><a href="kotlin.html#anko"><i class="fa fa-check"></i><b>18.2.2</b> Anko</a></li>
+</ul></li>
+</ul></li>
 <li class="part"><span><b>II Additional Topics (Labs)</b></span></li>
-<li class="chapter" data-level="18" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>18</b> Accessibility</a><ul>
-<li class="chapter" data-level="18.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>18.1</b> Universal Usability</a></li>
-<li class="chapter" data-level="18.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>18.2</b> Implementing Accessibility</a><ul>
-<li class="chapter" data-level="18.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>18.2.1</b> Supporting Vision Impairment</a></li>
-<li class="chapter" data-level="18.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>18.2.2</b> Supporting Alternative Inputs</a></li>
-<li class="chapter" data-level="18.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>18.2.3</b> Supporting Internationalization</a></li>
-<li class="chapter" data-level="18.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>18.2.4</b> Further Testing</a></li>
+<li class="chapter" data-level="19" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>19</b> Accessibility</a><ul>
+<li class="chapter" data-level="19.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>19.1</b> Universal Usability</a></li>
+<li class="chapter" data-level="19.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>19.2</b> Implementing Accessibility</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>19.2.1</b> Supporting Vision Impairment</a></li>
+<li class="chapter" data-level="19.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>19.2.2</b> Supporting Alternative Inputs</a></li>
+<li class="chapter" data-level="19.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>19.2.3</b> Supporting Internationalization</a></li>
+<li class="chapter" data-level="19.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>19.2.4</b> Further Testing</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>19</b> Fragments: ViewPager</a><ul>
-<li class="chapter" data-level="19.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>19.1</b> Define a SearchFragment</a></li>
-<li class="chapter" data-level="19.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>19.2</b> Add the ViewPager and Adapter</a></li>
-<li class="chapter" data-level="19.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>19.3</b> Add User Interaction</a></li>
+<li class="chapter" data-level="20" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>20</b> Fragments: ViewPager</a><ul>
+<li class="chapter" data-level="20.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>20.1</b> Define a SearchFragment</a></li>
+<li class="chapter" data-level="20.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>20.2</b> Add the ViewPager and Adapter</a></li>
+<li class="chapter" data-level="20.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>20.3</b> Add User Interaction</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>20</b> Bluetooth</a></li>
-<li class="chapter" data-level="21" data-path="maps.html"><a href="maps.html"><i class="fa fa-check"></i><b>21</b> Maps</a><ul>
-<li class="chapter" data-level="21.1" data-path="maps.html"><a href="maps.html#create-a-map-activity"><i class="fa fa-check"></i><b>21.1</b> Create a Map Activity</a><ul>
-<li class="chapter" data-level="21.1.1" data-path="maps.html"><a href="maps.html#getting-an-api-key"><i class="fa fa-check"></i><b>21.1.1</b> Getting an API Key</a></li>
-<li class="chapter" data-level="21.1.2" data-path="maps.html"><a href="maps.html#the-supportmapfragment"><i class="fa fa-check"></i><b>21.1.2</b> The <code>SupportMapFragment</code></a></li>
+<li class="chapter" data-level="21" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>21</b> Bluetooth</a></li>
+<li class="chapter" data-level="22" data-path="maps.html"><a href="maps.html"><i class="fa fa-check"></i><b>22</b> Maps</a><ul>
+<li class="chapter" data-level="22.1" data-path="maps.html"><a href="maps.html#create-a-map-activity"><i class="fa fa-check"></i><b>22.1</b> Create a Map Activity</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="maps.html"><a href="maps.html#getting-an-api-key"><i class="fa fa-check"></i><b>22.1.1</b> Getting an API Key</a></li>
+<li class="chapter" data-level="22.1.2" data-path="maps.html"><a href="maps.html#the-supportmapfragment"><i class="fa fa-check"></i><b>22.1.2</b> The <code>SupportMapFragment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="21.2" data-path="maps.html"><a href="maps.html#specifying-the-user-interface"><i class="fa fa-check"></i><b>21.2</b> Specifying the User Interface</a></li>
-<li class="chapter" data-level="21.3" data-path="maps.html"><a href="maps.html#markers-and-drawings"><i class="fa fa-check"></i><b>21.3</b> Markers and Drawings</a><ul>
-<li class="chapter" data-level="21.3.1" data-path="maps.html"><a href="maps.html#drawing-shapes"><i class="fa fa-check"></i><b>21.3.1</b> Drawing Shapes</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="22" data-path="styles-themes.html"><a href="styles-themes.html"><i class="fa fa-check"></i><b>22</b> Styles &amp; Themes</a><ul>
-<li class="chapter" data-level="22.1" data-path="styles-themes.html"><a href="styles-themes.html#defining-styles"><i class="fa fa-check"></i><b>22.1</b> Defining Styles</a><ul>
-<li class="chapter" data-level="22.1.1" data-path="styles-themes.html"><a href="styles-themes.html#style-inheritance"><i class="fa fa-check"></i><b>22.1.1</b> Style Inheritance</a></li>
-<li class="chapter" data-level="22.1.2" data-path="styles-themes.html"><a href="styles-themes.html#built-in-styles"><i class="fa fa-check"></i><b>22.1.2</b> Built-in Styles</a></li>
-</ul></li>
-<li class="chapter" data-level="22.2" data-path="styles-themes.html"><a href="styles-themes.html#themes"><i class="fa fa-check"></i><b>22.2</b> Themes</a><ul>
-<li class="chapter" data-level="22.2.1" data-path="styles-themes.html"><a href="styles-themes.html#material-themes"><i class="fa fa-check"></i><b>22.2.1</b> Material Themes</a></li>
-<li class="chapter" data-level="22.2.2" data-path="styles-themes.html"><a href="styles-themes.html#theme-attributes"><i class="fa fa-check"></i><b>22.2.2</b> Theme Attributes</a></li>
+<li class="chapter" data-level="22.2" data-path="maps.html"><a href="maps.html#specifying-the-user-interface"><i class="fa fa-check"></i><b>22.2</b> Specifying the User Interface</a></li>
+<li class="chapter" data-level="22.3" data-path="maps.html"><a href="maps.html#markers-and-drawings"><i class="fa fa-check"></i><b>22.3</b> Markers and Drawings</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="maps.html"><a href="maps.html#drawing-shapes"><i class="fa fa-check"></i><b>22.3.1</b> Drawing Shapes</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="multi-touch.html"><a href="multi-touch.html"><i class="fa fa-check"></i><b>23</b> Multi-Touch</a><ul>
-<li class="chapter" data-level="23.1" data-path="multi-touch.html"><a href="multi-touch.html#identifying-fingers"><i class="fa fa-check"></i><b>23.1</b> Identifying Fingers</a></li>
-<li class="chapter" data-level="23.2" data-path="multi-touch.html"><a href="multi-touch.html#drawing-touches"><i class="fa fa-check"></i><b>23.2</b> Drawing Touches</a></li>
-<li class="chapter" data-level="23.3" data-path="multi-touch.html"><a href="multi-touch.html#moving-fingers"><i class="fa fa-check"></i><b>23.3</b> Moving Fingers</a></li>
-<li class="chapter" data-level="23.4" data-path="multi-touch.html"><a href="multi-touch.html#other-multi-touch-gestures"><i class="fa fa-check"></i><b>23.4</b> Other Multi-Touch Gestures</a></li>
+<li class="chapter" data-level="23" data-path="styles-themes.html"><a href="styles-themes.html"><i class="fa fa-check"></i><b>23</b> Styles &amp; Themes</a><ul>
+<li class="chapter" data-level="23.1" data-path="styles-themes.html"><a href="styles-themes.html#defining-styles"><i class="fa fa-check"></i><b>23.1</b> Defining Styles</a><ul>
+<li class="chapter" data-level="23.1.1" data-path="styles-themes.html"><a href="styles-themes.html#style-inheritance"><i class="fa fa-check"></i><b>23.1.1</b> Style Inheritance</a></li>
+<li class="chapter" data-level="23.1.2" data-path="styles-themes.html"><a href="styles-themes.html#built-in-styles"><i class="fa fa-check"></i><b>23.1.2</b> Built-in Styles</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="memory.html"><a href="memory.html"><i class="fa fa-check"></i><b>24</b> Memory Management</a><ul>
-<li class="chapter" data-level="24.1" data-path="memory.html"><a href="memory.html#memory-allocation"><i class="fa fa-check"></i><b>24.1</b> Memory Allocation</a></li>
-<li class="chapter" data-level="24.2" data-path="memory.html"><a href="memory.html#the-memory-monitor"><i class="fa fa-check"></i><b>24.2</b> The Memory Monitor</a><ul>
-<li class="chapter" data-level="24.2.1" data-path="memory.html"><a href="memory.html#garbage-collection"><i class="fa fa-check"></i><b>24.2.1</b> Garbage Collection</a></li>
+<li class="chapter" data-level="23.2" data-path="styles-themes.html"><a href="styles-themes.html#themes"><i class="fa fa-check"></i><b>23.2</b> Themes</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="styles-themes.html"><a href="styles-themes.html#material-themes"><i class="fa fa-check"></i><b>23.2.1</b> Material Themes</a></li>
+<li class="chapter" data-level="23.2.2" data-path="styles-themes.html"><a href="styles-themes.html#theme-attributes"><i class="fa fa-check"></i><b>23.2.2</b> Theme Attributes</a></li>
 </ul></li>
-<li class="chapter" data-level="24.3" data-path="memory.html"><a href="memory.html#memory-leaks"><i class="fa fa-check"></i><b>24.3</b> Memory Leaks</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="multi-touch.html"><a href="multi-touch.html"><i class="fa fa-check"></i><b>24</b> Multi-Touch</a><ul>
+<li class="chapter" data-level="24.1" data-path="multi-touch.html"><a href="multi-touch.html#identifying-fingers"><i class="fa fa-check"></i><b>24.1</b> Identifying Fingers</a></li>
+<li class="chapter" data-level="24.2" data-path="multi-touch.html"><a href="multi-touch.html#drawing-touches"><i class="fa fa-check"></i><b>24.2</b> Drawing Touches</a></li>
+<li class="chapter" data-level="24.3" data-path="multi-touch.html"><a href="multi-touch.html#moving-fingers"><i class="fa fa-check"></i><b>24.3</b> Moving Fingers</a></li>
+<li class="chapter" data-level="24.4" data-path="multi-touch.html"><a href="multi-touch.html#other-multi-touch-gestures"><i class="fa fa-check"></i><b>24.4</b> Other Multi-Touch Gestures</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="memory.html"><a href="memory.html"><i class="fa fa-check"></i><b>25</b> Memory Management</a><ul>
+<li class="chapter" data-level="25.1" data-path="memory.html"><a href="memory.html#memory-allocation"><i class="fa fa-check"></i><b>25.1</b> Memory Allocation</a></li>
+<li class="chapter" data-level="25.2" data-path="memory.html"><a href="memory.html#the-memory-monitor"><i class="fa fa-check"></i><b>25.2</b> The Memory Monitor</a><ul>
+<li class="chapter" data-level="25.2.1" data-path="memory.html"><a href="memory.html#garbage-collection"><i class="fa fa-check"></i><b>25.2.1</b> Garbage Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="25.3" data-path="memory.html"><a href="memory.html#memory-leaks"><i class="fa fa-check"></i><b>25.3</b> Memory Leaks</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -384,7 +392,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="kotlin" class="section level1">
-<h1><span class="header-section-number">Lecture 16</span> Special Topics: Kotlin</h1>
+<h1><span class="header-section-number">Lecture 18</span> Special Topics: Kotlin</h1>
 <p>This lecture introduces <a href="https://kotlinlang.org/">Kotlin</a>, an open source programming language that runs on the Java Virtual Machine and is fully interoperable with Java Code. It is designed to be a more concise, more flexible, and faster alternative to Java while offering language-level support to features such as <code>null</code>-checking and functional programming techniques. As of May 2017, Google offers first-class support for using Kotlin when developing Android applications.</p>
 <ul>
 <li>Kotlin was developed by <a href="https://en.wikipedia.org/wiki/JetBrains">JetBrains</a>, the creators of the IntelliJ IDE which forms the basis for Android Studio.</li>
@@ -396,11 +404,11 @@ This lecture references code found at <a href="https://github.com/info448-s17/le
 <li>Note that the provided <a href="https://kotlinlang.org/docs/reference/using-gradle.html">gradle build script</a> includes the Kotlin standard library for Java 8, making (simplied) versions of Java classes available.</li>
 </ul>
 <div id="kotlin-syntax" class="section level2">
-<h2><span class="header-section-number">16.1</span> Kotlin Syntax</h2>
+<h2><span class="header-section-number">18.1</span> Kotlin Syntax</h2>
 <p>The Kotlin language draws many syntactical structures from popular modern languages, including JavaScript and <a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/">Swift</a> (used for iOS development); I find it has a lot in common with <a href="https://www.typescriptlang.org/">TypeScript</a>.</p>
 <p>The full documentation for the Kotlin language can be found at <a href="https://kotlinlang.org/docs/reference/" class="uri">https://kotlinlang.org/docs/reference/</a>; practice and examples are available in the form of <a href="https://kotlinlang.org/docs/tutorials/koans.html">Kotlin Koans</a>. This lecture does not aim to be a complete reference but rather to highlight some of the most noticable or interesting aspects of the langauge.</p>
 <div id="variables" class="section level3">
-<h3><span class="header-section-number">16.1.1</span> Variables</h3>
+<h3><span class="header-section-number">18.1.1</span> Variables</h3>
 <p>Kotlin variables are <em>declared</em> by using the keyword <strong><code>var</code></strong> (for mutable variables) or <strong><code>val</code></strong> (for read-only variables); this is similar to <code>let</code> and <code>const</code> in JavaScript ES5. Like Java, Kotlin is a statically-typed language—the variable type is written <em>after</em> the variablen name, separated by a colon (<strong><code>:</code></strong>). For example:</p>
 <div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">val</span> <span class="va">x</span>:<span class="kw">Int</span> = <span class="dv">448</span>  <span class="co">//read-only</span>
 <span class="kw">var</span> <span class="va">stepCount</span>:<span class="kw">Int</span> = <span class="dv">9000</span>  <span class="co">//mutable</span>
@@ -441,6 +449,7 @@ root = Math.sqrt(integer.toDouble())  <span class="co">//no problems!</span></co
 <span class="kw">val</span> <span class="va">cost</span>:<span class="kw">String</span> = <span class="st">&quot;$quantity items at $price costs ${quantity*price}&quot;</span></code></pre></div></li>
 <li><p><em>Note</em>: <a href="https://kotlinlang.org/docs/reference/basic-types.html#arrays">Arrays</a> in Kotlin are represented by the <code>Array&lt;T&gt;</code> class. The <code>Array&lt;T&gt;</code> class has a private constructor though; in order to create an array, use the <code>arrayOf()</code> factory method (to create an array out of the given parameters), or <code>arrayOfNulls()</code> to create an array of <em>n</em> <code>null</code> elements. Note that arrays still support using <em>bracket notation</em> (<code>[]</code>) for accessing values.</p>
 <div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">var</span> <span class="va">numbers</span>:Array&lt;<span class="kw">Int</span>&gt; = arrayOf(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)  <span class="co">//create an array</span>
+println(numbers.size)  <span class="co">//kotline uses `size` property for array length</span>
 println(numbers[<span class="dv">3</span>])  <span class="co">//4</span>
 numbers[<span class="dv">4</span>] = <span class="dv">10</span>  <span class="co">//assign value as normal</span></code></pre></div>
 <ul>
@@ -449,7 +458,7 @@ numbers[<span class="dv">4</span>] = <span class="dv">10</span>  <span class="co
 </ul>
 </div>
 <div id="functions" class="section level3">
-<h3><span class="header-section-number">16.1.2</span> Functions</h3>
+<h3><span class="header-section-number">18.1.2</span> Functions</h3>
 <p>Kotlin functions are in some ways closer to JavaScript functions that to Java methods. For one, Kotlin supports package-level functions that do not exist as members of a particular class, as an alternative to <code>static</code> functions in Java. Thus we can talk about Kotlin functions independent of classes (which are discussed below).</p>
 <p><a href="https://kotlinlang.org/docs/reference/functions.html">Functions</a> in Kotlin are declared with the <strong><code>fun</code></strong> keyword (not because they are fun, though they can be). This is folowed by the name of the function and the parameter list (where the parameters are given explicit types). The return type is declared <em>after</em> the parameter list, following a colon (<strong><code>:</code></strong>). For example:</p>
 <div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">fun</span> <span class="fu">makeFullName</span>(<span class="va">first</span>:<span class="dt">String</span>, <span class="va">last</span>:<span class="dt">String</span>): <span class="dt">String</span> {
@@ -532,7 +541,7 @@ for (x in 1..5) {
 //https://kotlinlang.org/docs/reference/ranges.html omg -->
 </div>
 <div id="classes" class="section level3">
-<h3><span class="header-section-number">16.1.3</span> Classes</h3>
+<h3><span class="header-section-number">18.1.3</span> Classes</h3>
 <p>Kotlin is an object-oriented language, just like Java. Thus despite being able to support package-level functions, Kotlin is primarily written using <strong>classes</strong> with <strong>attributes</strong> and <strong>methods</strong>.</p>
 <p>As in Java, Kotlin <a href="https://kotlinlang.org/docs/reference/classes.html">classes</a> are declared using the <code>class</code> keyword. Additionally, most Kotlin classes have a <em>primary constructor</em>, the parameters of which can be included as part of the class declaration.</p>
 <div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="co">//declares a class `Dog` whose constructor takes two parameters</span>
@@ -611,7 +620,7 @@ print(<span class="va">myBall</span>)  //Ball(<span class="va">x</span>=30, <spa
 </div>
 </div>
 <div id="kotlin-for-android" class="section level2">
-<h2><span class="header-section-number">16.2</span> Kotlin for Android</h2>
+<h2><span class="header-section-number">18.2</span> Kotlin for Android</h2>
 <p>Kotlin is built into Android Studio 3.0 by default, but is also available via a <a href="https://kotlinlang.org/docs/tutorials/kotlin-android.html#installing-the-kotlin-plugin">plugin</a> for earlier versions. You can install this plugins through the <strong><code>Preferences &gt; Plugins</code></strong> menu: click the <code>Install JetBrains plugin...</code> button at the bottom and select <code>Kotlin</code>. Note that you will need to <em>restart</em> Android Studio.</p>
 <p>After you’ve installed the plugin, you can use Android Studio to <a href="https://kotlinlang.org/docs/tutorials/kotlin-android.html#converting-java-code-to-kotlin">convert</a> an existing Java file to a Kotlin source code file (<strong><code>.kt</code></strong>) by selecting <code>Code &gt; Convert Java File to Kotlin File</code> from the menu. Once you start editing the file, you will be prompted to <a href="https://kotlinlang.org/docs/tutorials/kotlin-android.html#configuring-kotlin-in-the-project">configure</a> the project to use Kotlin. This will modify the Gradle build scripts to include Kotlin support, allowing you to build and run your app as usual.</p>
 <p>For example, we can convert the provided <code>MainActivity</code>, and consider the changes that have been made:</p>
@@ -626,7 +635,7 @@ print(<span class="va">myBall</span>)  //Ball(<span class="va">x</span>=30, <spa
 This section of the lecture is incomplete.
 </p>
 <div id="the-android-extension" class="section level3">
-<h3><span class="header-section-number">16.2.1</span> The Android Extension</h3>
+<h3><span class="header-section-number">18.2.1</span> The Android Extension</h3>
 <p><a href="https://kotlinlang.org/docs/tutorials/android-plugin.html" class="uri">https://kotlinlang.org/docs/tutorials/android-plugin.html</a></p>
 <p>To include:</p>
 <pre class="gradle"><code>apply plugin: &#39;kotlin-android-extensions&#39;</code></pre>
@@ -634,7 +643,7 @@ This section of the lecture is incomplete.
 <div class="sourceCode"><pre class="sourceCode kotlin"><code class="sourceCode kotlin"><span class="kw">import</span> <span class="im">kotlinx.android.synthetic.main</span>.&lt;<span class="im">layout</span>&gt;.*</code></pre></div>
 </div>
 <div id="anko" class="section level3">
-<h3><span class="header-section-number">16.2.2</span> Anko</h3>
+<h3><span class="header-section-number">18.2.2</span> Anko</h3>
 <p><a href="https://github.com/Kotlin/anko" class="uri">https://github.com/Kotlin/anko</a></p>
 <pre class="gradle"><code>dependencies {
     compile &quot;org.jetbrains.anko:anko-commons:$anko_version&quot;
@@ -664,13 +673,17 @@ alert(<span class="st">&quot;Hi, I&#39;m Roy&quot;</span>, <span class="st">&quo
 </div>
 </div>
 </div>
+
+
+
+</div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="animation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="publishing.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="publishing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="accessibility.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

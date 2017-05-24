@@ -26,7 +26,7 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-05-23">
+<meta name="date" content="2017-05-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -196,7 +196,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.4" data-path="ui-components.html"><a href="ui-components.html#toasts"><i class="fa fa-check"></i><b>6.4</b> Toasts</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html"><i class="fa fa-check"></i><b>7</b> Providers and Loaders</a><ul>
-<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
+<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers-intro"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
 <li class="chapter" data-level="7.2" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#cursors"><i class="fa fa-check"></i><b>7.2</b> Cursors</a></li>
 <li class="chapter" data-level="7.3" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#loaders"><i class="fa fa-check"></i><b>7.3</b> Loaders</a></li>
 <li class="chapter" data-level="7.4" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#other-provider-actions"><i class="fa fa-check"></i><b>7.4</b> Other Provider Actions</a><ul>
@@ -276,15 +276,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="15.3" data-path="animation.html"><a href="animation.html#property-animation"><i class="fa fa-check"></i><b>15.3</b> Property Animation</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="kotlin.html"><a href="kotlin.html"><i class="fa fa-check"></i><b>16</b> Special Topics: Kotlin</a><ul>
-<li class="chapter" data-level="16.1" data-path="kotlin.html"><a href="kotlin.html#kotlin-syntax"><i class="fa fa-check"></i><b>16.1</b> Kotlin Syntax</a><ul>
-<li class="chapter" data-level="16.1.1" data-path="kotlin.html"><a href="kotlin.html#variables"><i class="fa fa-check"></i><b>16.1.1</b> Variables</a></li>
-<li class="chapter" data-level="16.1.2" data-path="kotlin.html"><a href="kotlin.html#functions"><i class="fa fa-check"></i><b>16.1.2</b> Functions</a></li>
-<li class="chapter" data-level="16.1.3" data-path="kotlin.html"><a href="kotlin.html#classes"><i class="fa fa-check"></i><b>16.1.3</b> Classes</a></li>
-</ul></li>
-<li class="chapter" data-level="16.2" data-path="kotlin.html"><a href="kotlin.html#kotlin-for-android"><i class="fa fa-check"></i><b>16.2</b> Kotlin for Android</a><ul>
-<li class="chapter" data-level="16.2.1" data-path="kotlin.html"><a href="kotlin.html#the-android-extension"><i class="fa fa-check"></i><b>16.2.1</b> The Android Extension</a></li>
-<li class="chapter" data-level="16.2.2" data-path="kotlin.html"><a href="kotlin.html#anko"><i class="fa fa-check"></i><b>16.2.2</b> Anko</a></li>
+<li class="chapter" data-level="16" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>16</b> Databases and Providers</a><ul>
+<li class="chapter" data-level="16.1" data-path="databases.html"><a href="databases.html#review-providers-and-loaders"><i class="fa fa-check"></i><b>16.1</b> Review: Providers and Loaders</a></li>
+<li class="chapter" data-level="16.2" data-path="databases.html"><a href="databases.html#sqlite-databases"><i class="fa fa-check"></i><b>16.2</b> SQLite Databases</a></li>
+<li class="chapter" data-level="16.3" data-path="databases.html"><a href="databases.html#implementing-contentprovider"><i class="fa fa-check"></i><b>16.3</b> Implementing <code>ContentProvider</code></a><ul>
+<li class="chapter" data-level="16.3.1" data-path="databases.html"><a href="databases.html#uris-and-types"><i class="fa fa-check"></i><b>16.3.1</b> URIs and Types</a></li>
+<li class="chapter" data-level="16.3.2" data-path="databases.html"><a href="databases.html#query-methods"><i class="fa fa-check"></i><b>16.3.2</b> Query Methods</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="publishing.html"><a href="publishing.html"><i class="fa fa-check"></i><b>17</b> Publishing</a><ul>
@@ -292,54 +289,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="17.1.1" data-path="publishing.html"><a href="publishing.html#a-release-.apk"><i class="fa fa-check"></i><b>17.1.1</b> A Release <code>.apk</code></a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="18" data-path="kotlin.html"><a href="kotlin.html"><i class="fa fa-check"></i><b>18</b> Special Topics: Kotlin</a><ul>
+<li class="chapter" data-level="18.1" data-path="kotlin.html"><a href="kotlin.html#kotlin-syntax"><i class="fa fa-check"></i><b>18.1</b> Kotlin Syntax</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="kotlin.html"><a href="kotlin.html#variables"><i class="fa fa-check"></i><b>18.1.1</b> Variables</a></li>
+<li class="chapter" data-level="18.1.2" data-path="kotlin.html"><a href="kotlin.html#functions"><i class="fa fa-check"></i><b>18.1.2</b> Functions</a></li>
+<li class="chapter" data-level="18.1.3" data-path="kotlin.html"><a href="kotlin.html#classes"><i class="fa fa-check"></i><b>18.1.3</b> Classes</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="kotlin.html"><a href="kotlin.html#kotlin-for-android"><i class="fa fa-check"></i><b>18.2</b> Kotlin for Android</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="kotlin.html"><a href="kotlin.html#the-android-extension"><i class="fa fa-check"></i><b>18.2.1</b> The Android Extension</a></li>
+<li class="chapter" data-level="18.2.2" data-path="kotlin.html"><a href="kotlin.html#anko"><i class="fa fa-check"></i><b>18.2.2</b> Anko</a></li>
+</ul></li>
+</ul></li>
 <li class="part"><span><b>II Additional Topics (Labs)</b></span></li>
-<li class="chapter" data-level="18" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>18</b> Accessibility</a><ul>
-<li class="chapter" data-level="18.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>18.1</b> Universal Usability</a></li>
-<li class="chapter" data-level="18.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>18.2</b> Implementing Accessibility</a><ul>
-<li class="chapter" data-level="18.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>18.2.1</b> Supporting Vision Impairment</a></li>
-<li class="chapter" data-level="18.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>18.2.2</b> Supporting Alternative Inputs</a></li>
-<li class="chapter" data-level="18.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>18.2.3</b> Supporting Internationalization</a></li>
-<li class="chapter" data-level="18.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>18.2.4</b> Further Testing</a></li>
+<li class="chapter" data-level="19" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>19</b> Accessibility</a><ul>
+<li class="chapter" data-level="19.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>19.1</b> Universal Usability</a></li>
+<li class="chapter" data-level="19.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>19.2</b> Implementing Accessibility</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>19.2.1</b> Supporting Vision Impairment</a></li>
+<li class="chapter" data-level="19.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>19.2.2</b> Supporting Alternative Inputs</a></li>
+<li class="chapter" data-level="19.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>19.2.3</b> Supporting Internationalization</a></li>
+<li class="chapter" data-level="19.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>19.2.4</b> Further Testing</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>19</b> Fragments: ViewPager</a><ul>
-<li class="chapter" data-level="19.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>19.1</b> Define a SearchFragment</a></li>
-<li class="chapter" data-level="19.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>19.2</b> Add the ViewPager and Adapter</a></li>
-<li class="chapter" data-level="19.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>19.3</b> Add User Interaction</a></li>
+<li class="chapter" data-level="20" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>20</b> Fragments: ViewPager</a><ul>
+<li class="chapter" data-level="20.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>20.1</b> Define a SearchFragment</a></li>
+<li class="chapter" data-level="20.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>20.2</b> Add the ViewPager and Adapter</a></li>
+<li class="chapter" data-level="20.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>20.3</b> Add User Interaction</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>20</b> Bluetooth</a></li>
-<li class="chapter" data-level="21" data-path="maps.html"><a href="maps.html"><i class="fa fa-check"></i><b>21</b> Maps</a><ul>
-<li class="chapter" data-level="21.1" data-path="maps.html"><a href="maps.html#create-a-map-activity"><i class="fa fa-check"></i><b>21.1</b> Create a Map Activity</a><ul>
-<li class="chapter" data-level="21.1.1" data-path="maps.html"><a href="maps.html#getting-an-api-key"><i class="fa fa-check"></i><b>21.1.1</b> Getting an API Key</a></li>
-<li class="chapter" data-level="21.1.2" data-path="maps.html"><a href="maps.html#the-supportmapfragment"><i class="fa fa-check"></i><b>21.1.2</b> The <code>SupportMapFragment</code></a></li>
+<li class="chapter" data-level="21" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>21</b> Bluetooth</a></li>
+<li class="chapter" data-level="22" data-path="maps.html"><a href="maps.html"><i class="fa fa-check"></i><b>22</b> Maps</a><ul>
+<li class="chapter" data-level="22.1" data-path="maps.html"><a href="maps.html#create-a-map-activity"><i class="fa fa-check"></i><b>22.1</b> Create a Map Activity</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="maps.html"><a href="maps.html#getting-an-api-key"><i class="fa fa-check"></i><b>22.1.1</b> Getting an API Key</a></li>
+<li class="chapter" data-level="22.1.2" data-path="maps.html"><a href="maps.html#the-supportmapfragment"><i class="fa fa-check"></i><b>22.1.2</b> The <code>SupportMapFragment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="21.2" data-path="maps.html"><a href="maps.html#specifying-the-user-interface"><i class="fa fa-check"></i><b>21.2</b> Specifying the User Interface</a></li>
-<li class="chapter" data-level="21.3" data-path="maps.html"><a href="maps.html#markers-and-drawings"><i class="fa fa-check"></i><b>21.3</b> Markers and Drawings</a><ul>
-<li class="chapter" data-level="21.3.1" data-path="maps.html"><a href="maps.html#drawing-shapes"><i class="fa fa-check"></i><b>21.3.1</b> Drawing Shapes</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="22" data-path="styles-themes.html"><a href="styles-themes.html"><i class="fa fa-check"></i><b>22</b> Styles &amp; Themes</a><ul>
-<li class="chapter" data-level="22.1" data-path="styles-themes.html"><a href="styles-themes.html#defining-styles"><i class="fa fa-check"></i><b>22.1</b> Defining Styles</a><ul>
-<li class="chapter" data-level="22.1.1" data-path="styles-themes.html"><a href="styles-themes.html#style-inheritance"><i class="fa fa-check"></i><b>22.1.1</b> Style Inheritance</a></li>
-<li class="chapter" data-level="22.1.2" data-path="styles-themes.html"><a href="styles-themes.html#built-in-styles"><i class="fa fa-check"></i><b>22.1.2</b> Built-in Styles</a></li>
-</ul></li>
-<li class="chapter" data-level="22.2" data-path="styles-themes.html"><a href="styles-themes.html#themes"><i class="fa fa-check"></i><b>22.2</b> Themes</a><ul>
-<li class="chapter" data-level="22.2.1" data-path="styles-themes.html"><a href="styles-themes.html#material-themes"><i class="fa fa-check"></i><b>22.2.1</b> Material Themes</a></li>
-<li class="chapter" data-level="22.2.2" data-path="styles-themes.html"><a href="styles-themes.html#theme-attributes"><i class="fa fa-check"></i><b>22.2.2</b> Theme Attributes</a></li>
+<li class="chapter" data-level="22.2" data-path="maps.html"><a href="maps.html#specifying-the-user-interface"><i class="fa fa-check"></i><b>22.2</b> Specifying the User Interface</a></li>
+<li class="chapter" data-level="22.3" data-path="maps.html"><a href="maps.html#markers-and-drawings"><i class="fa fa-check"></i><b>22.3</b> Markers and Drawings</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="maps.html"><a href="maps.html#drawing-shapes"><i class="fa fa-check"></i><b>22.3.1</b> Drawing Shapes</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="multi-touch.html"><a href="multi-touch.html"><i class="fa fa-check"></i><b>23</b> Multi-Touch</a><ul>
-<li class="chapter" data-level="23.1" data-path="multi-touch.html"><a href="multi-touch.html#identifying-fingers"><i class="fa fa-check"></i><b>23.1</b> Identifying Fingers</a></li>
-<li class="chapter" data-level="23.2" data-path="multi-touch.html"><a href="multi-touch.html#drawing-touches"><i class="fa fa-check"></i><b>23.2</b> Drawing Touches</a></li>
-<li class="chapter" data-level="23.3" data-path="multi-touch.html"><a href="multi-touch.html#moving-fingers"><i class="fa fa-check"></i><b>23.3</b> Moving Fingers</a></li>
-<li class="chapter" data-level="23.4" data-path="multi-touch.html"><a href="multi-touch.html#other-multi-touch-gestures"><i class="fa fa-check"></i><b>23.4</b> Other Multi-Touch Gestures</a></li>
+<li class="chapter" data-level="23" data-path="styles-themes.html"><a href="styles-themes.html"><i class="fa fa-check"></i><b>23</b> Styles &amp; Themes</a><ul>
+<li class="chapter" data-level="23.1" data-path="styles-themes.html"><a href="styles-themes.html#defining-styles"><i class="fa fa-check"></i><b>23.1</b> Defining Styles</a><ul>
+<li class="chapter" data-level="23.1.1" data-path="styles-themes.html"><a href="styles-themes.html#style-inheritance"><i class="fa fa-check"></i><b>23.1.1</b> Style Inheritance</a></li>
+<li class="chapter" data-level="23.1.2" data-path="styles-themes.html"><a href="styles-themes.html#built-in-styles"><i class="fa fa-check"></i><b>23.1.2</b> Built-in Styles</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="memory.html"><a href="memory.html"><i class="fa fa-check"></i><b>24</b> Memory Management</a><ul>
-<li class="chapter" data-level="24.1" data-path="memory.html"><a href="memory.html#memory-allocation"><i class="fa fa-check"></i><b>24.1</b> Memory Allocation</a></li>
-<li class="chapter" data-level="24.2" data-path="memory.html"><a href="memory.html#the-memory-monitor"><i class="fa fa-check"></i><b>24.2</b> The Memory Monitor</a><ul>
-<li class="chapter" data-level="24.2.1" data-path="memory.html"><a href="memory.html#garbage-collection"><i class="fa fa-check"></i><b>24.2.1</b> Garbage Collection</a></li>
+<li class="chapter" data-level="23.2" data-path="styles-themes.html"><a href="styles-themes.html#themes"><i class="fa fa-check"></i><b>23.2</b> Themes</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="styles-themes.html"><a href="styles-themes.html#material-themes"><i class="fa fa-check"></i><b>23.2.1</b> Material Themes</a></li>
+<li class="chapter" data-level="23.2.2" data-path="styles-themes.html"><a href="styles-themes.html#theme-attributes"><i class="fa fa-check"></i><b>23.2.2</b> Theme Attributes</a></li>
 </ul></li>
-<li class="chapter" data-level="24.3" data-path="memory.html"><a href="memory.html#memory-leaks"><i class="fa fa-check"></i><b>24.3</b> Memory Leaks</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="multi-touch.html"><a href="multi-touch.html"><i class="fa fa-check"></i><b>24</b> Multi-Touch</a><ul>
+<li class="chapter" data-level="24.1" data-path="multi-touch.html"><a href="multi-touch.html#identifying-fingers"><i class="fa fa-check"></i><b>24.1</b> Identifying Fingers</a></li>
+<li class="chapter" data-level="24.2" data-path="multi-touch.html"><a href="multi-touch.html#drawing-touches"><i class="fa fa-check"></i><b>24.2</b> Drawing Touches</a></li>
+<li class="chapter" data-level="24.3" data-path="multi-touch.html"><a href="multi-touch.html#moving-fingers"><i class="fa fa-check"></i><b>24.3</b> Moving Fingers</a></li>
+<li class="chapter" data-level="24.4" data-path="multi-touch.html"><a href="multi-touch.html#other-multi-touch-gestures"><i class="fa fa-check"></i><b>24.4</b> Other Multi-Touch Gestures</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="memory.html"><a href="memory.html"><i class="fa fa-check"></i><b>25</b> Memory Management</a><ul>
+<li class="chapter" data-level="25.1" data-path="memory.html"><a href="memory.html#memory-allocation"><i class="fa fa-check"></i><b>25.1</b> Memory Allocation</a></li>
+<li class="chapter" data-level="25.2" data-path="memory.html"><a href="memory.html#the-memory-monitor"><i class="fa fa-check"></i><b>25.2</b> The Memory Monitor</a><ul>
+<li class="chapter" data-level="25.2.1" data-path="memory.html"><a href="memory.html#garbage-collection"><i class="fa fa-check"></i><b>25.2.1</b> Garbage Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="25.3" data-path="memory.html"><a href="memory.html#memory-leaks"><i class="fa fa-check"></i><b>25.3</b> Memory Leaks</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -384,14 +392,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="memory" class="section level1">
-<h1><span class="header-section-number">Lecture 24</span> Memory Management</h1>
+<h1><span class="header-section-number">Lecture 25</span> Memory Management</h1>
 <p>Android is designed to run on <em>resource constrained</em> devices, and one of the most constrained resources is the device’s <a href="https://en.wikipedia.org/wiki/Computer_memory"><strong>memory</strong></a>. Because of this, a large part of the Android framework and how we interact with application components deals with how the system <a href="https://developer.android.com/topic/performance/memory.html">manages memory</a>, making sure sufficient memory is available for whatever the user wants to do.</p>
 <p>In this short tutorial, you will explore how the Android operating system handles memory, and learn how to use the <a href="https://developer.android.com/studio/profile/android-monitor.html">Android Monitor</a>’s <a href="https://developer.android.com/studio/profile/am-memory.html">Memory Monitor</a> to view your application’s memory usage and identify potential <a href="https://en.wikipedia.org/wiki/Memory_leak">memory leaks</a>.</p>
 <p class="alert alert-info">
 The code for this tutorial can be found at <a href="https://github.com/info448-s17/lab-memory" class="uri">https://github.com/info448-s17/lab-memory</a>. Note that you will not be required to write much code for this lab; it is more about using the tools and inspecting the logged output to get a sense for how memory is handled in Android. You should be able to complete this tutorial on <em>either</em> the emulator or a physical device.
 </p>
 <div id="memory-allocation" class="section level2">
-<h2><span class="header-section-number">24.1</span> Memory Allocation</h2>
+<h2><span class="header-section-number">25.1</span> Memory Allocation</h2>
 <p>First, a short introduction to how memory is handled by a computer (including mobile computers):</p>
 <p>The basic idea is that your computer has some amount of storage space (in <a href="https://en.wikipedia.org/wiki/Random-access_memory">RAM</a>) dedicating to remembering all of the variables and objects that you create in your program. If you declare a new variable</p>
 <div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> number = <span class="dv">448</span>;</code></pre></div>
@@ -414,7 +422,7 @@ The code for this tutorial can be found at <a href="https://github.com/info448-s
 <p>The Android framework is structured so that when memory gets low, the system will <a href="https://developer.android.com/guide/topics/processes/process-lifecycle.html">destroy</a> any <em>stopped</em> Activities, thereby allowing them to be garbage collected (and freeing up the memory to be used by a different application). You’ll be able to see this process in action in the next section.</p>
 </div>
 <div id="the-memory-monitor" class="section level2">
-<h2><span class="header-section-number">24.2</span> The Memory Monitor</h2>
+<h2><span class="header-section-number">25.2</span> The Memory Monitor</h2>
 <p>Since we’re interested in the memory used by the application, you should enable and view the <a href="http://developer.android.com/tools/help/am-basics.html#displaying">Memory Monitor</a> provided by Android Studio. If you look at the bottom panel (the <code>Android Monitor</code> panel) where you normally see the <code>Logcat</code> results, you should see a tab called <code>Monitors</code>. Click on this to view the memory usage over time (you can ignore the other monitors for now).</p>
 <div class="figure">
 <img src="img/memory/am-androidmon2.png" alt="Android Memory Monitor (Google)" />
@@ -428,7 +436,7 @@ The code for this tutorial can be found at <a href="https://github.com/info448-s
 </ul>
 <p>Navigate back to the <code>MainActivity</code>. You might see the memory allocation increase a little more, as restarting the Activity can cause the Views to need to be recreated.</p>
 <div id="garbage-collection" class="section level3">
-<h3><span class="header-section-number">24.2.1</span> Garbage Collection</h3>
+<h3><span class="header-section-number">25.2.1</span> Garbage Collection</h3>
 <p>Let’s see how the Java (technically, Dalvik) virtual machine handles memory. From the <code>MainActivity</code>, click on the button to go to the <code>ProgressActivity</code>. This Activity will show the progress towards completing a number of undefined tasks (it’s just showing a bunch of <code>ProgressBar</code> Views, which use a bit more memory than standard buttons).</p>
 <ul>
 <li>When you visited this <code>Activity</code>, you should have seen the memory allocation jump up!</li>
@@ -446,7 +454,7 @@ The code for this tutorial can be found at <a href="https://github.com/info448-s
 </div>
 </div>
 <div id="memory-leaks" class="section level2">
-<h2><span class="header-section-number">24.3</span> Memory Leaks</h2>
+<h2><span class="header-section-number">25.3</span> Memory Leaks</h2>
 <p>Android’s garbage collection does a fine job of cleaning up memory… assuming that it can correctly identify the values that aren’t being used. This can sometimes be tricky: Java decides that a value is eligible for garbage collection whenever there are no longer any <em>references</em> to that value (e.g., no variables are in scope). However, if you’re not careful it’s often easy to leave an extra reference floating around that you didn’t intend, thereby keeping the memory from being deallocated. This is referred to as a <strong>memory leak</strong> (because the amount of available space is “leaking” away).</p>
 <p>For example, consider the <code>BirdActivity</code> class, that you can view by clicking on the <strong>“BIRD ACTIVITY”</strong> button. This activity shows a relatively high-resolution image of a bird—when you open the Activity, you should see the amount of allocated memory jump up dramatically since we need to load that <code>Drawable</code> into memory.</p>
 <p>If you click on the BirdActivity’s button, you’ll be taken to (another) blank Activity. Since the bird image is no longer being shown, it should no longer be used and thus should be eligible for garbage collection. Hit the “Initiate GC” button again to request that Android sweep up and reclaim that memory. <strong><em>What happens?</em></strong></p>

@@ -1,0 +1,307 @@
+# Databases and Providers {#databases}
+This lecture provides an in-depth discussion of working with [**Databases**](https://developer.android.com/training/basics/data-storage/databases.html) and [**Content Providers**](https://developer.android.com/guide/topics/providers/content-providers.html) in Android. _Accessing_ Content Providers (via a Loader) was discussed in a [previous lecture](#content-providers-intro). This lecture will instead talk about how to make your own database and a provider for it.
+
+Databases are appropriate when you want to store data _locally_ on the device (e.g., not on the cloud, which may require expensive network transactions as well as user accounts), but that data has greater scale or complexity than is appropriate for a SharedPreferences XML file&mdash;that is, you need to store more than just key-value pairs.
+
+<p class="alert alert-info">This lecture references code found at <https://github.com/info448-s17/lecture17-databases>.</p>
+
+## Review: Providers and Loaders
+As discussed previously, a **Content Provider** is an abstraction for a source of structured data (like a database, but also possibly files, internet resources, etc). It acts as an interface for interacting with that data, supporting the developing in reading, adding to, updating, or deleting data from the source (e.g., the basic [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations).
+
+The lecture reference code demonstrates again how to access and modify structured data&mdash;specifically the User Dictionary&mdash;via a Content Provider using a [Loader](https://developer.android.com/guide/components/loaders.html). You can read this example to review how to utilize an existing Provider:
+
+- The application displays a `ListView`, which is backed by a `SimpleCursorAdapter`. This adapter takes a "cursor" (think: a "pointer" or an Iterator&mdash;also a list of data that has been loaded _into memory_) and connects each item to a View on the screen. This View shows the word (`WORD`) and the "frequency"/prominence (`FREQUENCY`) of that word.
+
+- In order to get this list of items into memory from data store itself (to perform the **read** operation), we set up a `Loader`. The Loader fetches 3 "columns" (attributes) from the data store: `_ID`, `WORD`, and `FREQUENCY`; the `_ID` field is _not_ shown on the View, but the Loader needs that to keep track of the displayed items). We do not utilize any selection or sorting criteria, though we could add them in if we wanted.
+
+    The loader fetches (___queries___) data from the data store to load it into memory. It then tells the Adapter to take that loaded data and display it in the View. By using a Loader for this process, we gain two benefits: (1) the data is loaded into memory _on a background thread_ (not the UI Thread), and (2) the data is _automatically reloaded_ when the data store's content changes.
+
+- The example also supports the **create** operation: by clicking the "Add Word" button, we can ___insert___ a new entry into the data store represented by the Content Provider. We construct a `ContentValues` object (similar to a `Bundle`, but for Content Providers) that contains the attribute values for the new provider entry. We then use the `ContentResolver` to `insert()` this item into the Provider (indicated by its URI).
+
+- Finally, the example supports the **update** operation: by clicking the on an item in the list, we can ___update___ that entry in the data store (increasing the word's frequency). We get the Cursor containing the items from the AdapterView, with the "pointer" of that iterator set to the item that was clicked on. We then again use the `ContentResolver` to `update()` the item with the a ContentValues bundle of the fields we wish to change.
+
+    - Note that we make sure to update only that particular item by specifying the _URI of that item_. We do this by constructing a new URI representing/identifying that item, effectively by appending `"/:id"` to the URI. This means that we don't need to use the selection criteria (though we could do that as well).
+
+To review: the Content Provider acts as the data store, abstracting information at some location (e.g., in a database). The Loader grabs a bunch of rows and columns from that database, and hands it to the Adapter. The Adapter takes a subset of those rows and columns and puts them in the ListView so that they display to the user. User interaction allows us to add or modify the data in that database.
+
+
+## SQLite Databases
+Content Providers can abstract all kinds of data stores (files, urls, etc.). They abstract these as a _structured information_ similar to a database... and in fact the most common kind of store they represent is a [relational database](https://en.wikipedia.org/wiki/Relational_database_management_system) (specifically, an [SQLite database](https://en.wikipedia.org/wiki/SQLite)). Android [comes with an API](https://developer.android.com/guide/topics/data/data-storage.html#db) for creating an querying a database; these databases are stored on [_internal storage_](https://developer.android.com/guide/topics/data/data-storage.html#filesInternal) meaning that each application can have its own private database (or multiple databases, in fact)!
+
+<p class="alert alert-info">If you have worked with `SQL` or another relational database system (e.g., in the iSchool's INFO 340 course), this interaction will seem familiar. If you've never worked with a database, the simplest explanation is to think of them as a spreadsheet (like in an Excel file) where you manipulate _rows_ of data given a set of pre-defined _columns_. [SQL](https://en.wikipedia.org/wiki/SQL) (Structured Query Language) is its own command language for working with these spreadsheets; we'll see some samples of those queries in this lecture. SQLite is a "flavor" (version) of SQL; the full SQLite spec can be found [here](http://sqlite.org/lang.html). A short tutorial (borrowed from Google) is also available in the code repository.</p>
+
+In this lecture, we will build our own database of words (separate from the User Dictionary) that we can access through a Content Provider. We will simply change _which_ "data store" is being accessed; the rest of the application's interface will remain the same. This will let us demonstrate how to put together a Content Provider from scratch. We will start by setting up the database, and then implementing the `ContentProvider` that abstracts it.
+
+- Setting up a database is somewhat wordy and round-about, though it does not involve many new concepts.
+
+The step to effectively utilizing a database in Android is to create a class (e.g., `WordDatabase`) to act as a "namespace" for the various pieces of our database. This class will not be instantiated (and so could even have a `private` default constructor).
+
+The `WordDatabase` class will contain a number of _constants_:
+
+- `DATABASE_NAME` to refer to the name of the database file stored on the device (e.g., `words.db`)
+- `DATABASE_VERSION` to refer to the current version number of our database's schema. This is used more for supporting [migrations](https://en.wikipedia.org/wiki/Schema_migration) like if we want to update our database later.
+
+We're then going to specify constants that define the database's **schema** or **contract**. This is so that other classes (e.g., the `ContentProvider` and the `MainActivity`) can refer to column names consistently without having to remember or even know the specific text we utilize in the database. This is similar to how we used the variable `UserDictionary.Words.WORD` rather than the String value `"word"`. By convention, we define this schema as a separate _`static` nested class_ (e.g., `WordEntry`), to keep things organized. This class contains the constants to hold the column names:
+
+```java
+static class WordEntry implements BaseColumns {
+     //class cannot be instantiated
+     private WordEntry(){}
+
+     public static final String TABLE_NAME = "words";
+     public static final String COL_WORD = "word";
+     public static final String COL_COUNT = "count";
+}
+```
+
+- The class implements [`BaseColumns`](https://developer.android.com/reference/android/provider/BaseColumns.html), which lets it inherit a few framework specific constants for free&mdash;in particular, the `_ID` variable which Content Providers rely on the database to have.
+
+- We create a different nested class for each table in the database (sheet in a spreadsheet). This allows us to use Java-style namespacing (dot notation) to refer to different tables in a single database.
+
+Once we have defined the schema, we are ready to create and work with the database. In order to help us do this, we're going to use a class called [`SQLiteOpenHelper`](https://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper.html). This class offers a set of methods to help manage the database being created and upgraded (e.g., for migrations). Specifically, we will will _subclass_ `SQLiteOpenHelper`, creating another nested class that represents the specific helper for our database.
+
+The subclass has a constructor that takes in a `Context`, and then "passes up" the database name and version to the parent class.
+
+```java
+public DatabaseHelper(Context context){
+    super(context, DATABASE_NAME, null, DATABASE_VERSION);
+}
+```
+
+`SQLiteOpenHelper` also has two `abstract` methods (event callbacks) that we need to implemet: what happens when the database is _created_, and what happens when the database is _upgraded_.
+
+When the database is first created, we'll need to actually create the table to hold our words. This involves sending it an `SQL` command to create the table! We'll write this out as yet another constant for readability.
+
+```java
+private static final String CREATE_TASKS_TABLE =
+    "CREATE TABLE " + WordEntry.TABLE_NAME + "(" +
+        WordEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", "+
+        WordEntry.COL_WORD + " TEXT" + ","+
+        WordEntry.COL_COUNT + " INTEGER" +
+      ")";
+
+private static final String DROP_TASKS_TABLE =
+    "DROP TABLE IF EXISTS "+ WordEntry.TABLE_NAME;
+```
+
+- We can do the same for dropping (deleting) the table as well.
+- This is the only `SQL` we will write in this tutorial.
+
+We can run these `SQL` statements by using the `execSQL()` method, called on the [`SQLiteDatabase`](http://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.html) object that is passed to these callbacks. Note that this runs a "raw" SQL query (that doesn't return anything, so not `SELECT`), without any kind of checks against SQL injection attacks. But since we're hard-coding the information to run, it's not a problem. Aside from this situation, you should ___never___ use this method.
+
+- We can also use the `insert()` method to add some sample words to the database (similar to how we used the Content Provider), for clarity when testing:
+
+    ```java
+    ContentValues sample1 = new ContentValues();
+    sample1.put(WordEntry.COL_WORD, "Embiggen");
+    sample1.put(WordEntry.COL_COUNT, 0);
+    db.insert(WordEntry.TABLE_NAME, null, sample1);
+    ```
+
+- In the `onUpdate()` callback, we'll just "drop" the table and recreate it (by calling `onCreate()`).
+
+If we want to interact with this database in `MainActivity`, we can initialize the `DatabaseHelper` object (which will create the database _if needed_) and then use that helper to fetch the database we want to query (using `getReadableDatabase()`).
+
+- Note that querying a database could take a long time, and so we should _not_ be doing it on the UI Thread... this example is simply for testing.
+
+We can check that our database is set up correctly in one of two ways:
+
+- We can directly explore the SQLite database that is on your device by using `adb` and the `sqlite3` tool. See [this link](http://developer.android.com/tools/help/sqlite3.html) for more details.
+
+    ```
+    $ adb -s emulator-5554 shell
+    # sqlite3 /data/data/edu.uw.package.name/databases/words.db
+    # sqlite> select * from words;
+    # sqlite> .exit
+    ```
+
+- We can call a `query()` method on our `SQLiteDatabase`, and log out the results. A `SQLiteQueryBuilder` can offer some help if our query was going to be complex (e.g,. with `JOIN`):
+
+    ```java
+    SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+    builder.setTables(WordDatabase.WordEntry.TABLE_NAME); //set the table to use
+
+    Cursor results = builder.query(
+            db,
+            new String[] {WordDatabase.WordEntry.COL_WORD, WordDatabase.WordEntry.COL_COUNT},
+            null, null, null, null, null); //5 nulls!
+
+    while(results.moveToNext()) {
+        String word = results.getString(results.getColumnIndexOrThrow(WordDatabase.WordEntry.COL_WORD));
+        int freq = results.getInt(results.getColumnIndexOrThrow(WordDatabase.WordEntry.COL_COUNT));
+        Log.v(TAG, "'"+word+"' ("+freq+")");
+    }
+    ```
+
+    - This is the exact same Cursor processing work used when logging out the clicked item, but using our column names instead!
+    - We could even remove the Loader call and just pass in this query directly to the Adapter, if we wanted to display our database in the list.
+
+Voila, we have a database that we can call methods on to access!
+
+
+## Implementing `ContentProvider`
+We don't want to do this database creation and querying on the main thread (because it may take a while). And since we also want to easily let our `ListView` update when the database changes, we we like to be able to use a Loader to access this database. In order to use a Loader, we need to wrap the database in a `ContentProvider`.
+
+<p class="alert alert-info">There are a lot of steps and a lot of code involved inmaking a `ContentProvider`, and most of them are "boilerplate" for most databases. So much so that there is [thorough example code](https://developer.android.com/guide/topics/providers/content-provider-creating.html#ContentProvider) in the Google documentation, which you can copy-and-paste from as needed.</p>
+
+We'll start by creating another class that extends `ContentProvider` (_can you understand why?_). Since this will have a lot of abstract methods we'll need to fill in, so we can actually use one of Android Studio's generators via `New > Other > Content Provider` to help us along (I normally say not to use these, but with the `ContentProvider` it's not too messy).
+
+We will have to specify an [**authority**](https://developer.android.com/guide/topics/providers/content-provider-creating.html#ContentURI) for the Provider. This acts as a unique, Android-internal "name" for the database (to indicate which it is, or who "owns" it). This is the "name" by which others will be able to refer to our particular Provider. This is thus sort of like a package name&mdash;and in fact, we usually use the package name with an extra `.provider` attached as the authority name.
+
+Also notice that an entry for this `<provider>` has been added to the `Manifest`, including the authority name. `android:enabled` means the Provider can be instantiated, and `android:exported` means it is available to other applications.
+
+### URIs and Types
+The most important piece of a `ContentProvider` (that makes it more than just helper methods for a database) is how it can be accessed at a particular [**URI**](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier). So the first thing we need to do is specify this URI for our provider.
+
+- We'll actually want to specify _multiple_ URIs. This is because each piece of content we provide (each record in the database!) is itself a distinct _resource_, and thus should have its own URI. Thus we need to design a **schema** for the URIs so that we know how to refer to each kind of content offered by our provider.
+
+  Designing a URI schema is like designing a URL structure for a website; this will feel familiar to specifying _routes_ for a web application.
+
+The most common URI approach for Content Providers is to give each resource we provide a URI of the format:
+
+```
+content://authority/resource/id
+```
+
+- This URI indicates that it is a identifier for a particular provider (the `authority`), which has a particular `resource` type (think: which database table of information), which may have a particular resource `id` (think: the ID of the record in the table)
+- Leaving off the `id` would refer to the entire table, or rather the "list" of resources. So really we have two different "categories" of URIs: the whole list, and an individual resource within that list. Both have the same "base", but will need to be handled slightly differently.
+- See [designing content URIs](https://developer.android.com/guide/topics/providers/content-provider-creating.html#ContentURI) for more discussion on how to structure these.
+
+
+We will define these URIs piece-wise using constants (of course). One for the _authority_, one for the _resource type_ (which happens to be the name of the database table, but doesn't need to be), and finally the overall Content URI (parsed into a `Uri` object):
+
+```java
+public static final Uri CONTENT_URI =
+    Uri.parse("content://" + AUTHORITY + "/"+WORD_RESOURCE);
+```
+
+But we also need to handle both types of resources: the "list" of words, and the individual words themselves. To enable this, we're going to use a class called a [`UriMatcher`](https://developer.android.com/reference/android/content/UriMatcher.html). This class provides a _mapping_ between URIs and the actual "type" of data we're interested in (either lists or word objects). This will help us do "routing" work, without needing to parse the path of the URI ourselves.
+
+- We'll represent the "type" or "kind" with `int` constants, allwoing us to easily refer to "which" kind of resource we're talking about.
+
+    ```java
+    //integer values representing each supported resource Uri
+    private static final int WORD_LIST_URI = 1; // /words
+    private static final int WORD_SINGLE_URI = 2;// /words/:id
+    ```
+
+    - So if you give me a `/words` URI, I can tell you that you're interested in "resource kind \#1"
+
+We want to make a a `static UriMatcher` object (like a constant) that we can use to do the mapping... but because it takes more than one line to set this up (we add an entry for each mapping), we need to put it inside a `static` block so that all this code is run together:
+
+```java
+private static final UriMatcher sUriMatcher; //for handling Uri requests
+static {
+    //setup mapping between URIs and IDs
+    sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    sUriMatcher.addURI(AUTHORITY, WORD_RESOURCE, WORD_LIST_URI);
+    sUriMatcher.addURI(AUTHORITY, WORD_RESOURCE + "/#", WORD_SINGLE_URI);
+}
+```
+
+- Note the wildcard `#`, meaning "any number" (after the slash) will "match" this URI.
+
+We can then figure out which "kind" of task by using the `UriMatcher#match(uri)` method, which will return the "kind" `int` that matches the given Uri.
+
+As an example of this, let's fill in the `getType()` method. The purpose of this method is to allow the ContentProvider to let whoever queries it know the [MIME Type](https://en.wikipedia.org/wiki/Media_type) (media type) of the resource a URI is accessing. This lets the program specify whether the content provided by the Content Provider is an image, text, music, or some other type.
+
+- The type we're going to give back is a `Cursor` (list of rows in a table), so we'll specify [MIME Types for that](http://developer.android.com/guide/topics/providers/content-provider-creating.html#TableMIMETypes):
+
+    ```java
+    public String getType(Uri uri) {
+        switch(sUriMatcher.match(uri)){
+            case WORD_LIST_URI:
+                return "vnd.android.cursor.dir/"+AUTHORITY+"."+WORD_RESOURCE;
+            case WORD_SINGLE_URI:
+                return "vnd.android.cursor.item/"+AUTHORITY+"."+WORD_RESOURCE;
+            default:
+                throw new IllegalArgumentException("Unknown URI "+uri);
+        }
+    }
+    ```
+    - `vnd` stands for "vendor specific"&mdash;in this case, a format specific to Android.
+
+
+### Query Methods
+Once all of the URIs are specified, we can start responding to requests for content at those URIs. Specifically, when a request for content at a URI comes in, we're going to fetch data from the _database_ we made earlier and then return that data. We handle these "requests" through 4 different methods: `query()`, `insert()`, `update()`, and `delete()` (mirroring the CRUD operations, drawing on standard SQL query names). We will fill in those methods to have them fetch and return the database data.
+
+First, we need to get access to the database (through a helper), just as we did in the `MainActivity`. We'll instantiate the `DatabaseHelper` in the `ContentProvider#onCreate()` callback, saving that helper as an instance variable to reference later. Then in the CRUD methods (which will be executed _in a background thread_), we can call `getWriteableDatabase()` to get access to that database.
+
+We will start with implementing the **query()** method. Basically, we need to do the same query we used in `MainActivity`&mdash;though can pass in the extra query parameters (e.g., `projection`, `selection`, `sortOrder`) instead of always having them be `null` or defined manually.
+
+However, we also need to be able to handle both types of resources that our Provider serves (lists or single words). We can use the `UriMatcher` to determine how to adjust our query: for example, by using the `UriBuilder#appendWhere()` method to add a "selection" argument:
+
+```java
+switch(sUriMatcher.match(uri)){
+    case WORD_LIST_URI: //all words
+      break; //no change
+    case WORD_SINGLE_URI: //single word
+      builder.appendWhere(WordDatabase.WordEntry._ID + "=" + uri.getLastPathSegment()); //restrict to that item
+    default:
+      throw new IllegalArgumentException("Unknown URI "+uri);
+}
+```
+
+We'll then just return the `Cursor` that we get as a result of the query.
+
+But there is also one more piece. We want to make sure that the Loader that is reading from our Content Provider (that loaded this `Cursor` object) is notified of any changes to the results of its query. This will allow the Loader to "automatically" query for new content if any of the data _at that URI_ changes.
+
+```java
+cursor.setNotificationUri(getContext().getContentResolver(), uri);
+```
+
+With this step in place, we can go back to our `MainActivity` and swap all the column names and URIs for our own custom `WordProvider`! Rerun the app... and voila, we see our own list of words!
+
+We can do basically the same thing to support **`insert()`** and **`update()`** to enable all of our use cases.
+
+- Use the `UriMatcher` to make to only respond to proper Uris&mdash;you can't insert into a single record, and you can't update the entire list.
+
+    ```java
+    if(sUriMatcher.match(uri) != WORD_LIST_URI) {
+      throw new IllegalArgumentException("Unknown URI "+uri);
+    }
+    ```
+
+- For `insert()`, it is also possible to make sure that no "empty" entries are added to the database, and to return the result if the insertion is successful:
+
+    ```java
+    if(!values.containsKey(WordDatabase.WordEntry.COL_WORD)){
+      values.put(WordDatabase.WordEntry.COL_WORD, "");
+    }
+    if(!values.containsKey(WordDatabase.WordEntry.COL_COUNT)){
+        values.put(WordDatabase.WordEntry.COL_COUNT, 0);
+    }
+
+    long rowId = db.insert(WordDatabase.WordEntry.TABLE_NAME, null, values);
+    if (rowId > 0) { //if successful
+        Uri wordUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
+        getContext().getContentResolver().notifyChange(wordUri, null);
+        return wordUri; //return the URI for the entry
+    }
+    throw new SQLException("Failed to insert row into " + uri);
+    ```
+
+- The `update()` method can be somewhat awkward because we need to basically add our `id` restriction to the user-given selection args:
+
+    ```java
+    int count;
+    switch (sUriMatcher.match(uri)) {
+      case WORD_LIST_URI:
+        count = db.update(WordDatabase.WordEntry.TABLE_NAME, values, selection, selectionArgs); //just pass in params
+        break;
+      case WORD_SINGLE_URI:
+        String wordId = uri.getLastPathSegment();
+        count = db.update(WordDatabase.WordEntry.TABLE_NAME, values, WordDatabase.WordEntry._ID + "=" + wordId //select by id
+              + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs); //apply params
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown URI " + uri);
+    }
+    if (count > 0) {
+      getContext().getContentResolver().notifyChange(uri, null);
+      return count;
+    }
+    throw new SQLException("Failed to update row " + uri);
+    ```
+
+But in the end, we have a working ContentProvider that supports the same behaviors as the built in User Dictionary (well, except for `delete()`). We can now store data in our own database and easily access it off the UI Thread for use in things like ListViews. This is great for if you want to track and store any kind of structured information in your apps.

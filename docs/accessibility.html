@@ -26,14 +26,14 @@
 <meta name="author" content="Joel Ross">
 
 
-<meta name="date" content="2017-05-23">
+<meta name="date" content="2017-05-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="publishing.html">
+<link rel="prev" href="kotlin.html">
 <link rel="next" href="fragments-viewpager.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -196,7 +196,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.4" data-path="ui-components.html"><a href="ui-components.html#toasts"><i class="fa fa-check"></i><b>6.4</b> Toasts</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html"><i class="fa fa-check"></i><b>7</b> Providers and Loaders</a><ul>
-<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
+<li class="chapter" data-level="7.1" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#content-providers-intro"><i class="fa fa-check"></i><b>7.1</b> Content Providers</a></li>
 <li class="chapter" data-level="7.2" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#cursors"><i class="fa fa-check"></i><b>7.2</b> Cursors</a></li>
 <li class="chapter" data-level="7.3" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#loaders"><i class="fa fa-check"></i><b>7.3</b> Loaders</a></li>
 <li class="chapter" data-level="7.4" data-path="providers-and-loaders.html"><a href="providers-and-loaders.html#other-provider-actions"><i class="fa fa-check"></i><b>7.4</b> Other Provider Actions</a><ul>
@@ -276,15 +276,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="15.3" data-path="animation.html"><a href="animation.html#property-animation"><i class="fa fa-check"></i><b>15.3</b> Property Animation</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="kotlin.html"><a href="kotlin.html"><i class="fa fa-check"></i><b>16</b> Special Topics: Kotlin</a><ul>
-<li class="chapter" data-level="16.1" data-path="kotlin.html"><a href="kotlin.html#kotlin-syntax"><i class="fa fa-check"></i><b>16.1</b> Kotlin Syntax</a><ul>
-<li class="chapter" data-level="16.1.1" data-path="kotlin.html"><a href="kotlin.html#variables"><i class="fa fa-check"></i><b>16.1.1</b> Variables</a></li>
-<li class="chapter" data-level="16.1.2" data-path="kotlin.html"><a href="kotlin.html#functions"><i class="fa fa-check"></i><b>16.1.2</b> Functions</a></li>
-<li class="chapter" data-level="16.1.3" data-path="kotlin.html"><a href="kotlin.html#classes"><i class="fa fa-check"></i><b>16.1.3</b> Classes</a></li>
-</ul></li>
-<li class="chapter" data-level="16.2" data-path="kotlin.html"><a href="kotlin.html#kotlin-for-android"><i class="fa fa-check"></i><b>16.2</b> Kotlin for Android</a><ul>
-<li class="chapter" data-level="16.2.1" data-path="kotlin.html"><a href="kotlin.html#the-android-extension"><i class="fa fa-check"></i><b>16.2.1</b> The Android Extension</a></li>
-<li class="chapter" data-level="16.2.2" data-path="kotlin.html"><a href="kotlin.html#anko"><i class="fa fa-check"></i><b>16.2.2</b> Anko</a></li>
+<li class="chapter" data-level="16" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>16</b> Databases and Providers</a><ul>
+<li class="chapter" data-level="16.1" data-path="databases.html"><a href="databases.html#review-providers-and-loaders"><i class="fa fa-check"></i><b>16.1</b> Review: Providers and Loaders</a></li>
+<li class="chapter" data-level="16.2" data-path="databases.html"><a href="databases.html#sqlite-databases"><i class="fa fa-check"></i><b>16.2</b> SQLite Databases</a></li>
+<li class="chapter" data-level="16.3" data-path="databases.html"><a href="databases.html#implementing-contentprovider"><i class="fa fa-check"></i><b>16.3</b> Implementing <code>ContentProvider</code></a><ul>
+<li class="chapter" data-level="16.3.1" data-path="databases.html"><a href="databases.html#uris-and-types"><i class="fa fa-check"></i><b>16.3.1</b> URIs and Types</a></li>
+<li class="chapter" data-level="16.3.2" data-path="databases.html"><a href="databases.html#query-methods"><i class="fa fa-check"></i><b>16.3.2</b> Query Methods</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="publishing.html"><a href="publishing.html"><i class="fa fa-check"></i><b>17</b> Publishing</a><ul>
@@ -292,54 +289,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="17.1.1" data-path="publishing.html"><a href="publishing.html#a-release-.apk"><i class="fa fa-check"></i><b>17.1.1</b> A Release <code>.apk</code></a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="18" data-path="kotlin.html"><a href="kotlin.html"><i class="fa fa-check"></i><b>18</b> Special Topics: Kotlin</a><ul>
+<li class="chapter" data-level="18.1" data-path="kotlin.html"><a href="kotlin.html#kotlin-syntax"><i class="fa fa-check"></i><b>18.1</b> Kotlin Syntax</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="kotlin.html"><a href="kotlin.html#variables"><i class="fa fa-check"></i><b>18.1.1</b> Variables</a></li>
+<li class="chapter" data-level="18.1.2" data-path="kotlin.html"><a href="kotlin.html#functions"><i class="fa fa-check"></i><b>18.1.2</b> Functions</a></li>
+<li class="chapter" data-level="18.1.3" data-path="kotlin.html"><a href="kotlin.html#classes"><i class="fa fa-check"></i><b>18.1.3</b> Classes</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="kotlin.html"><a href="kotlin.html#kotlin-for-android"><i class="fa fa-check"></i><b>18.2</b> Kotlin for Android</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="kotlin.html"><a href="kotlin.html#the-android-extension"><i class="fa fa-check"></i><b>18.2.1</b> The Android Extension</a></li>
+<li class="chapter" data-level="18.2.2" data-path="kotlin.html"><a href="kotlin.html#anko"><i class="fa fa-check"></i><b>18.2.2</b> Anko</a></li>
+</ul></li>
+</ul></li>
 <li class="part"><span><b>II Additional Topics (Labs)</b></span></li>
-<li class="chapter" data-level="18" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>18</b> Accessibility</a><ul>
-<li class="chapter" data-level="18.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>18.1</b> Universal Usability</a></li>
-<li class="chapter" data-level="18.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>18.2</b> Implementing Accessibility</a><ul>
-<li class="chapter" data-level="18.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>18.2.1</b> Supporting Vision Impairment</a></li>
-<li class="chapter" data-level="18.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>18.2.2</b> Supporting Alternative Inputs</a></li>
-<li class="chapter" data-level="18.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>18.2.3</b> Supporting Internationalization</a></li>
-<li class="chapter" data-level="18.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>18.2.4</b> Further Testing</a></li>
+<li class="chapter" data-level="19" data-path="accessibility.html"><a href="accessibility.html"><i class="fa fa-check"></i><b>19</b> Accessibility</a><ul>
+<li class="chapter" data-level="19.1" data-path="accessibility.html"><a href="accessibility.html#universal-usability"><i class="fa fa-check"></i><b>19.1</b> Universal Usability</a></li>
+<li class="chapter" data-level="19.2" data-path="accessibility.html"><a href="accessibility.html#implementing-accessibility"><i class="fa fa-check"></i><b>19.2</b> Implementing Accessibility</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="accessibility.html"><a href="accessibility.html#supporting-vision-impairment"><i class="fa fa-check"></i><b>19.2.1</b> Supporting Vision Impairment</a></li>
+<li class="chapter" data-level="19.2.2" data-path="accessibility.html"><a href="accessibility.html#supporting-alternative-inputs"><i class="fa fa-check"></i><b>19.2.2</b> Supporting Alternative Inputs</a></li>
+<li class="chapter" data-level="19.2.3" data-path="accessibility.html"><a href="accessibility.html#supporting-internationalization"><i class="fa fa-check"></i><b>19.2.3</b> Supporting Internationalization</a></li>
+<li class="chapter" data-level="19.2.4" data-path="accessibility.html"><a href="accessibility.html#further-testing"><i class="fa fa-check"></i><b>19.2.4</b> Further Testing</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>19</b> Fragments: ViewPager</a><ul>
-<li class="chapter" data-level="19.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>19.1</b> Define a SearchFragment</a></li>
-<li class="chapter" data-level="19.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>19.2</b> Add the ViewPager and Adapter</a></li>
-<li class="chapter" data-level="19.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>19.3</b> Add User Interaction</a></li>
+<li class="chapter" data-level="20" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html"><i class="fa fa-check"></i><b>20</b> Fragments: ViewPager</a><ul>
+<li class="chapter" data-level="20.1" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#define-a-searchfragment"><i class="fa fa-check"></i><b>20.1</b> Define a SearchFragment</a></li>
+<li class="chapter" data-level="20.2" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-the-viewpager-and-adapter"><i class="fa fa-check"></i><b>20.2</b> Add the ViewPager and Adapter</a></li>
+<li class="chapter" data-level="20.3" data-path="fragments-viewpager.html"><a href="fragments-viewpager.html#add-user-interaction"><i class="fa fa-check"></i><b>20.3</b> Add User Interaction</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>20</b> Bluetooth</a></li>
-<li class="chapter" data-level="21" data-path="maps.html"><a href="maps.html"><i class="fa fa-check"></i><b>21</b> Maps</a><ul>
-<li class="chapter" data-level="21.1" data-path="maps.html"><a href="maps.html#create-a-map-activity"><i class="fa fa-check"></i><b>21.1</b> Create a Map Activity</a><ul>
-<li class="chapter" data-level="21.1.1" data-path="maps.html"><a href="maps.html#getting-an-api-key"><i class="fa fa-check"></i><b>21.1.1</b> Getting an API Key</a></li>
-<li class="chapter" data-level="21.1.2" data-path="maps.html"><a href="maps.html#the-supportmapfragment"><i class="fa fa-check"></i><b>21.1.2</b> The <code>SupportMapFragment</code></a></li>
+<li class="chapter" data-level="21" data-path="bluetooth.html"><a href="bluetooth.html"><i class="fa fa-check"></i><b>21</b> Bluetooth</a></li>
+<li class="chapter" data-level="22" data-path="maps.html"><a href="maps.html"><i class="fa fa-check"></i><b>22</b> Maps</a><ul>
+<li class="chapter" data-level="22.1" data-path="maps.html"><a href="maps.html#create-a-map-activity"><i class="fa fa-check"></i><b>22.1</b> Create a Map Activity</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="maps.html"><a href="maps.html#getting-an-api-key"><i class="fa fa-check"></i><b>22.1.1</b> Getting an API Key</a></li>
+<li class="chapter" data-level="22.1.2" data-path="maps.html"><a href="maps.html#the-supportmapfragment"><i class="fa fa-check"></i><b>22.1.2</b> The <code>SupportMapFragment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="21.2" data-path="maps.html"><a href="maps.html#specifying-the-user-interface"><i class="fa fa-check"></i><b>21.2</b> Specifying the User Interface</a></li>
-<li class="chapter" data-level="21.3" data-path="maps.html"><a href="maps.html#markers-and-drawings"><i class="fa fa-check"></i><b>21.3</b> Markers and Drawings</a><ul>
-<li class="chapter" data-level="21.3.1" data-path="maps.html"><a href="maps.html#drawing-shapes"><i class="fa fa-check"></i><b>21.3.1</b> Drawing Shapes</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="22" data-path="styles-themes.html"><a href="styles-themes.html"><i class="fa fa-check"></i><b>22</b> Styles &amp; Themes</a><ul>
-<li class="chapter" data-level="22.1" data-path="styles-themes.html"><a href="styles-themes.html#defining-styles"><i class="fa fa-check"></i><b>22.1</b> Defining Styles</a><ul>
-<li class="chapter" data-level="22.1.1" data-path="styles-themes.html"><a href="styles-themes.html#style-inheritance"><i class="fa fa-check"></i><b>22.1.1</b> Style Inheritance</a></li>
-<li class="chapter" data-level="22.1.2" data-path="styles-themes.html"><a href="styles-themes.html#built-in-styles"><i class="fa fa-check"></i><b>22.1.2</b> Built-in Styles</a></li>
-</ul></li>
-<li class="chapter" data-level="22.2" data-path="styles-themes.html"><a href="styles-themes.html#themes"><i class="fa fa-check"></i><b>22.2</b> Themes</a><ul>
-<li class="chapter" data-level="22.2.1" data-path="styles-themes.html"><a href="styles-themes.html#material-themes"><i class="fa fa-check"></i><b>22.2.1</b> Material Themes</a></li>
-<li class="chapter" data-level="22.2.2" data-path="styles-themes.html"><a href="styles-themes.html#theme-attributes"><i class="fa fa-check"></i><b>22.2.2</b> Theme Attributes</a></li>
+<li class="chapter" data-level="22.2" data-path="maps.html"><a href="maps.html#specifying-the-user-interface"><i class="fa fa-check"></i><b>22.2</b> Specifying the User Interface</a></li>
+<li class="chapter" data-level="22.3" data-path="maps.html"><a href="maps.html#markers-and-drawings"><i class="fa fa-check"></i><b>22.3</b> Markers and Drawings</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="maps.html"><a href="maps.html#drawing-shapes"><i class="fa fa-check"></i><b>22.3.1</b> Drawing Shapes</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="multi-touch.html"><a href="multi-touch.html"><i class="fa fa-check"></i><b>23</b> Multi-Touch</a><ul>
-<li class="chapter" data-level="23.1" data-path="multi-touch.html"><a href="multi-touch.html#identifying-fingers"><i class="fa fa-check"></i><b>23.1</b> Identifying Fingers</a></li>
-<li class="chapter" data-level="23.2" data-path="multi-touch.html"><a href="multi-touch.html#drawing-touches"><i class="fa fa-check"></i><b>23.2</b> Drawing Touches</a></li>
-<li class="chapter" data-level="23.3" data-path="multi-touch.html"><a href="multi-touch.html#moving-fingers"><i class="fa fa-check"></i><b>23.3</b> Moving Fingers</a></li>
-<li class="chapter" data-level="23.4" data-path="multi-touch.html"><a href="multi-touch.html#other-multi-touch-gestures"><i class="fa fa-check"></i><b>23.4</b> Other Multi-Touch Gestures</a></li>
+<li class="chapter" data-level="23" data-path="styles-themes.html"><a href="styles-themes.html"><i class="fa fa-check"></i><b>23</b> Styles &amp; Themes</a><ul>
+<li class="chapter" data-level="23.1" data-path="styles-themes.html"><a href="styles-themes.html#defining-styles"><i class="fa fa-check"></i><b>23.1</b> Defining Styles</a><ul>
+<li class="chapter" data-level="23.1.1" data-path="styles-themes.html"><a href="styles-themes.html#style-inheritance"><i class="fa fa-check"></i><b>23.1.1</b> Style Inheritance</a></li>
+<li class="chapter" data-level="23.1.2" data-path="styles-themes.html"><a href="styles-themes.html#built-in-styles"><i class="fa fa-check"></i><b>23.1.2</b> Built-in Styles</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="memory.html"><a href="memory.html"><i class="fa fa-check"></i><b>24</b> Memory Management</a><ul>
-<li class="chapter" data-level="24.1" data-path="memory.html"><a href="memory.html#memory-allocation"><i class="fa fa-check"></i><b>24.1</b> Memory Allocation</a></li>
-<li class="chapter" data-level="24.2" data-path="memory.html"><a href="memory.html#the-memory-monitor"><i class="fa fa-check"></i><b>24.2</b> The Memory Monitor</a><ul>
-<li class="chapter" data-level="24.2.1" data-path="memory.html"><a href="memory.html#garbage-collection"><i class="fa fa-check"></i><b>24.2.1</b> Garbage Collection</a></li>
+<li class="chapter" data-level="23.2" data-path="styles-themes.html"><a href="styles-themes.html#themes"><i class="fa fa-check"></i><b>23.2</b> Themes</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="styles-themes.html"><a href="styles-themes.html#material-themes"><i class="fa fa-check"></i><b>23.2.1</b> Material Themes</a></li>
+<li class="chapter" data-level="23.2.2" data-path="styles-themes.html"><a href="styles-themes.html#theme-attributes"><i class="fa fa-check"></i><b>23.2.2</b> Theme Attributes</a></li>
 </ul></li>
-<li class="chapter" data-level="24.3" data-path="memory.html"><a href="memory.html#memory-leaks"><i class="fa fa-check"></i><b>24.3</b> Memory Leaks</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="multi-touch.html"><a href="multi-touch.html"><i class="fa fa-check"></i><b>24</b> Multi-Touch</a><ul>
+<li class="chapter" data-level="24.1" data-path="multi-touch.html"><a href="multi-touch.html#identifying-fingers"><i class="fa fa-check"></i><b>24.1</b> Identifying Fingers</a></li>
+<li class="chapter" data-level="24.2" data-path="multi-touch.html"><a href="multi-touch.html#drawing-touches"><i class="fa fa-check"></i><b>24.2</b> Drawing Touches</a></li>
+<li class="chapter" data-level="24.3" data-path="multi-touch.html"><a href="multi-touch.html#moving-fingers"><i class="fa fa-check"></i><b>24.3</b> Moving Fingers</a></li>
+<li class="chapter" data-level="24.4" data-path="multi-touch.html"><a href="multi-touch.html#other-multi-touch-gestures"><i class="fa fa-check"></i><b>24.4</b> Other Multi-Touch Gestures</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="memory.html"><a href="memory.html"><i class="fa fa-check"></i><b>25</b> Memory Management</a><ul>
+<li class="chapter" data-level="25.1" data-path="memory.html"><a href="memory.html#memory-allocation"><i class="fa fa-check"></i><b>25.1</b> Memory Allocation</a></li>
+<li class="chapter" data-level="25.2" data-path="memory.html"><a href="memory.html#the-memory-monitor"><i class="fa fa-check"></i><b>25.2</b> The Memory Monitor</a><ul>
+<li class="chapter" data-level="25.2.1" data-path="memory.html"><a href="memory.html#garbage-collection"><i class="fa fa-check"></i><b>25.2.1</b> Garbage Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="25.3" data-path="memory.html"><a href="memory.html#memory-leaks"><i class="fa fa-check"></i><b>25.3</b> Memory Leaks</a></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix: Java</b></span></li>
 <li class="chapter" data-level="A" data-path="java-review.html"><a href="java-review.html"><i class="fa fa-check"></i><b>A</b> Java Review</a><ul>
@@ -384,10 +392,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="accessibility" class="section level1">
-<h1><span class="header-section-number">Lecture 18</span> Accessibility</h1>
+<h1><span class="header-section-number">Lecture 19</span> Accessibility</h1>
 <p>This chapter will discuss how to support <a href="https://developer.android.com/training/accessibility/index.html"><strong>Accessibility</strong></a> when developing Android applications—specifically, supporting users with levels of physical disability. Accessibility is an incredibly important software quality that is often overlooked, but making Android apps accessible requires only a few minor changes to the implementation details discussed in this course.</p>
 <div id="universal-usability" class="section level2">
-<h2><span class="header-section-number">18.1</span> Universal Usability</h2>
+<h2><span class="header-section-number">19.1</span> Universal Usability</h2>
 <p>When developing any kind of interactive system, there are different <em>design principles</em> (e.g., <a href="https://www.cs.umd.edu/users/ben/goldenrules.html">Shneiderman and Plaisant’s Golden Rules</a>) that can provide guidelines for how to develop effective and usable system.</p>
 <p>One of the most important design principles is <strong>Universal Usability</strong> (also known as <a href="https://en.wikipedia.org/wiki/Universal_design">Universal Design</a>), which is the principle that designed products should be <em>inherently accessible</em>. This principle takes as its premise that designing for <em>accessibility</em>—to be usable by all people no matter their ability (physical or otherwise)—benefits not just those with some form of limitation or disability, but <strong><em>everyone</em></strong>.</p>
 <p>The classic example of Universal Design are <a href="https://en.wikipedia.org/wiki/Curb_cut">curb cuts</a>: the “slopes” built into curbs to accommodate people in wheelchairs. However, this design decision end up making curbs more usability for <em>everyone</em>: curb cuts help people with rollerbags, strollers, temporary injuries, or who just have problems climbing steps.</p>
@@ -402,13 +410,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>People with disabilities cannot ethically be excluded from consideration in app design, and by considering their needs you will also improve the usability of your app for all population—two for the price of one! This guideline is <a href="http://www.fastcodesign.com/3054927/the-big-idea/microsofts-inspiring-bet-on-a-radical-new-type-of-design-thinking">increasingly being acknowledged</a> by companies as key to usability, and thus it is important that you apply it to your own design work.</p>
 </div>
 <div id="implementing-accessibility" class="section level2">
-<h2><span class="header-section-number">18.2</span> Implementing Accessibility</h2>
+<h2><span class="header-section-number">19.2</span> Implementing Accessibility</h2>
 <p>The Android framework provides a number of ways to <a href="https://developer.android.com/guide/topics/ui/accessibility/apps.html"><strong>make apps more accessible</strong></a>, including a handy <a href="https://developer.android.com/guide/topics/ui/accessibility/checklist.html"><strong>accessibility developer checklist</strong></a> that you can follow. Some specific actions are described in more detail below: you should perform the listed tasks to test and improve an app’s accessibility.</p>
 <p class="alert alert-info">
 These exercises build on the lecture code found at <a href="https://github.com/info448-s17/lecture07-loaders" class="uri">https://github.com/info448-s17/lecture07-loaders</a> (use the <code>completed</code> branch). You will need to adjust <code>MainActivity</code> so that it shows the provided <code>MovieFragment</code> by default; you will be testing and improving the accessibility of that Fragment.
 </p>
 <div id="supporting-vision-impairment" class="section level3">
-<h3><span class="header-section-number">18.2.1</span> Supporting Vision Impairment</h3>
+<h3><span class="header-section-number">19.2.1</span> Supporting Vision Impairment</h3>
 <p>One of the most important ways to support accessibility is to make sure your app is accessible to users with vision impairments.</p>
 <p>As mentioned previously, one way to support users with trouble seeing content on small screens is to always use <em>scalable pixels</em> (<strong><code>sp</code></strong>) as units on TextViews. This allows the size of the content to <em>scale</em> with user preferences: so if someone wants everything on the phone to be large, it can be!</p>
 <p>However, users who are <em>blind</em> require extra support. This support is provided by <a href="https://developer.android.com/guide/topics/ui/accessibility/services.html">Accessibility Services</a>, which are “background services” that can respond to specific accessibility events (we will discuss Services more in a future lecture). The most common built-in service is called <a href="https://developer.android.com/training/accessibility/testing.html#talkback"><strong>TalkBack</strong></a>, which is the Google-developed <a href="https://en.wikipedia.org/wiki/Screen_reader">screen reader</a> for Android. This service will “speak” the name of UI elements as the user focuses on them, as well as allow the user to drag a finger around a screen and get verbal feedback of what is there.</p>
@@ -430,7 +438,7 @@ These exercises build on the lecture code found at <a href="https://github.com/i
 <p>Incuding the <code>android:contentDescription</code> attribute is an incredibly easy addition (low-hanging fruit!) that does quite a lot to support accessibility of Android apps.</p>
 </div>
 <div id="supporting-alternative-inputs" class="section level3">
-<h3><span class="header-section-number">18.2.2</span> Supporting Alternative Inputs</h3>
+<h3><span class="header-section-number">19.2.2</span> Supporting Alternative Inputs</h3>
 <p>A second easy change involves supporting interaction that <em>doesn’t</em> use the Touch Screen. This could be because of physical limitations: the user may interact with the device through an external device such as a keyboard, trackball, or <a href="https://developer.android.com/training/accessibility/testing.html#switch-access">switch</a>.</p>
 <p>The best way to support these alternative inputs is by making sure that each navigational element (things the user may select) are <a href="https://developer.android.com/training/accessibility/accessible-app.html#focus">focusable</a>. You can do this by specifying the <code>android:focusable</code> attribute in the XML (or use the <code>View#setFocusable()</code> method in Java).</p>
 <p>Buttons are already focusable by default. But you can also specify the <em>order</em> by whch elements get focus (similar to the “tab order” in <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex">HTML</a>). This is done using XML attributes <code>android:nextFocusDown</code>, <code>android:nextFocusUp</code>, <code>android:nextFocusLeft</code>, <code>android:nextFocusRight</code>. Each of these takes an <code>id</code> reference as a value (e.g., <code>&quot;@id/nextElement&quot;</code>), which refers to which View should gain focus <em>instead of the “natural” order</em>.</p>
@@ -440,7 +448,7 @@ These exercises build on the lecture code found at <a href="https://github.com/i
 </ul>
 </div>
 <div id="supporting-internationalization" class="section level3">
-<h3><span class="header-section-number">18.2.3</span> Supporting Internationalization</h3>
+<h3><span class="header-section-number">19.2.3</span> Supporting Internationalization</h3>
 <p>Finally you can make an application accessible to a wider diversity of users by providing <a href="https://developer.android.com/training/basics/supporting-devices/languages.html">Internationalization</a> and supporting different languages and cultures.</p>
 <p>Internationalization (<a href="https://en.wikipedia.org/wiki/Internationalization_and_localization">i18n</a>) is primarily done by specifying <a href="https://developer.android.com/guide/topics/resources/providing-resources.html#AlternativeResources">alternative resource</a>, such as using XML to define user-facing Strings in multiple languages. We did an example of this in <a href="resources-and-layouts.html#alternative-resources">lecture 3</a></p>
 <p>However, changes in language may also require adjustments to the layout resources themselves: phrases in some languages are significantly longer or shorter than in English, and so may cause problems with spacing or word wrapping.</p>
@@ -461,7 +469,7 @@ These exercises build on the lecture code found at <a href="https://github.com/i
 <p><strong><em>Make these changes</em></strong> to the <code>MovieFragment</code> (there are no custom drawables to adjust). You can test that your changes work by selecting <code>Settings &gt; Developer options &gt; Force RTL layout direction</code>.</p>
 </div>
 <div id="further-testing" class="section level3">
-<h3><span class="header-section-number">18.2.4</span> Further Testing</h3>
+<h3><span class="header-section-number">19.2.4</span> Further Testing</h3>
 <p>These are fairly trivial changes you can make to how you define and implement user interfaces, that will go a long way to supporting use by <em>all</em> users no matter their level of ability.</p>
 <p>The Android Studio IDE will identify and suggest additional changes as “linted” style suggestions—watch out for these warnings and learn to correct them as you develop.</p>
 <p>Finally, Google has also developed an <a href="https://developer.android.com/training/accessibility/testing.html#accessibility-scanner">Accessibility Scanner</a> app that can be used to check for further accessibility issues (such as contrast levels or touchable areas).</p>
@@ -475,7 +483,7 @@ These exercises build on the lecture code found at <a href="https://github.com/i
           </div>
         </div>
       </div>
-<a href="publishing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="kotlin.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="fragments-viewpager.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
